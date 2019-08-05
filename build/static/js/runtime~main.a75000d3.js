@@ -1,47 +1,47 @@
 !(function(e) {
   function r(r) {
-    for (var n, f, i = r[0], l = r[1], a = r[2], c = 0, s = []; c < i.length; c++)
-      (f = i[c]), o[f] && s.push(o[f][0]), (o[f] = 0);
-    for (n in l) Object.prototype.hasOwnProperty.call(l, n) && (e[n] = l[n]);
+    for (var n, l, i = r[0], a = r[1], f = r[2], c = 0, s = []; c < i.length; c++)
+      (l = i[c]), o[l] && s.push(o[l][0]), (o[l] = 0);
+    for (n in a) Object.prototype.hasOwnProperty.call(a, n) && (e[n] = a[n]);
     for (p && p(r); s.length; ) s.shift()();
-    return u.push.apply(u, a || []), t();
+    return u.push.apply(u, f || []), t();
   }
   function t() {
     for (var e, r = 0; r < u.length; r++) {
       for (var t = u[r], n = !0, i = 1; i < t.length; i++) {
-        var l = t[i];
-        0 !== o[l] && (n = !1);
+        var a = t[i];
+        0 !== o[a] && (n = !1);
       }
-      n && (u.splice(r--, 1), (e = f((f.s = t[0]))));
+      n && (u.splice(r--, 1), (e = l((l.s = t[0]))));
     }
     return e;
   }
   var n = {},
     o = { 2: 0 },
     u = [];
-  function f(r) {
+  function l(r) {
     if (n[r]) return n[r].exports;
     var t = (n[r] = { i: r, l: !1, exports: {} });
-    return e[r].call(t.exports, t, t.exports, f), (t.l = !0), t.exports;
+    return e[r].call(t.exports, t, t.exports, l), (t.l = !0), t.exports;
   }
-  (f.m = e),
-    (f.c = n),
-    (f.d = function(e, r, t) {
-      f.o(e, r) || Object.defineProperty(e, r, { enumerable: !0, get: t });
+  (l.m = e),
+    (l.c = n),
+    (l.d = function(e, r, t) {
+      l.o(e, r) || Object.defineProperty(e, r, { enumerable: !0, get: t });
     }),
-    (f.r = function(e) {
+    (l.r = function(e) {
       "undefined" !== typeof Symbol &&
         Symbol.toStringTag &&
         Object.defineProperty(e, Symbol.toStringTag, { value: "Module" }),
         Object.defineProperty(e, "__esModule", { value: !0 });
     }),
-    (f.t = function(e, r) {
-      if ((1 & r && (e = f(e)), 8 & r)) return e;
+    (l.t = function(e, r) {
+      if ((1 & r && (e = l(e)), 8 & r)) return e;
       if (4 & r && "object" === typeof e && e && e.__esModule) return e;
       var t = Object.create(null);
-      if ((f.r(t), Object.defineProperty(t, "default", { enumerable: !0, value: e }), 2 & r && "string" != typeof e))
+      if ((l.r(t), Object.defineProperty(t, "default", { enumerable: !0, value: e }), 2 & r && "string" != typeof e))
         for (var n in e)
-          f.d(
+          l.d(
             t,
             n,
             function(r) {
@@ -50,7 +50,7 @@
           );
       return t;
     }),
-    (f.n = function(e) {
+    (l.n = function(e) {
       var r =
         e && e.__esModule
           ? function() {
@@ -59,17 +59,17 @@
           : function() {
               return e;
             };
-      return f.d(r, "a", r), r;
+      return l.d(r, "a", r), r;
     }),
-    (f.o = function(e, r) {
+    (l.o = function(e, r) {
       return Object.prototype.hasOwnProperty.call(e, r);
     }),
-    (f.p = "/");
+    (l.p = "/heartexlabs/label-studio/");
   var i = (window.webpackJsonp = window.webpackJsonp || []),
-    l = i.push.bind(i);
+    a = i.push.bind(i);
   (i.push = r), (i = i.slice());
-  for (var a = 0; a < i.length; a++) r(i[a]);
-  var p = l;
+  for (var f = 0; f < i.length; f++) r(i[f]);
+  var p = a;
   t();
 })([]);
-//# sourceMappingURL=runtime~main.229c360f.js.map
+//# sourceMappingURL=runtime~main.a75000d3.js.map

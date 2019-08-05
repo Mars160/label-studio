@@ -1,85 +1,98 @@
 (window.webpackJsonp = window.webpackJsonp || []).push([
   [0],
   {
-    114: function(e, t, n) {
+    115: function(e, t, n) {
       e.exports = {
-        skip: "Controls_skip__1MH5a",
-        task: "Controls_task__uHrO8",
-        container: "Controls_container__2MMJ1",
+        block: "Relations_block__3Oopf",
+        section: "Relations_section__2WXtQ",
+        section__blocks: "Relations_section__blocks__3JVyw",
+        delete: "Relations_delete__2Eyc8",
       };
     },
-    152: function(e, t, n) {
-      e.exports = { container: "Panel_container__3j8Ml", block: "Panel_block__1rZZU" };
+    149: function(e, t, n) {
+      e.exports = { container: "Panel_container__Qb4xi", block: "Panel_block__3mBJh" };
     },
-    194: function(e, t, n) {
-      e.exports = { main: "Hint_main__11cYR" };
+    202: function(e, t, n) {
+      e.exports = { main: "Hint_main__ZDhzi" };
     },
-    200: function(e, t, n) {
+    208: function(e, t, n) {
       e.exports = {
-        pushable: "App_pushable__9VpzN",
-        "hide-dd-icon": "App_hide-dd-icon__1eju5",
-        "drag-handle": "App_drag-handle__1u_JX",
-        noselect: "App_noselect__3TJvL",
-        "common-container": "App_common-container__20tb0",
-        "functional-buttons": "App_functional-buttons__yQZwb",
-        "editor-side-column": "App_editor-side-column__1sRAL",
-        editor: "App_editor__1R7U9",
-        menu: "App_menu__1lHSz",
-        content: "App_content__YPghD",
+        pushable: "App_pushable__2_dds",
+        "hide-dd-icon": "App_hide-dd-icon__QwL78",
+        "drag-handle": "App_drag-handle__3_W4W",
+        noselect: "App_noselect__2aaVW",
+        "common-container": "App_common-container__qkml1",
+        "functional-buttons": "App_functional-buttons__1KMBb",
+        "editor-side-column": "App_editor-side-column__2Tmm3",
+        editor: "App_editor__l2dha",
+        menu: "App_menu__1BSd3",
+        content: "App_content__1ym7D",
       };
     },
-    268: function(e, t, n) {
-      e.exports = { buttons: "Completions_buttons__1m7au" };
+    270: function(e, t, n) {
+      e.exports = { buttons: "Completions_buttons__1Egvo" };
     },
-    292: function(e, t, n) {
-      e.exports = { item: "Entities_item__2L2AT" };
+    294: function(e, t, n) {
+      e.exports = { item: "Entities_item__3oFPp" };
     },
-    293: function(e, t, n) {
-      e.exports = { card: "SideColumn_card__1_IjP" };
+    295: function(e, t, n) {
+      e.exports = { card: "SideColumn_card__2KVRh" };
     },
-    299: function(e, t, n) {
-      e.exports = { progress: "Waveform_progress__1WPXH", wave: "Waveform_wave__118D3" };
+    301: function(e, t, n) {
+      e.exports = { progress: "Waveform_progress__1GLjz", wave: "Waveform_wave__yPehs" };
     },
-    302: function(e, t, n) {
-      e.exports = { block: "TextHighlight_block__3sp7Y" };
+    304: function(e, t, n) {
+      e.exports = { block: "TextHighlight_block__z4O-f" };
     },
-    303: function(e, t, n) {
-      e.exports = { state: "TextRegion_state__1SB62" };
+    305: function(e, t, n) {
+      e.exports = { state: "TextRegion_state__wi_ws" };
     },
-    318: function(e, t, n) {
-      e.exports = n(544);
+    306: function(e, t, n) {
+      e.exports = {
+        pushable: "Segment_pushable__2gVkh",
+        "hide-dd-icon": "Segment_hide-dd-icon__1KuoO",
+        "drag-handle": "Segment_drag-handle__2sVHi",
+        noselect: "Segment_noselect__qWi_T",
+        "common-container": "Segment_common-container__EQ4YQ",
+        "functional-buttons": "Segment_functional-buttons__1u8fS",
+        "editor-side-column": "Segment_editor-side-column__2M4Dc",
+        block: "Segment_block__3-nF9",
+      };
     },
-    325: function(e, t, n) {},
-    544: function(e, t, n) {
+    321: function(e, t, n) {
+      e.exports = n(548);
+    },
+    328: function(e, t, n) {},
+    548: function(e, t, n) {
       "use strict";
       n.r(t);
       var a = {};
       n.r(a),
         n.d(a, "isString", function() {
-          return L;
+          return A;
         }),
         n.d(a, "isStringEmpty", function() {
           return D;
         }),
         n.d(a, "isStringJSON", function() {
-          return P;
+          return L;
         }),
         n.d(a, "getUrl", function() {
           return z;
         }),
         n.d(a, "toTimeString", function() {
-          return J;
+          return P;
         });
       var o = {};
       n.r(o),
         n.d(o, "hexToRGBA", function() {
-          return V;
+          return B;
         }),
         n.d(o, "colorToRGBA", function() {
-          return W;
+          return V;
         }),
         n.d(o, "convertToRGBA", function() {
-          return U;
+          return W;
         }),
         n.d(o, "stringToColor", function() {
           return F;
@@ -87,28 +100,27 @@
       var r = {};
       n.r(r),
         n.d(r, "msToHMS", function() {
-          return Z;
+          return U;
         }),
         n.d(r, "prettyDate", function() {
-          return Y;
+          return G;
         });
       var i = n(0),
         l = n.n(i),
         s = n(13),
         c = n.n(s),
-        u = n(8),
-        d = (n(322), n(325), n(26)),
+        u = n(7),
+        d = (n(325), n(328), n(26)),
         m = n(27),
-        p = n(30),
-        g = n(29),
-        f = n(31),
-        h = n(189),
+        p = n(29),
+        g = n(28),
+        f = n(30),
+        h = n(188),
         b = n.n(h),
         v = n(1),
-        y = n(565),
-        k = n(563),
-        S = n(554),
-        w = new ((function() {
+        y = n(566),
+        k = n(558),
+        S = new ((function() {
           function e() {
             Object(d.a)(this, e), (this.tags = []), (this.models = {}), (this.views = {}), (this.views_models = {});
           }
@@ -155,46 +167,46 @@
             e
           );
         })())(),
-        x = function(e, t, n, a) {
+        w = function(e, t, n, a) {
           return window.fetch(e, { method: t, headers: n, credentials: "include", body: a }).then(function(e) {
             return 200 !== (t = e).status || 201 !== t.status ? t : t.json();
             var t;
           });
         },
-        O = {
+        _ = {
           fetcher: function(e) {
-            return x(e, "GET", { Accept: "application/json" });
+            return w(e, "GET", { Accept: "application/json" });
           },
           poster: function(e, t) {
-            return x(e, "POST", { Accept: "application/json", "Content-Type": "application/json" }, t);
+            return w(e, "POST", { Accept: "application/json", "Content-Type": "application/json" }, t);
           },
           remover: function(e, t) {
-            return x(e, "DELETE", { "Content-Type": "application/json" }, t);
+            return w(e, "DELETE", { "Content-Type": "application/json" }, t);
           },
           patch: function(e, t) {
-            return x(e, "PATCH", { Accept: "application/json", "Content-Type": "application/json" }, t);
+            return w(e, "PATCH", { Accept: "application/json", "Content-Type": "application/json" }, t);
           },
         },
-        E = n(44),
-        _ = n(267),
-        N = n.n(_);
-      function j() {
-        return N()(10);
+        O = n(45),
+        x = n(269),
+        E = n.n(x);
+      function N() {
+        return E()(10);
+      }
+      function j(e) {
+        var t = Object(v.h)(e);
+        return Object(v.i)(e).create(Object(O.a)({}, t, { id: N() }));
       }
       function C(e) {
         var t = Object(v.h)(e);
-        return Object(v.i)(e).create(Object(E.a)({}, t, { id: j() }));
+        return Object(v.i)(e).create(Object(O.a)({}, t, { id: N() }));
       }
       function T(e) {
-        var t = Object(v.h)(e);
-        return Object(v.i)(e).create(Object(E.a)({}, t, { id: j() }));
-      }
-      function R(e) {
-        var t = w.getViewByModel(Object(v.i)(e).name);
+        var t = S.getViewByModel(Object(v.i)(e).name);
         if (!t) throw new Error("No view for model:" + Object(v.i)(e).name);
-        return l.a.createElement(t, { key: j(), item: e });
+        return l.a.createElement(t, { key: N(), item: e });
       }
-      var M = {
+      var R = {
           cloneReactTree: function(e, t) {
             var n = null;
             return (n = function(e) {
@@ -213,11 +225,11 @@
               );
             })(e);
           },
-          renderItem: R,
+          renderItem: T,
           renderChildren: function(e) {
             return e && e.children && e.children.length
               ? e.children.map(function(e) {
-                  return R(e);
+                  return T(e);
                 })
               : null;
           },
@@ -245,7 +257,7 @@
                 }
                 return t;
               })(e.attrs);
-              return (t.id = j()), (t.type = e.nodeName), "img" === t.type && (t.type = "image"), t;
+              return (t.id = N()), (t.type = e.nodeName), "img" === t.type && (t.type = "image"), t;
             }
             var n = (function(e) {
                 for (var t = e.split("/>"), n = "", a = 0; a < t.length - 1; a++) {
@@ -402,17 +414,17 @@
             return r;
           },
         },
-        I = n(559),
-        H = n(265),
-        A = n(555),
-        L = function(e) {
+        M = n(563),
+        I = n(198),
+        H = n(559),
+        A = function(e) {
           return "string" === typeof e || e instanceof String;
         },
         D = function(e) {
-          return !!L(e) && 0 === e.length;
+          return !!A(e) && 0 === e.length;
         },
-        P = function(e) {
-          if (L(e)) {
+        L = function(e) {
+          if (A(e)) {
             try {
               JSON.parse(e);
             } catch (t) {
@@ -427,10 +439,10 @@
           a = /^(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/g.exec(n);
         return a && a.length ? a[1] : "";
       }
-      function J(e) {
+      function P(e) {
         if ("number" === typeof e) return new Date(e).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
       }
-      var B = {
+      var J = {
         aliceblue: "#f0f8ff",
         antiquewhite: "#faebd7",
         aqua: "#00ffff",
@@ -573,7 +585,7 @@
         yellow: "#ffff00",
         yellowgreen: "#9acd32",
       };
-      function V(e, t) {
+      function B(e, t) {
         var n = 0,
           a = 0,
           o = 0,
@@ -590,11 +602,11 @@
             .concat(r, ")")
         );
       }
-      function W(e, t) {
-        return void 0 !== typeof B[e.toLowerCase()] ? V(B[e.toLowerCase()], t) : e;
+      function V(e, t) {
+        return "string" === typeof e && void 0 !== typeof J[e.toLowerCase()] ? B(J[e.toLowerCase()], t) : e;
       }
-      function U(e, t) {
-        return "#" === e.charAt(0) ? V(e, t) : W(e, t);
+      function W(e, t) {
+        return "#" === e.charAt(0) ? B(e, t) : V(e, t);
       }
       function F(e) {
         for (var t = 0, n = 0; n < e.length; n++) t = e.charCodeAt(n) + ((t << 5) - t);
@@ -603,12 +615,12 @@
         }
         return a;
       }
-      function Z(e) {
+      function U(e) {
         var t = e / 1e3,
           n = parseInt(t / 3600);
         return (t %= 3600), n + ":" + parseInt(t / 60) + ":" + (t = Math.floor(t));
       }
-      function Y(e) {
+      function G(e) {
         if (
           "string" === typeof e ||
           /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/.test(e)
@@ -630,12 +642,12 @@
             );
         }
       }
-      var G = n(138);
-      var X = {
+      var Y = n(137);
+      var Z = {
           Checkers: a,
           Colors: o,
           UDate: r,
-          guidGenerator: j,
+          guidGenerator: N,
           debounce: function(e, t, n) {
             var a;
             return function() {
@@ -664,22 +676,26 @@
                         .replace(/-./g, function(e) {
                           return e.substr(1).toUpperCase();
                         }),
-                      e.split(":")[1].trim(),
+                      e
+                        .split(":")
+                        .slice(1)
+                        .join(":")
+                        .trim(),
                     ];
                   })
                   .reduce(function(e, t) {
-                    return Object(E.a)({}, e, Object(G.a)({}, t[0], t[1]));
+                    return Object(O.a)({}, e, Object(Y.a)({}, t[0], t[1]));
                   }, {})
               : null;
           },
         },
-        $ = n(268),
-        K = n.n($),
-        q = Object(u.c)(function(e) {
+        K = n(270),
+        X = n.n(K),
+        $ = Object(u.c)(function(e) {
           var t = e.item,
             n = e.store;
           return l.a.createElement(
-            I.a.Item,
+            M.a.Item,
             {
               style: { backgroundColor: t.selected ? "#f8f8f9" : "white", padding: "1em" },
               onClick: function(e) {
@@ -687,27 +703,27 @@
               },
             },
             l.a.createElement(
-              I.a.Content,
+              M.a.Content,
               null,
-              l.a.createElement(I.a.Header, { as: "a" }, "ID ", t.pk || t.id),
+              l.a.createElement(M.a.Header, { as: "a" }, "ID ", t.pk || t.id),
               l.a.createElement("p", null),
               l.a.createElement(
-                I.a.Description,
+                M.a.Description,
                 { as: "a" },
                 "Created",
                 l.a.createElement(
                   "i",
                   null,
-                  t.createdAgo ? " ".concat(t.createdAgo, " ago") : " ".concat(X.UDate.prettyDate(t.createdDate)),
+                  t.createdAgo ? " ".concat(t.createdAgo, " ago") : " ".concat(Z.UDate.prettyDate(t.createdDate)),
                 ),
                 t.createdBy ? " by ".concat(t.createdBy) : null,
               ),
               t.selected &&
                 l.a.createElement(
                   "div",
-                  { className: K.a.buttons },
+                  { className: X.a.buttons },
                   l.a.createElement(
-                    H.a,
+                    I.a,
                     {
                       type: "danger",
                       onClick: function(e) {
@@ -718,7 +734,7 @@
                   ),
                   t.honeypot
                     ? l.a.createElement(
-                        H.a,
+                        I.a,
                         {
                           type: "primary",
                           onClick: function(e) {
@@ -728,7 +744,7 @@
                         "Honeypot",
                       )
                     : l.a.createElement(
-                        H.a,
+                        I.a,
                         {
                           type: "primary",
                           ghost: !0,
@@ -742,7 +758,7 @@
             ),
           );
         }),
-        Q = (function(e) {
+        q = (function(e) {
           function t() {
             return Object(d.a)(this, t), Object(p.a)(this, Object(g.a)(t).apply(this, arguments));
           }
@@ -754,13 +770,13 @@
                 value: function() {
                   var e = this.props.store;
                   return l.a.createElement(
-                    A.a,
+                    H.a,
                     { title: "Completions", bodyStyle: { padding: 0 } },
                     l.a.createElement(
-                      I.a,
+                      M.a,
                       { divided: !0, relaxed: !0 },
                       e.completionStore.savedCompletions.map(function(t) {
-                        return l.a.createElement(q, { key: t.id, item: t, store: e });
+                        return l.a.createElement($, { key: t.id, item: t, store: e });
                       }),
                     ),
                   );
@@ -770,10 +786,10 @@
             t
           );
         })(i.Component),
-        ee = Object(u.c)(Q),
-        te = n(194),
-        ne = n.n(te),
-        ae = (function(e) {
+        Q = Object(u.c)(q),
+        ee = n(202),
+        te = n.n(ee),
+        ne = (function(e) {
           function t() {
             return Object(d.a)(this, t), Object(p.a)(this, Object(g.a)(t).apply(this, arguments));
           }
@@ -784,10 +800,10 @@
                 key: "render",
                 value: function() {
                   var e,
-                    t = "".concat(ne.a.main);
+                    t = "".concat(te.a.main);
                   return (
                     this.props.style && (e = this.props.style),
-                    this.props.className && (t = "".concat(ne.a.main, " ").concat(this.props.className)),
+                    this.props.className && (t = "".concat(te.a.main, " ").concat(this.props.className)),
                     l.a.createElement(
                       "sup",
                       { "data-copy": this.props.copy, className: t, style: e },
@@ -800,61 +816,57 @@
             t
           );
         })(i.Component),
-        oe = n(114),
-        re = n.n(oe),
-        ie = Object(u.b)("store")(
+        ae = n(86),
+        oe = n.n(ae),
+        re = Object(u.b)("store")(
           Object(u.c)(function(e) {
-            var t = e.store;
-            return l.a.createElement(
-              "div",
-              { style: { clear: "both" } },
-              l.a.createElement("div", { className: "ui hidden divider" }),
+            var t,
+              n,
+              a,
+              o = e.store;
+            return (
+              o.task && (t = l.a.createElement("h4", { className: oe.a.task }, "Task ID: ", o.task.id)),
+              o.settings.enableHotkeys &&
+                o.settings.enableTooltips &&
+                ((n = l.a.createElement(ne, null, " [ Ctrl+Enter ]")),
+                (a = l.a.createElement(ne, null, " [ Ctrl+Space ]"))),
               l.a.createElement(
                 "div",
-                { style: { display: "flex", justifyContent: "space-between", alignItems: "center" } },
+                { className: oe.a.block },
                 l.a.createElement(
                   "div",
-                  { className: re.a.container },
-                  t.hasInterface("submit:skip") &&
-                    l.a.createElement(
-                      H.a,
-                      { type: "ghost", onClick: t.skipTask, className: re.a.skip },
-                      "Skip",
-                      t.settings.enableHotkeys &&
-                        t.settings.enableTooltips &&
-                        l.a.createElement(ae, null, " [ Ctrl+Space ]"),
-                    ),
+                  { className: oe.a.wrapper },
                   l.a.createElement(
-                    H.a,
-                    { type: "primary", icon: "check", onClick: t.sendTask, className: re.a.submit },
-                    "Submit",
-                    t.settings.enableHotkeys &&
-                      t.settings.enableTooltips &&
-                      l.a.createElement(ae, null, " [ Ctrl+Enter ]"),
+                    "div",
+                    { className: oe.a.container },
+                    o.hasInterface("submit:skip") &&
+                      l.a.createElement(I.a, { type: "ghost", onClick: o.skipTask, className: oe.a.skip }, "Skip ", a),
+                    l.a.createElement(
+                      I.a,
+                      { type: "primary", icon: "check", onClick: o.sendTask, className: oe.a.submit },
+                      "Submit ",
+                      n,
+                    ),
                   ),
+                  t,
                 ),
-                l.a.createElement(
-                  "div",
-                  null,
-                  t.task && l.a.createElement("h4", { className: re.a.task }, "Task ID: ", t.task.id),
-                ),
-              ),
+              )
             );
           }),
         ),
-        le = n(152),
-        se = n.n(le),
-        ce = Object(u.c)(function(e) {
+        ie = n(149),
+        le = n.n(ie),
+        se = Object(u.c)(function(e) {
           var t = e.store,
             n = t.completionStore.selected.history;
           return l.a.createElement(
             "div",
-            { className: se.a.container },
+            { className: le.a.container },
             l.a.createElement(
               "div",
-              { className: se.a.block },
+              { className: le.a.block },
               l.a.createElement(
-                H.a,
+                I.a,
                 {
                   type: "ghost",
                   icon: "undo",
@@ -863,10 +875,10 @@
                   },
                 },
                 "Undo",
-                t.settings.enableHotkeys && t.settings.enableTooltips && l.a.createElement(ae, null, "[ Ctrl+z ]"),
+                t.settings.enableHotkeys && t.settings.enableTooltips && l.a.createElement(ne, null, "[ Ctrl+z ]"),
               ),
               l.a.createElement(
-                H.a,
+                I.a,
                 {
                   type: "ghost",
                   icon: "redo",
@@ -877,7 +889,7 @@
                 "Redo",
               ),
               l.a.createElement(
-                H.a,
+                I.a,
                 {
                   type: "ghost",
                   icon: "rest",
@@ -889,7 +901,7 @@
               ),
               t.setPrelabeling &&
                 l.a.createElement(
-                  H.a,
+                  I.a,
                   {
                     style: { display: "none" },
                     onClick: function(e) {
@@ -902,10 +914,10 @@
             ),
             l.a.createElement(
               "div",
-              { className: se.a.block },
+              { className: le.a.block },
               t.showingDescription &&
                 l.a.createElement(
-                  H.a,
+                  I.a,
                   {
                     type: "primary",
                     onClick: function(e) {
@@ -916,7 +928,7 @@
                 ),
               !t.showingDescription &&
                 l.a.createElement(
-                  H.a,
+                  I.a,
                   {
                     type: "primary",
                     onClick: function(e) {
@@ -925,7 +937,7 @@
                   },
                   "Show Instructions",
                 ),
-              l.a.createElement(H.a, {
+              l.a.createElement(I.a, {
                 type: "dashed",
                 icon: "setting",
                 onClick: function(e) {
@@ -935,15 +947,15 @@
             ),
           );
         }),
-        ue = n(558),
-        de = n(568),
-        me = Object(u.c)(function(e) {
+        ce = n(562),
+        ue = n(569),
+        de = Object(u.c)(function(e) {
           var t = e.store;
           return l.a.createElement(
-            ue.a,
+            ce.a,
             { visible: t.showingSettings, title: "Hotkeys", footer: "", onCancel: t.toggleSettings },
             l.a.createElement(
-              de.a,
+              ue.a,
               {
                 value: "Enable labeling hotkeys",
                 defaultChecked: t.settings.enableHotkeys,
@@ -955,7 +967,7 @@
             ),
             l.a.createElement("br", null),
             l.a.createElement(
-              de.a,
+              ue.a,
               {
                 value: "Show tooltips",
                 defaultChecked: t.settings.enableTooltips,
@@ -967,10 +979,10 @@
             ),
           );
         }),
-        pe = n(566),
-        ge = n(562),
-        fe = n(556),
-        he = (function(e) {
+        me = n(570),
+        pe = n(568),
+        ge = n(560),
+        fe = (function(e) {
           function t() {
             var e, n;
             Object(d.a)(this, t);
@@ -993,9 +1005,9 @@
                     "div",
                     null,
                     l.a.createElement("br", null),
-                    l.a.createElement(pe.a, null, "Debug"),
+                    l.a.createElement(me.a, null, "Debug"),
                     l.a.createElement(
-                      ge.a,
+                      pe.a,
                       {
                         basic: !0,
                         onClick: function(t) {
@@ -1005,7 +1017,7 @@
                       "Serialize whole tree",
                     ),
                     l.a.createElement(
-                      ge.a,
+                      pe.a,
                       {
                         basic: !0,
                         onClick: function(t) {
@@ -1015,7 +1027,7 @@
                       "Seriealize results tree",
                     ),
                     l.a.createElement(
-                      ge.a,
+                      pe.a,
                       {
                         basic: !0,
                         onClick: function(e) {
@@ -1025,7 +1037,7 @@
                       "Load Serialized Results",
                     ),
                     l.a.createElement(
-                      ge.a,
+                      pe.a,
                       {
                         basic: !0,
                         onClick: function(e) {
@@ -1037,7 +1049,7 @@
                       "Load As New Completion",
                     ),
                     l.a.createElement(
-                      ge.a,
+                      pe.a,
                       {
                         basic: !0,
                         onClick: function(t) {
@@ -1047,7 +1059,7 @@
                       "Task data",
                     ),
                     l.a.createElement(
-                      ge.a,
+                      pe.a,
                       {
                         basic: !0,
                         onClick: function(e) {
@@ -1068,9 +1080,9 @@
                     l.a.createElement("br", null),
                     l.a.createElement("br", null),
                     l.a.createElement(
-                      fe.a,
+                      ge.a,
                       null,
-                      l.a.createElement(fe.a.TextArea, {
+                      l.a.createElement(ge.a.TextArea, {
                         value: this.state.res,
                         className: "is-search",
                         onChange: function(t) {
@@ -1085,8 +1097,8 @@
             t
           );
         })(i.Component),
-        be = (Object(u.c)(he), n(32)),
-        ve = Object(u.c)(function(e) {
+        he = (Object(u.c)(fe), n(32)),
+        be = Object(u.c)(function(e) {
           var t = e.node,
             n = function(e) {
               return (
@@ -1101,7 +1113,7 @@
             return l.a.createElement(
               "div",
               null,
-              l.a.createElement(be.a, { type: "font-colors" }),
+              l.a.createElement(he.a, { type: "font-colors" }),
               "Text \xa0",
               l.a.createElement("span", { style: { color: "#5a5a5a" } }, t.text),
             );
@@ -1161,10 +1173,10 @@
               )
             : void 0;
         }),
-        ye = function(e) {
+        ve = function(e) {
           var t = e.node;
           return "TextRegionModel" == Object(v.i)(t).name
-            ? l.a.createElement(i.Fragment, null, l.a.createElement("i", { className: "font icon" }), "Text")
+            ? l.a.createElement(i.Fragment, null, l.a.createElement(he.a, { type: "font-colors" }), " Text")
             : "RectRegionModel" == Object(v.i)(t).name
             ? l.a.createElement(i.Fragment, null, l.a.createElement("i", { className: "expand icon" }), "Rectangle")
             : "AudioRegionModel" == Object(v.i)(t).name
@@ -1180,7 +1192,9 @@
               )
             : void 0;
         },
-        ke = function(e) {
+        ye = n(115),
+        ke = n.n(ye),
+        Se = function(e) {
           var t = e.store,
             n = e.rl;
           return Object(v.j)(function() {
@@ -1191,12 +1205,11 @@
             })
             ? l.a.createElement(
                 "div",
-                { style: { display: "flex", alignItems: "center", marginBottom: "1em" } },
+                { className: ke.a.block },
                 l.a.createElement(
                   "div",
                   {
-                    className: "ui segment",
-                    style: { marginBottom: 0, width: "100%" },
+                    className: ke.a.section,
                     onMouseOver: function() {
                       n.toggleHighlight();
                     },
@@ -1206,56 +1219,42 @@
                   },
                   l.a.createElement(
                     "div",
-                    { className: "ui two column grid" },
-                    l.a.createElement(
-                      "div",
-                      { className: "column" },
-                      l.a.createElement("p", null, l.a.createElement(ye, { node: n.node1 })),
-                    ),
-                    l.a.createElement(
-                      "div",
-                      { className: "column" },
-                      l.a.createElement("p", null, l.a.createElement(ye, { node: n.node2 })),
-                    ),
-                  ),
-                  l.a.createElement(
-                    "div",
-                    { className: "ui vertical divider" },
-                    l.a.createElement("i", { className: "arrow right icon" }),
+                    { className: ke.a.section__blocks },
+                    l.a.createElement("div", null, l.a.createElement(ve, { node: n.node1 })),
+                    l.a.createElement(he.a, { type: "arrow-right" }),
+                    l.a.createElement("div", null, l.a.createElement(ve, { node: n.node2 })),
                   ),
                 ),
                 l.a.createElement(
                   "a",
                   {
                     href: "#",
-                    className: "floating right",
+                    className: ke.a.delete,
                     onClick: function() {
                       return t.deleteRelation(n), !1;
                     },
-                    style: { marginLeft: "5px" },
                   },
-                  l.a.createElement("i", { className: "ui icon delete" }),
+                  l.a.createElement(he.a, { type: "delete" }),
                 ),
               )
             : null;
         },
-        Se = Object(u.c)(function(e) {
-          e.item;
+        we = Object(u.c)(function(e) {
           var t = e.store.completionStore.selected,
             n = t.relationStore.relations;
           return l.a.createElement(
-            "div",
+            i.Fragment,
             null,
             l.a.createElement("h4", null, "Relations (", n.length, ")"),
             !n.length && l.a.createElement("p", null, "No Relations added yet"),
             t.relationStore.relations.map(function(e) {
-              return l.a.createElement(ke, { store: t.relationStore, rl: e });
+              return l.a.createElement(Se, { store: t.relationStore, rl: e });
             }),
           );
         }),
-        we = n(292),
-        xe = n.n(we),
-        Oe = Object(u.c)(function(e) {
+        _e = n(294),
+        Oe = n.n(_e),
+        xe = Object(u.c)(function(e) {
           var t = e.store,
             n = e.regionStore.regions;
           return l.a.createElement(
@@ -1264,7 +1263,7 @@
             l.a.createElement("h4", null, "Entities (", n.length, ")"),
             n.length > 0 &&
               l.a.createElement(
-                H.a,
+                I.a,
                 {
                   type: "link",
                   style: { paddingLeft: 0 },
@@ -1276,7 +1275,7 @@
                 n.length > 0 &&
                   t.settings.enableHotkeys &&
                   t.settings.enableTooltips &&
-                  l.a.createElement(ae, null, "[ Ctrl+bksp ]"),
+                  l.a.createElement(ne, null, "[ Ctrl+bksp ]"),
               ),
             !n.length && l.a.createElement("p", null, "No Entitied added yet"),
             l.a.createElement(
@@ -1287,7 +1286,7 @@
                   "li",
                   {
                     key: e.id,
-                    className: xe.a.item,
+                    className: Oe.a.item,
                     onMouseOver: function() {
                       e.toggleHightlight();
                     },
@@ -1295,16 +1294,16 @@
                       e.toggleHightlight();
                     },
                   },
-                  l.a.createElement(ve, { node: e }),
+                  l.a.createElement(be, { node: e }),
                 );
               }),
             ),
           );
         }),
-        Ee = n(567),
-        _e = n(74),
-        Ne = n.n(_e),
-        je = function(e) {
+        Ee = n(571),
+        Ne = n(74),
+        je = n.n(Ne),
+        Ce = function(e) {
           var t = e.node,
             n = function(e) {
               return "LabelsModel" === Object(v.i)(e).name ||
@@ -1313,11 +1312,11 @@
                 ? ((t = e),
                   l.a.createElement(
                     "div",
-                    { key: t.id, className: Ne.a.labels },
+                    { key: t.id, className: je.a.labels },
                     "Labels:",
                     t.getSelectedNames().map(function(e) {
                       var n = t.getSelectedColor() ? t.getSelectedColor() : "#000000";
-                      return l.a.createElement(Ee.a, { key: t.id, color: n, className: Ne.a.tag }, e);
+                      return l.a.createElement(Ee.a, { key: t.id, color: n, className: je.a.tag }, e);
                     }),
                   ))
                 : "RatingModel" === Object(v.i)(e).name
@@ -1333,21 +1332,21 @@
             }),
           );
         },
-        Ce = Object(u.c)(function(e) {
+        Te = Object(u.c)(function(e) {
           var t = e.store,
             n = e.completion,
             a = n.highlightedNode;
           return l.a.createElement(
             i.Fragment,
             null,
-            l.a.createElement("p", null, l.a.createElement(ye, { node: a }), " (id: ", a.id, ")"),
+            l.a.createElement("p", null, l.a.createElement(ve, { node: a }), " (id: ", a.id, ")"),
             a.normalization &&
               l.a.createElement(
                 "p",
                 null,
                 "Normalization: ",
                 a.normalization,
-                l.a.createElement(be.a, {
+                l.a.createElement(he.a, {
                   name: "delete",
                   style: { cursor: "pointer" },
                   onClick: function() {
@@ -1355,56 +1354,56 @@
                   },
                 }),
               ),
-            a.states && l.a.createElement(je, { node: a }),
+            a.states && l.a.createElement(Ce, { node: a }),
             l.a.createElement(
               "div",
-              { className: Ne.a.block },
+              { className: je.a.block },
               l.a.createElement(
-                H.a,
+                I.a,
                 {
-                  className: Ne.a.button,
+                  className: je.a.button,
                   onClick: function() {
                     n.startRelationMode(a);
                   },
                 },
-                l.a.createElement(be.a, { type: "link" }),
+                l.a.createElement(he.a, { type: "link" }),
                 "Relation",
               ),
               l.a.createElement(
-                H.a,
+                I.a,
                 {
-                  className: Ne.a.button,
+                  className: je.a.button,
                   onClick: function() {
                     n.setNormalizationMode(!0);
                   },
                 },
-                l.a.createElement(be.a, { type: "plus" }),
+                l.a.createElement(he.a, { type: "plus" }),
                 "Normalization",
               ),
               l.a.createElement(
-                H.a,
+                I.a,
                 {
-                  className: Ne.a.button,
+                  className: je.a.button,
                   type: "dashed",
                   onClick: function() {
                     n.highlightedNode.unselectRegion();
                   },
                 },
-                l.a.createElement(be.a, { type: "fullscreen-exit" }),
+                l.a.createElement(he.a, { type: "fullscreen-exit" }),
                 "Unselect",
               ),
               l.a.createElement(
-                H.a,
+                I.a,
                 {
                   type: "danger",
-                  className: Ne.a.button,
+                  className: je.a.button,
                   onClick: function() {
                     n.highlightedNode.deleteRegion();
                   },
                 },
-                l.a.createElement(be.a, { type: "delete" }),
+                l.a.createElement(he.a, { type: "delete" }),
                 "Delete",
-                t.settings.enableHotkeys && t.settings.enableTooltips && l.a.createElement(ae, null, "[ Bksp ]"),
+                t.settings.enableHotkeys && t.settings.enableTooltips && l.a.createElement(ne, null, "[ Bksp ]"),
               ),
             ),
             n.normalizationMode &&
@@ -1412,7 +1411,7 @@
                 "div",
                 null,
                 l.a.createElement(
-                  fe.a,
+                  ge.a,
                   {
                     style: { marginTop: "0.5em" },
                     onSubmit: function(e) {
@@ -1420,7 +1419,7 @@
                       return a.setNormalization(a.normInput), n.setNormalizationMode(!1), e.preventDefault(), !1;
                     },
                   },
-                  l.a.createElement(fe.a.Input, {
+                  l.a.createElement(ge.a.Input, {
                     onChange: function(e) {
                       var t = e.target.value;
                       a.setNormInput(t);
@@ -1431,22 +1430,22 @@
               ),
           );
         }),
-        Te = n(293),
-        Re = n.n(Te),
-        Me = Object(u.c)(function(e) {
+        Re = n(295),
+        Me = n.n(Re),
+        Ie = Object(u.c)(function(e) {
           var t = e.store,
             n = t.completionStore.selected,
             a = n.highlightedNode;
           return l.a.createElement(
-            A.a,
-            { title: "Entity", className: Re.a.card },
-            a && l.a.createElement(Ce, { store: t, completion: n }),
+            H.a,
+            { title: "Entity", className: Me.a.card },
+            a && l.a.createElement(Te, { store: t, completion: n }),
             !n.highlightedNode && l.a.createElement("p", null, "Nothing selected"),
-            l.a.createElement(Oe, { store: t, regionStore: n.regionStore }),
-            l.a.createElement(Se, { store: t, item: n }),
+            l.a.createElement(xe, { store: t, regionStore: n.regionStore }),
+            l.a.createElement(we, { store: t, item: n }),
           );
         });
-      function Ie(e) {
+      function He(e) {
         return v.m.union({
           dispatcher: function(t) {
             if (
@@ -1454,34 +1453,34 @@
                 return t.type === e;
               })
             )
-              return w.getModelByTag(t.type);
+              return S.getModelByTag(t.type);
             throw Error("Not expecting tag: " + t.type);
           },
         });
       }
-      var He = {
+      var Ae = {
           unionArray: function(e) {
-            return v.m.maybeNull(v.m.array(Ie(e)));
+            return v.m.maybeNull(v.m.array(He(e)));
           },
           allModelsTypes: function() {
             var e = [
                 {
                   dispatcher: function(e) {
                     if (
-                      w.tags.find(function(t) {
+                      S.tags.find(function(t) {
                         return e.type === t;
                       })
                     )
-                      return w.getModelByTag(e.type);
+                      return S.getModelByTag(e.type);
                     throw Error("Not expecting tag: " + e.type);
                   },
                 },
-                w.modelsArr(),
+                S.modelsArr(),
               ],
               t = [].concat.apply([], e);
             return v.m.union.apply(null, t);
           },
-          oneOf: Ie,
+          oneOf: He,
           isType: function(e, t) {
             var n = Object(v.i)(e),
               a = !0,
@@ -1523,7 +1522,7 @@
             return null;
           },
         },
-        Ae = v.m.model({
+        De = v.m.model({
           display: v.m.optional(v.m.string, "block"),
           backgroundcolor: v.m.optional(v.m.string, ""),
           margin: v.m.optional(v.m.string, ""),
@@ -1532,7 +1531,7 @@
           id: v.m.identifier,
           type: "view",
           style: v.m.maybeNull(v.m.string),
-          children: He.unionArray([
+          children: Ae.unionArray([
             "view",
             "header",
             "labels",
@@ -1553,9 +1552,9 @@
             "dialog",
           ]),
         }),
-        De = v.m.compose(
+        ze = v.m.compose(
           "ViewModel",
-          Ae,
+          De,
           Le,
         ),
         Pe = Object(u.c)(function(e) {
@@ -1563,13 +1562,13 @@
             n = {};
           return (
             "inline" === t.display && (n = { display: "inline-block", marginRight: "15px" }),
-            t.style && (n = M.cssConverter(t.style)),
-            l.a.createElement("div", { style: n }, M.renderChildren(t))
+            t.style && (n = R.cssConverter(t.style)),
+            l.a.createElement("div", { style: n }, R.renderChildren(t))
           );
         });
-      w.addTag("view", De, Pe);
-      var ze = n(560);
-      function Je(e, t) {
+      S.addTag("view", ze, Pe);
+      var Je = n(564);
+      function Be(e, t) {
         return "$" === e.charAt(0)
           ? (function e(t, n, a) {
               return "string" === typeof n
@@ -1582,7 +1581,7 @@
             })(t, e.substring(1))
           : e;
       }
-      function Be(e, t) {
+      function Ve(e, t) {
         t || (t = {});
         for (
           var n,
@@ -1616,14 +1615,14 @@
         }
         return n;
       }
-      var Ve = v.m.model().actions(function(e) {
+      var We = v.m.model().actions(function(e) {
           return {
             updateValue: function(t) {
-              e._value = Be(e.value, t.task.dataObj) || "";
+              e._value = Ve(e.value, t.task.dataObj) || "";
             },
           };
         }),
-        We = v.m.model({
+        Fe = v.m.model({
           type: "table",
           size: v.m.optional(v.m.string, "h4"),
           value: v.m.maybeNull(v.m.string),
@@ -1631,10 +1630,10 @@
         }),
         Ue = v.m.compose(
           "TableModel",
+          Fe,
           We,
-          Ve,
         ),
-        Fe = Object(u.b)("store")(
+        Ge = Object(u.b)("store")(
           Object(u.c)(function(e) {
             var t = e.store,
               n = e.item._value;
@@ -1644,24 +1643,24 @@
                 "div",
                 { style: { marginTop: "1em" } },
                 l.a.createElement(
-                  ze.a,
+                  Je.a,
                   { basic: "very", celled: !0, collapsing: !0 },
                   l.a.createElement(
-                    ze.a.Body,
+                    Je.a.Body,
                     null,
                     Object.keys(n).map(function(e) {
                       var t = n[e];
                       return (
                         "object" === typeof t && (t = JSON.stringify(t)),
                         l.a.createElement(
-                          ze.a.Row,
+                          Je.a.Row,
                           null,
                           l.a.createElement(
-                            ze.a.Cell,
+                            Je.a.Cell,
                             null,
-                            l.a.createElement(pe.a, { as: "h4" }, l.a.createElement(pe.a.Subheader, null, e)),
+                            l.a.createElement(me.a, { as: "h4" }, l.a.createElement(me.a.Subheader, null, e)),
                           ),
-                          l.a.createElement(ze.a.Cell, null, t),
+                          l.a.createElement(Je.a.Cell, null, t),
                         )
                       );
                     }),
@@ -1671,30 +1670,30 @@
             );
           }),
         );
-      w.addTag("table", Ue, Fe);
-      var Ze = n(557),
-        Ye = v.m.model({
+      S.addTag("table", Ue, Ge);
+      var Ye = n(561),
+        Ze = v.m.model({
           type: "header",
           size: v.m.optional(v.m.number, 4),
           value: v.m.optional(v.m.string, ""),
           underline: v.m.optional(v.m.boolean, !1),
         }),
-        Ge = v.m.compose(
+        Ke = v.m.compose(
           "HeaderModel",
-          Ye,
-          Ve,
+          Ze,
+          We,
         ),
         Xe = Object(u.c)(function(e) {
           var t = e.item;
           return l.a.createElement(
-            Ze.a.Title,
+            Ye.a.Title,
             { underline: t.underline, level: t.size, style: { margin: "10px 0" } },
             t.value,
           );
         });
-      w.addTag("header", Ge, Xe);
+      S.addTag("header", Ke, Xe);
       var $e = v.m.model({ value: v.m.maybeNull(v.m.string), name: v.m.maybeNull(v.m.string) });
-      var Ke = v.m
+      var qe = v.m
           .model({ id: v.m.identifier, type: "HyperText" })
           .views(function(e) {
             return {
@@ -1713,26 +1712,26 @@
               };
             })(e);
           }),
-        qe = v.m.compose(
+        Qe = v.m.compose(
           "HyperTextModel",
           $e,
-          Ke,
+          qe,
         ),
-        Qe = Object(u.b)("store")(
+        et = Object(u.b)("store")(
           Object(u.c)(function(e) {
             var t = e.store,
               n = e.item;
             return t.task
-              ? l.a.createElement("div", { dangerouslySetInnerHTML: { __html: Be(n.value, t.task.dataObj) } })
+              ? l.a.createElement("div", { dangerouslySetInnerHTML: { __html: Ve(n.value, t.task.dataObj) } })
               : null;
           }),
         );
-      w.addTag("hypertext", qe, Qe);
-      var et = n(393),
-        tt = n(553),
-        nt = n(86),
-        at = n.n(nt),
-        ot = (function(e) {
+      S.addTag("hypertext", Qe, et);
+      var tt = n(396),
+        nt = n(557),
+        at = n(87),
+        ot = n.n(at),
+        rt = (function(e) {
           function t() {
             return Object(d.a)(this, t), Object(p.a)(this, Object(g.a)(t).apply(this, arguments));
           }
@@ -1745,12 +1744,12 @@
                   var e,
                     t,
                     n,
-                    a = "".concat(at.a.block);
+                    a = "".concat(ot.a.block);
                   return (
                     this.props.hint && (e = l.a.createElement(Ee.a, { color: "blue" }, this.props.hint)),
                     this.props.bg && (t = this.props.bg),
                     this.props.selected &&
-                      ((a = "".concat(a, " ").concat(at.a.block_selected)),
+                      ((a = "".concat(a, " ").concat(ot.a.block_selected)),
                       (e = l.a.createElement(
                         "div",
                         null,
@@ -1759,15 +1758,15 @@
                       this.props.hint &&
                         (e = l.a.createElement(
                           "div",
-                          { className: at.a.tag },
+                          { className: ot.a.tag },
                           l.a.createElement(Ee.a, { color: "magenta" }, this.props.hint),
                         ))),
-                    this.props.date && (n = l.a.createElement("span", { className: at.a.date }, this.props.date)),
+                    this.props.date && (n = l.a.createElement("span", { className: ot.a.date }, this.props.date)),
                     l.a.createElement(
                       "div",
                       { className: a, style: { background: t, width: "max-content", maxWidth: "100%" } },
-                      l.a.createElement("span", { className: at.a.name }, this.props.name, ":\xa0"),
-                      l.a.createElement("p", { className: at.a.text }, this.props.text),
+                      l.a.createElement("span", { className: ot.a.name }, this.props.name, ":\xa0"),
+                      l.a.createElement("p", { className: ot.a.text }, this.props.text),
                       n,
                       e,
                     )
@@ -1778,16 +1777,16 @@
             t
           );
         })(l.a.Component),
-        rt = v.m.model({
+        it = v.m.model({
           name: v.m.string,
           text: v.m.string,
           selected: v.m.optional(v.m.boolean, !1),
           date: v.m.optional(v.m.string, ""),
           hint: v.m.optional(v.m.string, ""),
         }),
-        it = v.m.model({ value: v.m.maybeNull(v.m.string), name: v.m.maybeNull(v.m.string) });
-      var lt = v.m
-          .model({ id: v.m.optional(v.m.identifier, j), type: "Dialog", data: v.m.map(rt) })
+        lt = v.m.model({ value: v.m.maybeNull(v.m.string), name: v.m.maybeNull(v.m.string) });
+      var st = v.m
+          .model({ id: v.m.optional(v.m.identifier, N), type: "Dialog", data: v.m.map(it) })
           .views(function(e) {
             return {
               get completion() {
@@ -1805,25 +1804,25 @@
               };
             })(e);
           }),
-        st = v.m.compose(
+        ct = v.m.compose(
           "DialogModel",
-          it,
           lt,
+          st,
         ),
-        ct = Object(u.b)("store")(
+        ut = Object(u.b)("store")(
           Object(u.c)(function(e) {
             var t = e.store,
               n = e.item;
-            if (!t.task || !t.task.dataObj) return l.a.createElement(et.a, null);
+            if (!t.task || !t.task.dataObj) return l.a.createElement(tt.a, null);
             var a = [],
               o = n.value;
             return (
               "$" === o.charAt(0) && (o = o.substr(1)),
               t.task.dataObj[o].forEach(function(e, t) {
                 var n;
-                e.name && (n = U(F(e.name), 0.1)),
+                e.name && (n = W(F(e.name), 0.1)),
                   a.push(
-                    l.a.createElement(ot, {
+                    l.a.createElement(rt, {
                       key: t,
                       name: e.name,
                       hint: e.hint,
@@ -1852,15 +1851,15 @@
                   },
                   a,
                 ),
-                l.a.createElement(tt.a, { dashed: !0 }),
+                l.a.createElement(nt.a, { dashed: !0 }),
               )
             );
           }),
         );
-      w.addTag("dialog", st, ct);
-      var ut = v.m.model({ name: v.m.maybeNull(v.m.string), value: v.m.maybeNull(v.m.string) }),
-        dt = v.m
-          .model({ id: v.m.optional(v.m.identifier, j), type: "audio", _value: v.m.optional(v.m.string, "") })
+      S.addTag("dialog", ct, ut);
+      var dt = v.m.model({ name: v.m.maybeNull(v.m.string), value: v.m.maybeNull(v.m.string) }),
+        mt = v.m
+          .model({ id: v.m.optional(v.m.identifier, N), type: "audio", _value: v.m.optional(v.m.string, "") })
           .views(function(e) {
             return {
               get completion() {
@@ -1876,13 +1875,13 @@
               },
             };
           }),
-        mt = v.m.compose(
+        pt = v.m.compose(
           "AudioModel",
-          ut,
           dt,
-          Ve,
+          mt,
+          We,
         ),
-        pt = Object(u.c)(function(e) {
+        gt = Object(u.c)(function(e) {
           e.store;
           var t = e.item;
           return t._value
@@ -1898,18 +1897,18 @@
               )
             : null;
         }),
-        gt = Object(u.b)("store")(Object(u.c)(pt));
-      w.addTag("audio", mt, gt);
-      var ft = n(295),
-        ht = n.n(ft),
-        bt = n(296),
-        vt = n.n(bt),
-        yt = n(297),
-        kt = n.n(yt),
-        St = n(298),
-        wt = n.n(St),
-        xt = n(299),
-        Ot = n.n(xt);
+        ft = Object(u.b)("store")(Object(u.c)(gt));
+      S.addTag("audio", pt, ft);
+      var ht = n(297),
+        bt = n.n(ht),
+        vt = n(298),
+        yt = n.n(vt),
+        kt = n(299),
+        St = n.n(kt),
+        wt = n(300),
+        _t = n.n(wt),
+        Ot = n(301),
+        xt = n.n(Ot);
       function Et(e, t) {
         e = Number(e);
         var n = Math.floor(e / 60);
@@ -1920,7 +1919,7 @@
           n > 0 ? (e < 10 && (a = "0" + a), "".concat(n, ":").concat(a)) : a
         );
       }
-      function _t(e) {
+      function Nt(e) {
         return e >= 2500
           ? 0.01
           : e >= 1e3
@@ -1937,7 +1936,7 @@
           ? 15
           : 60 * Math.ceil(0.5 / e);
       }
-      function Nt(e) {
+      function jt(e) {
         return e >= 2500
           ? 10
           : e >= 1e3
@@ -1954,10 +1953,10 @@
           ? 15
           : 60 * Math.ceil(0.5 / e);
       }
-      function jt(e) {
-        return Math.floor(10 / _t(e));
+      function Ct(e) {
+        return Math.floor(10 / Nt(e));
       }
-      var Ct = (function(e) {
+      var Tt = (function(e) {
           function t(e) {
             var n;
             return (
@@ -1979,26 +1978,26 @@
                   var e = this;
                   (this.$el = c.a.findDOMNode(this)),
                     (this.$waveform = this.$el.querySelector("#wave")),
-                    (this.regions = vt.a.create({ dragSelection: { slop: 5 } })),
-                    (this.wavesurfer = ht.a.create({
+                    (this.regions = yt.a.create({ dragSelection: { slop: 5 } })),
+                    (this.wavesurfer = bt.a.create({
                       container: this.$waveform,
                       backend: "MediaElement",
                       waveColor: this.state.colors.waveColor,
                       progressColor: this.state.colors.progressColor,
                       plugins: [
                         this.regions,
-                        kt.a.create({
+                        St.a.create({
                           container: "#timeline",
                           formatTimeCallback: Et,
-                          timeInterval: _t,
-                          primaryLabelInterval: Nt,
-                          secondaryLabelInterval: jt,
+                          timeInterval: Nt,
+                          primaryLabelInterval: jt,
+                          secondaryLabelInterval: Ct,
                           primaryColor: "blue",
                           secondaryColor: "red",
                           primaryFontColor: "blue",
                           secondaryFontColor: "red",
                         }),
-                        wt.a.create({ wrapper: this.$waveform, showTime: !0, opacity: 1 }),
+                        _t.a.create({ wrapper: this.$waveform, showTime: !0, opacity: 1 }),
                       ],
                     })),
                     this.wavesurfer.load(this.props.src);
@@ -2044,7 +2043,7 @@
                   return l.a.createElement(
                     "div",
                     null,
-                    l.a.createElement("div", { id: "wave", className: Ot.a.wave }),
+                    l.a.createElement("div", { id: "wave", className: xt.a.wave }),
                     l.a.createElement("div", { id: "timeline" }),
                   );
                 },
@@ -2053,7 +2052,7 @@
             t
           );
         })(l.a.Component),
-        Tt = v.m
+        Rt = v.m
           .model({ selected: v.m.optional(v.m.boolean, !1), highlighted: v.m.optional(v.m.boolean, !1) })
           .actions(function(e) {
             return {
@@ -2086,7 +2085,7 @@
               },
             };
           }),
-        Rt = v.m
+        Mt = v.m
           .model({ normInput: v.m.maybeNull(v.m.string), normalization: v.m.maybeNull(v.m.string) })
           .actions(function(e) {
             return {
@@ -2101,7 +2100,7 @@
               },
             };
           }),
-        Mt = v.m.model({
+        It = v.m.model({
           value: v.m.maybeNull(v.m.string),
           selected: v.m.optional(v.m.boolean, !1),
           alias: v.m.maybeNull(v.m.string),
@@ -2112,13 +2111,13 @@
           background: v.m.optional(v.m.string, "#36B37E"),
           selectedcolor: v.m.optional(v.m.string, "white"),
         }),
-        It = v.m
-          .model({ id: v.m.optional(v.m.identifier, j), type: "label", _value: v.m.optional(v.m.string, "") })
+        Ht = v.m
+          .model({ id: v.m.optional(v.m.identifier, N), type: "label", _value: v.m.optional(v.m.string, "") })
           .actions(function(e) {
             return {
               toggleSelected: function() {
                 var t = e.selected,
-                  n = He.getParentOfTypeString(e, ["LabelsModel", "RectangleLabelsModel", "PolygonLabelsModel"]);
+                  n = Ae.getParentOfTypeString(e, ["LabelsModel", "RectangleLabelsModel", "PolygonLabelsModel"]);
                 n.shouldBeUnselected && n.unselectAll(),
                   (n.shouldBeUnselected && !0 === t) || (e.selected = !e.selected);
               },
@@ -2130,13 +2129,13 @@
               },
             };
           }),
-        Ht = v.m.compose(
+        At = v.m.compose(
           "LabelModel",
-          Mt,
           It,
-          Ve,
+          Ht,
+          We,
         ),
-        At = Object(u.b)("store")(
+        Dt = Object(u.b)("store")(
           Object(u.c)(function(e) {
             var t = e.item,
               n = e.store,
@@ -2158,15 +2157,15 @@
               t._value,
               "true" === t.showalias &&
                 t.alias &&
-                l.a.createElement("span", { style: X.styleToProp(t.aliasstyle) }, "\xa0", t.alias),
+                l.a.createElement("span", { style: Z.styleToProp(t.aliasstyle) }, "\xa0", t.alias),
               n.settings.enableTooltips &&
                 n.settings.enableHotkeys &&
                 t.hotkey &&
-                l.a.createElement(ae, null, "[", t.hotkey, "]"),
+                l.a.createElement(ne, null, "[", t.hotkey, "]"),
             );
           }),
         );
-      w.addTag("label", Ht, At);
+      S.addTag("label", At, Dt);
       var Lt = v.m
           .model()
           .views(function(e) {
@@ -2203,19 +2202,18 @@
               },
             };
           }),
-        Dt = v.m.model({
+        zt = v.m.model({
           name: v.m.maybeNull(v.m.string),
           toname: v.m.maybeNull(v.m.string),
           choice: v.m.optional(v.m.enumeration(["single", "multiple"]), "single"),
-          headerprefix: v.m.maybeNull(v.m.string),
           selectionstyle: v.m.maybeNull(v.m.optional(v.m.string, "basic", "border", "bottom")),
         }),
         Pt = v.m
           .model({
-            id: v.m.optional(v.m.identifier, j),
-            pid: v.m.optional(v.m.string, j),
+            id: v.m.optional(v.m.identifier, N),
+            pid: v.m.optional(v.m.string, N),
             type: "labels",
-            children: He.unionArray(["labels", "label", "choice"]),
+            children: Ae.unionArray(["labels", "label", "choice"]),
           })
           .views(function(e) {
             return {
@@ -2248,13 +2246,13 @@
               },
             };
           }),
-        zt = v.m.compose(
+        Jt = v.m.compose(
           "LabelsModel",
-          Dt,
+          zt,
           Pt,
           Lt,
         ),
-        Jt = Object(u.c)(function(e) {
+        Bt = Object(u.c)(function(e) {
           var t = e.item;
           return l.a.createElement(
             "div",
@@ -2268,14 +2266,12 @@
                 flexFlow: "wrap",
               },
             },
-            t.headerprefix &&
-              l.a.createElement("h4", { style: { display: "inline", marginRight: "15px" } }, t.headerprefix),
-            M.renderChildren(t),
+            R.renderChildren(t),
           );
         });
-      w.addTag("labels", zt, Jt);
-      var Bt = n(569),
-        Vt = v.m.model({
+      S.addTag("labels", Jt, Bt);
+      var Vt = n(572),
+        Wt = v.m.model({
           name: v.m.maybeNull(v.m.string),
           toname: v.m.maybeNull(v.m.string),
           maxrating: v.m.optional(v.m.string, "5"),
@@ -2283,10 +2279,10 @@
           size: v.m.optional(v.m.string, "large"),
           hotkey: v.m.maybeNull(v.m.string),
         }),
-        Wt = v.m
+        Ft = v.m
           .model({
-            id: v.m.optional(v.m.identifier, j),
-            pid: v.m.optional(v.m.string, j),
+            id: v.m.optional(v.m.identifier, N),
+            pid: v.m.optional(v.m.string, N),
             type: "rating",
             rating: v.m.maybeNull(v.m.number),
           })
@@ -2332,17 +2328,17 @@
           }),
         Ut = v.m.compose(
           "RatingModel",
-          Vt,
           Wt,
+          Ft,
         ),
-        Ft = Object(u.b)("store")(
+        Gt = Object(u.b)("store")(
           Object(u.c)(function(e) {
             var t = e.item,
               n = e.store;
             return l.a.createElement(
               "div",
               null,
-              l.a.createElement(Bt.a, {
+              l.a.createElement(Vt.a, {
                 icon: "star",
                 size: t.size,
                 defaultRating: 0,
@@ -2358,14 +2354,14 @@
             );
           }),
         );
-      w.addTag("rating", Ut, Ft);
-      var Zt = v.m
+      S.addTag("rating", Ut, Gt);
+      var Yt = v.m
           .model({
-            id: v.m.optional(v.m.identifier, j),
-            pid: v.m.optional(v.m.string, j),
+            id: v.m.optional(v.m.identifier, N),
+            pid: v.m.optional(v.m.string, N),
             start: v.m.number,
             end: v.m.number,
-            states: v.m.maybeNull(v.m.array(v.m.union(zt, Ut))),
+            states: v.m.maybeNull(v.m.array(v.m.union(Jt, Ut))),
           })
           .views(function(e) {
             return {
@@ -2438,13 +2434,13 @@
               },
             };
           }),
-        Yt = v.m.compose(
+        Zt = v.m.compose(
           "AudioRegionModel",
-          Tt,
           Rt,
-          Zt,
+          Mt,
+          Yt,
         ),
-        Gt = v.m.model({
+        Kt = v.m.model({
           name: v.m.maybeNull(v.m.string),
           value: v.m.maybeNull(v.m.string),
           haszoom: v.m.optional(v.m.string, "true"),
@@ -2457,7 +2453,7 @@
             id: v.m.identifier,
             type: "audio",
             playing: v.m.optional(v.m.boolean, !1),
-            regions: v.m.array(Yt),
+            regions: v.m.array(Zt),
             rangeValue: v.m.optional(v.m.string, "20"),
           })
           .views(function(e) {
@@ -2492,7 +2488,7 @@
               },
               fromStateJSON: function(t, n) {
                 e.findRegion(t.value.start, t.value.end),
-                  T(n),
+                  C(n),
                   e._ws.addRegion({ start: t.value.start, end: t.value.end });
               },
               setRangeValue: function(t) {
@@ -2504,11 +2500,11 @@
                 var a = e.activeStates(),
                   o = a
                     ? a.map(function(e) {
-                        return C(e);
+                        return j(e);
                       })
                     : null,
-                  r = Yt.create({
-                    id: j(),
+                  r = Zt.create({
+                    id: N(),
                     start: t.start,
                     end: t.end,
                     regionbg: e.regionbg,
@@ -2542,17 +2538,17 @@
           }),
         $t = v.m.compose(
           "AudioPlusModel",
-          Gt,
+          Kt,
           Xt,
-          Ve,
+          We,
         ),
-        Kt = Object(u.c)(function(e) {
+        qt = Object(u.c)(function(e) {
           e.store;
           var t = e.item;
           return l.a.createElement(
             "div",
             null,
-            l.a.createElement(Ct, {
+            l.a.createElement(Tt, {
               src: t._value,
               selectRegion: t.selectRegion,
               handlePlay: t.handlePlay,
@@ -2564,7 +2560,7 @@
               "div",
               { style: { display: "flex", justifyContent: "space-between", marginTop: "1em" } },
               l.a.createElement(
-                H.a,
+                I.a,
                 {
                   type: "primary",
                   onClick: function(e) {
@@ -2572,9 +2568,9 @@
                   },
                 },
                 t.playing &&
-                  l.a.createElement(i.Fragment, null, l.a.createElement(be.a, { type: "pause-circle" }), " Pause"),
+                  l.a.createElement(i.Fragment, null, l.a.createElement(he.a, { type: "pause-circle" }), " Pause"),
                 !t.playing &&
-                  l.a.createElement(i.Fragment, null, l.a.createElement(be.a, { type: "play-circle" }), " Play"),
+                  l.a.createElement(i.Fragment, null, l.a.createElement(he.a, { type: "play-circle" }), " Play"),
               ),
               "true" === t.haszoom &&
                 l.a.createElement("input", {
@@ -2590,11 +2586,11 @@
             ),
           );
         }),
-        qt = Object(u.b)("store")(Object(u.c)(Kt));
-      w.addTag("audioplus", $t, qt);
-      var Qt = n(53),
-        en =
-          (n(111),
+        Qt = Object(u.b)("store")(Object(u.c)(qt));
+      S.addTag("audioplus", $t, Qt);
+      var en = n(53),
+        tn =
+          (n(112),
           v.m.model({
             name: v.m.maybeNull(v.m.string),
             toname: v.m.maybeNull(v.m.string),
@@ -2604,7 +2600,7 @@
             strokecolor: v.m.optional(v.m.string, "#f48a42"),
             canrotate: v.m.optional(v.m.string, "true"),
           })),
-        tn = v.m
+        nn = v.m
           .model({ id: v.m.identifier, type: "rectangle" })
           .views(function(e) {
             return {
@@ -2620,21 +2616,21 @@
           .actions(function(e) {
             return { fromStateJSON: function(e) {} };
           }),
-        nn = v.m.compose(
+        an = v.m.compose(
           "RectangleModel",
-          en,
           tn,
+          nn,
         );
-      w.addTag("rectangle", nn, function() {
+      S.addTag("rectangle", an, function() {
         return null;
       });
-      var an = v.m.model({ name: v.m.maybeNull(v.m.string), toname: v.m.maybeNull(v.m.string) }),
-        on = v.m
+      var on = v.m.model({ name: v.m.maybeNull(v.m.string), toname: v.m.maybeNull(v.m.string) }),
+        rn = v.m
           .model("RectangleLabelsModel", {
-            id: v.m.optional(v.m.identifier, j),
-            pid: v.m.optional(v.m.string, j),
+            id: v.m.optional(v.m.identifier, N),
+            pid: v.m.optional(v.m.string, N),
             type: "rectanglelabels",
-            children: He.unionArray(["labels", "label", "choice"]),
+            children: Ae.unionArray(["labels", "label", "choice"]),
           })
           .actions(function(e) {
             return {
@@ -2649,26 +2645,26 @@
               },
             };
           }),
-        rn = v.m.compose(
-          zt,
-          nn,
+        ln = v.m.compose(
+          Jt,
           an,
           on,
+          rn,
           Lt,
         ),
-        ln = v.m.compose(
+        sn = v.m.compose(
           "RectangleLabelsModel",
-          rn,
+          ln,
         ),
-        sn = Object(u.c)(function(e) {
+        cn = Object(u.c)(function(e) {
           var t = e.item;
-          return l.a.createElement(Jt, { item: t });
+          return l.a.createElement(Bt, { item: t });
         });
-      w.addTag("rectanglelabels", ln, sn);
-      var cn = v.m
+      S.addTag("rectanglelabels", sn, cn);
+      var un = v.m
           .model({
             id: v.m.identifier,
-            pid: v.m.optional(v.m.string, j),
+            pid: v.m.optional(v.m.string, N),
             type: "rectangleregion",
             x: v.m.number,
             y: v.m.number,
@@ -2681,7 +2677,7 @@
             strokewidth: v.m.number,
             fillcolor: v.m.maybeNull(v.m.string),
             strokecolor: v.m.string,
-            states: v.m.maybeNull(v.m.array(v.m.union(zt, Ut, ln))),
+            states: v.m.maybeNull(v.m.array(v.m.union(Jt, Ut, sn))),
             wp: v.m.maybeNull(v.m.number),
             hp: v.m.maybeNull(v.m.number),
             sw: v.m.maybeNull(v.m.number),
@@ -2691,7 +2687,7 @@
           .views(function(e) {
             return {
               get parent() {
-                return Object(v.f)(e, Cn);
+                return Object(v.f)(e, Tn);
               },
               get completion() {
                 return Object(v.g)(e).completionStore.selected;
@@ -2766,13 +2762,13 @@
               },
             };
           }),
-        un = v.m.compose(
+        dn = v.m.compose(
           "RectRegionModel",
-          Tt,
           Rt,
-          cn,
+          Mt,
+          un,
         ),
-        dn = Object(u.b)("store")(
+        mn = Object(u.b)("store")(
           Object(u.c)(function(e) {
             var t = e.store,
               n = e.item,
@@ -2800,7 +2796,7 @@
                 i.Fragment,
                 null,
                 l.a.createElement(
-                  Qt.Rect,
+                  en.Rect,
                   Object.assign(
                     {
                       x: a,
@@ -2866,10 +2862,10 @@
             );
           }),
         );
-      w.addTag("rectangleregion", un, dn);
-      n(305);
-      var mn = n(301),
-        pn = v.m
+      S.addTag("rectangleregion", dn, mn);
+      n(308);
+      var pn = n(303),
+        gn = v.m
           .model({
             init_x: v.m.optional(v.m.number, 0),
             init_y: v.m.optional(v.m.number, 0),
@@ -2917,7 +2913,7 @@
               },
             };
           }),
-        gn = Object(u.c)(function(e) {
+        fn = Object(u.c)(function(e) {
           var t = e.item,
             n = e.index,
             a = { small: 1, medium: 2, large: 3 },
@@ -2947,7 +2943,7 @@
               });
           return "circle" == t.style
             ? l.a.createElement(
-                Qt.Circle,
+                en.Circle,
                 Object.assign(
                   {
                     key: n,
@@ -2964,7 +2960,7 @@
                 ),
               )
             : l.a.createElement(
-                Qt.Rect,
+                en.Rect,
                 Object.assign(
                   {
                     key: n,
@@ -2983,7 +2979,7 @@
                 ),
               );
         }),
-        fn = v.m.model({
+        hn = v.m.model({
           name: v.m.maybeNull(v.m.string),
           toname: v.m.maybeNull(v.m.string),
           opacity: v.m.optional(v.m.string, "0.6"),
@@ -2993,7 +2989,7 @@
           pointsize: v.m.optional(v.m.string, "medium"),
           pointstyle: v.m.optional(v.m.string, "rectangle"),
         }),
-        hn = v.m
+        bn = v.m
           .model({ id: v.m.identifier, type: "polygon", _value: v.m.optional(v.m.string, "") })
           .views(function(e) {
             return {
@@ -3020,25 +3016,25 @@
           .actions(function(e) {
             return {};
           }),
-        bn = v.m.compose(
+        vn = v.m.compose(
           "PolygonModel",
-          fn,
           hn,
+          bn,
         ),
-        vn = Object(u.b)("store")(
+        yn = Object(u.b)("store")(
           Object(u.c)(function(e) {
             e.store, e.item;
             return null;
           }),
         );
-      w.addTag("polygon", bn, vn);
-      var yn = v.m.model({ name: v.m.maybeNull(v.m.string), toname: v.m.maybeNull(v.m.string) }),
-        kn = v.m
+      S.addTag("polygon", vn, yn);
+      var kn = v.m.model({ name: v.m.maybeNull(v.m.string), toname: v.m.maybeNull(v.m.string) }),
+        Sn = v.m
           .model("PolygonLabelsModel", {
-            id: v.m.optional(v.m.identifier, j),
-            pid: v.m.optional(v.m.string, j),
+            id: v.m.optional(v.m.identifier, N),
+            pid: v.m.optional(v.m.string, N),
             type: "polygonlabels",
-            children: He.unionArray(["labels", "label", "choice"]),
+            children: Ae.unionArray(["labels", "label", "choice"]),
           })
           .actions(function(e) {
             return {
@@ -3053,26 +3049,26 @@
               },
             };
           }),
-        Sn = v.m.compose(
-          zt,
-          bn,
-          yn,
+        wn = v.m.compose(
+          Jt,
+          vn,
           kn,
+          Sn,
           Lt,
         ),
-        wn = v.m.compose(
+        _n = v.m.compose(
           "PolygonLabelsModel",
-          Sn,
+          wn,
         ),
-        xn = Object(u.c)(function(e) {
+        On = Object(u.c)(function(e) {
           var t = e.item;
-          return l.a.createElement(Jt, { item: t });
+          return l.a.createElement(Bt, { item: t });
         });
-      w.addTag("polygonlabels", wn, xn);
-      var On = v.m
+      S.addTag("polygonlabels", _n, On);
+      var xn = v.m
           .model({
             id: v.m.identifier,
-            pid: v.m.optional(v.m.string, j),
+            pid: v.m.optional(v.m.string, N),
             type: "polygonregion",
             opacity: v.m.number,
             fillcolor: v.m.maybeNull(v.m.string),
@@ -3081,8 +3077,8 @@
             pointsize: v.m.string,
             pointstyle: v.m.string,
             closed: v.m.optional(v.m.boolean, !1),
-            points: v.m.array(pn, []),
-            states: v.m.maybeNull(v.m.array(v.m.union(zt, Ut, wn))),
+            points: v.m.array(gn, []),
+            states: v.m.maybeNull(v.m.array(v.m.union(Jt, Ut, _n))),
             mouseOverStartPoint: v.m.optional(v.m.boolean, !1),
             fromName: v.m.maybeNull(v.m.string),
             wp: v.m.maybeNull(v.m.number),
@@ -3091,7 +3087,7 @@
           .views(function(e) {
             return {
               get parent() {
-                return Object(v.f)(e, Cn);
+                return Object(v.f)(e, Tn);
               },
               get completion() {
                 return Object(v.g)(e).completionStore.selected;
@@ -3137,7 +3133,7 @@
                     s = o[r][1],
                     c = o[i][0],
                     u = o[i][1];
-                  s > n != u > n && t < ((c - l) * (n - s)) / (u - s) + l && (Object(mn.a)("inside"), (a = !a));
+                  s > n != u > n && t < ((c - l) * (n - s)) / (u - s) + l && (Object(pn.a)("inside"), (a = !a));
                 }
                 return a;
               },
@@ -3216,11 +3212,11 @@
           }),
         En = v.m.compose(
           "PolygonRegionModel",
-          Tt,
           Rt,
-          On,
+          Mt,
+          xn,
         );
-      var _n = Object(u.b)("store")(
+      var Nn = Object(u.b)("store")(
         Object(u.c)(function(e) {
           var t = e.store,
             n = e.item,
@@ -3247,7 +3243,7 @@
               null,
               n.mouseOverStartPoint,
               l.a.createElement(
-                Qt.Line,
+                en.Line,
                 Object.assign(
                   {
                     points: n.linePoints(),
@@ -3307,26 +3303,26 @@
               ),
               !n.closed &&
                 n.points.map(function(e, t) {
-                  return l.a.createElement(gn, { item: e, index: t });
+                  return l.a.createElement(fn, { item: e, index: t });
                 }),
               n.closed &&
                 n.selected &&
                 n.points.map(function(e, t) {
-                  return l.a.createElement(gn, { item: e, index: t });
+                  return l.a.createElement(fn, { item: e, index: t });
                 }),
             )
           );
         }),
       );
-      w.addTag("polygonregion", En, _n);
-      var Nn = v.m.model({
+      S.addTag("polygonregion", En, Nn);
+      var jn = v.m.model({
           name: v.m.maybeNull(v.m.string),
           value: v.m.maybeNull(v.m.string),
           resize: v.m.maybeNull(v.m.string),
           width: v.m.optional(v.m.string, "100%"),
           maxwidth: v.m.optional(v.m.string, "750px"),
         }),
-        jn = v.m
+        Cn = v.m
           .model({
             id: v.m.identifier,
             type: "image",
@@ -3335,9 +3331,9 @@
             stageHeight: v.m.optional(v.m.integer, 1),
             naturalWidth: v.m.optional(v.m.integer, 1),
             naturalHeight: v.m.optional(v.m.integer, 1),
-            selectedShape: v.m.safeReference(v.m.union(un, En)),
+            selectedShape: v.m.safeReference(v.m.union(dn, En)),
             activePolygon: v.m.maybeNull(v.m.safeReference(En)),
-            shapes: v.m.array(v.m.union(un, En), []),
+            shapes: v.m.array(v.m.union(dn, En), []),
           })
           .views(function(e) {
             return {
@@ -3406,7 +3402,7 @@
                         : null,
                       o = a
                         ? a.map(function(e) {
-                            return C(e);
+                            return j(e);
                           })
                         : null;
                     if (0 === o.length) return;
@@ -3425,7 +3421,7 @@
                       : null,
                     l = i
                       ? i.map(function(e) {
-                          return C(e);
+                          return j(e);
                         })
                       : null;
                   if (0 === l.length) return;
@@ -3446,8 +3442,8 @@
               },
               __addRect: function(t, n, a, o, r, i, l) {
                 var s = e.controlButton(),
-                  c = un.create({
-                    id: j(),
+                  c = dn.create({
+                    id: N(),
                     x: t,
                     y: n,
                     width: a,
@@ -3470,7 +3466,7 @@
                   else {
                     var r = e.controlButton();
                     (a = En.create({
-                      id: j(),
+                      id: N(),
                       x: t.evt.offsetX - 5,
                       y: t.evt.offsetY - 5,
                       width: o,
@@ -3504,21 +3500,21 @@
                   t.value.choices && e.completion.names.get(t.from_name).fromStateJSON(t),
                   t.value.rectanglelabels)
                 ) {
-                  var o = T(n);
+                  var o = C(n);
                   o.fromStateJSON(t),
                     e.__addRect(t.value.x, t.value.y, t.value.width, t.value.height, o.getSelectedColor(), [o], "perc");
                 }
-                t.value.shape && (t.from_name !== t.to_name && ((a = T(n).fromStateJSON(t)), e.shapes.push(a)));
+                t.value.shape && (t.from_name !== t.to_name && ((a = C(n).fromStateJSON(t)), e.shapes.push(a)));
               },
             };
           }),
-        Cn = v.m.compose(
+        Tn = v.m.compose(
           "ImageModel",
-          Nn,
           jn,
-          Ve,
+          Cn,
+          We,
         ),
-        Tn = (function(e) {
+        Rn = (function(e) {
           function t() {
             return Object(d.a)(this, t), Object(p.a)(this, Object(g.a)(t).apply(this, arguments));
           }
@@ -3553,7 +3549,7 @@
                 key: "render",
                 value: function() {
                   var e = this;
-                  return l.a.createElement(Qt.Transformer, {
+                  return l.a.createElement(en.Transformer, {
                     resizeEnabled: !0,
                     rotateEnabled: this.props.rotateEnabled,
                     anchorSize: 8,
@@ -3567,7 +3563,7 @@
             t
           );
         })(l.a.Component),
-        Rn = (function(e) {
+        Mn = (function(e) {
           function t() {
             var e, n;
             Object(d.a)(this, t);
@@ -3608,7 +3604,7 @@
                         l.a.createElement("img", { style: a, src: t._value, onLoad: t.updateIE }),
                       ),
                       l.a.createElement(
-                        Qt.Stage,
+                        en.Stage,
                         {
                           ref: function(e) {
                             t._setStageRef(e);
@@ -3620,12 +3616,12 @@
                           onMouseDown: this.handleStageMouseDown,
                         },
                         l.a.createElement(
-                          Qt.Layer,
+                          en.Layer,
                           null,
                           t.shapes.map(function(e) {
-                            return M.renderItem(e);
+                            return R.renderItem(e);
                           }),
-                          l.a.createElement(Tn, { rotateEnabled: o, selectedShapeName: this.props.item.selectedShape }),
+                          l.a.createElement(Rn, { rotateEnabled: o, selectedShapeName: this.props.item.selectedShape }),
                         ),
                       ),
                     );
@@ -3644,16 +3640,16 @@
             t
           );
         })(i.Component),
-        Mn = Object(u.b)("store")(Object(u.c)(Rn));
-      w.addTag("image", Cn, Mn);
-      var In = n(154),
-        Hn = n(199),
-        An = n.n(Hn),
+        In = Object(u.b)("store")(Object(u.c)(Mn));
+      S.addTag("image", Tn, In);
+      var Hn = n(151),
+        An = n(207),
+        Dn = n.n(An),
         Ln = function e(t, n, a) {
           var o = arguments.length > 3 && void 0 !== arguments[3] ? arguments[3] : {};
           Object(d.a)(this, e), (this.start = t), (this.end = n), (this.text = a), (this.data = o);
         },
-        Dn = (function(e) {
+        zn = (function(e) {
           function t() {
             return Object(d.a)(this, t), Object(p.a)(this, Object(g.a)(t).apply(this, arguments));
           }
@@ -3714,7 +3710,7 @@
               u.length &&
               (a.states &&
                 a.states.map(function(e) {
-                  t = X.Colors.convertToRGBA(e.getSelectedColor(), 0.3);
+                  t = Z.Colors.convertToRGBA(e.getSelectedColor(), 0.3);
                 }),
               n.completionStore.selected.regionStore.regions.map(function(e) {
                 e.selected &&
@@ -3725,7 +3721,7 @@
               }),
               (p = u.reduceRight(function(e, n) {
                 return l.a.createElement(
-                  Dn,
+                  zn,
                   { style: { background: t, padding: "2px 0" }, position: s, overlap: n, keyNode: m(a) },
                   e,
                 );
@@ -3733,7 +3729,7 @@
             return p;
           }),
         ),
-        zn = function(e) {
+        Jn = function(e) {
           var t = { wordWrap: "break-word" };
           return l.a.createElement(
             Pn,
@@ -3752,16 +3748,16 @@
             ),
           );
         },
-        Jn = function(e) {
+        Bn = function(e) {
           return l.a.createElement(
             Pn,
             { id: e.id, highlightStyle: e.highlightStyle, charIndex: e.charIndex, range: e.range, overlap: e.overlap },
             "".concat(e.text[e.charIndex]).concat(e.text[e.charIndex + 1]),
           );
         },
-        Bn = n(302),
-        Vn = n.n(Bn),
-        Wn = (function(e) {
+        Vn = n(304),
+        Wn = n.n(Vn),
+        Fn = (function(e) {
           function t() {
             var e;
             return Object(d.a)(this, t), ((e = Object(p.a)(this, Object(g.a)(t).call(this))).dismissMouseUp = 0), e;
@@ -3794,7 +3790,7 @@
                   return (
                     this.props.ranges &&
                       this.props.ranges.map(function(t) {
-                        return e >= t.start && e <= t.end ? (o = [].concat(Object(In.a)(o), [t.id])) : o;
+                        return e >= t.start && e <= t.end ? (o = [].concat(Object(Hn.a)(o), [t.id])) : o;
                       }),
                     l.a.createElement(
                       Pn,
@@ -3818,9 +3814,9 @@
                   return (
                     this.props.ranges &&
                       this.props.ranges.map(function(t) {
-                        return e >= t.start && e <= t.end ? (n = [].concat(Object(In.a)(n), [t.id])) : n;
+                        return e >= t.start && e <= t.end ? (n = [].concat(Object(Hn.a)(n), [t.id])) : n;
                       }),
-                    l.a.createElement(Jn, {
+                    l.a.createElement(Bn, {
                       text: this.props.text,
                       id: this.props.id,
                       overlap: n,
@@ -3839,9 +3835,9 @@
                   return (
                     this.props.ranges &&
                       this.props.ranges.map(function(t) {
-                        return e >= t.start && e <= t.end ? (a = [].concat(Object(In.a)(a), [t.id])) : a;
+                        return e >= t.start && e <= t.end ? (a = [].concat(Object(Hn.a)(a), [t.id])) : a;
                       }),
-                    l.a.createElement(zn, {
+                    l.a.createElement(Jn, {
                       url: n,
                       id: this.props.id,
                       overlap: a,
@@ -3881,7 +3877,7 @@
                   if (!r.startContainer.parentNode.dataset.hint && !r.endContainer.parentNode.dataset.hint) {
                     var i = parseInt(r.startContainer.parentNode.dataset.position),
                       l = parseInt(r.endContainer.parentNode.dataset.position),
-                      s = new Ln(i < l ? i : l, i < l ? l : i, e, Object(E.a)({}, this.props, { ranges: void 0 }));
+                      s = new Ln(i < l ? i : l, i < l ? l : i, e, Object(O.a)({}, this.props, { ranges: void 0 }));
                     this.props.onTextHighlighted(s);
                   }
                 },
@@ -3912,13 +3908,13 @@
                 value: function() {
                   for (var e, t = [], n = 0; n < this.props.text.length; n++) {
                     var a = this.getRange(n),
-                      o = X.Checkers.getUrl(n, this.props.text),
-                      r = An()().test(this.props.text[n] + this.props.text[n + 1]),
+                      o = Z.Checkers.getUrl(n, this.props.text),
+                      r = Dn()().test(this.props.text[n] + this.props.text[n + 1]),
                       i = this.getNode(n, a, this.props.text, o, r);
                     if ((o.length ? (n += o.length - 1) : r && n++, a)) {
                       e = a;
                       for (var l = [i], s = n + 1; s < parseInt(a.end) + 1; s++) {
-                        An()().test("".concat(this.props.text[s]).concat(this.props.text[s + 1]))
+                        Dn()().test("".concat(this.props.text[s]).concat(this.props.text[s + 1]))
                           ? (l.push(this.getEmojiNode(s, a)), s++)
                           : l.push(this.getLetterNode(s, a)),
                           (n = s);
@@ -3936,7 +3932,7 @@
                   return l.a.createElement(
                     "div",
                     {
-                      className: Vn.a.block,
+                      className: Wn.a.block,
                       style: this.props.style,
                       onMouseUp: this.onMouseUp.bind(this),
                       onMouseDown: this.onMouseDown.bind(this),
@@ -3951,23 +3947,23 @@
             t
           );
         })(i.Component),
-        Un = Object(u.c)(Wn),
-        Fn = n(303),
-        Zn = n.n(Fn),
-        Yn = v.m
+        Un = Object(u.c)(Fn),
+        Gn = n(305),
+        Yn = n.n(Gn),
+        Zn = v.m
           .model("TextRegionModel", {
-            id: v.m.optional(v.m.identifier, j),
-            pid: v.m.optional(v.m.string, j),
+            id: v.m.optional(v.m.identifier, N),
+            pid: v.m.optional(v.m.string, N),
             type: "textrange",
             start: v.m.integer,
             end: v.m.integer,
             text: v.m.string,
-            states: v.m.maybeNull(v.m.array(v.m.union(zt, Ut))),
+            states: v.m.maybeNull(v.m.array(v.m.union(Jt, Ut))),
           })
           .views(function(e) {
             return {
               get parent() {
-                return Object(v.f)(e, Qn);
+                return Object(v.f)(e, ea);
               },
               get completion() {
                 return Object(v.g)(e).completionStore.selected;
@@ -3999,21 +3995,21 @@
               },
             };
           }),
-        Gn = v.m.compose(
+        Kn = v.m.compose(
           "TextRegionModel",
-          Tt,
           Rt,
-          Yn,
+          Mt,
+          Zn,
         ),
         Xn = function(e) {
           var t = e.state,
             n = t.getSelectedString(),
-            a = { background: X.Colors.convertToRGBA(t.getSelectedColor(), 0.3) };
+            a = { background: Z.Colors.convertToRGBA(t.getSelectedColor(), 0.3) };
           return (
-            e.style && (a = Object(E.a)({}, a, { outline: e.style.outline })),
+            e.style && (a = Object(O.a)({}, a, { outline: e.style.outline })),
             l.a.createElement(
-              ae,
-              { className: Zn.a.state, style: a },
+              ne,
+              { className: Yn.a.state, style: a },
               l.a.createElement("span", { "data-hint": !0 }, "\xa0[", n, "]"),
             )
           );
@@ -4028,7 +4024,7 @@
               (o = a.states.map(function(e) {
                 return e.getSelectedColor();
               })),
-              0 !== o.length && (o = X.Colors.convertToRGBA(o[0], 0.3));
+              0 !== o.length && (o = Z.Colors.convertToRGBA(o[0], 0.3));
             var r = {
                 padding: "2px 0px",
                 position: "relative",
@@ -4050,7 +4046,7 @@
                     }),
                   );
                 }),
-              i.length || (r = Object(E.a)({}, r, { background: "rgba(0, 0, 255, 0.1)" })),
+              i.length || (r = Object(O.a)({}, r, { background: "rgba(0, 0, 255, 0.1)" })),
               l.a.createElement(
                 "span",
                 {
@@ -4069,8 +4065,8 @@
             );
           }),
         );
-      w.addTag("textrange", Gn, $n);
-      var Kn = v.m.model("TextModel", {
+      S.addTag("textrange", Kn, $n);
+      var qn = v.m.model("TextModel", {
           name: v.m.maybeNull(v.m.string),
           value: v.m.maybeNull(v.m.string),
           selelectwithoutlabel: v.m.optional(v.m.string, "false"),
@@ -4078,11 +4074,11 @@
           adjustselection: v.m.optional(v.m.string, "true"),
           selectionenabled: v.m.optional(v.m.string, "true"),
         }),
-        qn = v.m
+        Qn = v.m
           .model("TextModel", {
-            id: v.m.optional(v.m.identifier, j),
+            id: v.m.optional(v.m.identifier, N),
             type: "text",
-            regions: v.m.array(Gn),
+            regions: v.m.array(Kn),
             _value: v.m.optional(v.m.string, ""),
           })
           .views(function(e) {
@@ -4118,17 +4114,17 @@
                 });
               },
               updateValue: function(t) {
-                e._value = Be(e.value, t.task.dataObj);
+                e._value = Ve(e.value, t.task.dataObj);
               },
               _addRegion: function(t) {
-                var n = Gn.create(t);
+                var n = Kn.create(t);
                 return e.regions.push(n), e.completion.addRegion(n), n;
               },
               addRegion: function(t) {
                 var n = e.activeStates(),
                   a = n
                     ? n.map(function(e) {
-                        return C(e);
+                        return j(e);
                       })
                     : null;
                 if ("false" === e.selelectwithoutlabel && !a.length) return null;
@@ -4159,7 +4155,7 @@
                   if (t.from_name === t.to_name) a = e._addRegion(o);
                   else {
                     var r = e.findRegion(t.value.start, t.value.end),
-                      i = T(n);
+                      i = C(n);
                     i.fromStateJSON(t), r ? r.states.push(i) : ((o.states = [i]), (a = e._addRegion(o)));
                   }
                   return a;
@@ -4168,12 +4164,12 @@
               },
             };
           }),
-        Qn = v.m.compose(
+        ea = v.m.compose(
           "TextModel",
-          Kn,
           qn,
+          Qn,
         ),
-        ea = (function(e) {
+        ta = (function(e) {
           function t() {
             return Object(d.a)(this, t), Object(p.a)(this, Object(g.a)(t).apply(this, arguments));
           }
@@ -4198,24 +4194,23 @@
               {
                 key: "render",
                 value: function() {
-                  var e = this.props,
-                    t = (e.store, e.item),
-                    n = {};
+                  var e = this.props.item,
+                    t = {};
                   return (
-                    "true" == t.hidden && (n.display = "none"),
+                    "true" === e.hidden && (t.display = "none"),
                     l.a.createElement(
                       "div",
-                      { style: n },
+                      { style: t },
                       l.a.createElement(Un, {
-                        id: t.id,
-                        key: t.id,
-                        text: t._value,
-                        enabled: "true" === t.selectionenabled,
-                        ranges: t.regions,
-                        adjustSelection: t.adjustselection,
+                        id: e.id,
+                        key: e.id,
+                        text: e._value,
+                        enabled: "true" === e.selectionenabled,
+                        ranges: e.regions,
+                        adjustSelection: e.adjustselection,
                         rangeRenderer: this.renderRegion.bind(this),
-                        onTextHighlighted: function(e) {
-                          t.addRegion(e);
+                        onTextHighlighted: function(t) {
+                          e.addRegion(t);
                         },
                       }),
                     )
@@ -4226,11 +4221,11 @@
             t
           );
         })(i.Component),
-        ta = Object(u.b)("store")(Object(u.c)(ea));
-      w.addTag("text", Qn, ta);
-      var na = n(552),
-        aa = n(564),
-        oa =
+        na = Object(u.b)("store")(Object(u.c)(ta));
+      S.addTag("text", ea, na);
+      var aa = n(556),
+        oa = n(567),
+        ra =
           (l.a.Component,
           v.m.model({
             selected: v.m.optional(v.m.boolean, !1),
@@ -4239,23 +4234,23 @@
             hotkey: v.m.maybeNull(v.m.string),
             style: v.m.maybeNull(v.m.string),
           })),
-        ra = v.m
+        ia = v.m
           .model({ type: "choice", _value: v.m.optional(v.m.string, "") })
           .views(function(e) {
             return {
               get isCheckbox() {
-                var t = Object(v.f)(e, ua).choice;
+                var t = Object(v.f)(e, da).choice;
                 return "multiple" === t || "single" === t;
               },
               get name() {
-                return Object(v.f)(e, ua).name;
+                return Object(v.f)(e, da).name;
               },
             };
           })
           .actions(function(e) {
             return {
               toggleSelected: function() {
-                var t = Object(v.f)(e, ua);
+                var t = Object(v.f)(e, da);
                 t.shouldBeUnselected && t.unselectAll(), e.markSelected(!e.selected);
               },
               markSelected: function(t) {
@@ -4266,23 +4261,23 @@
               },
             };
           }),
-        ia = v.m.compose(
+        la = v.m.compose(
           "ChoiceModel",
-          oa,
           ra,
-          Ve,
+          ia,
+          We,
         ),
-        la = Object(u.b)("store")(
+        sa = Object(u.b)("store")(
           Object(u.c)(function(e) {
             var t = e.item,
               n = e.store,
               a = {};
-            if ((t.style && (a = M.cssConverter(t.style)), t.isCheckbox)) {
+            if ((t.style && (a = R.cssConverter(t.style)), t.isCheckbox)) {
               var o = Object.assign({ marginRight: "1em", display: "flex", alignItems: "center" }, a);
               return l.a.createElement(
                 "div",
                 { style: o },
-                l.a.createElement(na.a, {
+                l.a.createElement(aa.a, {
                   name: t._value,
                   label: t._value,
                   onChange: function(e) {
@@ -4293,7 +4288,7 @@
                 n.settings.enableTooltips &&
                   n.settings.enableHotkeys &&
                   t.hotkey &&
-                  l.a.createElement(ae, null, "[", t.hotkey, "]"),
+                  l.a.createElement(ne, null, "[", t.hotkey, "]"),
               );
             }
             var r = l.a.createElement(
@@ -4303,12 +4298,12 @@
               n.settings.enableTooltips &&
                 n.settings.enableHotkeys &&
                 t.hotkey &&
-                l.a.createElement(ae, null, "[", t.hotkey, "]"),
+                l.a.createElement(ne, null, "[", t.hotkey, "]"),
             );
             return l.a.createElement(
               "div",
               { style: a },
-              l.a.createElement(fe.a.Radio, {
+              l.a.createElement(ge.a.Radio, {
                 label: r,
                 value: t._value,
                 style: { display: "inline-block" },
@@ -4320,19 +4315,19 @@
             );
           }),
         );
-      w.addTag("choice", ia, la);
-      var sa = v.m.model({
+      S.addTag("choice", la, sa);
+      var ca = v.m.model({
           name: v.m.string,
           toname: v.m.maybeNull(v.m.string),
           showinline: v.m.optional(v.m.string, "false"),
           choice: v.m.optional(v.m.enumeration(["single", "single-radio", "multiple"]), "single"),
         }),
-        ca = v.m
+        ua = v.m
           .model({
-            id: v.m.optional(v.m.identifier, j),
-            pid: v.m.optional(v.m.string, j),
+            id: v.m.optional(v.m.identifier, N),
+            pid: v.m.optional(v.m.string, N),
             type: "choices",
-            children: He.unionArray(["choice"]),
+            children: Ae.unionArray(["choice"]),
           })
           .views(function(e) {
             return {
@@ -4367,62 +4362,62 @@
               },
             };
           }),
-        ua = v.m.compose(
+        da = v.m.compose(
           "ChoicesModel",
-          sa,
           ca,
+          ua,
           Lt,
         ),
-        da = Object(u.c)(function(e) {
+        ma = Object(u.c)(function(e) {
           var t = e.item;
           return l.a.createElement(
             "div",
             { style: { marginTop: "1em" } },
             l.a.createElement(
-              fe.a,
+              ge.a,
               null,
               "true" === t.showinline
-                ? l.a.createElement(fe.a.Group, { inline: !0 }, M.renderChildren(t))
-                : l.a.createElement(fe.a.Group, { grouped: !0 }, M.renderChildren(t)),
+                ? l.a.createElement(ge.a.Group, { inline: !0 }, R.renderChildren(t))
+                : l.a.createElement(ge.a.Group, { grouped: !0 }, R.renderChildren(t)),
             ),
           );
         });
-      w.addTag("choices", ua, da);
-      var ma = n(561),
-        pa = v.m
+      S.addTag("choices", da, ma);
+      var pa = n(565),
+        ga = v.m
           .model("TextAreaRegionModel", {
-            id: v.m.optional(v.m.identifier, j),
-            pid: v.m.optional(v.m.string, j),
+            id: v.m.optional(v.m.identifier, N),
+            pid: v.m.optional(v.m.string, N),
             type: "textarearegion",
             _value: v.m.string,
           })
           .views(function(e) {
             return {
               get parent() {
-                return Object(v.f)(e, va);
+                return Object(v.f)(e, ya);
               },
               get completion() {
                 return Object(v.g)(e).completionStore.selected;
               },
             };
           }),
-        ga = v.m.compose(
+        fa = v.m.compose(
           "TextAreaRegionModel",
-          Tt,
           Rt,
-          pa,
+          Mt,
+          ga,
         ),
-        fa = Object(u.b)("store")(
+        ha = Object(u.b)("store")(
           Object(u.c)(function(e) {
             var t = e.store,
               n = e.item,
               a = { cursor: t.completionStore.selected.relationMode ? "crosshair" : "pointer" };
             return (
               n.selected
-                ? (a = Object(E.a)({}, a, { border: "1px solid red" }))
-                : n.highlighted && (a = Object(E.a)({}, a, { border: "2px solid red" })),
+                ? (a = Object(O.a)({}, a, { border: "1px solid red" }))
+                : n.highlighted && (a = Object(O.a)({}, a, { border: "2px solid red" })),
               l.a.createElement(
-                ma.a,
+                pa.a,
                 {
                   className: "warning",
                   style: a,
@@ -4439,8 +4434,8 @@
             );
           }),
         );
-      w.addTag("textarearegion", ga, fa);
-      var ha = v.m.model({
+      S.addTag("textarearegion", fa, ha);
+      var ba = v.m.model({
           allowSubmit: v.m.optional(v.m.string, "true"),
           label: v.m.optional(v.m.string, ""),
           name: v.m.maybeNull(v.m.string),
@@ -4449,11 +4444,11 @@
           placeholder: v.m.maybeNull(v.m.string),
           maxsubmissions: v.m.maybeNull(v.m.string),
         }),
-        ba = v.m
+        va = v.m
           .model({
-            id: v.m.optional(v.m.identifier, j),
+            id: v.m.optional(v.m.identifier, N),
             type: "textarea",
-            regions: v.m.array(ga),
+            regions: v.m.array(fa),
             _value: v.m.optional(v.m.string, ""),
           })
           .views(function(e) {
@@ -4479,7 +4474,7 @@
                 e._value = t;
               },
               addText: function(t, n) {
-                var a = ga.create({ pid: n, _value: t });
+                var a = fa.create({ pid: n, _value: t });
                 return e.regions.push(a), e.completion.addRegion(a), a;
               },
               beforeSend: function() {
@@ -4501,13 +4496,13 @@
               },
             };
           }),
-        va = v.m.compose(
+        ya = v.m.compose(
           "TextAreaModel",
-          ha,
           ba,
-          Ve,
+          va,
+          We,
         ),
-        ya = Object(u.c)(function(e) {
+        ka = Object(u.c)(function(e) {
           var t = e.item;
           return l.a.createElement(
             "div",
@@ -4517,18 +4512,18 @@
                 "div",
                 { style: { marginTop: "1em", marginBottom: "1em" } },
                 t.regions.map(function(e) {
-                  return l.a.createElement(fa, { item: e });
+                  return l.a.createElement(ha, { item: e });
                 }),
               ),
             t.showSubmit &&
               l.a.createElement(
-                fe.a,
+                ge.a,
                 {
                   onSubmit: function(e) {
                     return "true" === t.allowSubmit && (t.addText(t._value), t.setValue("")), e.preventDefault(), !1;
                   },
                 },
-                l.a.createElement(fe.a.Input, {
+                l.a.createElement(ge.a.Input, {
                   value: t._value,
                   className: "is-search",
                   label: t.label,
@@ -4541,11 +4536,11 @@
               ),
           );
         });
-      w.addTag("textarea", va, ya);
-      var ka = n(72),
-        Sa = n(101),
-        wa = n.n(Sa),
-        xa = v.m
+      S.addTag("textarea", ya, ka);
+      var Sa = n(72),
+        wa = n(102),
+        _a = n.n(wa),
+        Oa = v.m
           .model({
             backgroundColor: v.m.optional(v.m.string, "transparent"),
             value: v.m.maybeNull(v.m.string),
@@ -4569,7 +4564,7 @@
               },
             };
           }),
-        Oa = v.m.model({
+        xa = v.m.model({
           axis: v.m.optional(v.m.string, "y"),
           lockaxis: v.m.maybeNull(v.m.string),
           elementvalue: v.m.maybeNull(v.m.string),
@@ -4580,10 +4575,10 @@
         }),
         Ea = v.m
           .model({
-            id: v.m.optional(v.m.identifier, j),
+            id: v.m.optional(v.m.identifier, N),
             type: "list",
             update: v.m.optional(v.m.number, 1),
-            regions: v.m.array(xa),
+            regions: v.m.array(Oa),
           })
           .views(function(e) {
             return {};
@@ -4594,11 +4589,11 @@
                 e.update = e.update + 1;
               },
               addRegion: function(t, n) {
-                var a = xa.create({ value: e.elementvalue, idx: n, _value: Je(e.elementvalue, t[n]) });
+                var a = Oa.create({ value: e.elementvalue, idx: n, _value: Be(e.elementvalue, t[n]) });
                 e.regions.push(a);
               },
               updateValue: function(t) {
-                var n = Je(e.value, t.task.dataObj);
+                var n = Be(e.value, t.task.dataObj);
                 (e.regions = []),
                   n.forEach(function(t, a) {
                     return e.addRegion(n, a);
@@ -4615,8 +4610,8 @@
                 n !== a &&
                   (e.sortedhighlightcolor && e.regions[n].setBG(e.sortedhighlightcolor),
                   e.regions[n].setSelected(!0),
-                  e._value && (e._value = wa()(e._value, n, a)),
-                  (e.regions = wa()(e.regions, n, a)),
+                  e._value && (e._value = _a()(e._value, n, a)),
+                  (e.regions = _a()(e.regions, n, a)),
                   e.setUpdate());
               },
               toStateJSON: function() {
@@ -4665,26 +4660,26 @@
               },
             };
           }),
-        _a = v.m.compose(
+        Na = v.m.compose(
           "ListModel",
-          Oa,
+          xa,
           Ea,
         ),
-        Na = Object(ka.sortableHandle)(function() {
+        ja = Object(Sa.sortableHandle)(function() {
           return l.a.createElement("div", { className: "drag-handle" });
         });
-      function ja() {
+      function Ca() {
         try {
           return "undefined" !== typeof window.orientation || -1 !== navigator.userAgent.indexOf("IEMobile");
         } catch (e) {
           return !1;
         }
       }
-      var Ca = Object(ka.SortableElement)(function(e) {
+      var Ta = Object(Sa.SortableElement)(function(e) {
           var t,
             n = e.item,
             a = e.value;
-          ja && (t = "noselect");
+          Ca && (t = "noselect");
           var o = {
             text: function(e) {
               return l.a.createElement("span", { className: t }, e._value);
@@ -4715,18 +4710,18 @@
                 );
               },
             },
-            l.a.createElement(Na, null),
+            l.a.createElement(ja, null),
             o[n.elementtag.toLowerCase()](a),
           );
         }),
-        Ta = Object(ka.SortableContainer)(function(e) {
+        Ra = Object(Sa.SortableContainer)(function(e) {
           var t = e.item,
             n = e.items;
           return l.a.createElement(
-            I.a,
+            M.a,
             { celled: !0 },
             n.map(function(e, n) {
-              return l.a.createElement(Ca, {
+              return l.a.createElement(Ta, {
                 key: "item-".concat(n),
                 index: n,
                 value: e,
@@ -4737,25 +4732,25 @@
             }),
           );
         }),
-        Ra = Object(u.c)(function(e) {
+        Ma = Object(u.c)(function(e) {
           e.store;
           var t = e.item,
             n = {};
           return (
-            ja() ? (n.pressDelay = 100) : (n.distance = 7),
+            Ca() ? (n.pressDelay = 100) : (n.distance = 7),
             l.a.createElement(
               "div",
               null,
               l.a.createElement(
-                Ta,
+                Ra,
                 Object.assign({ update: t.update, item: t, items: t.regions, onSortEnd: t.moveItems }, n),
               ),
             )
           );
         }),
-        Ma = Object(u.b)("store")(Object(u.c)(Ra));
-      w.addTag("list", _a, Ma);
-      var Ia = v.m
+        Ia = Object(u.b)("store")(Object(u.c)(Ma));
+      S.addTag("list", Na, Ia);
+      var Ha = v.m
           .model({
             backgroundColor: v.m.optional(v.m.string, "transparent"),
             value: v.m.maybeNull(v.m.string),
@@ -4779,7 +4774,7 @@
               },
             };
           }),
-        Ha = v.m.model({
+        Aa = v.m.model({
           axis: v.m.optional(v.m.string, "y"),
           lockaxis: v.m.maybeNull(v.m.string),
           elementtag: v.m.optional(v.m.string, "Text"),
@@ -4789,12 +4784,12 @@
           name: v.m.maybeNull(v.m.string),
           value: v.m.maybeNull(v.m.string),
         }),
-        Aa = v.m
+        Da = v.m
           .model({
-            id: v.m.optional(v.m.identifier, j),
+            id: v.m.optional(v.m.identifier, N),
             type: "ranker",
             update: v.m.optional(v.m.number, 1),
-            regions: v.m.array(Ia),
+            regions: v.m.array(Ha),
           })
           .views(function(e) {
             return {};
@@ -4805,7 +4800,7 @@
                 e.update = e.update + 1;
               },
               _addRegion: function(t, n) {
-                var a = Ia.create({ value: t, idx: n, _value: t });
+                var a = Ha.create({ value: t, idx: n, _value: t });
                 e.regions.push(a);
               },
               moveItems: function(t) {
@@ -4814,8 +4809,8 @@
                 n != a &&
                   (e.sortedhighlightcolor && e.regions[n].setBG(e.sortedhighlightcolor),
                   e.regions[n].setSelected(!0),
-                  e._value && (e._value = wa()(e._value, n, a)),
-                  (e.regions = wa()(e.regions, n, a)),
+                  e._value && (e._value = _a()(e._value, n, a)),
+                  (e.regions = _a()(e.regions, n, a)),
                   e.setUpdate());
               },
               toStateJSON: function() {
@@ -4842,10 +4837,10 @@
           }),
         La = v.m.compose(
           "RankerModel",
-          Ha,
           Aa,
+          Da,
         ),
-        Da = Object(ka.sortableHandle)(function() {
+        za = Object(Sa.sortableHandle)(function() {
           return l.a.createElement("div", { className: "drag-handle" });
         });
       function Pa() {
@@ -4855,7 +4850,7 @@
           return !1;
         }
       }
-      var za = Object(ka.SortableElement)(function(e) {
+      var Ja = Object(Sa.SortableElement)(function(e) {
           var t,
             n = e.item,
             a = e.value;
@@ -4890,18 +4885,18 @@
                 );
               },
             },
-            l.a.createElement(Da, null),
+            l.a.createElement(za, null),
             o[n.elementtag.toLowerCase()](a),
           );
         }),
-        Ja = Object(ka.SortableContainer)(function(e) {
+        Ba = Object(Sa.SortableContainer)(function(e) {
           var t = e.item,
             n = e.items;
           return l.a.createElement(
-            I.a,
+            M.a,
             { celled: !0 },
             n.map(function(e, n) {
-              return l.a.createElement(za, {
+              return l.a.createElement(Ja, {
                 key: "item-".concat(n),
                 index: n,
                 value: e,
@@ -4912,7 +4907,7 @@
             }),
           );
         }),
-        Ba = Object(u.c)(function(e) {
+        Va = Object(u.c)(function(e) {
           e.store;
           var t = e.item,
             n = {};
@@ -4922,17 +4917,36 @@
               "div",
               null,
               l.a.createElement(
-                Ja,
+                Ba,
                 Object.assign({ update: t.update, item: t, items: t.regions, onSortEnd: t.moveItems }, n),
               ),
             )
           );
         }),
-        Va = Object(u.b)("store")(Object(u.c)(Ba));
-      w.addTag("ranker", La, Va);
-      var Wa = n(200),
-        Ua = n.n(Wa),
-        Fa = Object(u.b)("store")(
+        Wa = Object(u.b)("store")(Object(u.c)(Va));
+      S.addTag("ranker", La, Wa);
+      var Fa = n(306),
+        Ua = n.n(Fa),
+        Ga = (function(e) {
+          function t() {
+            return Object(d.a)(this, t), Object(p.a)(this, Object(g.a)(t).apply(this, arguments));
+          }
+          return (
+            Object(f.a)(t, e),
+            Object(m.a)(t, [
+              {
+                key: "render",
+                value: function() {
+                  return l.a.createElement("div", { className: Ua.a.block }, this.props.children);
+                },
+              },
+            ]),
+            t
+          );
+        })(l.a.Component),
+        Ya = n(208),
+        Za = n.n(Ya),
+        Ka = Object(u.b)("store")(
           Object(u.c)(
             (function(e) {
               function t() {
@@ -4945,21 +4959,21 @@
                     key: "renderSuccess",
                     value: function() {
                       this.props.store;
-                      return l.a.createElement(k.a, { status: "success", title: "Done!" });
+                      return l.a.createElement(y.a, { status: "success", title: "Done!" });
                     },
                   },
                   {
                     key: "renderNoCompletion",
                     value: function() {
                       this.props.store;
-                      return l.a.createElement(k.a, { status: "success", title: "No more completions" });
+                      return l.a.createElement(y.a, { status: "success", title: "No more completions" });
                     },
                   },
                   {
                     key: "renderNothingToLabel",
                     value: function() {
                       this.props.store;
-                      return l.a.createElement(k.a, {
+                      return l.a.createElement(y.a, {
                         status: "success",
                         title: "No more data available for labeling",
                       });
@@ -4968,7 +4982,7 @@
                   {
                     key: "renderLoader",
                     value: function() {
-                      return l.a.createElement(k.a, { icon: l.a.createElement(S.a, { size: "large" }) });
+                      return l.a.createElement(y.a, { icon: l.a.createElement(k.a, { size: "large" }) });
                     },
                   },
                   {
@@ -4982,18 +4996,18 @@
                       var t = e.completionStore.currentCompletion.root;
                       return l.a.createElement(
                         "div",
-                        { className: Ua.a.editor },
-                        l.a.createElement(me, { store: e }),
+                        { className: Za.a.editor },
+                        l.a.createElement(de, { store: e }),
                         l.a.createElement(
                           u.a,
                           { store: e },
                           l.a.createElement(
                             "div",
                             null,
-                            e.hasInterface("panel") && l.a.createElement(ce, { store: e }),
+                            e.hasInterface("panel") && l.a.createElement(se, { store: e }),
                             e.showingDescription &&
                               l.a.createElement(
-                                y.a,
+                                Ga,
                                 null,
                                 l.a.createElement("div", { dangerouslySetInnerHTML: { __html: e.description } }),
                               ),
@@ -5001,16 +5015,16 @@
                               "div",
                               { className: "common-container" },
                               l.a.createElement(
-                                y.a,
-                                { style: { maxWidth: "1200px", minWidth: "70%" } },
-                                M.renderItem(t),
-                                e.hasInterface("submit") && l.a.createElement(ie, null),
+                                Ga,
+                                null,
+                                R.renderItem(t),
+                                e.hasInterface("submit") && l.a.createElement(re, null),
                               ),
                               l.a.createElement(
                                 "div",
-                                { className: Ua.a.menu },
-                                e.hasInterface("completions") && l.a.createElement(ee, { store: e }),
-                                e.hasInterface("side-column") && l.a.createElement(Me, { store: e }),
+                                { className: Za.a.menu },
+                                e.hasInterface("completions") && l.a.createElement(Q, { store: e }),
+                                e.hasInterface("side-column") && l.a.createElement(Ie, { store: e }),
                               ),
                             ),
                           ),
@@ -5029,9 +5043,9 @@
           "[::1]" === window.location.hostname ||
           window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/),
       );
-      var Za = n(50),
-        Ya = n.n(Za),
-        Ga = v.m
+      var Xa = n(49),
+        $a = n.n(Xa),
+        qa = v.m
           .model("Task", { id: v.m.identifierNumber, data: v.m.maybeNull(v.m.string), project: v.m.number })
           .views(function(e) {
             return {
@@ -5039,11 +5053,11 @@
                 return Object(v.e)(e);
               },
               get dataObj() {
-                return X.Checkers.isStringJSON(e.data) ? JSON.parse(e.data) : null;
+                return Z.Checkers.isStringJSON(e.data) ? JSON.parse(e.data) : null;
               },
             };
           }),
-        Xa =
+        Qa =
           (n(10),
           v.m
             .model("TimeTraveller", {
@@ -5107,35 +5121,35 @@
                 },
               };
             })),
-        $a = n(153),
-        Ka = n.n($a),
-        qa = {};
-      var Qa = {
+        eo = n(150),
+        to = n.n(eo),
+        no = {};
+      var ao = {
           addKey: function(e, t) {
-            qa[e] || ((qa[e] = !0), Ka()(e, "main", t));
+            no[e] || ((no[e] = !0), to()(e, "main", t));
           },
           unbindAll: function() {
-            for (var e = 0, t = Object.keys(qa); e < t.length; e++) {
+            for (var e = 0, t = Object.keys(no); e < t.length; e++) {
               var n = t[e];
-              Ka.a.unbind(n);
+              to.a.unbind(n);
             }
-            qa = {};
+            no = {};
           },
           makeComb: function() {
             for (var e = "1234567890qwertasdfgzxcvbyuiophjklnm".split(""), t = 0; t <= e.length; t++) {
               var n = void 0;
-              if (((n = e[t]), !qa.hasOwnProperty(n))) return n;
+              if (((n = e[t]), !no.hasOwnProperty(n))) return n;
             }
             return null;
           },
           setScope: function(e) {
-            Ka.a.setScope(e);
+            to.a.setScope(e);
           },
         },
-        eo = v.m
+        oo = v.m
           .model("Relation", {
-            node1: v.m.reference(v.m.union(Gn, un, Yt, ga, En)),
-            node2: v.m.reference(v.m.union(Gn, un, Yt, ga, En)),
+            node1: v.m.reference(v.m.union(Kn, dn, Zt, fa, En)),
+            node2: v.m.reference(v.m.union(Kn, dn, Zt, fa, En)),
           })
           .actions(function(e) {
             return {
@@ -5146,7 +5160,7 @@
               },
             };
           }),
-        to = v.m.model("RelationStore", { relations: v.m.array(eo) }).actions(function(e) {
+        ro = v.m.model("RelationStore", { relations: v.m.array(oo) }).actions(function(e) {
           return {
             findRelations: function(t, n) {
               return n
@@ -5162,7 +5176,7 @@
             },
             addRelation: function(t, n) {
               if (!e.nodesRelated(t, n)) {
-                var a = eo.create({ node1: t, node2: n });
+                var a = oo.create({ node1: t, node2: n });
                 return e.relations.push(a), a;
               }
             },
@@ -5183,8 +5197,8 @@
             },
           };
         }),
-        no = v.m
-          .model("RegionStore", { regions: v.m.array(v.m.safeReference(v.m.union(Gn, un, En, Yt, ga))) })
+        io = v.m
+          .model("RegionStore", { regions: v.m.array(v.m.safeReference(v.m.union(Kn, dn, En, Zt, fa))) })
           .actions(function(e) {
             return {
               addRegion: function(t) {
@@ -5211,7 +5225,7 @@
               },
             };
           }),
-        ao = v.m
+        lo = v.m
           .model("Completion", {
             id: v.m.identifier,
             pk: v.m.optional(v.m.integer, 1),
@@ -5220,23 +5234,23 @@
             createdAgo: v.m.maybeNull(v.m.string),
             createdBy: v.m.optional(v.m.string, "Admin"),
             honeypot: v.m.optional(v.m.boolean, !1),
-            root: He.allModelsTypes(),
-            names: v.m.map(v.m.reference(He.allModelsTypes())),
-            toNames: v.m.map(v.m.array(v.m.reference(He.allModelsTypes()))),
-            history: v.m.optional(Xa, { targetPath: "../root" }),
+            root: Ae.allModelsTypes(),
+            names: v.m.map(v.m.reference(Ae.allModelsTypes())),
+            toNames: v.m.map(v.m.array(v.m.reference(Ae.allModelsTypes()))),
+            history: v.m.optional(Qa, { targetPath: "../root" }),
             dragMode: v.m.optional(v.m.boolean, !1),
             relationMode: v.m.optional(v.m.boolean, !1),
-            relationStore: v.m.optional(to, { relations: [] }),
+            relationStore: v.m.optional(ro, { relations: [] }),
             normalizationMode: v.m.optional(v.m.boolean, !1),
-            regionStore: v.m.optional(no, { regions: [] }),
+            regionStore: v.m.optional(io, { regions: [] }),
             highlightedNode: v.m.maybeNull(
               v.m.union(
-                v.m.safeReference(Gn),
-                v.m.safeReference(un),
-                v.m.safeReference(Yt),
-                v.m.safeReference(ga),
+                v.m.safeReference(Kn),
+                v.m.safeReference(dn),
+                v.m.safeReference(Zt),
+                v.m.safeReference(fa),
                 v.m.safeReference(En),
-                v.m.safeReference(nn),
+                v.m.safeReference(an),
               ),
             ),
           })
@@ -5317,18 +5331,18 @@
                     n ? n.push(t.id) : e.toNames.set(t.toname, [t.id]);
                   }
                 }),
-                  Qa.unbindAll(),
+                  ao.unbindAll(),
                   e.traverseTree(function(e) {
-                    e && e.onHotKey && e.hotkey && Qa.addKey(e.hotkey, e.onHotKey);
+                    e && e.onHotKey && e.hotkey && ao.addKey(e.hotkey, e.onHotKey);
                   }),
                   e.traverseTree(function(e) {
                     if (e && e.onHotKey && !e.hotkey) {
-                      var t = Qa.makeComb();
+                      var t = ao.makeComb();
                       if (!t) return;
-                      (e.hotkey = t), Qa.addKey(e.hotkey, e.onHotKey);
+                      (e.hotkey = t), ao.addKey(e.hotkey, e.onHotKey);
                     }
                   }),
-                  Qa.setScope("main");
+                  ao.setScope("main");
               },
               serializeCompletion: function() {
                 var t = [];
@@ -5364,8 +5378,8 @@
               },
             };
           }),
-        oo = v.m
-          .model("CompletionStore", { completions: v.m.array(ao), selected: v.m.maybeNull(v.m.reference(ao)) })
+        so = v.m
+          .model("CompletionStore", { completions: v.m.array(lo), selected: v.m.maybeNull(v.m.reference(lo)) })
           .views(function(e) {
             return {
               get currentCompletion() {
@@ -5388,8 +5402,8 @@
           })
           .actions(function(e) {
             var t = Object(v.c)(
-              Ya.a.mark(function t(n) {
-                return Ya.a.wrap(
+              $a.a.mark(function t(n) {
+                return $a.a.wrap(
                   function(t) {
                     for (;;)
                       switch ((t.prev = t.next)) {
@@ -5429,7 +5443,7 @@
                 (n.selected = !0), (e.selected = n);
               },
               addCompletion: function(t, n) {
-                var a = ao.create(t);
+                var a = lo.create(t);
                 return (
                   e.store.task &&
                     "initial" == n &&
@@ -5445,9 +5459,9 @@
               },
               destroyCompletion: n,
               addInitialCompletion: function() {
-                var t = M.treeToModel(e.store.config),
-                  n = w.getModelByTag(t.type).create(t),
-                  a = { id: j(), root: n };
+                var t = R.treeToModel(e.store.config),
+                  n = S.getModelByTag(t.type).create(t),
+                  a = { id: N(), root: n };
                 if (e.store.expert) {
                   var o = e.store.expert;
                   a.createdBy = o.firstName + " " + o.lastName;
@@ -5455,11 +5469,11 @@
                 return e.addCompletion(a, "initial");
               },
               addSavedCompletion: function(t) {
-                var n = M.treeToModel(e.store.config),
-                  a = w.getModelByTag(n.type).create(n),
+                var n = R.treeToModel(e.store.config),
+                  a = S.getModelByTag(n.type).create(n),
                   o = {
                     pk: t.id,
-                    id: j(),
+                    id: N(),
                     createdAgo: t.created_ago,
                     createdBy: t.created_username,
                     honeypot: t.honeypot,
@@ -5469,8 +5483,8 @@
               },
             };
           }),
-        ro = v.m.model("UserStore", { pk: v.m.integer, firstName: v.m.string, lastName: v.m.string }),
-        io = v.m
+        co = v.m.model("UserStore", { pk: v.m.integer, firstName: v.m.string, lastName: v.m.string }),
+        uo = v.m
           .model("SettingsModel", {
             enableHotkeys: v.m.optional(v.m.boolean, !0),
             enablePanelHotkeys: v.m.optional(v.m.boolean, !0),
@@ -5479,7 +5493,7 @@
           .actions(function(e) {
             return {
               toggleHotkeys: function() {
-                (e.enableHotkeys = !e.enableHotkeys), e.enableHotkeys ? Qa.setScope("main") : Qa.setScope("none");
+                (e.enableHotkeys = !e.enableHotkeys), e.enableHotkeys ? ao.setScope("main") : ao.setScope("none");
               },
               togglePanelHotkeys: function() {
                 e.enablePanelHotkeys = !e.enablePanelHotkeys;
@@ -5489,17 +5503,17 @@
               },
             };
           }),
-        lo = v.m
+        mo = v.m
           .model("AppStore", {
             config: v.m.string,
-            task: v.m.maybeNull(Ga),
+            task: v.m.maybeNull(qa),
             taskID: v.m.maybeNull(v.m.number),
             interfaces: v.m.array(v.m.string),
-            completionStore: v.m.optional(oo, { completions: [] }),
+            completionStore: v.m.optional(so, { completions: [] }),
             projectID: v.m.integer,
-            expert: ro,
+            expert: co,
             debug: v.m.optional(v.m.boolean, !0),
-            settings: v.m.optional(io, {}),
+            settings: v.m.optional(uo, {}),
             showingSettings: v.m.optional(v.m.boolean, !1),
             showingDescription: v.m.optional(v.m.boolean, !1),
             description: v.m.maybeNull(v.m.string),
@@ -5522,9 +5536,9 @@
           })
           .actions(function(e) {
             var t = Object(v.c)(
-              Ya.a.mark(function t() {
+              $a.a.mark(function t() {
                 var n, a;
-                return Ya.a.wrap(function(t) {
+                return $a.a.wrap(function(t) {
                   for (;;)
                     switch ((t.prev = t.next)) {
                       case 0:
@@ -5552,9 +5566,9 @@
               return e.taskID ? o("/api/tasks/" + e.taskID + "/") : o("/api/projects/" + e.projectID + "/next");
             }
             var o = Object(v.c)(
-                Ya.a.mark(function t(n) {
+                $a.a.mark(function t(n) {
                   var a;
-                  return Ya.a.wrap(
+                  return $a.a.wrap(
                     function(t) {
                       for (;;)
                         switch ((t.prev = t.next)) {
@@ -5610,8 +5624,8 @@
                 }),
               ),
               r = Object(v.c)(
-                Ya.a.mark(function t() {
-                  return Ya.a.wrap(
+                $a.a.mark(function t() {
+                  return $a.a.wrap(
                     function(t) {
                       for (;;)
                         switch ((t.prev = t.next)) {
@@ -5641,9 +5655,9 @@
                 }),
               ),
               i = Object(v.c)(
-                Ya.a.mark(function t() {
+                $a.a.mark(function t() {
                   var o, r, i, l;
-                  return Ya.a.wrap(
+                  return $a.a.wrap(
                     function(t) {
                       for (;;)
                         switch ((t.prev = t.next)) {
@@ -5693,27 +5707,27 @@
             return {
               afterCreate: function() {
                 e.task || e.loadTask(),
-                  Qa.addKey("ctrl+enter", e.sendTask),
-                  e.hasInterface("submit:skip") && Qa.addKey("ctrl+space", e.skipTask),
-                  Qa.addKey("ctrl+backspace", function() {
+                  ao.addKey("ctrl+enter", e.sendTask),
+                  e.hasInterface("submit:skip") && ao.addKey("ctrl+space", e.skipTask),
+                  ao.addKey("ctrl+backspace", function() {
                     e.completionStore.selected.deleteAllRegions();
                   }),
-                  Qa.addKey("ctrl+z", function() {
+                  ao.addKey("ctrl+z", function() {
                     var t = e.completionStore.selected.history;
                     t && t.canUndo && t.undo();
                   }),
-                  Qa.addKey("escape", function() {
+                  ao.addKey("escape", function() {
                     var t = e.completionStore.selected;
                     t && t.relationMode && t.stopRelationMode();
                   }),
-                  Qa.addKey("backspace", function() {
+                  ao.addKey("backspace", function() {
                     var t = e.completionStore.selected;
                     t && t.highlightedNode && t.highlightedNode.deleteRegion();
                   });
               },
               loadTask: a,
               addTask: function(t) {
-                e.task = Ga.create(t);
+                e.task = qa.create(t);
               },
               hasInterface: n,
               skipTask: r,
@@ -5722,7 +5736,7 @@
                 e.isLoading = t;
               },
               resetState: function() {
-                e.completionStore = oo.create({ completions: [] });
+                e.completionStore = so.create({ completions: [] });
                 var t = e.completionStore.addInitialCompletion();
                 e.completionStore.selectCompletion(t.id);
               },
@@ -5763,284 +5777,252 @@
               },
             };
           });
-      var so = {
-          getData: function() {
-            window.taskData && (window.taskData.data = JSON.stringify(window.taskData.data));
-            var e = {
-              projectID: window.projectID,
-              isLoading: !1,
-              config: window.editorAppConfig,
-              taskID: window.taskID,
-              expert: window.expertData,
-              debug: window.debugEditor,
-              interfaces: window.editorInterfaces ? window.editorInterfaces : ["basic", "completions"],
-            };
-            return (
-              window.preRender && (e.task = window.taskData),
-              window.explore
-                ? (e.interfaces = window.editorInterfaces ? window.editorInterfaces : ["basic", "completions"])
-                : (e.interfaces = window.editorInterfaces
-                    ? window.editorInterfaces
-                    : ["basic", "submit", "submit:skip", "submit:submit"]),
-              e
-            );
+      var po = {
+        default: {
+          config: '<View><Text name="txt-1" value="$text"></Text></View>',
+          data: {
+            text:
+              "mobx-state-tree is a state container that combines the simplicity and ease of mutable data with the traceability of immutable data and the reactiveness and performance of observable data.\n      Simply put, mobx-state-tree tries to combine the best features of both immutability (transactionality, traceability and composition) and mutability (discoverability, co-location and encapsulation) based approaches to state management; everything to provide the best developer experience possible. Unlike MobX itself, mobx-state-tree is very opinionated about how data should be structured and updated. This makes it possible to solve many common problems out of the box.\n      Central in MST (mobx-state-tree) is the concept of a living tree. The tree consists of mutable, but strictly protected objects enriched with runtime type information. In other words, each tree has a shape (type information) and state (data). From this living tree, immutable, structurally shared, snapshots are automatically generated.",
           },
-          getState: function() {
-            return { completions: window.taskData && window.taskData.completions ? window.taskData.completions : null };
-          },
-          rootElement: function() {
-            var e = document.createElement("div"),
-              t = document.getElementById("root");
-            return (t.innerHTML = ""), t.appendChild(e), e;
+          task: {
+            id: 402324,
+            completions: [],
+            meta: {},
+            accuracy: 0,
+            created_at: "2019-06-14T15:15:47.982764Z",
+            updated_at: "2019-06-14T15:15:47.982771Z",
+            is_labeled: !1,
+            exposed: !0,
+            project: 139,
           },
         },
-        co = {
-          default: {
-            config: '<View><Text name="txt-1" value="$text"></Text></View>',
-            data: {
-              text:
-                "mobx-state-tree is a state container that combines the simplicity and ease of mutable data with the traceability of immutable data and the reactiveness and performance of observable data.\n      Simply put, mobx-state-tree tries to combine the best features of both immutability (transactionality, traceability and composition) and mutability (discoverability, co-location and encapsulation) based approaches to state management; everything to provide the best developer experience possible. Unlike MobX itself, mobx-state-tree is very opinionated about how data should be structured and updated. This makes it possible to solve many common problems out of the box.\n      Central in MST (mobx-state-tree) is the concept of a living tree. The tree consists of mutable, but strictly protected objects enriched with runtime type information. In other words, each tree has a shape (type information) and state (data). From this living tree, immutable, structurally shared, snapshots are automatically generated.",
-            },
-            task: {
-              id: 402324,
-              completions: [],
-              meta: {},
-              accuracy: 0,
-              created_at: "2019-06-14T15:15:47.982764Z",
-              updated_at: "2019-06-14T15:15:47.982771Z",
-              is_labeled: !1,
-              exposed: !0,
-              project: 139,
-            },
+        gptc: {
+          config:
+            '<View>\n        <Text name="mytext" value="$text"></Text>\n        <Choices name="mytext_class" toName="mytext" choice="single">\n          <Choice value="important" alias="Important document"></Choice>\n          <Choice value="other" alias="Other"></Choice>\n        </Choices>\n      </View>',
+          data: {
+            text:
+              "mobx-state-tree is a state container that combines the simplicity and ease of mutable data with the traceability of immutable data and the reactiveness and performance of observable data.\n      Simply put, mobx-state-tree tries to combine the best features of both immutability (transactionality, traceability and composition) and mutability (discoverability, co-location and encapsulation) based approaches to state management; everything to provide the best developer experience possible. Unlike MobX itself, mobx-state-tree is very opinionated about how data should be structured and updated. This makes it possible to solve many common problems out of the box.\n      Central in MST (mobx-state-tree) is the concept of a living tree. The tree consists of mutable, but strictly protected objects enriched with runtime type information. In other words, each tree has a shape (type information) and state (data). From this living tree, immutable, structurally shared, snapshots are automatically generated.",
           },
-          gptc: {
-            config:
-              '<View>\n        <Text name="mytext" value="$text"></Text>\n        <Choices name="mytext_class" toName="mytext" choice="single">\n          <Choice value="important" alias="Important document"></Choice>\n          <Choice value="other" alias="Other"></Choice>\n        </Choices>\n      </View>',
-            data: {
-              text:
-                "mobx-state-tree is a state container that combines the simplicity and ease of mutable data with the traceability of immutable data and the reactiveness and performance of observable data.\n      Simply put, mobx-state-tree tries to combine the best features of both immutability (transactionality, traceability and composition) and mutability (discoverability, co-location and encapsulation) based approaches to state management; everything to provide the best developer experience possible. Unlike MobX itself, mobx-state-tree is very opinionated about how data should be structured and updated. This makes it possible to solve many common problems out of the box.\n      Central in MST (mobx-state-tree) is the concept of a living tree. The tree consists of mutable, but strictly protected objects enriched with runtime type information. In other words, each tree has a shape (type information) and state (data). From this living tree, immutable, structurally shared, snapshots are automatically generated.",
-            },
-            task: {
-              id: 402324,
-              completions: [],
-              meta: {},
-              accuracy: 0,
-              created_at: "2019-06-14T15:15:47.982764Z",
-              updated_at: "2019-06-14T15:15:47.982771Z",
-              is_labeled: !1,
-              exposed: !0,
-              project: 139,
-            },
+          task: {
+            id: 402324,
+            completions: [],
+            meta: {},
+            accuracy: 0,
+            created_at: "2019-06-14T15:15:47.982764Z",
+            updated_at: "2019-06-14T15:15:47.982771Z",
+            is_labeled: !1,
+            exposed: !0,
+            project: 139,
           },
-          ner: {
-            config:
-              '<View>\n    <Labels name="ner" toName="text">\n      <Label value="Person"></Label>\n      <Label value="Organization"></Label>\n      <Label value="Fact"></Label>\n      <Label value="Money"></Label>\n      <Label value="Date"></Label>\n      <Label value="Time"></Label>\n      <Label value="Ordinal"></Label>\n      <Label value="Percent"></Label>\n      <Label value="Product"></Label>\n      <Label value="Language"></Label>\n      <Label value="Location"></Label>\n    </Labels>\n    <Text name="text" value="$text"></Text>\n  </View>',
-            data: {
-              text:
-                "mobx-state-tree is a state container that combines the simplicity and ease. Apple's and \ud83d\ude0bApp Store are still broken http://t.co/gIrx8G4pcC http://t.co/fwTXH2aSvC",
-              texta: "To have faith is to trust yourself to the water",
-            },
-            task: {
-              id: 402324,
-              completions: [
-                {
-                  id: 137601,
-                  model_version: "2019-04-10 10:52:20.591839",
-                  result: [
-                    {
-                      id: "RuJ2GrJyG8",
-                      from_name: "ner",
-                      to_name: "text",
-                      source: "$text",
-                      type: "labels",
-                      value: { start: 8, end: 12, text: "faith", labels: ["Fact"] },
-                    },
-                  ],
-                  score: 1,
-                  created_at: "2019-04-10T10:53:28.822843Z",
-                  updated_at: "2019-04-10T10:53:28.822851Z",
-                  task: 71937,
-                  was_generated: !0,
-                },
-              ],
-              meta: {},
-              accuracy: 0,
-              created_at: "2019-06-14T15:15:47.982764Z",
-              updated_at: "2019-06-14T15:15:47.982771Z",
-              is_labeled: !1,
-              exposed: !0,
-              project: 139,
-            },
+        },
+        ner: {
+          config:
+            '<View>\n    <Labels name="ner" toName="text">\n      <Label value="Person"></Label>\n      <Label value="Organization"></Label>\n      <Label value="Fact"></Label>\n      <Label value="Money"></Label>\n      <Label value="Date"></Label>\n      <Label value="Time"></Label>\n      <Label value="Ordinal"></Label>\n      <Label value="Percent"></Label>\n      <Label value="Product"></Label>\n      <Label value="Language"></Label>\n      <Label value="Location"></Label>\n    </Labels>\n    <Text name="text" value="$text"></Text>\n  </View>',
+          data: {
+            text:
+              "mobx-state-tree is a state container that combines the simplicity and ease. Apple's and \ud83d\ude0bApp Store are still broken http://t.co/gIrx8G4pcC http://t.co/fwTXH2aSvC",
+            texta: "To have faith is to trust yourself to the water",
           },
-          bbox: {
-            config:
-              '<View>\n        <RectangleLabels name="tag" toName="image">\n          <Label value="Cat"></Label>\n          <Label value="Dog" background="blue"></Label>\n        </RectangleLabels>\n        <Image name="image" value="$image_url"></Image>\n      </View>\n    ',
-            task: {
-              id: 402324,
-              meta: {},
-              accuracy: 0,
-              created_at: "2019-06-14T15:15:47.982764Z",
-              updated_at: "2019-06-14T15:15:47.982771Z",
-              is_labeled: !1,
-              exposed: !0,
-              project: 139,
-              completions: [],
-            },
-            data: { image_url: "https://go.heartex.net/static/samples/kittens.jpg" },
+          task: {
+            id: 402324,
+            completions: [
+              {
+                id: 137601,
+                model_version: "2019-04-10 10:52:20.591839",
+                result: [
+                  {
+                    id: "RuJ2GrJyG8",
+                    from_name: "ner",
+                    to_name: "text",
+                    source: "$text",
+                    type: "labels",
+                    value: { start: 8, end: 12, text: "faith", labels: ["Fact"] },
+                  },
+                ],
+                score: 1,
+                created_at: "2019-04-10T10:53:28.822843Z",
+                updated_at: "2019-04-10T10:53:28.822851Z",
+                task: 71937,
+                was_generated: !0,
+              },
+            ],
+            meta: {},
+            accuracy: 0,
+            created_at: "2019-06-14T15:15:47.982764Z",
+            updated_at: "2019-06-14T15:15:47.982771Z",
+            is_labeled: !1,
+            exposed: !0,
+            project: 139,
           },
-          image: {
-            config:
-              '<View> <Image name="image" value="$image_url"/> <Choices name="cats_or_dogs" toName="image">   <Choice value="Cat"></Choice>   <Choice value="Dog"></Choice> </Choices></View>',
-            data: { image_url: "http://s3.amazonaws.com/heartex-private/cats_n_dogs/training_set/dogs/dog.887.jpg" },
-            task: {
-              id: 402324,
-              meta: {},
-              accuracy: 0,
-              created_at: "2019-06-14T15:15:47.982764Z",
-              updated_at: "2019-06-14T15:15:47.982771Z",
-              exposed: !0,
-              project: 139,
-              completions: [
-                {
-                  completed_by: null,
-                  created_ago: "2 months",
-                  created_at: "2019-05-14T05:02:41.289000Z",
-                  created_username: "",
-                  honeypot: !0,
-                  id: 1430,
-                  result:
-                    '[{"type":"choices","value":{"choices":["Dog"]},"to_name":"image","from_name":"cats_or_dogs"}]',
-                  state: "{}",
-                  task: 163260,
-                  updated_at: "2019-05-14T05:02:41.289000Z",
-                  was_cancelled: !1,
-                  was_generated: !0,
-                },
-              ],
-            },
+        },
+        bbox: {
+          config:
+            '<View>\n        <RectangleLabels name="tag" toName="image">\n          <Label value="Cat"></Label>\n          <Label value="Dog" background="blue"></Label>\n        </RectangleLabels>\n        <Image name="image" value="$image_url"></Image>\n      </View>\n    ',
+          task: {
+            id: 402324,
+            meta: {},
+            accuracy: 0,
+            created_at: "2019-06-14T15:15:47.982764Z",
+            updated_at: "2019-06-14T15:15:47.982771Z",
+            is_labeled: !1,
+            exposed: !0,
+            project: 139,
+            completions: [],
           },
-          cda: {
-            config:
-              '<View>\n    <HyperText name="dialog" value="$dialogs"></HyperText>\n    <Header value="Rate last answer:"></Header>\n    <Choices name="chc-1" choice="single-radio" toName="dialog">\n      <Choice value="Bad answer"></Choice>\n      <Choice value="Neutral answer"></Choice>\n      <Choice value="Good answer"></Choice>\n    </Choices>\n    <Header value="Your answer:"></Header>\n    <TextArea name="answer"></TextArea>\n  </View>',
-            task: {},
-            data: {},
+          data: { image_url: "https://go.heartex.net/static/samples/kittens.jpg" },
+        },
+        image: {
+          config:
+            '<View> <Image name="image" value="$image_url"/> <Choices name="cats_or_dogs" toName="image">   <Choice value="Cat"></Choice>   <Choice value="Dog"></Choice> </Choices></View>',
+          data: { image_url: "http://s3.amazonaws.com/heartex-private/cats_n_dogs/training_set/dogs/dog.887.jpg" },
+          task: {
+            id: 402324,
+            meta: {},
+            accuracy: 0,
+            created_at: "2019-06-14T15:15:47.982764Z",
+            updated_at: "2019-06-14T15:15:47.982771Z",
+            exposed: !0,
+            project: 139,
+            completions: [
+              {
+                completed_by: null,
+                created_ago: "2 months",
+                created_at: "2019-05-14T05:02:41.289000Z",
+                created_username: "",
+                honeypot: !0,
+                id: 1430,
+                result: '[{"type":"choices","value":{"choices":["Dog"]},"to_name":"image","from_name":"cats_or_dogs"}]',
+                state: "{}",
+                task: 163260,
+                updated_at: "2019-05-14T05:02:41.289000Z",
+                was_cancelled: !1,
+                was_generated: !0,
+              },
+            ],
           },
-          dialog: {
-            config:
-              '<View>\n        <Header value="Select choice:"></Header>\n        <Dialog value="$dialoga" name="dial"></Dialog>\n        <Choices showInline="true" name="mytext_class" toName="dial">\n          <Choice value="important"></Choice>\n          <Choice value="other"></Choice>\n        </Choices>\n      </View>',
-            task: {
-              id: 402324,
-              completions: [
-                {
-                  completed_by: 55,
-                  created_ago: "16 hours, 57 minutes",
-                  created_at: "2019-07-19T17:48:15.465239Z",
-                  created_username: "",
-                  honeypot: !1,
-                  id: 8440,
-                  result:
-                    '[{"type":"choices","value":{"choices":["important"]},"to_name":"dial","from_name":"mytext_class"}]',
-                  task: 761928,
-                  updated_at: "2019-07-19T17:48:15.465264Z",
-                  was_cancelled: !1,
-                  was_generated: !0,
-                },
-              ],
-              meta: {},
-              accuracy: 0,
-              created_at: "2019-06-14T15:15:47.982764Z",
-              updated_at: "2019-06-14T15:15:47.982771Z",
-              is_labeled: !1,
-              exposed: !0,
-              project: 139,
-            },
-            data: {
-              dialoga: [
-                { name: "Jules Winnfield", text: "Okay, so, tell me about the hash bars", id: 100 },
-                { name: "Vasya", text: "So what you want to know?", date: "1 August, 2019" },
-                {
-                  name: "Jules Winnfield",
-                  text: "Well, hash is legal there, right?",
-                  selected: !0,
-                  date: "1 August, 2019",
-                },
-                {
-                  name: "Vinc\u0443",
-                  text:
-                    "Yeah, it's legal, but it ain't a hundred percent legal. I mean, you can't walk into a restaurant,\n   roll a joint, and start puffin' away. They want you to smoke in your home or certain designated places.",
-                },
-                { name: "Jules Winnfield", text: "Those are hash bars?" },
-                {
-                  name: "Vincent Vega",
-                  text:
-                    "Breaks down like this, okay: it's legal to buy it,\n   it's legal to own it, and if you're the proprietor of a hash bar, it's legal to sell it. It's illegal to carry it,\n   but that doesn't really matter 'cause, get a load of this, all right; if you get stopped by the cops in Amsterdam,\n   it's illegal for them to search you. I mean, that's a right the cops in Amsterdam don't have.",
-                },
-                {
-                  name: "Vincent Vega",
-                  text:
-                    "Yeah, it's legal, but it ain't a hundred percent legal. I mean, you can't walk into a restaurant,\n   roll a joint, and start puffin' away. They want you to smoke in your home or certain designated places.",
-                },
-                { name: "Jules Winnfield", text: "Those are hash bars?" },
-                {
-                  name: "Vincent Vega",
-                  text:
-                    "Breaks down like this, okay: it's legal to buy it,\n   it's legal to own it, and if you're the proprietor of a hash bar, it's legal to sell it. It's illegal to carry it,\n   but that doesn't really matter 'cause, get a load of this, all right; if you get stopped by the cops in Amsterdam,\n   it's illegal for them to search you. I mean, that's a right the cops in Amsterdam don't have.",
-                },
-                {
-                  name: "Vincent Vega",
-                  text:
-                    "Yeah, it's legal, but it ain't a hundred percent legal. I mean, you can't walk into a restaurant,\n   roll a joint, and start puffin' away. They want you to smoke in your home or certain designated places.",
-                },
-                { name: "Jules Winnfield", text: "Those are hash bars?" },
-                {
-                  name: "Vincent Vega",
-                  text:
-                    "Breaks down like this, okay: it's legal to buy it,\n   it's legal to own it, and if you're the proprietor of a hash bar, it's legal to sell it. It's illegal to carry it,\n   but that doesn't really matter 'cause, get a load of this, all right; if you get stopped by the cops in Amsterdam,\n   it's illegal for them to search you. I mean, that's a right the cops in Amsterdam don't have.",
-                },
-              ],
-            },
+        },
+        cda: {
+          config:
+            '<View>\n    <HyperText name="dialog" value="$dialogs"></HyperText>\n    <Header value="Rate last answer:"></Header>\n    <Choices name="chc-1" choice="single-radio" toName="dialog">\n      <Choice value="Bad answer"></Choice>\n      <Choice value="Neutral answer"></Choice>\n      <Choice value="Good answer"></Choice>\n    </Choices>\n    <Header value="Your answer:"></Header>\n    <TextArea name="answer"></TextArea>\n  </View>',
+          task: {},
+          data: {},
+        },
+        dialog: {
+          config:
+            '<View>\n        <Header value="Select choice:"></Header>\n        <Dialog value="$dialoga" name="dial"></Dialog>\n        <Choices showInline="true" name="mytext_class" toName="dial">\n          <Choice value="important"></Choice>\n          <Choice value="other"></Choice>\n        </Choices>\n      </View>',
+          task: {
+            id: 402324,
+            completions: [
+              {
+                completed_by: 55,
+                created_ago: "16 hours, 57 minutes",
+                created_at: "2019-07-19T17:48:15.465239Z",
+                created_username: "",
+                honeypot: !1,
+                id: 8440,
+                result:
+                  '[{"type":"choices","value":{"choices":["important"]},"to_name":"dial","from_name":"mytext_class"}]',
+                task: 761928,
+                updated_at: "2019-07-19T17:48:15.465264Z",
+                was_cancelled: !1,
+                was_generated: !0,
+              },
+            ],
+            meta: {},
+            accuracy: 0,
+            created_at: "2019-06-14T15:15:47.982764Z",
+            updated_at: "2019-06-14T15:15:47.982771Z",
+            is_labeled: !1,
+            exposed: !0,
+            project: 139,
           },
-          audio: {
-            config:
-              '<View>\n        <Header value="Select label:"></Header>\n        <Labels name="label" toName="audio">\n          <Label value="Politics" background="red"></Label>\n          <Label value="Business" background="blue"></Label>\n          <Label value="Education"></Label>\n        </Labels>\n        <Header value="Select audio region:"></Header>\n        <AudioPlus name="audio" value="$url"></AudioPlus>\n      </View>',
-            task: {
-              id: 402324,
-              completions: [
-                {
-                  completed_by: 55,
-                  created_ago: "16 hours, 57 minutes",
-                  created_at: "2019-07-19T17:48:15.465239Z",
-                  created_username: "",
-                  honeypot: !1,
-                  id: 8440,
-                  result:
-                    '[{"id":"XPxpLMifV7","from_name":"label","to_name":"audio","source":"$url","type":"labels","value":{"start":0.7047114876227649,"end":2.369030107327593,"labels":["Politics"]}},{"id":"6ycG2nV3mp","from_name":"label","to_name":"audio","source":"$url","type":"labels","value":{"start":2.6014349596287176,"end":5.982550714074112,"labels":["Business"]}}]',
-                  task: 761928,
-                  updated_at: "2019-07-19T17:48:15.465264Z",
-                  was_cancelled: !1,
-                },
-              ],
-              meta: {},
-              accuracy: 0,
-              created_at: "2019-06-14T15:15:47.982764Z",
-              updated_at: "2019-06-14T15:15:47.982771Z",
-              is_labeled: !1,
-              exposed: !0,
-              project: 139,
-            },
-            data: { url: "https://s3-us-west-1.amazonaws.com/heartex-public/cello.mp3" },
+          data: {
+            dialoga: [
+              { name: "Jules Winnfield", text: "Okay, so, tell me about the hash bars", id: 100 },
+              { name: "Vasya", text: "So what you want to know?", date: "1 August, 2019" },
+              {
+                name: "Jules Winnfield",
+                text: "Well, hash is legal there, right?",
+                selected: !0,
+                date: "1 August, 2019",
+              },
+              {
+                name: "Vinc\u0443",
+                text:
+                  "Yeah, it's legal, but it ain't a hundred percent legal. I mean, you can't walk into a restaurant,\n   roll a joint, and start puffin' away. They want you to smoke in your home or certain designated places.",
+              },
+              { name: "Jules Winnfield", text: "Those are hash bars?" },
+              {
+                name: "Vincent Vega",
+                text:
+                  "Breaks down like this, okay: it's legal to buy it,\n   it's legal to own it, and if you're the proprietor of a hash bar, it's legal to sell it. It's illegal to carry it,\n   but that doesn't really matter 'cause, get a load of this, all right; if you get stopped by the cops in Amsterdam,\n   it's illegal for them to search you. I mean, that's a right the cops in Amsterdam don't have.",
+              },
+              {
+                name: "Vincent Vega",
+                text:
+                  "Yeah, it's legal, but it ain't a hundred percent legal. I mean, you can't walk into a restaurant,\n   roll a joint, and start puffin' away. They want you to smoke in your home or certain designated places.",
+              },
+              { name: "Jules Winnfield", text: "Those are hash bars?" },
+              {
+                name: "Vincent Vega",
+                text:
+                  "Breaks down like this, okay: it's legal to buy it,\n   it's legal to own it, and if you're the proprietor of a hash bar, it's legal to sell it. It's illegal to carry it,\n   but that doesn't really matter 'cause, get a load of this, all right; if you get stopped by the cops in Amsterdam,\n   it's illegal for them to search you. I mean, that's a right the cops in Amsterdam don't have.",
+              },
+              {
+                name: "Vincent Vega",
+                text:
+                  "Yeah, it's legal, but it ain't a hundred percent legal. I mean, you can't walk into a restaurant,\n   roll a joint, and start puffin' away. They want you to smoke in your home or certain designated places.",
+              },
+              { name: "Jules Winnfield", text: "Those are hash bars?" },
+              {
+                name: "Vincent Vega",
+                text:
+                  "Breaks down like this, okay: it's legal to buy it,\n   it's legal to own it, and if you're the proprietor of a hash bar, it's legal to sell it. It's illegal to carry it,\n   but that doesn't really matter 'cause, get a load of this, all right; if you get stopped by the cops in Amsterdam,\n   it's illegal for them to search you. I mean, that's a right the cops in Amsterdam don't have.",
+              },
+            ],
           },
-        };
-      function uo() {
+        },
+        audio: {
+          config:
+            '<View>\n        <Header value="Select label:"></Header>\n        <Labels name="label" toName="audio">\n          <Label value="Politics" background="red"></Label>\n          <Label value="Business" background="blue"></Label>\n          <Label value="Education"></Label>\n        </Labels>\n        <Header value="Select audio region:"></Header>\n        <AudioPlus name="audio" value="$url"></AudioPlus>\n      </View>',
+          task: {
+            id: 402324,
+            completions: [
+              {
+                completed_by: 55,
+                created_ago: "16 hours, 57 minutes",
+                created_at: "2019-07-19T17:48:15.465239Z",
+                created_username: "",
+                honeypot: !1,
+                id: 8440,
+                result:
+                  '[{"id":"XPxpLMifV7","from_name":"label","to_name":"audio","source":"$url","type":"labels","value":{"start":0.7047114876227649,"end":2.369030107327593,"labels":["Politics"]}},{"id":"6ycG2nV3mp","from_name":"label","to_name":"audio","source":"$url","type":"labels","value":{"start":2.6014349596287176,"end":5.982550714074112,"labels":["Business"]}}]',
+                task: 761928,
+                updated_at: "2019-07-19T17:48:15.465264Z",
+                was_cancelled: !1,
+              },
+            ],
+            meta: {},
+            accuracy: 0,
+            created_at: "2019-06-14T15:15:47.982764Z",
+            updated_at: "2019-06-14T15:15:47.982771Z",
+            is_labeled: !1,
+            exposed: !0,
+            project: 139,
+          },
+          data: { url: "https://s3-us-west-1.amazonaws.com/heartex-public/cello.mp3" },
+        },
+      };
+      function go() {
         return (function(e) {
-          var t = co[e].task;
+          var t = po[e].task;
           return (
             (window.T = t),
-            (t = Object(E.a)({}, t, { data: JSON.stringify(co[e].data) })),
+            (t = Object(O.a)({}, t, { data: JSON.stringify(po[e].data) })),
             {
               projectID: 1,
               isLoading: !1,
-              config: co[e].config,
+              config: po[e].config,
               task: t,
               taskID: 1,
               expert: { pk: 1, lastName: "Jones", firstName: "Oliver" },
@@ -6050,38 +6032,70 @@
                 : ["basic", "completions", "submit", "panel", "side-column"],
             }
           );
-        })("dialog");
+        })("ner");
       }
-      var mo = {
-          getState: function() {
-            return { completions: uo().task.completions ? uo().task.completions : null };
-          },
-          getData: uo,
-          rootElement: function() {
-            var e = document.createElement("div");
-            return (
-              (e.style.marginTop = "10px"),
-              (e.style.marginBottom = "10px"),
-              (e.style.marginLeft = "10px"),
-              (e.style.marginRight = "10px"),
-              document.body.appendChild(e),
-              e
-            );
-          },
+      var fo = {
+        getState: function() {
+          return { completions: go().task.completions ? go().task.completions : null };
         },
-        po = window.projectID ? so : mo,
-        go = lo.create(po.getData(), {
-          fetch: O.fetcher,
-          patch: O.patch,
-          post: O.poster,
-          remove: O.remover,
-          alert: function(e) {
-            return console.log(e);
-          },
-        });
-      go.initializeStore(po.getState()),
-        (window.Htx = go),
-        c.a.render(l.a.createElement(u.a, { store: go }, l.a.createElement(Fa, null)), po.rootElement()),
+        getData: go,
+        rootElement: function() {
+          var e = document.createElement("div"),
+            t = document.getElementById("root");
+          return (
+            (t.innerHTML = ""),
+            t.appendChild(e),
+            (t.style.marginTop = "10px"),
+            (t.style.marginBottom = "10px"),
+            (t.style.marginLeft = "10px"),
+            (t.style.marginRight = "10px"),
+            e
+          );
+        },
+      };
+      fo = {
+        getData: function() {
+          window.taskData && (window.taskData.data = JSON.stringify(window.taskData.data));
+          var e = {
+            projectID: window.projectID,
+            isLoading: !1,
+            config: window.editorAppConfig,
+            taskID: window.taskID,
+            expert: window.expertData,
+            debug: window.debugEditor,
+            interfaces: window.editorInterfaces ? window.editorInterfaces : ["basic", "completions"],
+          };
+          return (
+            window.preRender && (e.task = window.taskData),
+            window.explore
+              ? (e.interfaces = window.editorInterfaces ? window.editorInterfaces : ["basic", "completions"])
+              : (e.interfaces = window.editorInterfaces
+                  ? window.editorInterfaces
+                  : ["basic", "submit", "submit:skip", "submit:submit"]),
+            e
+          );
+        },
+        getState: function() {
+          return { completions: window.taskData && window.taskData.completions ? window.taskData.completions : null };
+        },
+        rootElement: function() {
+          var e = document.createElement("div"),
+            t = document.getElementById("root");
+          return (t.innerHTML = ""), t.appendChild(e), e;
+        },
+      };
+      var ho = mo.create(fo.getData(), {
+        fetch: _.fetcher,
+        patch: _.patch,
+        post: _.poster,
+        remove: _.remover,
+        alert: function(e) {
+          return console.log(e);
+        },
+      });
+      ho.initializeStore(fo.getState()),
+        (window.Htx = ho),
+        c.a.render(l.a.createElement(u.a, { store: ho }, l.a.createElement(Ka, null)), fo.rootElement()),
         "serviceWorker" in navigator &&
           navigator.serviceWorker.ready.then(function(e) {
             e.unregister();
@@ -6089,22 +6103,31 @@
     },
     74: function(e, t, n) {
       e.exports = {
-        block: "Entity_block__1ejHe",
-        button: "Entity_button__3FWxG",
-        labels: "Entity_labels__g-6K1",
-        tag: "Entity_tag__1_fMd",
+        block: "Entity_block__3ckIB",
+        button: "Entity_button__W4DcF",
+        labels: "Entity_labels__1Ldoe",
+        tag: "Entity_tag__3VRfN",
       };
     },
     86: function(e, t, n) {
       e.exports = {
-        block: "Dialog_block__1sqOj",
-        block_selected: "Dialog_block_selected__2wy2k",
-        name: "Dialog_name__282jm",
-        tag: "Dialog_tag__3Hqj2",
-        date: "Dialog_date__23Eve",
+        skip: "Controls_skip__1Km2f",
+        task: "Controls_task__3a2SA",
+        container: "Controls_container__2OOQz",
+        block: "Controls_block__3VbK-",
+        wrapper: "Controls_wrapper__3Yptx",
+      };
+    },
+    87: function(e, t, n) {
+      e.exports = {
+        block: "Dialog_block__3oOBf",
+        block_selected: "Dialog_block_selected__2Do_t",
+        name: "Dialog_name__1MoM3",
+        tag: "Dialog_tag__3NOpX",
+        date: "Dialog_date__28pt2",
       };
     },
   },
-  [[318, 2, 1]],
+  [[321, 2, 1]],
 ]);
-//# sourceMappingURL=main.90705aa9.chunk.js.map
+//# sourceMappingURL=main.416cb8b7.chunk.js.map
