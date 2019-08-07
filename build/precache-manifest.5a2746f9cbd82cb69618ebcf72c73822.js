@@ -4,16 +4,16 @@ self.__precacheManifest = [
     url: "/heartexlabs/label-studio/static/media/icons.faff9214.woff",
   },
   {
-    revision: "14cd376e121e157f404e",
-    url: "/heartexlabs/label-studio/static/css/main.52245053.chunk.css",
+    revision: "5943b99c21f20da96432",
+    url: "/heartexlabs/label-studio/static/css/main.d28f49ad.chunk.css",
   },
   {
     revision: "a1a749e89f578a49306ec2b055c073da",
     url: "/heartexlabs/label-studio/static/media/brand-icons.a1a749e8.svg",
   },
   {
-    revision: "f32481002cb2e6493698",
-    url: "/heartexlabs/label-studio/static/js/1.f3248100.chunk.js",
+    revision: "397d9ac3aede2ef32906",
+    url: "/heartexlabs/label-studio/static/js/1.397d9ac3.chunk.js",
   },
   {
     revision: "a75000d3a0dee3004045",
@@ -44,8 +44,8 @@ self.__precacheManifest = [
     url: "/heartexlabs/label-studio/static/media/icons.0ab54153.woff2",
   },
   {
-    revision: "14cd376e121e157f404e",
-    url: "/heartexlabs/label-studio/static/js/main.14cd376e.chunk.js",
+    revision: "5943b99c21f20da96432",
+    url: "/heartexlabs/label-studio/static/js/main.5943b99c.chunk.js",
   },
   {
     revision: "e8c322de9658cbeb8a774b6624167c2c",
@@ -80,11 +80,11 @@ self.__precacheManifest = [
     url: "/heartexlabs/label-studio/static/media/icons.962a1bf3.svg",
   },
   {
-    revision: "f32481002cb2e6493698",
-    url: "/heartexlabs/label-studio/static/css/1.148a59da.chunk.css",
+    revision: "397d9ac3aede2ef32906",
+    url: "/heartexlabs/label-studio/static/css/1.2716ee49.chunk.css",
   },
   {
-    revision: "dad394c536fd66abc60bd52f572d1395",
+    revision: "b10db72ba5b47b6c5d4f8554bb9767ea",
     url: "/heartexlabs/label-studio/index.html",
   },
 ];

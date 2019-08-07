@@ -82,10 +82,10 @@
           return A;
         }),
         n.d(a, "isStringEmpty", function() {
-          return L;
+          return D;
         }),
         n.d(a, "isStringJSON", function() {
-          return D;
+          return L;
         }),
         n.d(a, "getUrl", function() {
           return P;
@@ -430,10 +430,10 @@
         A = function(e) {
           return "string" === typeof e || e instanceof String;
         },
-        L = function(e) {
+        D = function(e) {
           return !!A(e) && 0 === e.length;
         },
-        D = function(e) {
+        L = function(e) {
           if (A(e)) {
             try {
               JSON.parse(e);
@@ -1532,12 +1532,12 @@
             return null;
           },
         },
-        Le = y.m.model({
+        De = y.m.model({
           display: y.m.optional(y.m.string, "block"),
           backgroundcolor: y.m.optional(y.m.string, ""),
           margin: y.m.optional(y.m.string, ""),
         }),
-        De = y.m.model({
+        Le = y.m.model({
           id: y.m.identifier,
           type: "view",
           style: y.m.maybeNull(y.m.string),
@@ -1564,8 +1564,8 @@
         }),
         Pe = y.m.compose(
           "ViewModel",
-          Le,
           De,
+          Le,
         ),
         ze = Object(u.c)(function(e) {
           var t = e.item,
@@ -2145,7 +2145,7 @@
           Ht,
           We,
         ),
-        Lt = Object(u.b)("store")(
+        Dt = Object(u.b)("store")(
           Object(u.c)(function(e) {
             var t = e.item,
               n = e.store,
@@ -2175,8 +2175,8 @@
             );
           }),
         );
-      S.addTag("label", At, Lt);
-      var Dt = y.m
+      S.addTag("label", At, Dt);
+      var Lt = y.m
           .model()
           .views(function(e) {
             return {
@@ -2260,7 +2260,7 @@
           "LabelsModel",
           Pt,
           zt,
-          Dt,
+          Lt,
         ),
         Bt = Object(u.c)(function(e) {
           var t = e.item;
@@ -2660,7 +2660,7 @@
           an,
           on,
           rn,
-          Dt,
+          Lt,
         ),
         sn = y.m.compose(
           "RectangleLabelsModel",
@@ -3064,7 +3064,7 @@
           yn,
           kn,
           Sn,
-          Dt,
+          Lt,
         ),
         wn = y.m.compose(
           "PolygonLabelsModel",
@@ -3654,8 +3654,8 @@
       S.addTag("image", Tn, In);
       var Hn = n(153),
         An = n(202),
-        Ln = n.n(An),
-        Dn = function e(t, n, a) {
+        Dn = n.n(An),
+        Ln = function e(t, n, a) {
           var o = arguments.length > 3 && void 0 !== arguments[3] ? arguments[3] : {};
           Object(d.a)(this, e), (this.start = t), (this.end = n), (this.text = a), (this.data = o);
         },
@@ -3887,7 +3887,7 @@
                   if (!r.startContainer.parentNode.dataset.hint && !r.endContainer.parentNode.dataset.hint) {
                     var i = parseInt(r.startContainer.parentNode.dataset.position),
                       l = parseInt(r.endContainer.parentNode.dataset.position),
-                      s = new Dn(i < l ? i : l, i < l ? l : i, e, Object(O.a)({}, this.props, { ranges: void 0 }));
+                      s = new Ln(i < l ? i : l, i < l ? l : i, e, Object(O.a)({}, this.props, { ranges: void 0 }));
                     this.props.onTextHighlighted(s);
                   }
                 },
@@ -3919,12 +3919,12 @@
                   for (var e, t = [], n = 0; n < this.props.text.length; n++) {
                     var a = this.getRange(n),
                       o = Y.Checkers.getUrl(n, this.props.text),
-                      r = Ln()().test(this.props.text[n] + this.props.text[n + 1]),
+                      r = Dn()().test(this.props.text[n] + this.props.text[n + 1]),
                       i = this.getNode(n, a, this.props.text, o, r);
                     if ((o.length ? (n += o.length - 1) : r && n++, a)) {
                       e = a;
                       for (var l = [i], s = n + 1; s < parseInt(a.end) + 1; s++) {
-                        Ln()().test("".concat(this.props.text[s]).concat(this.props.text[s + 1]))
+                        Dn()().test("".concat(this.props.text[s]).concat(this.props.text[s + 1]))
                           ? (l.push(this.getEmojiNode(s, a)), s++)
                           : l.push(this.getLetterNode(s, a)),
                           (n = s);
@@ -4376,7 +4376,7 @@
           "ChoicesModel",
           ca,
           ua,
-          Dt,
+          Lt,
         ),
         ma = Object(u.c)(function(e) {
           var t = e.item;
@@ -4794,7 +4794,7 @@
           name: y.m.maybeNull(y.m.string),
           value: y.m.maybeNull(y.m.string),
         }),
-        La = y.m
+        Da = y.m
           .model({
             id: y.m.optional(y.m.identifier, N),
             type: "ranker",
@@ -4845,10 +4845,10 @@
               },
             };
           }),
-        Da = y.m.compose(
+        La = y.m.compose(
           "RankerModel",
           Aa,
-          La,
+          Da,
         ),
         Pa = Object(Sa.sortableHandle)(function() {
           return l.a.createElement("div", { className: "drag-handle" });
@@ -4934,7 +4934,7 @@
           );
         }),
         Wa = Object(u.b)("store")(Object(u.c)(Va));
-      S.addTag("ranker", Da, Wa);
+      S.addTag("ranker", La, Wa);
       var Fa = n(308),
         Ua = n.n(Fa),
         Za = (function(e) {
@@ -5056,7 +5056,11 @@
       var Xa = n(48),
         $a = n.n(Xa),
         qa = y.m
-          .model("Task", { id: y.m.identifierNumber, data: y.m.maybeNull(y.m.string), project: y.m.number })
+          .model("Task", {
+            id: y.m.identifierNumber,
+            data: y.m.maybeNull(y.m.string),
+            project: y.m.maybeNull(y.m.number),
+          })
           .views(function(e) {
             return {
               get app() {
@@ -5762,18 +5766,18 @@
               },
               initializeStore: function(t) {
                 var n = t.completions,
-                  a = [],
-                  o = e.completionStore;
+                  a = e.completionStore,
+                  o = [];
                 if (n && n.length)
                   for (var r = 0; r < n.length; r++) {
                     var i = n[r];
-                    !0 !== i.was_cancelled && i.was_generated && a.push(i);
+                    !0 !== i.was_cancelled && o.push(i);
                   }
-                if (0 === o.completions.length) {
+                if (0 === a.completions.length) {
                   var l = e.completionStore.addInitialCompletion();
-                  if ((e.completionStore.selectCompletion(l.id), a.length > 0)) {
-                    var s = a[0].result;
-                    "string" === typeof a[0].result && (s = JSON.parse(a[0].result)),
+                  if ((e.completionStore.selectCompletion(l.id), o.length > 0)) {
+                    var s = o[0].result;
+                    "string" === typeof o[0].result && (s = JSON.parse(o[0].result)),
                       l.deserializeCompletion(s),
                       l.reinitHistory();
                   }
@@ -6065,11 +6069,12 @@
       };
       fo = {
         getData: function() {
-          window.taskData && (window.taskData.data = JSON.stringify(window.taskData.data));
+          window.taskData && window.taskData.data && (window.taskData.data = JSON.stringify(window.taskData.data));
           var e = {
             projectID: window.projectID,
             isLoading: !1,
             config: window.editorAppConfig,
+            task: window.taskData,
             taskID: window.taskID,
             expert: window.expertData,
             debug: window.debugEditor,
@@ -6147,3 +6152,4 @@
   },
   [[323, 2, 1]],
 ]);
+//# sourceMappingURL=main.5943b99c.chunk.js.map
