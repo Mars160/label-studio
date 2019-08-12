@@ -1,7 +1,40 @@
 (window.webpackJsonp = window.webpackJsonp || []).push([
   [0],
   {
-    116: function(e, t, n) {
+    164: function(e, t, n) {
+      e.exports = {
+        block: "Entity_block__3ckIB",
+        button: "Entity_button__W4DcF",
+        labels: "Entity_labels__1Ldoe",
+        tag: "Entity_tag__3VRfN",
+      };
+    },
+    168: function(e, t, n) {
+      e.exports = {
+        pushable: "Controls_pushable__a1HxL",
+        "hide-dd-icon": "Controls_hide-dd-icon__3MPHE",
+        "drag-handle": "Controls_drag-handle__2yyWu",
+        noselect: "Controls_noselect__1U7-5",
+        "common-container": "Controls_common-container__2x_Gk",
+        "functional-buttons": "Controls_functional-buttons__37irg",
+        "editor-side-column": "Controls_editor-side-column__-zSr5",
+        skip: "Controls_skip__1Km2f",
+        task: "Controls_task__3a2SA",
+        container: "Controls_container__2OOQz",
+        block: "Controls_block__3VbK-",
+        wrapper: "Controls_wrapper__3Yptx",
+      };
+    },
+    169: function(e, t, n) {
+      e.exports = {
+        block: "Dialog_block__3oOBf",
+        block_selected: "Dialog_block_selected__2Do_t",
+        name: "Dialog_name__1MoM3",
+        tag: "Dialog_tag__3NOpX",
+        date: "Dialog_date__28pt2",
+      };
+    },
+    177: function(e, t, n) {
       e.exports = {
         block: "Relations_block__3Oopf",
         section: "Relations_section__2WXtQ",
@@ -9,7 +42,7 @@
         delete: "Relations_delete__2Eyc8",
       };
     },
-    151: function(e, t, n) {
+    191: function(e, t, n) {
       e.exports = {
         pushable: "Panel_pushable__2Zm85",
         "hide-dd-icon": "Panel_hide-dd-icon__xZoa5",
@@ -22,10 +55,13 @@
         block: "Panel_block__3mBJh",
       };
     },
-    197: function(e, t, n) {
+    203: function(e, t, n) {
       e.exports = { main: "Hint_main__ZDhzi" };
     },
-    203: function(e, t, n) {
+    208: function(e, t, n) {
+      e.exports = { progress: "Waveform_progress__1GLjz", wave: "Waveform_wave__yPehs", menu: "Waveform_menu__3Kb8O" };
+    },
+    210: function(e, t, n) {
       e.exports = {
         pushable: "App_pushable__2_dds",
         "hide-dd-icon": "App_hide-dd-icon__QwL78",
@@ -39,25 +75,25 @@
         content: "App_content__1ym7D",
       };
     },
-    272: function(e, t, n) {
+    280: function(e, t, n) {
       e.exports = { buttons: "Completions_buttons__1Egvo" };
     },
-    296: function(e, t, n) {
+    304: function(e, t, n) {
       e.exports = { item: "Entities_item__3oFPp" };
     },
-    297: function(e, t, n) {
+    305: function(e, t, n) {
       e.exports = { card: "SideColumn_card__2KVRh" };
     },
-    303: function(e, t, n) {
-      e.exports = { progress: "Waveform_progress__1GLjz", wave: "Waveform_wave__yPehs" };
+    312: function(e, t, n) {
+      e.exports = { play: "AudioPlus_play__1hGxY" };
     },
-    306: function(e, t, n) {
+    314: function(e, t, n) {
       e.exports = { block: "TextHighlight_block__z4O-f" };
     },
-    307: function(e, t, n) {
+    315: function(e, t, n) {
       e.exports = { state: "TextRegion_state__wi_ws" };
     },
-    308: function(e, t, n) {
+    316: function(e, t, n) {
       e.exports = {
         pushable: "Segment_pushable__2gVkh",
         "hide-dd-icon": "Segment_hide-dd-icon__1KuoO",
@@ -69,73 +105,1565 @@
         block: "Segment_block__3-nF9",
       };
     },
-    323: function(e, t, n) {
-      e.exports = n(549);
+    318: function(e, t, n) {
+      e.exports = n.p + "static/media/config.34f6aa9f.xml";
     },
-    330: function(e, t, n) {},
-    549: function(e, t, n) {
+    319: function(e) {
+      e.exports = [
+        {
+          reviewerID: "A2IBPI20UZIR0U",
+          asin: "1384719342",
+          reviewerName: "cassandra tu \"Yeah, well, that's just like, u...",
+          helpful: [0, 0],
+          reviewText:
+            "Not much to write about here, but it does exactly what it's supposed to. filters out the pop sounds. now my recordings are much more crisp. it is one of the lowest prices pop filters on amazon so might as well buy it, they honestly work the same despite their pricing,",
+          overall: 5,
+          summary: "good",
+          unixReviewTime: 1393545600,
+          reviewTime: "02 28, 2014",
+        },
+        {
+          reviewerID: "A14VAT5EAX3D9S",
+          asin: "1384719342",
+          reviewerName: "Jake",
+          helpful: [13, 14],
+          reviewText:
+            "The product does exactly as it should and is quite affordable.I did not realized it was double screened until it arrived, so it was even better than I had expected.As an added bonus, one of the screens carries a small hint of the smell of an old grape candy I used to buy, so for reminiscent's sake, I cannot stop putting the pop filter next to my nose and smelling it after recording. :DIf you needed a pop filter, this will work just as well as the expensive ones, and it may even come with a pleasing aroma like mine did!Buy this product! :]",
+          overall: 5,
+          summary: "Jake",
+          unixReviewTime: 1363392e3,
+          reviewTime: "03 16, 2013",
+        },
+        {
+          reviewerID: "A195EZSQDW3E21",
+          asin: "1384719342",
+          reviewerName: 'Rick Bennette "Rick Bennette"',
+          helpful: [1, 1],
+          reviewText:
+            "The primary job of this device is to block the breath that would otherwise produce a popping sound, while allowing your voice to pass through with no noticeable reduction of volume or high frequencies. The double cloth filter blocks the pops and lets the voice through with no coloration. The metal clamp mount attaches to the mike stand secure enough to keep it attached. The goose neck needs a little coaxing to stay where you put it.",
+          overall: 5,
+          summary: "It Does The Job Well",
+          unixReviewTime: 1377648e3,
+          reviewTime: "08 28, 2013",
+        },
+        {
+          reviewerID: "A2C00NNG1ZQQG2",
+          asin: "1384719342",
+          reviewerName: 'RustyBill "Sunday Rocker"',
+          helpful: [0, 0],
+          reviewText:
+            "Nice windscreen protects my MXL mic and prevents pops. Only thing is that the gooseneck is only marginally able to hold the screen in position and requires careful positioning of the clamp to avoid sagging.",
+          overall: 5,
+          summary: "GOOD WINDSCREEN FOR THE MONEY",
+          unixReviewTime: 1392336e3,
+          reviewTime: "02 14, 2014",
+        },
+        {
+          reviewerID: "A94QU4C90B1AX",
+          asin: "1384719342",
+          reviewerName: "SEAN MASLANKA",
+          helpful: [0, 0],
+          reviewText:
+            "This pop filter is great. It looks and performs like a studio filter. If you're recording vocals this will eliminate the pops that gets recorded when you sing.",
+          overall: 5,
+          summary: "No more pops when I record my vocals.",
+          unixReviewTime: 1392940800,
+          reviewTime: "02 21, 2014",
+        },
+        {
+          reviewerID: "A2A039TZMZHH9Y",
+          asin: "B00004Y2UT",
+          reviewerName: 'Bill Lewey "blewey"',
+          helpful: [0, 0],
+          reviewText:
+            "So good that I bought another one.  Love the heavy cord and gold connectors.  Bass sounds great.  I just learned last night how to coil them up.  I guess I should read instructions more carefully.  But no harm done, still works great!",
+          overall: 5,
+          summary: "The Best Cable",
+          unixReviewTime: 1356048e3,
+          reviewTime: "12 21, 2012",
+        },
+        {
+          reviewerID: "A1UPZM995ZAH90",
+          asin: "B00004Y2UT",
+          reviewerName: "Brian",
+          helpful: [0, 0],
+          reviewText:
+            "I have used monster cables for years, and with good reason. The lifetime warranty is worth the price alone. Simple fact: cables break, but getting to replace them at no cost is where it's at.",
+          overall: 5,
+          summary: "Monster Standard 100 - 21' Instrument Cable",
+          unixReviewTime: 1390089600,
+          reviewTime: "01 19, 2014",
+        },
+        {
+          reviewerID: "AJNFQI3YR6XJ5",
+          asin: "B00004Y2UT",
+          reviewerName: 'Fender Guy "Rick"',
+          helpful: [0, 0],
+          reviewText:
+            "I now use this cable to run from the output of my pedal chain to the input of my Fender Amp. After I bought Monster Cable to hook up my pedal board I thought I would try another one and update my guitar. I had been using a high end Planet Waves cable that I bought in the 1980's... Once I found out the input jacks on the new Monster cable didn't fit into the Fender Strat jack I was a little disappointed... I didn't return it and as stated I use it for the output on the pedal board. Save your money... I went back to my Planet Waves Cable...I payed $30.00 back in the eighties for the Planet Waves which now comes in at around $50.00. What I'm getting at is you get what you pay for. I thought Waves was a lot of money back in the day...but I haven't bought a guitar cable since this one...20 plus years and still working...Planet Waves wins.",
+          overall: 3,
+          summary: "Didn't fit my 1996 Fender Strat...",
+          unixReviewTime: 1353024e3,
+          reviewTime: "11 16, 2012",
+        },
+        {
+          reviewerID: "A3M1PLEYNDEYO8",
+          asin: "B00004Y2UT",
+          reviewerName: 'G. Thomas "Tom"',
+          helpful: [0, 0],
+          reviewText:
+            "Perfect for my Epiphone Sheraton II.  Monster cables are well constructed.  I have several and never had any problems with any of them over the years.  Got this one because I wanted the 90 degree plug.",
+          overall: 5,
+          summary: "Great cable",
+          unixReviewTime: 1215302400,
+          reviewTime: "07 6, 2008",
+        },
+        {
+          reviewerID: "AMNTZU1YQN1TH",
+          asin: "B00004Y2UT",
+          reviewerName: "Kurt Robair",
+          helpful: [0, 0],
+          reviewText:
+            "Monster makes the best cables and a lifetime warranty doesnt hurt either. This isnt their top of the line series but it works great with my bass guitar rig and has for some time. You cant go wrong with Monster Cables.",
+          overall: 5,
+          summary: "Best Instrument Cables On The Market",
+          unixReviewTime: 1389139200,
+          reviewTime: "01 8, 2014",
+        },
+        {
+          reviewerID: "A2NYK9KWFMJV4Y",
+          asin: "B00004Y2UT",
+          reviewerName: 'Mike Tarrani "Jazz Drummer"',
+          helpful: [6, 6],
+          reviewText:
+            "Monster makes a wide array of cables, including some that are very high end. I initially purchased a pair ofMonster Rock Instrument Cable - 21 Feet - Angled to Straight 1/4-Inch plugto use with my keyboards, but when it came time to purchase cables for my bass and guitar I thought I'd pinch a few pennies.  I am so glad I did.I compared this cable model to the more expensive models I previously purchased and, aside from looks, could not detect any difference in sound. I Swapped back and forth between my guitars and keyboards, ensuring that each model was used on each instrument - still no difference.What the more expensive model has going for it is looks. I am not sure it (the higher priced model) is even more sturdy because the molded stress relief ends on this model seem to make it more reliable than its pricier sibling.Bottom line: carefully compare both cables using your own instrument and amp - if possible - before making a purchase decision. You may find, as I did, that higher price does not necessarily equal higher value, even from the same manufacturer.",
+          overall: 5,
+          summary: "One of the best instrument cables within the brand",
+          unixReviewTime: 1334793600,
+          reviewTime: "04 19, 2012",
+        },
+        {
+          reviewerID: "A35QFQI0M46LWO",
+          asin: "B00005ML71",
+          reviewerName: "Christopher C",
+          helpful: [0, 0],
+          reviewText:
+            "I got it to have it if I needed it. I have found that i don't really need it that often and rarely use it. If I was really good I can see the need. But this is a keyboard not an organ.",
+          overall: 4,
+          summary: "It works great but I hardly use it.",
+          unixReviewTime: 1398124800,
+          reviewTime: "04 22, 2014",
+        },
+        {
+          reviewerID: "A2NIT6BKW11XJQ",
+          asin: "B00005ML71",
+          reviewerName: "Jai",
+          helpful: [0, 0],
+          reviewText:
+            "If you are not use to using a large sustaining pedal while playing the piano, it may appear little awkward.",
+          overall: 3,
+          summary: "HAS TO GET USE TO THE SIZE",
+          unixReviewTime: 1384646400,
+          reviewTime: "11 17, 2013",
+        },
+        {
+          reviewerID: "A1C0O09LOLVI39",
+          asin: "B00005ML71",
+          reviewerName: "Michael",
+          helpful: [0, 0],
+          reviewText: "I love it, I used this for my Yamaha ypt-230 and it works great, I would recommend it to anyone",
+          overall: 5,
+          summary: "awesome",
+          unixReviewTime: 1371340800,
+          reviewTime: "06 16, 2013",
+        },
+        {
+          reviewerID: "A17SLR18TUMULM",
+          asin: "B00005ML71",
+          reviewerName: "Straydogger",
+          helpful: [0, 0],
+          reviewText:
+            "I bought this to use in my home studio to control my midi keyboard. It does just what I wanted it to do.",
+          overall: 5,
+          summary: "It works!",
+          unixReviewTime: 1356912e3,
+          reviewTime: "12 31, 2012",
+        },
+        {
+          reviewerID: "A2PD27UKAD3Q00",
+          asin: "B00005ML71",
+          reviewerName: 'Wilhelmina Zeitgeist "coolartsybabe"',
+          helpful: [0, 0],
+          reviewText:
+            "I bought this to use with my keyboard. I wasn't really aware that there were other options for keyboard pedals. It doesn't work as smoothly as the pedals do on an acoustic piano, which is what I'd always used. Doesn't have the same feel either. Nowhere close.In my opinion, a sustain pedal like the M-Audio SP-2 Sustain Pedal with Piano Style Action or other similar pedal is a much better choice. The price difference is only a few dollars and the feel and action are so much better. The only thing I've found the Yamaha FC-5 Sustain Pedal is good for is taking up space in a drawer where I keep my electric guitar pedals.",
+          overall: 2,
+          summary: "Definitely Not For The Seasoned Piano Player",
+          unixReviewTime: 1376697600,
+          reviewTime: "08 17, 2013",
+        },
+        {
+          reviewerID: "AKSFZ4G1AXYFC",
+          asin: "B000068NSX",
+          reviewerName: 'C.E. "Frank"',
+          helpful: [0, 0],
+          reviewText:
+            "This Fender cable is the perfect length for me! Sometimes I find it a bit too long but I don't mind. The build quality is great and I know that it will last. The only gripe I have with this cable is that the metal sleeve gets unscrewed way too easily, requiring me to tighten it often.Sound quality is not affected, and the color is cool, definitely try this cable out.",
+          overall: 4,
+          summary: "Durable Instrument Cable",
+          unixReviewTime: 1376352e3,
+          reviewTime: "08 13, 2013",
+        },
+        {
+          reviewerID: "A67OJZLHBBUQ9",
+          asin: "B000068NSX",
+          reviewerName: 'Charles F. Marks "charlie marks"',
+          helpful: [0, 0],
+          reviewText:
+            "wanted it just on looks alone...It is a nice looking cord... I know it will perform...as for Sam Ash ...this cord was packed in a mailer inside another box with my Roc n Soc... his shipping team do great work..never any complaints from me... I love Sam Ash.. thanks Amazon",
+          overall: 5,
+          summary: "fender 18 ft. Cali clear...",
+          unixReviewTime: 1373328e3,
+          reviewTime: "07 9, 2013",
+        },
+        {
+          reviewerID: "A2EZWZ8MBEDOLN",
+          asin: "B000068NSX",
+          reviewerName: "Charlo",
+          helpful: [3, 3],
+          reviewText:
+            "I've been using these cables for more than 4 months and they are holding up pretty well.  For years I used seemingly indestructable guitar cables that were made for me by an electrician friend.  When they finally gave out, I got in the habit of using the no-name cables that are always on display near the register at Guitar Center- really more of an impulse buy than something I put any thought into.  After the third or fourth Guitar Center cable failed from light use I decided to try these cables.  Not only are they cheaper but they seem to be holding up better.  I am not terribly hard on my gear but my cables tend to get twisted as I move around and the cheaper ones  eventually fail mid-cable.  I don't mind spending a few extra dollars if the cable is a little more durable.  This cable is actually cheaper- $12 or so shipped- and it's holding up pretty well.  These are actually very reasonably priced for 18' cables.  There is some kind of limited life warantee on this product but I haven't needed it.  Five stars for a nicely made 18 foot guitar cable that costs $12 shipped!Incidentally- these cables are shielded and are meant to connect your instrument to your amp's input.  Do not use these to connect an amplifier to a speaker cab.  You want to use unshielded cables for that purpose.Edit-  More than 6 months has passed and this cable is functioning without any issues.  The price on these things has gone up significantly and although the cable is highly recommended, there are probably better values from Hosa, Monster or Planet Waves-",
+          overall: 5,
+          summary: "So far so good.  Will revisit at the 6 month mark ;)",
+          unixReviewTime: 1363564800,
+          reviewTime: "03 18, 2013",
+        },
+        {
+          reviewerID: "A1CL807EOUPVP1",
+          asin: "B000068NSX",
+          reviewerName: "GunHawk",
+          helpful: [0, 0],
+          reviewText:
+            "Fender cords look great and work just as well. By adding the word California to the description I'm sure to sound like the Beach Boys...",
+          overall: 5,
+          summary: "Add California to the name and I jump!",
+          unixReviewTime: 1375833600,
+          reviewTime: "08 7, 2013",
+        },
+        {
+          reviewerID: "A1GMWTGXW682GB",
+          asin: "B000068NSX",
+          reviewerName: "MetalFan",
+          helpful: [0, 0],
+          reviewText:
+            "This is a cool looking cheap cable which works well. I bent one of the connectors pretty badly but that was my fault. One thing to consider with the cable is to tighten the connectors once in awhile. You'll be able to hear them rattle. It seems that the 'retro' look is screw on connectors over some black rubber, but other than that, the cable looks cool and works well.I also have the shorter red cable which goes with one of my guitars perfectly. I bought theses to use while practicing with others who use black cables. It's easier to plug into different amps without cutting someone out by accident. The green cable is good for that.",
+          overall: 4,
+          summary: "Cheap and cool looking, good length",
+          unixReviewTime: 1331856e3,
+          reviewTime: "03 16, 2012",
+        },
+        {
+          reviewerID: "A2G12DY50U700V",
+          asin: "B000068NSX",
+          reviewerName: "Ricky Shows",
+          helpful: [0, 0],
+          reviewText:
+            "The Fender 18 Feet California Clear Instrument Cable - Lake Placid Blue  is a very good extra cord for a good price.",
+          overall: 5,
+          summary: "Fender 18 Feet California Clear Instrument Cable - Lake Placid Blue",
+          unixReviewTime: 1390953600,
+          reviewTime: "01 29, 2014",
+        },
+        {
+          reviewerID: "A3E0CF25A7LD2",
+          asin: "B000068NSX",
+          reviewerName: "WBowie",
+          helpful: [0, 0],
+          reviewText:
+            "Very good cable. Well made and it looks great with my Candy Apple Red Tele. The reason I gave it only 4 stars is because it tends not to lay flat on the floor.",
+          overall: 4,
+          summary: "Guitar Cable",
+          unixReviewTime: 1354924800,
+          reviewTime: "12 8, 2012",
+        },
+        {
+          reviewerID: "A2W3CLAYZLDPTV",
+          asin: "B000068NTU",
+          reviewerName: 'Amazon Customer "=Chris="',
+          helpful: [0, 0],
+          reviewText:
+            "Got this cable to run a rockband keyboard controller to my M-audio profire 2626 to control midi in Pro Tools. Works great! Firm fit, solidly molded ends, reputable branded cable.(a bit on the thin side, but i haven't seen to have any issue due to this or anything. Couldn't go wrong for $5 at the time of my purchase and prime eligibility.",
+          overall: 5,
+          summary: "Quality cable!",
+          unixReviewTime: 1341446400,
+          reviewTime: "07 5, 2012",
+        },
+        {
+          reviewerID: "A398X9POBHK69N",
+          asin: "B000068NTU",
+          reviewerName: "Ann Vande Zande",
+          helpful: [0, 0],
+          reviewText:
+            "When I was searching for MIDI cables for my ART X-15 foot controller, I came across these Hosa ones, and they were $2 dollars each! As they are now $6, I realize I would still be happy with that price as well, as they are high quality plastic and metal connectors, and work flawlessly. You must realize that they are only 5 feet, as I overestimated it and now wish they were longer. For any connection from racked sound modules, this will be perfect.",
+          overall: 5,
+          summary: "I Got Great Pricing, But Still a Really Good Product",
+          unixReviewTime: 1383177600,
+          reviewTime: "10 31, 2013",
+        },
+        {
+          reviewerID: "AXWB93VKVML6K",
+          asin: "B000068NTU",
+          reviewerName: "Michael Hassey",
+          helpful: [0, 0],
+          reviewText:
+            "Cant go wrong. Great quality on a budget price  - Hosa is the go to when you need to hook things up",
+          overall: 4,
+          summary: "Its a Hosa",
+          unixReviewTime: 1372809600,
+          reviewTime: "07 3, 2013",
+        },
+        {
+          reviewerID: "A2FZ4Z0UFA1OR8",
+          asin: "B000068NTU",
+          reviewerName: "Pat",
+          helpful: [0, 0],
+          reviewText:
+            "The ends of the midi cable look and feel like quality. Connection is secure, no worries about uneven connections, it also detaches without a hitch. Highly recommended.",
+          overall: 5,
+          summary: "Quality and Secure",
+          unixReviewTime: 1327449600,
+          reviewTime: "01 25, 2012",
+        },
+        {
+          reviewerID: "AXP9CF1UTFRSU",
+          asin: "B000068NTU",
+          reviewerName: "tada",
+          helpful: [0, 0],
+          reviewText:
+            "Just trying to find a midi to midi was a task, and you have to make sure the pin config is correct.  This one is a good product and works just fine",
+          overall: 5,
+          summary: "Midi to Midi",
+          unixReviewTime: 1381795200,
+          reviewTime: "10 15, 2013",
+        },
+        {
+          reviewerID: "A2CCGGDGZ694CT",
+          asin: "B000068NVI",
+          reviewerName: "b carney",
+          helpful: [1, 1],
+          reviewText:
+            "The Hosa XLR cables are affordable and very heavily made.I have a large mixer and rack and cables everywhere.I decided to purchase shorter cables and the Hosa cables 5ft measurement worked perfectly.You really will not be disappointed with these.",
+          overall: 4,
+          summary: "Very Heavy Cables At Affordable Price",
+          unixReviewTime: 1341964800,
+          reviewTime: "07 11, 2012",
+        },
+        {
+          reviewerID: "A27DR1VO079F1V",
+          asin: "B000068NVI",
+          reviewerName: "Dan Edman",
+          helpful: [0, 0],
+          reviewText:
+            "I bought these to go from my board to the amp. We use them for a mobile church so they take a beating. They are still going strong.",
+          overall: 5,
+          summary: "Still going",
+          unixReviewTime: 1392768e3,
+          reviewTime: "02 19, 2014",
+        },
+        {
+          reviewerID: "A1LQC225SE8UNI",
+          asin: "B000068NVI",
+          reviewerName: "David Burch",
+          helpful: [0, 0],
+          reviewText:
+            "Sturdy cord and plugs, inexpensive, good value. I don't require professional-level equipment, so this cord serves my purposes well. Satisfied with purchase.",
+          overall: 5,
+          summary: "Does what it's supposed to do",
+          unixReviewTime: 1337990400,
+          reviewTime: "05 26, 2012",
+        },
+        {
+          reviewerID: "AU9BPT3Y3K6J4",
+          asin: "B000068NVI",
+          reviewerName: "G. L. Beebe",
+          helpful: [0, 0],
+          reviewText:
+            "Use it every week at gigs.  Solid, no problems with the solder joints.  A good quality cable at a very good price.",
+          overall: 5,
+          summary: "Good cable",
+          unixReviewTime: 1376092800,
+          reviewTime: "08 10, 2013",
+        },
+        {
+          reviewerID: "A14Z9LAETO21KL",
+          asin: "B000068NVI",
+          reviewerName: "Gutjammer",
+          helpful: [0, 0],
+          reviewText:
+            "Hosa products are a good bang for the buck. I haven't looked up the specifications, but I'm guessing the wire is 22 to 24 AWG, but since it's only 10' long, it's good enough.",
+          overall: 4,
+          summary: "Good Enough",
+          unixReviewTime: 1394496e3,
+          reviewTime: "03 11, 2014",
+        },
+        {
+          reviewerID: "A2074KEJGRYJV4",
+          asin: "B000068NVI",
+          reviewerName: "hcross",
+          helpful: [0, 0],
+          reviewText:
+            "This was exactly what I was after. I have a voice touch and needed a small cord to connect the mic to the voice touch and this was perfect. Before I used a 20 foot cord to go about 12 inches. I highly recommend this for those who keep the mic on a stand and have a voice touch or other stand connected device for vocals.",
+          overall: 5,
+          summary: "Great little cord",
+          unixReviewTime: 1379289600,
+          reviewTime: "09 16, 2013",
+        },
+        {
+          reviewerID: "A7TRK2GG6BHWD",
+          asin: "B000068NVI",
+          reviewerName: 'Johnny Pasta "Johnny Pasta"',
+          helpful: [0, 0],
+          reviewText:
+            "I bought these because I really had too long of mike cords for my solo live show. And these are really nice cords if you have a home portastudio recording studio like myself. Who needs all the spaghetti to trip on all over the place? I bought two because I use a Digitech Live 2 Harmony processor and two XLR mike cords are required to make it operational. Good price here too. Hard to find just 10' mike cords. Usually longer ones are only obtainable.",
+          overall: 5,
+          summary: "Does the job. What more do you need?",
+          unixReviewTime: 1325808e3,
+          reviewTime: "01 6, 2012",
+        },
+        {
+          reviewerID: "A319B090A2POEB",
+          asin: "B000068NVI",
+          reviewerName: "Lee",
+          helpful: [0, 0],
+          reviewText:
+            "This cable seems like it will last me for a while. As it is only being used to connect a DI box it will not get abused as much as the vocal mics always do.",
+          overall: 4,
+          summary: "Decent mic cable",
+          unixReviewTime: 1329004800,
+          reviewTime: "02 12, 2012",
+        },
+        {
+          reviewerID: "A396ELNTQDFYPO",
+          asin: "B000068NVI",
+          reviewerName: "Mark King",
+          helpful: [0, 0],
+          reviewText:
+            "These are not the greatest but they're cheap and they get to you fast when you need them. I've only had one fail and I've bought many of them to use in our broadcast studio.Amazon is the first place I go when I need cables for audio, video, computers or concert lighting.Good music to all!",
+          overall: 4,
+          summary: "Decent inexpensive cable",
+          unixReviewTime: 1379289600,
+          reviewTime: "09 16, 2013",
+        },
+        {
+          reviewerID: "A17CU1D2CWXOHB",
+          asin: "B000068NVI",
+          reviewerName: "Rick",
+          helpful: [0, 0],
+          reviewText:
+            "This is a fine cable at a decent price point, nothing exceptional mind, but it gets the job done well enough.",
+          overall: 4,
+          summary: "a fine cable.",
+          unixReviewTime: 1387065600,
+          reviewTime: "12 15, 2013",
+        },
+        {
+          reviewerID: "A1S0HTDO0P4N5V",
+          asin: "B000068NVI",
+          reviewerName: 'R. Wristen "The Party Doc VJ and Karaoke"',
+          helpful: [0, 0],
+          reviewText:
+            "I've used a lot of cables and I always come back to HOSA, they are indeed some of the best audio cables in their price range on the market.",
+          overall: 5,
+          summary: "Hosa is the best",
+          unixReviewTime: 1379376e3,
+          reviewTime: "09 17, 2013",
+        },
+        {
+          reviewerID: "A3DWQW2L39RB1S",
+          asin: "B000068NVI",
+          reviewerName: "S. Dawdy",
+          helpful: [0, 0],
+          reviewText:
+            "I bought this cord after returning a cheap one that I should've known better than to buy. My son, who has some experience as a musician recommended the Hosa brand when I was seeking a proper replacement.I bought it for a small home recording setup which includes a Behringer C-1 Condenser Microphone and a Behringer Xenyx 302 Mixer, and both ends make a reliable connection to both the board and the mic; the sound quality is excellent.An excellent value for the money.",
+          overall: 4,
+          summary: "Excellent quality, exactly what I needed",
+          unixReviewTime: 1355443200,
+          reviewTime: "12 14, 2012",
+        },
+        {
+          reviewerID: "AQQ91U1U4YKDF",
+          asin: "B000068NVI",
+          reviewerName: 'Vince Lewis "Vince"',
+          helpful: [0, 0],
+          reviewText:
+            "Nice solid cables, with excellent support at the ends.  Should last a lifetime of usage no problem and just what I needed to connect my tube preamp.",
+          overall: 5,
+          summary: "great value",
+          unixReviewTime: 1372464e3,
+          reviewTime: "06 29, 2013",
+        },
+        {
+          reviewerID: "AA5TINW2RJ195",
+          asin: "B000068NW5",
+          helpful: [0, 0],
+          reviewText: "Good quality cable and sounds very good",
+          overall: 5,
+          summary: "Five Stars",
+          unixReviewTime: 1405382400,
+          reviewTime: "07 15, 2014",
+        },
+        {
+          reviewerID: "ABC68JUCPTVOE",
+          asin: "B000068NW5",
+          reviewerName: 'A. Fabbri "afabbri"',
+          helpful: [0, 0],
+          reviewText:
+            "Zero issues with this cable so far.  It feels fairly cheap and light weight but it has survived for months of plugging in, unplugging, and packing between practice spaces.I'll update this review if/when it breaks.",
+          overall: 5,
+          summary: "Pretty cheap cable that has lasted so far",
+          unixReviewTime: 1333152e3,
+          reviewTime: "03 31, 2012",
+        },
+        {
+          reviewerID: "A3W2E6S24BTXXK",
+          asin: "B000068NW5",
+          reviewerName: 'airchamp "ariel"',
+          helpful: [0, 0],
+          reviewText:
+            "Realtively inexpensive patch cable for electric guitar.I have had it for a few months and so far it has held up pretty well",
+          overall: 5,
+          summary: "very nice cable",
+          unixReviewTime: 1401235200,
+          reviewTime: "05 28, 2014",
+        },
+        {
+          reviewerID: "A3872Y2XH0YDX1",
+          asin: "B000068NW5",
+          reviewerName: "Amazon Customer",
+          helpful: [0, 0],
+          reviewText:
+            "I bought this because I wanted a cheap replacement cable for one that had a short. I'm pleasantly surprised with this cable. It's decent sound and decent build quality, for a good price.",
+          overall: 5,
+          summary: "Nice guitar cable, even better price",
+          unixReviewTime: 1363132800,
+          reviewTime: "03 13, 2013",
+        },
+        {
+          reviewerID: "A398X9POBHK69N",
+          asin: "B000068NW5",
+          reviewerName: "Ann Vande Zande",
+          helpful: [0, 0],
+          reviewText:
+            "This is a very nice cable for the price. I already bent one end of it though, fortunately it still works fine. Inside the phono connector the wires are covered by white shrink plastic. Haven't noticed any hum or crackles. For sure a good buy.",
+          overall: 4,
+          summary: "Does What You Want",
+          unixReviewTime: 1388966400,
+          reviewTime: "01 6, 2014",
+        },
+        {
+          reviewerID: "A13A81NN0NRD1S",
+          asin: "B000068NW5",
+          reviewerName: 'aspiring saint "TATITTLE"',
+          helpful: [12, 13],
+          reviewText:
+            "Cheap and good texture rubber that does not get stiff.  Only time will tell how well the soldering is.  Sounds fine to me.",
+          overall: 4,
+          summary: "flexible, soft rubber is great.",
+          unixReviewTime: 1290038400,
+          reviewTime: "11 18, 2010",
+        },
+        {
+          reviewerID: "A1EUO0BU72JR7T",
+          asin: "B000068NW5",
+          reviewerName: "Bilbo",
+          helpful: [0, 0],
+          reviewText:
+            "Seems sturdy enough, and no noise issues, so I'm pretty much satified with it; it doesn't leave the house so I'm not asking it to handle a lot, but with reasonable care it should last a while.",
+          overall: 5,
+          summary: "Works wonderfully, no noise",
+          unixReviewTime: 1372291200,
+          reviewTime: "06 27, 2013",
+        },
+        {
+          reviewerID: "A1H4WSC8JWS59N",
+          asin: "B000068NW5",
+          reviewerName: "bradley",
+          helpful: [0, 0],
+          reviewText:
+            "I'm not a professional, but have been playing for many, many years.  This is the best cord I've ever had, though I'm sure Eric Clapton has something better.",
+          overall: 5,
+          summary: "excellent",
+          unixReviewTime: 1359504e3,
+          reviewTime: "01 30, 2013",
+        },
+        {
+          reviewerID: "A3OXHLG6DIBRW8",
+          asin: "B000068NW5",
+          reviewerName: 'C. Hill "CFH"',
+          helpful: [0, 1],
+          reviewText:
+            "This Hosa Cable is very well made, with good quality connectors and a nice long length. My son is expanding his collection of amps and effects pedals so needed additional cables to get everything connected. This 25' cable gives him flexibility to move around and it is sturdy enough that it can take being stepped on and pulled around.The cable works well and is a good value for a decent quality cable.Highly Recommended!CFH",
+          overall: 5,
+          summary: "Great Guitar Cable, Good Value - Highly Recommended",
+          unixReviewTime: 1346803200,
+          reviewTime: "09 5, 2012",
+        },
+        {
+          reviewerID: "A12ABV9NU02O29",
+          asin: "B000068NW5",
+          reviewerName: "C. Longo",
+          helpful: [2, 2],
+          reviewText:
+            "I didn't expect this cable to be so thin. It's easily 1/2 the thickness of any guitar cable I've used. Not sure about long-term durability or signal loss/interference. If I had the foresight I'd spend a couple extra bucks on a thicker cable.  Still, it works and was inexpensive.EDIT: 6 months later and it's dead already.  Wire frayed at the right angle jack.  You get what you pay for.",
+          overall: 2,
+          summary: "Cannot recommend",
+          unixReviewTime: 1309910400,
+          reviewTime: "07 6, 2011",
+        },
+        {
+          reviewerID: "A2U1Z3TZ4P76JB",
+          asin: "B000068NW5",
+          reviewerName: "C. Zemer",
+          helpful: [0, 0],
+          reviewText:
+            "Bought this for my daughter along with her new guitar. It seems to work well, no issues in the first couple of weeks.",
+          overall: 5,
+          summary: "Cable works as described",
+          unixReviewTime: 1393977600,
+          reviewTime: "03 5, 2014",
+        },
+        {
+          reviewerID: "A1L7M2JXN4EZCR",
+          asin: "B000068NW5",
+          reviewerName: "David G",
+          helpful: [0, 0],
+          reviewText:
+            "It hums, crackles, and I think I'm having problems with my equipment.  As soon as I use any of my other cords then the problem is gone.  Hosa makes some other products that have good value.  But based on my experience I don't recommend this one.",
+          overall: 1,
+          summary: "I have bought many cables and this one is the only one that gives me problems",
+          unixReviewTime: 1391904e3,
+          reviewTime: "02 9, 2014",
+        },
+        {
+          reviewerID: "A37A41GWQFMK3D",
+          asin: "B000068NW5",
+          reviewerName: "Dr. Freud",
+          helpful: [0, 0],
+          reviewText:
+            "I am not hard on cables.  I typically just plug them in to my guitar, dont move around much, and play for an hour or two a day.  this one seem to perform just fine.  no buzz, and/or other noises noted.  I have several of them and they have all performed well.",
+          overall: 4,
+          summary: "gets the job done",
+          unixReviewTime: 1370649600,
+          reviewTime: "06 8, 2013",
+        },
+        {
+          reviewerID: "A2JK2ITE138P7Z",
+          asin: "B000068NW5",
+          reviewerName: "Dr. Marc",
+          helpful: [0, 0],
+          reviewText:
+            "I have found Hosa cables to be an excellent value. More expensive cables may be more rugged, but for the price, I'm very happy with the Hosa's I have purchased.",
+          overall: 5,
+          summary: "Nice cable for the price",
+          unixReviewTime: 1399939200,
+          reviewTime: "05 13, 2014",
+        },
+        {
+          reviewerID: "A1DVUFG2QSJ6IK",
+          asin: "B000068NW5",
+          reviewerName: 'grandpa "Randy"',
+          helpful: [0, 0],
+          reviewText:
+            "This is good cable. Excellent 1/4&#34; plugs. The lugs and solder joints are covered with heat shrink material, which will hold everything in place for years. Grade A+ cable at a very affordable price. Definitely  going back for more. The 25 ft. cable was only a couple dollars more than 10 ft.",
+          overall: 5,
+          summary: "Well made audio cable",
+          unixReviewTime: 1381190400,
+          reviewTime: "10 8, 2013",
+        },
+        {
+          reviewerID: "A34VZEFXQJJ7AT",
+          asin: "B000068NW5",
+          reviewerName: "Guitarslim",
+          helpful: [0, 0],
+          reviewText:
+            "Pretty crappy cable. It works and gets the job done, but after purchasing this product and using it, I will shell out the extra bucks for better quality.",
+          overall: 5,
+          summary: "Eh",
+          unixReviewTime: 1374710400,
+          reviewTime: "07 25, 2013",
+        },
+        {
+          reviewerID: "A1SD1C8XK3Z3V1",
+          asin: "B000068NW5",
+          reviewerName: 'guitfiddleblue "guitfiddleblue"',
+          helpful: [0, 0],
+          reviewText:
+            "I use this cord in my church to run from my pedalboard to my amp (which is in a soundproof box). The cord is reliable and clean sounding. I like it and have used HOSA products in the past with confidence. Excellent cord. Hopefully this review will be usefull to you.",
+          overall: 5,
+          summary: "great, affordable, cord",
+          unixReviewTime: 1392163200,
+          reviewTime: "02 12, 2014",
+        },
+        {
+          reviewerID: "AKHWZ3S1UVZAO",
+          asin: "B000068NW5",
+          reviewerName: "Hagen LeBray",
+          helpful: [0, 0],
+          reviewText:
+            "This my second Hosa guitar cable.  (The other one is shorter.)  Like my first Hosa cable, this is a high quality item.  I'd definitely buy more cables of this brand.",
+          overall: 4,
+          summary: "Nice Cable",
+          unixReviewTime: 1397779200,
+          reviewTime: "04 18, 2014",
+        },
+        {
+          reviewerID: "A3LNNEYLGGCO25",
+          asin: "B000068NW5",
+          reviewerName: "Hans R",
+          helpful: [0, 0],
+          reviewText:
+            "Works for practice ... it's a guitar instrument cable, what can I say ... maybe not the best but it serves it's purpose.",
+          overall: 3,
+          summary: "maybe not the best but it serves it's purpose",
+          unixReviewTime: 1404518400,
+          reviewTime: "07 5, 2014",
+        },
+        {
+          reviewerID: "AMACM7BGUQCZD",
+          asin: "B000068NW5",
+          reviewerName: "IBZANE",
+          helpful: [0, 0],
+          reviewText:
+            "These cables have taken a beating the last few months, and have served me well with no problems..Real metal ends, not molded on, with high quality silicone jackets and strain reliefs at the connectors..",
+          overall: 5,
+          summary: "High quality low cost",
+          unixReviewTime: 1390521600,
+          reviewTime: "01 24, 2014",
+        },
+        {
+          reviewerID: "A38HMS5RYSYF8G",
+          asin: "B000068NW5",
+          reviewerName: "James I Van Asten",
+          helpful: [0, 0],
+          reviewText:
+            "In my opinion it does not hurt to have extra guitar cables around. From experience they tend to just die without notice. I have a feeling this one will last a long time. It is built sturdy and sounds really good.I recommend this product.",
+          overall: 5,
+          summary: "works as advertised....",
+          unixReviewTime: 1389571200,
+          reviewTime: "01 13, 2014",
+        },
+        {
+          reviewerID: "A6D91KPQGIDKZ",
+          asin: "B000068NW5",
+          reviewerName: 'Jim R. "Photo man"',
+          helpful: [0, 0],
+          reviewText:
+            "Hosa guitar cables work great. Never had any problems with them. I own several of different lengths and they all sound perfect.",
+          overall: 5,
+          summary: "Good cables",
+          unixReviewTime: 1343001600,
+          reviewTime: "07 23, 2012",
+        },
+        {
+          reviewerID: "A2RCCN4KEXZGC8",
+          asin: "B000068NW5",
+          reviewerName: 'Joe Average "Joe Average"',
+          helpful: [0, 0],
+          reviewText:
+            "This product does exactly what it is supposed to do at a decent price.  I have absolutely no complaints.  This is my first experience with the brand and I am not disappointed.",
+          overall: 5,
+          summary: "No Complaints",
+          unixReviewTime: 1377388800,
+          reviewTime: "08 25, 2013",
+        },
+        {
+          reviewerID: "A3GAP455S8YH0M",
+          asin: "B000068NW5",
+          reviewerName: 'Joe\'s Gadgets "JOE H."',
+          helpful: [0, 0],
+          reviewText:
+            "Good quality guitar cord.Very low noise, repairable, effective strain releaf,thick rubber cover!! This is a great buy, under 10 bucks for a quality cord.Of course I just got it..it might not be durable but it looks durable.If I change my mind about anything I will update my review.For now, I would say, buy one!!Joe",
+          overall: 5,
+          summary: "Good Quality",
+          unixReviewTime: 1373068800,
+          reviewTime: "07 6, 2013",
+        },
+        {
+          reviewerID: "A1N06X05VZWO5Y",
+          asin: "B000068NW5",
+          reviewerName: "Joe Toland",
+          helpful: [0, 0],
+          reviewText:
+            "This is a good solid cable with no problems. When I'm on stage, I like a longer cable but at practice I don't need all the extra length tangleing up on everything...",
+          overall: 5,
+          summary: "Perfect for practice!",
+          unixReviewTime: 1391385600,
+          reviewTime: "02 3, 2014",
+        },
+        {
+          reviewerID: "A3TA1UJWRJF9NC",
+          asin: "B000068NW5",
+          reviewerName: "jschristian44",
+          helpful: [3, 3],
+          reviewText:
+            "This guitar cable is very nice.  It looks high quality and has the white ends.  Fantastic deal for this cable.",
+          overall: 5,
+          summary: "Nice high quality guitar cable",
+          unixReviewTime: 1293580800,
+          reviewTime: "12 29, 2010",
+        },
+        {
+          reviewerID: "A3VPISTBNS66C5",
+          asin: "B000068NW5",
+          reviewerName: "k2review",
+          helpful: [0, 0],
+          reviewText:
+            "Good product at a good price. Have used it multiple times and works well with my guitar and speaker. Great to have when friends come over to jam.",
+          overall: 4,
+          summary: "Works well",
+          unixReviewTime: 1359072e3,
+          reviewTime: "01 25, 2013",
+        },
+        {
+          reviewerID: "A1E5FQZTUM8OC1",
+          asin: "B000068NW5",
+          reviewerName: "Kenwood",
+          helpful: [0, 0],
+          reviewText:
+            "This item is well built and I like the terminal ends and how they have the spring built in. These aren't going to be the most durable road cables but for home and light road use they will work well.",
+          overall: 5,
+          summary: "Well built cable",
+          unixReviewTime: 1373846400,
+          reviewTime: "07 15, 2013",
+        },
+        {
+          reviewerID: "A3MYWHYZ30WLQJ",
+          asin: "B000068NW5",
+          reviewerName: "kyle c.",
+          helpful: [0, 0],
+          reviewText:
+            "This amp plug is great for the price its 10 ft long the perfect size for jammin at home and it has a quality look to it aesthetically totally worth the price",
+          overall: 5,
+          summary: "pperfect amp chord.for home use",
+          unixReviewTime: 1377734400,
+          reviewTime: "08 29, 2013",
+        },
+        {
+          reviewerID: "A1FHOW9NVOH8XR",
+          asin: "B000068NW5",
+          reviewerName: "Lee",
+          helpful: [0, 0],
+          reviewText:
+            "Hosa Cable GTR210 Guitar Instrument Cable - 10ft. is a High quality Instrument Cable, but low cost, won't break the bank. I'm very satisfied with my purchase.",
+          overall: 5,
+          summary: "Hosa Cable GTR210 Guitar Instrument Cable - 10ft.",
+          unixReviewTime: 1359936e3,
+          reviewTime: "02 4, 2013",
+        },
+        {
+          reviewerID: "A319B090A2POEB",
+          asin: "B000068NW5",
+          reviewerName: "Lee",
+          helpful: [0, 0],
+          reviewText:
+            "...unbalanced guitar cable is notoriously noisy especially around florescent lights. These are no different. I would prefer to use cables with better shielding but cannot justify the expense considering how rarely these things get used.",
+          overall: 3,
+          summary: "Standard guitar cable",
+          unixReviewTime: 1329004800,
+          reviewTime: "02 12, 2012",
+        },
+        {
+          reviewerID: "A2VH0UT5EQFB6P",
+          asin: "B000068NW5",
+          reviewerName: "Loveguitar",
+          helpful: [0, 0],
+          reviewText:
+            "This is your basic, black electric guitar cable but it works great.  So far the connections at both ends are solid and the sound from the amp is great!  Nice and rubbery and 10 feet is long enough.  If problems arise later with this cable, I will update this review, but as of now there has been no problems whatsoever with this cable.",
+          overall: 5,
+          summary: "Hosa Electric Guitar Cable GTR210",
+          unixReviewTime: 1389830400,
+          reviewTime: "01 16, 2014",
+        },
+        {
+          reviewerID: "A396ELNTQDFYPO",
+          asin: "B000068NW5",
+          reviewerName: "Mark King",
+          helpful: [0, 0],
+          reviewText:
+            "Hosa cable quality can be all over the place, some of their products are good (sound good, reliable, long lasting) and some of their products are not good (affect sound negatively, break prematurely, short useful life span).These guitar cords are actually quite nice, they feel good (gooey soft rubber jacket like Mogami), they sound good and so far they are working reliably, the rubber jacket is about .25&#34; in diameter (by eye) and there is a short heat shrink overwrap to add strength where the wire enters the plug.I bought these when I needed cables fast for an internet concert, we had lots of pedals and signal splits to connect up. These cables arrived in good working condition and we've been using them continuously since.We have over a dozen tube amps and are very particular about sound degradation but so far these cables have not disappointed anyone.I would buy more if I needed them.",
+          overall: 4,
+          summary: "So Far So Good",
+          unixReviewTime: 1358726400,
+          reviewTime: "01 21, 2013",
+        },
+        {
+          reviewerID: "A2WYAHJGST6AOT",
+          asin: "B000068NW5",
+          reviewerName: "Matt",
+          helpful: [0, 1],
+          reviewText:
+            "It's a cable, no frills, tangles pretty easy and due to it's design it might rattle a little when you move around but it works like it should",
+          overall: 3,
+          summary: "average cable",
+          unixReviewTime: 1393372800,
+          reviewTime: "02 26, 2014",
+        },
+        {
+          reviewerID: "A781ITP3HE2N5",
+          asin: "B000068NW5",
+          reviewerName: 'Michael Livote "dragon2knight"',
+          helpful: [0, 0],
+          reviewText:
+            "I never really considered a cheaper cable, I was always taught to get the best I could afford. When this showed up in a cable search on amazon, I jumped on it. I figured I had nothing to lose.To my surprise, this is an excellent cable, with good build quality and a strong, thick jacket that inspires confidence. The sound through it is identical to my Monster cables, and it cost one quarter the price....hmmmm, guess I should have tried to figure this out myself instead of listening to &#34;snobs&#34; for so many years. I will never do that again.This is worth the money twice over, try it out for yourself and kiss overpriced cables goodbye!",
+          overall: 5,
+          summary: "Good quality, low price",
+          unixReviewTime: 1380844800,
+          reviewTime: "10 4, 2013",
+        },
+        {
+          reviewerID: "AN73VQ17FZVJ8",
+          asin: "B000068NW5",
+          reviewerName: "MJK",
+          helpful: [2, 2],
+          reviewText:
+            "One end was loose, so I tightened it, it keeps coming loose so I had to put a dab of crazy glue on the threads, hope I don't ever have to open the end for repair.",
+          overall: 3,
+          summary: "Good for the Price",
+          unixReviewTime: 1371168e3,
+          reviewTime: "06 14, 2013",
+        },
+        {
+          reviewerID: "ALUTHT4U058KZ",
+          asin: "B000068NW5",
+          reviewerName: "M. M. Jackson",
+          helpful: [6, 6],
+          reviewText:
+            "For the price, fantastic.They do feel light and I don't trust the build quality at the key stress points (where cable meets connector), but then again I am not going to push it.Set your guitar down on it by accident when it's plugged in and...who knows.But for seven bucks it gets the job done. Recommended if you are doing the \"beginner\" thing and testing the waters.Otherwise, spend a few more bucks for something with higher chances of lasting.",
+          overall: 4,
+          summary: "Feel a little flimsy and can see easily breaking, but the work",
+          unixReviewTime: 1334620800,
+          reviewTime: "04 17, 2012",
+        },
+        {
+          reviewerID: "A1A15ECLHM9BQY",
+          asin: "B000068NW5",
+          reviewerName: "Nick",
+          helpful: [0, 0],
+          reviewText:
+            "Hosa makes good stuff, this is no exception. I've trusted them for years, I can't think if a single Hosa cable I've owned that's failed.",
+          overall: 5,
+          summary: "Excellent",
+          unixReviewTime: 1404950400,
+          reviewTime: "07 10, 2014",
+        },
+        {
+          reviewerID: "A1S8R9OAIQT7YI",
+          asin: "B000068NW5",
+          reviewerName: "patriotsarebest",
+          helpful: [0, 0],
+          reviewText:
+            "Only complaint is the size which is my fault. If you can buy at least a 15 foot if you plan to use it on stage.",
+          overall: 4,
+          summary: "Only complaint is the size which is my fault. ...",
+          unixReviewTime: 1403913600,
+          reviewTime: "06 28, 2014",
+        },
+        {
+          reviewerID: "A3RHT4KI3H5TVH",
+          asin: "B000068NW5",
+          reviewerName: "pops",
+          helpful: [0, 0],
+          reviewText: "Hard to day too much, but it works great. No issues to speak of. It does the job perfectly well",
+          overall: 5,
+          summary: "worth it",
+          unixReviewTime: 1379894400,
+          reviewTime: "09 23, 2013",
+        },
+        {
+          reviewerID: "AVY8D3ULJTX0H",
+          asin: "B000068NW5",
+          reviewerName: "P. Panehal",
+          helpful: [0, 0],
+          reviewText:
+            "For the price, this works really well. I see no faults. It can unscrew pretty easily, but this is hardly a problem right now.",
+          overall: 5,
+          summary: "Works",
+          unixReviewTime: 1357603200,
+          reviewTime: "01 8, 2013",
+        },
+        {
+          reviewerID: "A15BHBF0L0HV1F",
+          asin: "B000068NW5",
+          reviewerName: 'Quaestor "Raoul Duke"',
+          helpful: [0, 0],
+          reviewText:
+            "This cable disproves the notion that you get what you pay for. It's quality outweighs its price. Let's face it, a cable is a cable is a cable. But the quality of these cables can vary greatly. I replaced a lighter cable with this one and I was surprised at the difference in the quality of the sound from my amp. I have an Ibanez ART series guitar into an Ibanez 15 watt amp set up in my home. With nothing changed but the cable, there was a significant difference in quality and volume. So much so that I checked with my guitar teacher who said he was not surprised. The quality appears good. The ends are heavy duty and the little bit of hum I had due to the proximity of everything was attenuated to the point where it was inconsequential. I've seen more expensive cables and this one is (so far) great.Hosa GTR210 Guitar Cable 10 Ft",
+          overall: 5,
+          summary: "Good quality, great price",
+          unixReviewTime: 1320192e3,
+          reviewTime: "11 2, 2011",
+        },
+        {
+          reviewerID: "A1AFN4T80DZ3RR",
+          asin: "B000068NW5",
+          reviewerName: "Quique",
+          helpful: [0, 0],
+          reviewText:
+            "I was looking for a long cable to perform live with my band and i'm glad with HOSA quality. It feels reliable and without adding noise.",
+          overall: 5,
+          summary: "Very good quality for an excellent price",
+          unixReviewTime: 1383868800,
+          reviewTime: "11 8, 2013",
+        },
+        {
+          reviewerID: "A3DCG2MNPR4BW",
+          asin: "B000068NW5",
+          reviewerName: "RAYON ORMOND",
+          helpful: [0, 0],
+          reviewText:
+            "These are Good cables at a good price!! Not sure they would hold up to heavy use, but for practicing at home they are really great!",
+          overall: 5,
+          summary: "Good cables at a good price!!",
+          unixReviewTime: 1369180800,
+          reviewTime: "05 22, 2013",
+        },
+        {
+          reviewerID: "A3NGAQKJ6X088B",
+          asin: "B000068NW5",
+          reviewerName: 'R. Beckmeyer "Positively Positive"',
+          helpful: [0, 0],
+          reviewText:
+            "very sturdy, high quality with little to no feedback, i use it for performing for my friends and they all love it",
+          overall: 5,
+          summary: "works well, great quality",
+          unixReviewTime: 1402876800,
+          reviewTime: "06 16, 2014",
+        },
+        {
+          reviewerID: "A35XRT4BW4I6UD",
+          asin: "B000068NW5",
+          reviewerName: "Richard R. Casper",
+          helpful: [0, 0],
+          reviewText:
+            "Unless you're going to go for the very top of the line most expensive professional chords, these will do for any medium sized venue.",
+          overall: 5,
+          summary: "Great Value",
+          unixReviewTime: 1346976e3,
+          reviewTime: "09 7, 2012",
+        },
+        {
+          reviewerID: "AKYDGCKCY7H9F",
+          asin: "B000068NW5",
+          reviewerName: 'R. W. Milyard "GearJunky"',
+          helpful: [0, 0],
+          reviewText:
+            "I have many lengths of these Hosa cables and have neverhad a problem with them.I am not an active musician, so have not put any of them throughthe riggers of what happens on stage; so I cannot comment on thistype of usage.In my over 40 years (10 of them on stage) I have come to realize, thatyou should ALWAYS have extra cables (just like strings) with you, aseven the most expensive cables will sometimes let you down.",
+          overall: 5,
+          summary: "Good cables",
+          unixReviewTime: 1381363200,
+          reviewTime: "10 10, 2013",
+        },
+        {
+          reviewerID: "A19NGYCQ1NCF3W",
+          asin: "B000068NW5",
+          reviewerName: "S. Haney",
+          helpful: [4, 4],
+          reviewText:
+            "I've been using these for about 3 weeks now - they are strong but flexible and don't seem to develop kinks or bending \"habits\" if you roll them up the proper way.I've seen and used some better cables but not at this price point.  And I've certainly seen quite a few worse!  This is a pretty good sweet spot, in my opinion.",
+          overall: 4,
+          summary: "Very Solid Cables",
+          unixReviewTime: 1295568e3,
+          reviewTime: "01 21, 2011",
+        },
+        {
+          reviewerID: "A3UD50M7M72150",
+          asin: "B000068NW5",
+          reviewerName: "synthezatory",
+          helpful: [0, 0],
+          reviewText:
+            "I'm a pro-cheapo and I hated this thing. They're noisy, and the cables feel really cheap, gummy-like. Drop few more bucks and get something else!",
+          overall: 1,
+          summary: "Crap",
+          unixReviewTime: 1394755200,
+          reviewTime: "03 14, 2014",
+        },
+        {
+          reviewerID: "A2B78RXJ2PB6ZD",
+          asin: "B000068NW5",
+          reviewerName: "Tom",
+          helpful: [0, 0],
+          reviewText:
+            "Works great on my 100 watt Amp. Almost compares to a monster cable. And with Its length Its plenty of Room from your Guitar to amp. GOOD PRODUCT!",
+          overall: 5,
+          summary: "Works Good. No complaints!!!",
+          unixReviewTime: 1328313600,
+          reviewTime: "02 4, 2012",
+        },
+        {
+          reviewerID: "A18RGYRCEN181M",
+          asin: "B000068NW5",
+          reviewerName: "Truvor",
+          helpful: [0, 0],
+          reviewText:
+            "Good cable, as good as any expensive brand. Thick, a bit stiff and seems to be shielded. No complaints at all.",
+          overall: 5,
+          summary: "Good guitar cable",
+          unixReviewTime: 1386633600,
+          reviewTime: "12 10, 2013",
+        },
+        {
+          reviewerID: "A18LZ6VHS4DK69",
+          asin: "B000068NW5",
+          reviewerName: "Wesley Newell",
+          helpful: [0, 0],
+          reviewText:
+            "I own lots of hosa cables they are cheap and quality is there. I've only recieved one bad cable out of around 50 or so. I use a lot of these guys and if they work when you get them, they havn't failed yet.",
+          overall: 5,
+          summary: "hosa rocks",
+          unixReviewTime: 1360886400,
+          reviewTime: "02 15, 2013",
+        },
+        {
+          reviewerID: "AQG6AQXC703WD",
+          asin: "B000068NZC",
+          reviewerName: "Bob",
+          helpful: [0, 0],
+          reviewText:
+            "It is a decent cable. It does its job, but it leaves much to be desired as far as structural integrity is concerned. The mating part of the connector jiggles back and forth. The switch is also loose. The connector will move around 2mm out of the microphone without the switch being pressed.'I would not recommend using this cable for critical applications. It would be more suited to home or hobby use.",
+          overall: 3,
+          summary: "Does Its Job",
+          unixReviewTime: 1395792e3,
+          reviewTime: "03 26, 2014",
+        },
+        {
+          reviewerID: "A2YGWCX3DQ6ER0",
+          asin: "B000068NZC",
+          reviewerName: "Christian Morales",
+          helpful: [0, 0],
+          reviewText:
+            "the cable is great for connecting directly to the computer microphone to record live without a console or mixer...... its great  i recomended",
+          overall: 5,
+          summary: "good for direct connect to computer",
+          unixReviewTime: 1372550400,
+          reviewTime: "06 30, 2013",
+        },
+        {
+          reviewerID: "A21VM9WVF8EOSJ",
+          asin: "B000068NZC",
+          reviewerName: 'J. Warren "NiALTA"',
+          helpful: [3, 3],
+          reviewText:
+            "Bought this to hook up a Beta 58 to a Panasonic G2 DSLR and a Kodak Zi8 for interviews. Works the way it's supposed to. 90 degree TRS is a nice touch. Good price.",
+          overall: 5,
+          summary: "Does what it was intended for",
+          unixReviewTime: 1323129600,
+          reviewTime: "12 6, 2011",
+        },
+        {
+          reviewerID: "A3M48SSAOTBSMW",
+          asin: "B000068NZC",
+          reviewerName: 'L. Rapoport "lenrapp"',
+          helpful: [3, 3],
+          reviewText:
+            "Just received this cord and it seems to work as expected. What can you say about an adapter cord?  It is well made, good construction and sound from my DSLR with my mic is superb.",
+          overall: 5,
+          summary: "Works as expected",
+          unixReviewTime: 1335312e3,
+          reviewTime: "04 25, 2012",
+        },
+        {
+          reviewerID: "AFLRU6952DEFX",
+          asin: "B000068NZC",
+          reviewerName: "S.",
+          helpful: [0, 0],
+          reviewText:
+            "If you're like me, you probably bought this to hook up an XLR microphone to a digital recorder or a PC.It works fine for the handy type recorders.But forget hooking this directly to a PC.  Way too much noise.",
+          overall: 4,
+          summary: "Good for some uses",
+          unixReviewTime: 1396828800,
+          reviewTime: "04 7, 2014",
+        },
+        {
+          reviewerID: "A1W3CEEQBJ4GTN",
+          asin: "B000068NZC",
+          reviewerName: "S. Marchuk",
+          helpful: [0, 0],
+          reviewText:
+            "I bought this for my Canon Vixia HF G10 Video Camera and a Shotgun Mic that I recently purchased for it. I needed a 12&#34; wire for it to be a perfect fit from my mic (which is mounted on the Mini Advanced Shoe) to the microphone plug on the Video Camera...The wire on this thing is *not* 1 foot long. the actual wire is under 8&#34; long itself. I would have returned this thing but it was cheap enough that it wasn't worth the hassle... I'd have rated it 1 star, but I tried it on my Nikon D3200 (Shoe mounted Shotgun Mike) and it worked out ok. Still a tight fit though (since there's only 8&#34; of wire)...I'd recommend anyone looking for a short cable go with a 2' adapter; worst case scenario, you can zip-tie a loop instead of getting angry that it doesn't fit.Also, not sure if it's the wire (so this didn't affect stars) but I hear a hiss when recording. Again; unsure if it's the way the wires are stretched out to the max on the DSLR or not (or my shotgun mic).",
+          overall: 2,
+          summary: "Measure your damned wires before sending them...",
+          unixReviewTime: 1379289600,
+          reviewTime: "09 16, 2013",
+        },
+        {
+          reviewerID: "AXP9CF1UTFRSU",
+          asin: "B000068NZC",
+          reviewerName: "tada",
+          helpful: [0, 0],
+          reviewText:
+            "Well made, XLR 3 pin adaptor to mini.  Needed to get a real XLR mic into the computer and this did the job.",
+          overall: 5,
+          summary: "Recommend",
+          unixReviewTime: 1369526400,
+          reviewTime: "05 26, 2013",
+        },
+      ];
+    },
+    320: function(e) {
+      e.exports = {
+        completions: [
+          {
+            result: [
+              {
+                from_name: "sentiment",
+                id: "yrSY-dipPI",
+                to_name: "my_text",
+                type: "choices",
+                value: { choices: ["Neutral"] },
+              },
+            ],
+          },
+        ],
+        data: {
+          asin: "1384719342",
+          helpful: [0, 0],
+          overall: 5,
+          reviewText:
+            "Not much to write about here, but it does exactly what it's supposed to. filters out the pop sounds. now my recordings are much more crisp. it is one of the lowest prices pop filters on amazon so might as well buy it, they honestly work the same despite their pricing,",
+          reviewTime: "02 28, 2014",
+          reviewerID: "A2IBPI20UZIR0U",
+          reviewerName: "cassandra tu \"Yeah, well, that's just like, u...",
+          summary: "good",
+          unixReviewTime: 1393545600,
+        },
+        id: 0,
+        task_path: "../examples/sentiment_analysis/tasks.json",
+      };
+    },
+    321: function(e, t, n) {
+      e.exports = n.p + "static/media/config.c5233796.xml";
+    },
+    322: function(e) {
+      e.exports = [
+        { url: "https://go.heartex.net/static/samples/game.wav" },
+        { url: "https://go.heartex.net/static/samples/game.wav" },
+      ];
+    },
+    323: function(e) {
+      e.exports = {
+        completions: [
+          {
+            result: [
+              {
+                from_name: "label",
+                id: "wvDEy63Wgs",
+                to_name: "audio",
+                type: "choices",
+                value: { choices: ["Politics"] },
+              },
+            ],
+          },
+        ],
+        data: { url: "https://go.heartex.net/static/samples/game.wav" },
+        id: 0,
+        task_path: "../examples/audio_classification/tasks.json",
+      };
+    },
+    324: function(e, t, n) {
+      e.exports = n.p + "static/media/config.66767299.xml";
+    },
+    325: function(e) {
+      e.exports = [
+        { url: "https://go.heartex.net/static/samples/game.wav" },
+        { url: "https://go.heartex.net/static/samples/game.wav" },
+      ];
+    },
+    326: function(e) {
+      e.exports = {
+        completions: [
+          {
+            result: [
+              {
+                from_name: "label",
+                id: "mCLSGNsQJB",
+                source: "$url",
+                to_name: "audio",
+                type: "labels",
+                value: {
+                  end: 0.6802172883805536,
+                  labels: ["Politics", "Business", "Education", "Other"],
+                  start: 0.41476663925643514,
+                },
+              },
+              {
+                from_name: "label",
+                id: "V_cGBu-tdJ",
+                normalization: "Test NORM",
+                source: "$url",
+                to_name: "audio",
+                type: "labels",
+                value: { end: 1.5263412324636814, labels: ["Business", "Education"], start: 0.8627146096533851 },
+              },
+              {
+                from_name: "label",
+                id: "z1PvXezFlv",
+                source: "$url",
+                to_name: "audio",
+                type: "labels",
+                value: { end: 1.854006877476265, labels: ["Education"], start: 1.1820849218808402 },
+              },
+              { from_id: "mCLSGNsQJB", to_id: "z1PvXezFlv", type: "relation" },
+            ],
+          },
+        ],
+        data: { url: "https://go.heartex.net/static/samples/game.wav" },
+        id: 0,
+        task_path: "../examples/audio_regions/tasks.json",
+      };
+    },
+    327: function(e, t, n) {
+      e.exports = n.p + "static/media/config.0e2a1e7f.xml";
+    },
+    328: function(e) {
+      e.exports = [
+        {
+          dialogs:
+            '<div style="max-width: 750px"><div style="clear: both"><div style="float: right; display: inline-block; border: 1px solid #F2F3F4; background-color: #F8F9F9; border-radius: 5px; padding: 7px; margin: 10px 0;"><p><b>Jules</b>: No no, Mr. Wolfe, it\'s not like that. Your help is definitely appreciated.</p></div></div><div style="clear: both"><div style="float: right; display: inline-block; border: 1px solid #F2F3F4; background-color: #F8F9F9; border-radius: 5px; padding: 7px; margin: 10px 0;"><p><b>Vincent</b>: Look, Mr. Wolfe, I respect you. I just don\'t like people barking orders at me, that\'s all.</p></div></div><div style="clear: both"><div style="display: inline-block; border: 1px solid #D5F5E3; background-color: #EAFAF1; border-radius: 5px; padding: 7px; margin: 10px 0;"><p><b>The Wolf</b>: If I\'m curt with you, it\'s because time is a factor. I think fast, I talk fast, and I need you two guys to act fast if you want to get out of this. So pretty please, with sugar on top, clean the car.</p></div></div></div>',
+        },
+      ];
+    },
+    329: function(e) {
+      e.exports = {
+        completions: [
+          {
+            result: [
+              {
+                from_name: "chc-1",
+                id: "U0BELrkHFO",
+                to_name: "dialog",
+                type: "choices",
+                value: { choices: ["Good answer"] },
+              },
+              { from_name: "answer", id: "wpu4IxRzqw", to_name: "answer", type: "textarea", value: { text: "Test" } },
+            ],
+          },
+        ],
+        data: {
+          dialogs:
+            '<div style="max-width: 750px"><div style="clear: both"><div style="float: right; display: inline-block; border: 1px solid #F2F3F4; background-color: #F8F9F9; border-radius: 5px; padding: 7px; margin: 10px 0;"><p><b>Jules</b>: No no, Mr. Wolfe, it\'s not like that. Your help is definitely appreciated.</p></div></div><div style="clear: both"><div style="float: right; display: inline-block; border: 1px solid #F2F3F4; background-color: #F8F9F9; border-radius: 5px; padding: 7px; margin: 10px 0;"><p><b>Vincent</b>: Look, Mr. Wolfe, I respect you. I just don\'t like people barking orders at me, that\'s all.</p></div></div><div style="clear: both"><div style="display: inline-block; border: 1px solid #D5F5E3; background-color: #EAFAF1; border-radius: 5px; padding: 7px; margin: 10px 0;"><p><b>The Wolf</b>: If I\'m curt with you, it\'s because time is a factor. I think fast, I talk fast, and I need you two guys to act fast if you want to get out of this. So pretty please, with sugar on top, clean the car.</p></div></div></div>',
+        },
+        id: 0,
+        task_path: "../examples/chatbot_analysis/tasks.json",
+      };
+    },
+    330: function(e, t, n) {
+      e.exports = n.p + "static/media/config.2a6054fe.xml";
+    },
+    331: function(e) {
+      e.exports = [{ image: "https://user.fm/files/v2-901310d5cb3fa90e0616ca10590bacb3/spacexmoon-800x501.jpg" }];
+    },
+    332: function(e) {
+      e.exports = {
+        completions: [
+          {
+            result: [
+              {
+                from_name: "tag",
+                id: "l9nzOC__un",
+                source: "$image",
+                to_name: "img",
+                type: "rectanglelabels",
+                value: {
+                  height: 51.93992490613267,
+                  rectanglelabels: ["Planet"],
+                  rotation: 0,
+                  width: 47.18954248366012,
+                  x: 37.40522875816994,
+                  y: 1.3704630788485608,
+                },
+              },
+              {
+                from_name: "tag",
+                id: "8rGMRebMkB",
+                source: "$image",
+                to_name: "img",
+                type: "rectanglelabels",
+                value: {
+                  height: 18.1476846057572,
+                  rectanglelabels: ["Moonwalker"],
+                  rotation: 0,
+                  width: 16.601307189542485,
+                  x: 36.032679738562095,
+                  y: 59.968710888610765,
+                },
+              },
+            ],
+          },
+        ],
+        data: { image: "https://user.fm/files/v2-901310d5cb3fa90e0616ca10590bacb3/spacexmoon-800x501.jpg" },
+        id: 0,
+        task_path: "../examples/image_bbox/tasks.json",
+      };
+    },
+    333: function(e, t, n) {
+      e.exports = n.p + "static/media/config.bb22cd0c.xml";
+    },
+    334: function(e) {
+      e.exports = [
+        {
+          text:
+            "Showers continued throughout the week in the Bahia cocoa zone, alleviating the drought since early January and improving prospects for the coming temporao, although normal humidity levels have not been restored, Comissaria Smith said in its weekly review.\n\nThe dry period means the temporao will be late this year. Arrivals for the week ended February 22 were 155,221 bags of 60 kilos making a cumulative total for the season of 5.93 mln against 5.81 at the same stage last year. Again it seems that cocoa delivered earlier on consignment was included in the arrivals figures.\n\nComissaria Smith said there is still some doubt as to how much old crop cocoa is still available as harvesting has practically come to an end. With total Bahia crop estimates around 6.4 mln bags and sales standing at almost 6.2 mln there are a few hundred thousand bags still in the hands of farmers, middlemen, exporters and processors.",
+        },
+      ];
+    },
+    335: function(e) {
+      e.exports = {
+        completions: [
+          {
+            result: [
+              {
+                from_name: "ner",
+                id: "jmsfDPthEY",
+                source: "$text",
+                to_name: "text",
+                type: "labels",
+                value: { end: 353, labels: ["Date"], start: 343, text: "February 22" },
+              },
+              {
+                from_name: "ner",
+                id: "oaesD6kuGR",
+                source: "$text",
+                to_name: "text",
+                type: "labels",
+                value: { end: 49, labels: ["Location"], start: 45, text: "Bahia" },
+              },
+            ],
+          },
+        ],
+        data: {
+          text:
+            "Showers continued throughout the week in the Bahia cocoa zone, alleviating the drought since early January and improving prospects for the coming temporao, although normal humidity levels have not been restored, Comissaria Smith said in its weekly review.\n\nThe dry period means the temporao will be late this year. Arrivals for the week ended February 22 were 155,221 bags of 60 kilos making a cumulative total for the season of 5.93 mln against 5.81 at the same stage last year. Again it seems that cocoa delivered earlier on consignment was included in the arrivals figures.\n\nComissaria Smith said there is still some doubt as to how much old crop cocoa is still available as harvesting has practically come to an end. With total Bahia crop estimates around 6.4 mln bags and sales standing at almost 6.2 mln there are a few hundred thousand bags still in the hands of farmers, middlemen, exporters and processors.",
+        },
+        id: 0,
+        task_path: "../examples/named_entity/tasks.json",
+      };
+    },
+    336: function(e, t, n) {
+      e.exports = n.p + "static/media/config.32729adf.xml";
+    },
+    337: function(e) {
+      e.exports = [{ text: "To have faith is to trust yourself to the water" }];
+    },
+    338: function(e) {
+      e.exports = {
+        completions: [
+          {
+            result: [
+              {
+                from_name: "reference",
+                id: "JIFsmkYFND",
+                source: "$text",
+                to_name: "text",
+                type: "labels",
+                value: { end: 12, labels: ["OBJ"], start: 8, text: "faith" },
+              },
+            ],
+          },
+        ],
+        data: { text: "To have faith is to trust yourself to the water" },
+        id: 0,
+        task_path: "../examples/references/tasks.json",
+      };
+    },
+    339: function(e, t, n) {
+      e.exports = n.p + "static/media/config.1890026d.xml";
+    },
+    340: function(e) {
+      e.exports = [{ url: "https://go.heartex.net/static/samples/game.wav" }];
+    },
+    341: function(e) {
+      e.exports = {
+        completions: [
+          {
+            result: [
+              { from_name: "answer", id: "eGp_aIzha3", to_name: "answer", type: "textarea", value: { text: "Mario" } },
+            ],
+          },
+        ],
+        data: { url: "https://go.heartex.net/static/samples/game.wav" },
+        id: 0,
+        task_path: "../examples/transcribe_audio/tasks.json",
+      };
+    },
+    356: function(e, t, n) {
+      e.exports = n(600);
+    },
+    364: function(e, t, n) {},
+    600: function(e, t, n) {
       "use strict";
       n.r(t);
       var a = {};
       n.r(a),
         n.d(a, "isString", function() {
-          return A;
+          return M;
         }),
         n.d(a, "isStringEmpty", function() {
-          return D;
+          return B;
         }),
         n.d(a, "isStringJSON", function() {
-          return L;
+          return H;
         }),
         n.d(a, "getUrl", function() {
-          return P;
+          return W;
         }),
         n.d(a, "toTimeString", function() {
-          return z;
+          return P;
         });
       var o = {};
       n.r(o),
         n.d(o, "hexToRGBA", function() {
-          return B;
+          return L;
         }),
         n.d(o, "colorToRGBA", function() {
-          return V;
+          return F;
         }),
         n.d(o, "convertToRGBA", function() {
-          return W;
+          return J;
         }),
         n.d(o, "stringToColor", function() {
-          return F;
+          return G;
+        }),
+        n.d(o, "rgbaChangeAlpha", function() {
+          return U;
         });
       var r = {};
       n.r(r),
         n.d(r, "msToHMS", function() {
-          return U;
+          return V;
         }),
         n.d(r, "prettyDate", function() {
-          return Z;
+          return Y;
         });
       var i = n(0),
         l = n.n(i),
-        s = n(13),
+        s = n(16),
         c = n.n(s),
         u = n(7),
-        d = (n(327), n(330), n(26)),
-        m = n(27),
+        m = (n(361), n(364), n(26)),
+        d = n(27),
+        h = n(30),
         p = n(29),
-        g = n(28),
-        f = n(30),
-        h = n(191),
-        b = n.n(h),
-        y = n(1),
-        v = n(568),
-        k = n(560),
-        S = new ((function() {
+        g = n(31),
+        f = n(197),
+        v = n.n(f),
+        b = n(1),
+        y = n(623),
+        w = n(613),
+        k = new ((function() {
           function e() {
-            Object(d.a)(this, e), (this.tags = []), (this.models = {}), (this.views = {}), (this.views_models = {});
+            Object(m.a)(this, e), (this.tags = []), (this.models = {}), (this.views = {}), (this.views_models = {});
           }
           return (
-            Object(m.a)(e, [
+            Object(d.a)(e, [
               {
                 key: "addTag",
                 value: function(e, t, n) {
@@ -177,46 +1705,46 @@
             e
           );
         })())(),
-        _ = function(e, t, n, a) {
+        x = function(e, t, n, a) {
           return window.fetch(e, { method: t, headers: n, credentials: "include", body: a }).then(function(e) {
             return 200 !== (t = e).status || 201 !== t.status ? t : t.json();
             var t;
           });
         },
-        w = {
+        T = {
           fetcher: function(e) {
-            return _(e, "GET", { Accept: "application/json" });
+            return x(e, "GET", { Accept: "application/json" });
           },
           poster: function(e, t) {
-            return _(e, "POST", { Accept: "application/json", "Content-Type": "application/json" }, t);
+            return x(e, "POST", { Accept: "application/json", "Content-Type": "application/json" }, t);
           },
           remover: function(e, t) {
-            return _(e, "DELETE", { "Content-Type": "application/json" }, t);
+            return x(e, "DELETE", { "Content-Type": "application/json" }, t);
           },
           patch: function(e, t) {
-            return _(e, "PATCH", { Accept: "application/json", "Content-Type": "application/json" }, t);
+            return x(e, "PATCH", { Accept: "application/json", "Content-Type": "application/json" }, t);
           },
         },
-        x = n(44),
-        O = n(271),
-        E = n.n(O);
-      function N() {
-        return E()(10);
+        N = n(39),
+        S = n(279),
+        I = n.n(S);
+      function E() {
+        return I()(10);
       }
-      function j(e) {
-        var t = Object(y.h)(e);
-        return Object(y.i)(e).create(Object(x.a)({}, t, { id: N() }));
+      function O(e) {
+        var t = Object(b.h)(e);
+        return Object(b.i)(e).create(Object(N.a)({}, t, { id: E() }));
       }
-      function C(e) {
-        var t = Object(y.h)(e);
-        return Object(y.i)(e).create(Object(x.a)({}, t, { id: N() }));
+      function _(e) {
+        var t = Object(b.h)(e);
+        return Object(b.i)(e).create(Object(N.a)({}, t, { id: E() }));
       }
-      function T(e) {
-        var t = S.getViewByModel(Object(y.i)(e).name);
-        if (!t) throw new Error("No view for model:" + Object(y.i)(e).name);
-        return l.a.createElement(t, { key: N(), item: e });
+      function R(e) {
+        var t = k.getViewByModel(Object(b.i)(e).name);
+        if (!t) throw new Error("No view for model:" + Object(b.i)(e).name);
+        return l.a.createElement(t, { key: E(), item: e });
       }
-      var R = {
+      var C = {
           cloneReactTree: function(e, t) {
             var n = null;
             return (n = function(e) {
@@ -235,11 +1763,11 @@
               );
             })(e);
           },
-          renderItem: T,
+          renderItem: R,
           renderChildren: function(e) {
             return e && e.children && e.children.length
               ? e.children.map(function(e) {
-                  return T(e);
+                  return R(e);
                 })
               : null;
           },
@@ -267,7 +1795,7 @@
                 }
                 return t;
               })(e.attrs);
-              return (t.id = N()), (t.type = e.nodeName), "img" === t.type && (t.type = "image"), t;
+              return (t.id = E()), (t.type = e.nodeName), "img" === t.type && (t.type = "image"), t;
             }
             var n = (function(e) {
                 for (var t = e.split("/>"), n = "", a = 0; a < t.length - 1; a++) {
@@ -276,7 +1804,7 @@
                 }
                 return n + t[t.length - 1];
               })(e.replace(/(\r\n|\n|\r)/gm, "")),
-              a = b.a.parseFragment(n),
+              a = v.a.parseFragment(n),
               o = t(a.childNodes[0]);
             return (
               (o.children = (function e(n) {
@@ -290,12 +1818,12 @@
                     var c = l.value;
                     if ("#text" !== c.nodeName) {
                       var u = t(c),
-                        d = e(c);
-                      d && ("string" === typeof d ? (u.value = d) : (u.children = d)), a.push(u);
+                        m = e(c);
+                      m && ("string" === typeof m ? (u.value = m) : (u.children = m)), a.push(u);
                     }
                   }
-                } catch (m) {
-                  (r = !0), (i = m);
+                } catch (d) {
+                  (r = !0), (i = d);
                 } finally {
                   try {
                     o || null == s.return || s.return();
@@ -311,7 +1839,7 @@
           findInterface: function(e, t) {
             var n;
             return (n = function(t) {
-              if (Object(y.i)(t).name === e) return t;
+              if (Object(b.i)(t).name === e) return t;
               if (t.children) {
                 var a = !0,
                   o = !1,
@@ -342,7 +1870,7 @@
               for (var r, i = t[Symbol.iterator](); !(n = (r = i.next()).done); n = !0) {
                 var l = r.value;
                 try {
-                  var s = Object(y.f)(e, l);
+                  var s = Object(b.f)(e, l);
                   if (s) return s;
                 } catch (c) {}
               }
@@ -368,10 +1896,10 @@
                 try {
                   for (var l, s = t[Symbol.iterator](); !(o = (l = s.next()).done); o = !0) {
                     var c = l.value;
-                    Object(y.i)(e).name === c && a.push(e);
+                    Object(b.i)(e).name === c && a.push(e);
                   }
-                } catch (h) {
-                  (r = !0), (i = h);
+                } catch (f) {
+                  (r = !0), (i = f);
                 } finally {
                   try {
                     o || null == s.return || s.return();
@@ -381,20 +1909,20 @@
                 }
                 if (e.children) {
                   var u = !0,
-                    d = !1,
-                    m = void 0;
+                    m = !1,
+                    d = void 0;
                   try {
-                    for (var p, g = e.children[Symbol.iterator](); !(u = (p = g.next()).done); u = !0) {
-                      var f = p.value;
-                      n(f);
+                    for (var h, p = e.children[Symbol.iterator](); !(u = (h = p.next()).done); u = !0) {
+                      var g = h.value;
+                      n(g);
                     }
-                  } catch (h) {
-                    (d = !0), (m = h);
+                  } catch (f) {
+                    (m = !0), (d = f);
                   } finally {
                     try {
-                      u || null == g.return || g.return();
+                      u || null == p.return || p.return();
                     } finally {
-                      if (d) throw m;
+                      if (m) throw d;
                     }
                   }
                 }
@@ -424,17 +1952,17 @@
             return r;
           },
         },
-        M = n(564),
-        I = n(269),
-        H = n(561),
-        A = function(e) {
+        j = n(619),
+        A = n(277),
+        D = n(615),
+        M = function(e) {
           return "string" === typeof e || e instanceof String;
         },
-        D = function(e) {
-          return !!A(e) && 0 === e.length;
+        B = function(e) {
+          return !!M(e) && 0 === e.length;
         },
-        L = function(e) {
-          if (A(e)) {
+        H = function(e) {
+          if (M(e)) {
             try {
               JSON.parse(e);
             } catch (t) {
@@ -444,15 +1972,15 @@
           }
           return !1;
         };
-      function P(e, t) {
+      function W(e, t) {
         var n = t.slice(e),
           a = /^(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/g.exec(n);
         return a && a.length ? a[1] : "";
       }
-      function z(e) {
+      function P(e) {
         if ("number" === typeof e) return new Date(e).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
       }
-      var J = {
+      var z = {
         aliceblue: "#f0f8ff",
         antiquewhite: "#faebd7",
         aqua: "#00ffff",
@@ -595,7 +2123,7 @@
         yellow: "#ffff00",
         yellowgreen: "#9acd32",
       };
-      function B(e, t) {
+      function L(e, t) {
         var n = 0,
           a = 0,
           o = 0,
@@ -612,25 +2140,28 @@
             .concat(r, ")")
         );
       }
-      function V(e, t) {
-        return "string" === typeof e && void 0 !== typeof J[e.toLowerCase()] ? B(J[e.toLowerCase()], t) : e;
+      function F(e, t) {
+        return "string" === typeof e && void 0 !== typeof z[e.toLowerCase()] ? L(z[e.toLowerCase()], t) : e;
       }
-      function W(e, t) {
-        return "#" === e.charAt(0) ? B(e, t) : V(e, t);
+      function J(e, t) {
+        return "#" === e.charAt(0) ? L(e, t) : F(e, t);
       }
-      function F(e) {
+      function G(e) {
         for (var t = 0, n = 0; n < e.length; n++) t = e.charCodeAt(n) + ((t << 5) - t);
         for (var a = "#", o = 0; o < 3; o++) {
           a += ("00" + ((t >> (8 * o)) & 255).toString(16)).substr(-2);
         }
         return a;
       }
-      function U(e) {
+      function U(e, t) {
+        return e.replace(/[\d\.]+\)$/g, "".concat(t, ")"));
+      }
+      function V(e) {
         var t = e / 1e3,
           n = parseInt(t / 3600);
         return (t %= 3600), n + ":" + parseInt(t / 60) + ":" + (t = Math.floor(t));
       }
-      function Z(e) {
+      function Y(e) {
         if (
           "string" === typeof e ||
           /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/.test(e)
@@ -652,12 +2183,12 @@
             );
         }
       }
-      var G = n(139);
-      var Y = {
+      var X = n(178);
+      var q = {
           Checkers: a,
           Colors: o,
           UDate: r,
-          guidGenerator: N,
+          guidGenerator: E,
           debounce: function(e, t, n) {
             var a;
             return function() {
@@ -694,18 +2225,18 @@
                     ];
                   })
                   .reduce(function(e, t) {
-                    return Object(x.a)({}, e, Object(G.a)({}, t[0], t[1]));
+                    return Object(N.a)({}, e, Object(X.a)({}, t[0], t[1]));
                   }, {})
               : null;
           },
         },
-        K = n(272),
-        X = n.n(K),
-        $ = Object(u.c)(function(e) {
+        K = n(280),
+        Z = n.n(K),
+        Q = Object(u.c)(function(e) {
           var t = e.item,
             n = e.store;
           return l.a.createElement(
-            M.a.Item,
+            j.a.Item,
             {
               style: { backgroundColor: t.selected ? "#f8f8f9" : "white", padding: "1em" },
               onClick: function(e) {
@@ -713,27 +2244,27 @@
               },
             },
             l.a.createElement(
-              M.a.Content,
+              j.a.Content,
               null,
-              l.a.createElement(M.a.Header, { as: "a" }, "ID ", t.pk || t.id),
+              l.a.createElement(j.a.Header, { as: "a" }, "ID ", t.pk || t.id),
               l.a.createElement("p", null),
               l.a.createElement(
-                M.a.Description,
+                j.a.Description,
                 { as: "a" },
                 "Created",
                 l.a.createElement(
                   "i",
                   null,
-                  t.createdAgo ? " ".concat(t.createdAgo, " ago") : " ".concat(Y.UDate.prettyDate(t.createdDate)),
+                  t.createdAgo ? " ".concat(t.createdAgo, " ago") : " ".concat(q.UDate.prettyDate(t.createdDate)),
                 ),
                 t.createdBy ? " by ".concat(t.createdBy) : null,
               ),
               t.selected &&
                 l.a.createElement(
                   "div",
-                  { className: X.a.buttons },
+                  { className: Z.a.buttons },
                   l.a.createElement(
-                    I.a,
+                    A.a,
                     {
                       type: "danger",
                       onClick: function(e) {
@@ -744,7 +2275,7 @@
                   ),
                   t.honeypot
                     ? l.a.createElement(
-                        I.a,
+                        A.a,
                         {
                           type: "primary",
                           onClick: function(e) {
@@ -754,7 +2285,7 @@
                         "Honeypot",
                       )
                     : l.a.createElement(
-                        I.a,
+                        A.a,
                         {
                           type: "primary",
                           ghost: !0,
@@ -768,25 +2299,25 @@
             ),
           );
         }),
-        q = (function(e) {
+        $ = (function(e) {
           function t() {
-            return Object(d.a)(this, t), Object(p.a)(this, Object(g.a)(t).apply(this, arguments));
+            return Object(m.a)(this, t), Object(h.a)(this, Object(p.a)(t).apply(this, arguments));
           }
           return (
-            Object(f.a)(t, e),
-            Object(m.a)(t, [
+            Object(g.a)(t, e),
+            Object(d.a)(t, [
               {
                 key: "render",
                 value: function() {
                   var e = this.props.store;
                   return l.a.createElement(
-                    H.a,
+                    D.a,
                     { title: "Completions", bodyStyle: { padding: 0 } },
                     l.a.createElement(
-                      M.a,
+                      j.a,
                       { divided: !0, relaxed: !0 },
                       e.completionStore.savedCompletions.map(function(t) {
-                        return l.a.createElement($, { key: t.id, item: t, store: e });
+                        return l.a.createElement(Q, { key: t.id, item: t, store: e });
                       }),
                     ),
                   );
@@ -796,24 +2327,24 @@
             t
           );
         })(i.Component),
-        Q = Object(u.c)(q),
-        ee = n(197),
-        te = n.n(ee),
-        ne = (function(e) {
+        ee = Object(u.c)($),
+        te = n(203),
+        ne = n.n(te),
+        ae = (function(e) {
           function t() {
-            return Object(d.a)(this, t), Object(p.a)(this, Object(g.a)(t).apply(this, arguments));
+            return Object(m.a)(this, t), Object(h.a)(this, Object(p.a)(t).apply(this, arguments));
           }
           return (
-            Object(f.a)(t, e),
-            Object(m.a)(t, [
+            Object(g.a)(t, e),
+            Object(d.a)(t, [
               {
                 key: "render",
                 value: function() {
                   var e,
-                    t = "".concat(te.a.main);
+                    t = "".concat(ne.a.main);
                   return (
                     this.props.style && (e = this.props.style),
-                    this.props.className && (t = "".concat(te.a.main, " ").concat(this.props.className)),
+                    this.props.className && (t = "".concat(ne.a.main, " ").concat(this.props.className)),
                     l.a.createElement(
                       "sup",
                       { "data-copy": this.props.copy, className: t, style: e },
@@ -826,34 +2357,34 @@
             t
           );
         })(i.Component),
-        ae = n(87),
-        oe = n.n(ae),
-        re = Object(u.b)("store")(
+        oe = n(168),
+        re = n.n(oe),
+        ie = Object(u.b)("store")(
           Object(u.c)(function(e) {
             var t,
               n,
               a,
               o = e.store;
             return (
-              o.task && (t = l.a.createElement("h4", { className: oe.a.task }, "Task ID: ", o.task.id)),
+              o.task && (t = l.a.createElement("h4", { className: re.a.task }, "Task ID: ", o.task.id)),
               o.settings.enableHotkeys &&
                 o.settings.enableTooltips &&
-                ((n = l.a.createElement(ne, null, " [ Ctrl+Enter ]")),
-                (a = l.a.createElement(ne, null, " [ Ctrl+Space ]"))),
+                ((n = l.a.createElement(ae, null, " [ Ctrl+Enter ]")),
+                (a = l.a.createElement(ae, null, " [ Ctrl+Space ]"))),
               l.a.createElement(
                 "div",
-                { className: oe.a.block },
+                { className: re.a.block },
                 l.a.createElement(
                   "div",
-                  { className: oe.a.wrapper },
+                  { className: re.a.wrapper },
                   l.a.createElement(
                     "div",
-                    { className: oe.a.container },
+                    { className: re.a.container },
                     o.hasInterface("submit:skip") &&
-                      l.a.createElement(I.a, { type: "ghost", onClick: o.skipTask, className: oe.a.skip }, "Skip ", a),
+                      l.a.createElement(A.a, { type: "ghost", onClick: o.skipTask, className: re.a.skip }, "Skip ", a),
                     l.a.createElement(
-                      I.a,
-                      { type: "primary", icon: "check", onClick: o.sendTask, className: oe.a.submit },
+                      A.a,
+                      { type: "primary", icon: "check", onClick: o.sendTask, className: re.a.submit },
                       "Submit ",
                       n,
                     ),
@@ -864,19 +2395,19 @@
             );
           }),
         ),
-        ie = n(151),
-        le = n.n(ie),
-        se = Object(u.c)(function(e) {
+        le = n(191),
+        se = n.n(le),
+        ce = Object(u.c)(function(e) {
           var t = e.store,
             n = t.completionStore.selected.history;
           return l.a.createElement(
             "div",
-            { className: le.a.container },
+            { className: se.a.container },
             l.a.createElement(
               "div",
-              { className: le.a.block },
+              { className: se.a.block },
               l.a.createElement(
-                I.a,
+                A.a,
                 {
                   type: "ghost",
                   icon: "undo",
@@ -885,10 +2416,10 @@
                   },
                 },
                 "Undo",
-                t.settings.enableHotkeys && t.settings.enableTooltips && l.a.createElement(ne, null, "[ Ctrl+z ]"),
+                t.settings.enableHotkeys && t.settings.enableTooltips && l.a.createElement(ae, null, "[ Ctrl+z ]"),
               ),
               l.a.createElement(
-                I.a,
+                A.a,
                 {
                   type: "ghost",
                   icon: "redo",
@@ -899,7 +2430,7 @@
                 "Redo",
               ),
               l.a.createElement(
-                I.a,
+                A.a,
                 {
                   type: "ghost",
                   icon: "rest",
@@ -911,7 +2442,7 @@
               ),
               t.setPrelabeling &&
                 l.a.createElement(
-                  I.a,
+                  A.a,
                   {
                     style: { display: "none" },
                     onClick: function(e) {
@@ -924,10 +2455,10 @@
             ),
             l.a.createElement(
               "div",
-              { className: le.a.block },
+              { className: se.a.block },
               t.showingDescription &&
                 l.a.createElement(
-                  I.a,
+                  A.a,
                   {
                     type: "primary",
                     onClick: function(e) {
@@ -938,7 +2469,7 @@
                 ),
               !t.showingDescription &&
                 l.a.createElement(
-                  I.a,
+                  A.a,
                   {
                     type: "primary",
                     onClick: function(e) {
@@ -947,7 +2478,7 @@
                   },
                   "Show Instructions",
                 ),
-              l.a.createElement(I.a, {
+              l.a.createElement(A.a, {
                 type: "dashed",
                 icon: "setting",
                 onClick: function(e) {
@@ -957,15 +2488,15 @@
             ),
           );
         }),
-        ce = n(565),
-        ue = n(571),
+        ue = n(618),
+        me = n(626),
         de = Object(u.c)(function(e) {
           var t = e.store;
           return l.a.createElement(
-            ce.a,
+            ue.a,
             { visible: t.showingSettings, title: "Hotkeys", footer: "", onCancel: t.toggleSettings },
             l.a.createElement(
-              ue.a,
+              me.a,
               {
                 value: "Enable labeling hotkeys",
                 defaultChecked: t.settings.enableHotkeys,
@@ -977,7 +2508,7 @@
             ),
             l.a.createElement("br", null),
             l.a.createElement(
-              ue.a,
+              me.a,
               {
                 value: "Show tooltips",
                 defaultChecked: t.settings.enableTooltips,
@@ -989,21 +2520,21 @@
             ),
           );
         }),
-        me = n(572),
-        pe = n(570),
-        ge = n(562),
+        he = n(628),
+        pe = n(625),
+        ge = n(614),
         fe = (function(e) {
           function t() {
             var e, n;
-            Object(d.a)(this, t);
+            Object(m.a)(this, t);
             for (var a = arguments.length, o = new Array(a), r = 0; r < a; r++) o[r] = arguments[r];
             return (
-              ((n = Object(p.a)(this, (e = Object(g.a)(t)).call.apply(e, [this].concat(o)))).state = { res: null }), n
+              ((n = Object(h.a)(this, (e = Object(p.a)(t)).call.apply(e, [this].concat(o)))).state = { res: null }), n
             );
           }
           return (
-            Object(f.a)(t, e),
-            Object(m.a)(t, [
+            Object(g.a)(t, e),
+            Object(d.a)(t, [
               {
                 key: "render",
                 value: function() {
@@ -1015,7 +2546,7 @@
                     "div",
                     null,
                     l.a.createElement("br", null),
-                    l.a.createElement(me.a, null, "Debug"),
+                    l.a.createElement(he.a, null, "Debug"),
                     l.a.createElement(
                       pe.a,
                       {
@@ -1107,27 +2638,27 @@
             t
           );
         })(i.Component),
-        he = (Object(u.c)(fe), n(31)),
+        ve = (Object(u.c)(fe), n(36)),
         be = Object(u.c)(function(e) {
           var t = e.node,
             n = function(e) {
               return (
                 e.preventDefault(),
-                Object(y.g)(t).completionStore.selected.regionStore.unselectAll(),
+                Object(b.g)(t).completionStore.selected.regionStore.unselectAll(),
                 t.selectRegion(),
                 !1
               );
             },
             a = { color: "black", textDecorationLine: "underline", textDecorationStyle: "dotted" };
-          if ("TextRegionModel" === Object(y.i)(t).name)
+          if ("TextRegionModel" === Object(b.i)(t).name)
             return l.a.createElement(
               "div",
               null,
-              l.a.createElement(he.a, { type: "font-colors" }),
+              l.a.createElement(ve.a, { type: "font-colors" }),
               "Text \xa0",
               l.a.createElement("span", { style: { color: "#5a5a5a" } }, t.text),
             );
-          if ("AudioRegionModel" === Object(y.i)(t).name)
+          if ("AudioRegionModel" === Object(b.i)(t).name)
             return l.a.createElement(
               "p",
               null,
@@ -1141,7 +2672,7 @@
                 t.end.toFixed(2),
               ),
             );
-          if ("TextAreaRegionModel" === Object(y.i)(t).name)
+          if ("TextAreaRegionModel" === Object(b.i)(t).name)
             return l.a.createElement(
               "p",
               null,
@@ -1153,7 +2684,7 @@
                 l.a.createElement("span", { style: { color: "#5a5a5a" } }, t._value),
               ),
             );
-          if ("RectRegionModel" === Object(y.i)(t).name) {
+          if ("RectRegionModel" === Object(b.i)(t).name) {
             var o = t.width * t.scaleX,
               r = t.height * t.scaleY;
             return l.a.createElement(
@@ -1170,7 +2701,7 @@
               ),
             );
           }
-          return "PolygonRegionModel" === Object(y.i)(t).name
+          return "PolygonRegionModel" === Object(b.i)(t).name
             ? l.a.createElement(
                 "p",
                 null,
@@ -1185,15 +2716,15 @@
         }),
         ye = function(e) {
           var t = e.node;
-          return "TextRegionModel" == Object(y.i)(t).name
-            ? l.a.createElement(i.Fragment, null, l.a.createElement(he.a, { type: "font-colors" }), " Text")
-            : "RectRegionModel" == Object(y.i)(t).name
+          return "TextRegionModel" == Object(b.i)(t).name
+            ? l.a.createElement(i.Fragment, null, l.a.createElement(ve.a, { type: "font-colors" }), " Text")
+            : "RectRegionModel" == Object(b.i)(t).name
             ? l.a.createElement(i.Fragment, null, l.a.createElement("i", { className: "expand icon" }), "Rectangle")
-            : "AudioRegionModel" == Object(y.i)(t).name
+            : "AudioRegionModel" == Object(b.i)(t).name
             ? l.a.createElement(i.Fragment, null, l.a.createElement("i", { className: "microphone icon" }), "Audio")
-            : "TextAreaRegionModel" == Object(y.i)(t).name
+            : "TextAreaRegionModel" == Object(b.i)(t).name
             ? l.a.createElement(i.Fragment, null, l.a.createElement("i", { className: "i cursor icon" }), "Input")
-            : "PolygonRegionModel" == Object(y.i)(t).name
+            : "PolygonRegionModel" == Object(b.i)(t).name
             ? l.a.createElement(
                 i.Fragment,
                 null,
@@ -1202,15 +2733,15 @@
               )
             : void 0;
         },
-        ve = n(116),
-        ke = n.n(ve),
-        Se = function(e) {
+        we = n(177),
+        ke = n.n(we),
+        xe = function(e) {
           var t = e.store,
             n = e.rl;
-          return Object(y.j)(function() {
+          return Object(b.j)(function() {
             return n.node1;
           }) &&
-            Object(y.j)(function() {
+            Object(b.j)(function() {
               return n.node2;
             })
             ? l.a.createElement(
@@ -1231,7 +2762,7 @@
                     "div",
                     { className: ke.a.section__blocks },
                     l.a.createElement("div", null, l.a.createElement(ye, { node: n.node1 })),
-                    l.a.createElement(he.a, { type: "arrow-right" }),
+                    l.a.createElement(ve.a, { type: "arrow-right" }),
                     l.a.createElement("div", null, l.a.createElement(ye, { node: n.node2 })),
                   ),
                 ),
@@ -1244,12 +2775,12 @@
                       return t.deleteRelation(n), !1;
                     },
                   },
-                  l.a.createElement(he.a, { type: "delete" }),
+                  l.a.createElement(ve.a, { type: "delete" }),
                 ),
               )
             : null;
         },
-        _e = Object(u.c)(function(e) {
+        Te = Object(u.c)(function(e) {
           var t = e.store.completionStore.selected,
             n = t.relationStore.relations;
           return l.a.createElement(
@@ -1258,13 +2789,13 @@
             l.a.createElement("h4", null, "Relations (", n.length, ")"),
             !n.length && l.a.createElement("p", null, "No Relations added yet"),
             t.relationStore.relations.map(function(e) {
-              return l.a.createElement(Se, { store: t.relationStore, rl: e });
+              return l.a.createElement(xe, { store: t.relationStore, rl: e });
             }),
           );
         }),
-        we = n(296),
-        xe = n.n(we),
-        Oe = Object(u.c)(function(e) {
+        Ne = n(304),
+        Se = n.n(Ne),
+        Ie = Object(u.c)(function(e) {
           var t = e.store,
             n = e.regionStore.regions;
           return l.a.createElement(
@@ -1273,7 +2804,7 @@
             l.a.createElement("h4", null, "Entities (", n.length, ")"),
             n.length > 0 &&
               l.a.createElement(
-                I.a,
+                A.a,
                 {
                   type: "link",
                   style: { paddingLeft: 0 },
@@ -1285,7 +2816,7 @@
                 n.length > 0 &&
                   t.settings.enableHotkeys &&
                   t.settings.enableTooltips &&
-                  l.a.createElement(ne, null, "[ Ctrl+bksp ]"),
+                  l.a.createElement(ae, null, "[ Ctrl+bksp ]"),
               ),
             !n.length && l.a.createElement("p", null, "No Entitied added yet"),
             l.a.createElement(
@@ -1296,7 +2827,7 @@
                   "li",
                   {
                     key: e.id,
-                    className: xe.a.item,
+                    className: Se.a.item,
                     onMouseOver: function() {
                       e.toggleHightlight();
                     },
@@ -1310,26 +2841,26 @@
             ),
           );
         }),
-        Ee = n(573),
-        Ne = n(75),
-        je = n.n(Ne),
-        Ce = function(e) {
+        Ee = n(627),
+        Oe = n(164),
+        _e = n.n(Oe),
+        Re = function(e) {
           var t = e.node,
             n = function(e) {
-              return "LabelsModel" === Object(y.i)(e).name ||
-                "RectangleLabelsModel" === Object(y.i)(e).name ||
-                "PolygonLabelsModel" === Object(y.i)(e).name
+              return "LabelsModel" === Object(b.i)(e).name ||
+                "RectangleLabelsModel" === Object(b.i)(e).name ||
+                "PolygonLabelsModel" === Object(b.i)(e).name
                 ? ((t = e),
                   l.a.createElement(
                     "div",
-                    { key: t.id, className: je.a.labels },
-                    "Labels:",
+                    { key: t.pid, className: _e.a.labels },
+                    "Labels:\xa0",
                     t.getSelectedNames().map(function(e) {
-                      var n = t.getSelectedColor() ? t.getSelectedColor() : "#000000";
-                      return l.a.createElement(Ee.a, { key: t.id, color: n, className: je.a.tag }, e);
+                      var n = t.findLabel(e).background ? t.findLabel(e).background : "#000000";
+                      return l.a.createElement(Ee.a, { key: t.findLabel(e).id, color: n, className: _e.a.tag }, e);
                     }),
                   ))
-                : "RatingModel" === Object(y.i)(e).name
+                : "RatingModel" === Object(b.i)(e).name
                 ? l.a.createElement("p", null, "Rating: ", e.getSelectedString())
                 : null;
               var t;
@@ -1342,7 +2873,7 @@
             }),
           );
         },
-        Te = Object(u.c)(function(e) {
+        Ce = Object(u.c)(function(e) {
           var t = e.store,
             n = e.completion,
             a = n.highlightedNode;
@@ -1356,7 +2887,7 @@
                 null,
                 "Normalization: ",
                 a.normalization,
-                l.a.createElement(he.a, {
+                l.a.createElement(ve.a, {
                   name: "delete",
                   style: { cursor: "pointer" },
                   onClick: function() {
@@ -1364,56 +2895,56 @@
                   },
                 }),
               ),
-            a.states && l.a.createElement(Ce, { node: a }),
+            a.states && l.a.createElement(Re, { node: a }),
             l.a.createElement(
               "div",
-              { className: je.a.block },
+              { className: _e.a.block },
               l.a.createElement(
-                I.a,
+                A.a,
                 {
-                  className: je.a.button,
+                  className: _e.a.button,
                   onClick: function() {
                     n.startRelationMode(a);
                   },
                 },
-                l.a.createElement(he.a, { type: "link" }),
+                l.a.createElement(ve.a, { type: "link" }),
                 "Relation",
               ),
               l.a.createElement(
-                I.a,
+                A.a,
                 {
-                  className: je.a.button,
+                  className: _e.a.button,
                   onClick: function() {
                     n.setNormalizationMode(!0);
                   },
                 },
-                l.a.createElement(he.a, { type: "plus" }),
+                l.a.createElement(ve.a, { type: "plus" }),
                 "Normalization",
               ),
               l.a.createElement(
-                I.a,
+                A.a,
                 {
-                  className: je.a.button,
+                  className: _e.a.button,
                   type: "dashed",
                   onClick: function() {
                     n.highlightedNode.unselectRegion();
                   },
                 },
-                l.a.createElement(he.a, { type: "fullscreen-exit" }),
+                l.a.createElement(ve.a, { type: "fullscreen-exit" }),
                 "Unselect",
               ),
               l.a.createElement(
-                I.a,
+                A.a,
                 {
                   type: "danger",
-                  className: je.a.button,
+                  className: _e.a.button,
                   onClick: function() {
                     n.highlightedNode.deleteRegion();
                   },
                 },
-                l.a.createElement(he.a, { type: "delete" }),
+                l.a.createElement(ve.a, { type: "delete" }),
                 "Delete",
-                t.settings.enableHotkeys && t.settings.enableTooltips && l.a.createElement(ne, null, "[ Bksp ]"),
+                t.settings.enableHotkeys && t.settings.enableTooltips && l.a.createElement(ae, null, "[ Bksp ]"),
               ),
             ),
             n.normalizationMode &&
@@ -1440,59 +2971,59 @@
               ),
           );
         }),
-        Re = n(297),
-        Me = n.n(Re),
-        Ie = Object(u.c)(function(e) {
+        je = n(305),
+        Ae = n.n(je),
+        De = Object(u.c)(function(e) {
           var t = e.store,
             n = t.completionStore.selected,
             a = n.highlightedNode;
           return l.a.createElement(
-            H.a,
-            { title: "Entity", className: Me.a.card },
-            a && l.a.createElement(Te, { store: t, completion: n }),
+            D.a,
+            { title: "Entity", className: Ae.a.card },
+            a && l.a.createElement(Ce, { store: t, completion: n }),
             !n.highlightedNode && l.a.createElement("p", null, "Nothing selected"),
-            l.a.createElement(Oe, { store: t, regionStore: n.regionStore }),
-            l.a.createElement(_e, { store: t, item: n }),
+            l.a.createElement(Ie, { store: t, regionStore: n.regionStore }),
+            l.a.createElement(Te, { store: t, item: n }),
           );
         });
-      function He(e) {
-        return y.m.union({
+      function Me(e) {
+        return b.m.union({
           dispatcher: function(t) {
             if (
               e.find(function(e) {
                 return t.type === e;
               })
             )
-              return S.getModelByTag(t.type);
+              return k.getModelByTag(t.type);
             throw Error("Not expecting tag: " + t.type);
           },
         });
       }
-      var Ae = {
+      var Be = {
           unionArray: function(e) {
-            return y.m.maybeNull(y.m.array(He(e)));
+            return b.m.maybeNull(b.m.array(Me(e)));
           },
           allModelsTypes: function() {
             var e = [
                 {
                   dispatcher: function(e) {
                     if (
-                      S.tags.find(function(t) {
+                      k.tags.find(function(t) {
                         return e.type === t;
                       })
                     )
-                      return S.getModelByTag(e.type);
+                      return k.getModelByTag(e.type);
                     throw Error("Not expecting tag: " + e.type);
                   },
                 },
-                S.modelsArr(),
+                k.modelsArr(),
               ],
               t = [].concat.apply([], e);
-            return y.m.union.apply(null, t);
+            return b.m.union.apply(null, t);
           },
-          oneOf: He,
+          oneOf: Me,
           isType: function(e, t) {
-            var n = Object(y.i)(e),
+            var n = Object(b.i)(e),
               a = !0,
               o = !1,
               r = void 0;
@@ -1510,18 +3041,18 @@
             return !1;
           },
           getParentOfTypeString: function(e, t) {
-            var n = Object(y.e)(e);
+            var n = Object(b.e)(e);
             Array.isArray(t) || (t = [t]);
             for (
               var a = function() {
-                var e = Object(y.i)(n).name;
+                var e = Object(b.i)(n).name;
                 if (
                   t.find(function(t) {
                     return t === e;
                   })
                 )
                   return { v: n };
-                n = Object(y.e)(n);
+                n = Object(b.e)(n);
               };
               n;
 
@@ -1532,16 +3063,16 @@
             return null;
           },
         },
-        De = y.m.model({
-          display: y.m.optional(y.m.string, "block"),
-          backgroundcolor: y.m.optional(y.m.string, ""),
-          margin: y.m.optional(y.m.string, ""),
+        He = b.m.model({
+          display: b.m.optional(b.m.string, "block"),
+          backgroundcolor: b.m.optional(b.m.string, ""),
+          margin: b.m.optional(b.m.string, ""),
         }),
-        Le = y.m.model({
-          id: y.m.identifier,
+        We = b.m.model({
+          id: b.m.identifier,
           type: "view",
-          style: y.m.maybeNull(y.m.string),
-          children: Ae.unionArray([
+          style: b.m.maybeNull(b.m.string),
+          children: Be.unionArray([
             "view",
             "header",
             "labels",
@@ -1562,23 +3093,23 @@
             "dialog",
           ]),
         }),
-        Pe = y.m.compose(
+        Pe = b.m.compose(
           "ViewModel",
-          De,
-          Le,
+          He,
+          We,
         ),
         ze = Object(u.c)(function(e) {
           var t = e.item,
             n = {};
           return (
             "inline" === t.display && (n = { display: "inline-block", marginRight: "15px" }),
-            t.style && (n = R.cssConverter(t.style)),
-            l.a.createElement("div", { style: n }, R.renderChildren(t))
+            t.style && (n = C.cssConverter(t.style)),
+            l.a.createElement("div", { style: n }, C.renderChildren(t))
           );
         });
-      S.addTag("view", Pe, ze);
-      var Je = n(566);
-      function Be(e, t) {
+      k.addTag("view", Pe, ze);
+      var Le = n(620);
+      function Fe(e, t) {
         return "$" === e.charAt(0)
           ? (function e(t, n, a) {
               return "string" === typeof n
@@ -1591,7 +3122,7 @@
             })(t, e.substring(1))
           : e;
       }
-      function Ve(e, t) {
+      function Je(e, t) {
         t || (t = {});
         for (
           var n,
@@ -1625,25 +3156,25 @@
         }
         return n;
       }
-      var We = y.m.model().actions(function(e) {
+      var Ge = b.m.model().actions(function(e) {
           return {
             updateValue: function(t) {
-              e._value = Ve(e.value, t.task.dataObj) || "";
+              e._value = Je(e.value, t.task.dataObj) || "";
             },
           };
         }),
-        Fe = y.m.model({
+        Ue = b.m.model({
           type: "table",
-          size: y.m.optional(y.m.string, "h4"),
-          value: y.m.maybeNull(y.m.string),
-          _value: y.m.optional(y.m.string, ""),
+          size: b.m.optional(b.m.string, "h4"),
+          value: b.m.maybeNull(b.m.string),
+          _value: b.m.optional(b.m.string, ""),
         }),
-        Ue = y.m.compose(
+        Ve = b.m.compose(
           "TableModel",
-          Fe,
-          We,
+          Ue,
+          Ge,
         ),
-        Ze = Object(u.b)("store")(
+        Ye = Object(u.b)("store")(
           Object(u.c)(function(e) {
             var t = e.store,
               n = e.item._value;
@@ -1653,24 +3184,24 @@
                 "div",
                 { style: { marginTop: "1em" } },
                 l.a.createElement(
-                  Je.a,
+                  Le.a,
                   { basic: "very", celled: !0, collapsing: !0 },
                   l.a.createElement(
-                    Je.a.Body,
+                    Le.a.Body,
                     null,
                     Object.keys(n).map(function(e) {
                       var t = n[e];
                       return (
                         "object" === typeof t && (t = JSON.stringify(t)),
                         l.a.createElement(
-                          Je.a.Row,
+                          Le.a.Row,
                           null,
                           l.a.createElement(
-                            Je.a.Cell,
+                            Le.a.Cell,
                             null,
-                            l.a.createElement(me.a, { as: "h4" }, l.a.createElement(me.a.Subheader, null, e)),
+                            l.a.createElement(he.a, { as: "h4" }, l.a.createElement(he.a.Subheader, null, e)),
                           ),
-                          l.a.createElement(Je.a.Cell, null, t),
+                          l.a.createElement(Le.a.Cell, null, t),
                         )
                       );
                     }),
@@ -1680,35 +3211,35 @@
             );
           }),
         );
-      S.addTag("table", Ue, Ze);
-      var Ge = n(563),
-        Ye = y.m.model({
+      k.addTag("table", Ve, Ye);
+      var Xe = n(616),
+        qe = b.m.model({
           type: "header",
-          size: y.m.optional(y.m.number, 4),
-          value: y.m.optional(y.m.string, ""),
-          underline: y.m.optional(y.m.boolean, !1),
+          size: b.m.optional(b.m.number, 4),
+          value: b.m.optional(b.m.string, ""),
+          underline: b.m.optional(b.m.boolean, !1),
         }),
-        Ke = y.m.compose(
+        Ke = b.m.compose(
           "HeaderModel",
-          Ye,
-          We,
+          qe,
+          Ge,
         ),
-        Xe = Object(u.c)(function(e) {
+        Ze = Object(u.c)(function(e) {
           var t = e.item;
           return l.a.createElement(
-            Ge.a.Title,
+            Xe.a.Title,
             { underline: t.underline, level: t.size, style: { margin: "10px 0" } },
             t.value,
           );
         });
-      S.addTag("header", Ke, Xe);
-      var $e = y.m.model({ value: y.m.maybeNull(y.m.string), name: y.m.maybeNull(y.m.string) });
-      var qe = y.m
-          .model({ id: y.m.identifier, type: "HyperText" })
+      k.addTag("header", Ke, Ze);
+      var Qe = b.m.model({ value: b.m.maybeNull(b.m.string), name: b.m.maybeNull(b.m.string) });
+      var $e = b.m
+          .model({ id: b.m.identifier, type: "HyperText" })
           .views(function(e) {
             return {
               get completion() {
-                return Object(y.g)(e).completionStore.selected;
+                return Object(b.g)(e).completionStore.selected;
               },
             };
           })
@@ -1722,44 +3253,44 @@
               };
             })(e);
           }),
-        Qe = y.m.compose(
+        et = b.m.compose(
           "HyperTextModel",
+          Qe,
           $e,
-          qe,
         ),
-        et = Object(u.b)("store")(
+        tt = Object(u.b)("store")(
           Object(u.c)(function(e) {
             var t = e.store,
               n = e.item;
             return t.task
-              ? l.a.createElement("div", { dangerouslySetInnerHTML: { __html: Ve(n.value, t.task.dataObj) } })
+              ? l.a.createElement("div", { dangerouslySetInnerHTML: { __html: Je(n.value, t.task.dataObj) } })
               : null;
           }),
         );
-      S.addTag("hypertext", Qe, et);
-      var tt = n(551),
-        nt = n(559),
-        at = n(88),
-        ot = n.n(at),
-        rt = (function(e) {
+      k.addTag("hypertext", et, tt);
+      var nt = n(602),
+        at = n(612),
+        ot = n(169),
+        rt = n.n(ot),
+        it = (function(e) {
           function t() {
-            return Object(d.a)(this, t), Object(p.a)(this, Object(g.a)(t).apply(this, arguments));
+            return Object(m.a)(this, t), Object(h.a)(this, Object(p.a)(t).apply(this, arguments));
           }
           return (
-            Object(f.a)(t, e),
-            Object(m.a)(t, [
+            Object(g.a)(t, e),
+            Object(d.a)(t, [
               {
                 key: "render",
                 value: function() {
                   var e,
                     t,
                     n,
-                    a = "".concat(ot.a.block);
+                    a = "".concat(rt.a.block);
                   return (
                     this.props.hint && (e = l.a.createElement(Ee.a, { color: "blue" }, this.props.hint)),
                     this.props.bg && (t = this.props.bg),
                     this.props.selected &&
-                      ((a = "".concat(a, " ").concat(ot.a.block_selected)),
+                      ((a = "".concat(a, " ").concat(rt.a.block_selected)),
                       (e = l.a.createElement(
                         "div",
                         null,
@@ -1768,15 +3299,15 @@
                       this.props.hint &&
                         (e = l.a.createElement(
                           "div",
-                          { className: ot.a.tag },
+                          { className: rt.a.tag },
                           l.a.createElement(Ee.a, { color: "magenta" }, this.props.hint),
                         ))),
-                    this.props.date && (n = l.a.createElement("span", { className: ot.a.date }, this.props.date)),
+                    this.props.date && (n = l.a.createElement("span", { className: rt.a.date }, this.props.date)),
                     l.a.createElement(
                       "div",
                       { className: a, style: { background: t, width: "max-content", maxWidth: "100%" } },
-                      l.a.createElement("span", { className: ot.a.name }, this.props.name, ":\xa0"),
-                      l.a.createElement("p", { className: ot.a.text }, this.props.text),
+                      l.a.createElement("span", { className: rt.a.name }, this.props.name, ":\xa0"),
+                      l.a.createElement("p", { className: rt.a.text }, this.props.text),
                       n,
                       e,
                     )
@@ -1787,20 +3318,20 @@
             t
           );
         })(l.a.Component),
-        it = y.m.model({
-          name: y.m.string,
-          text: y.m.string,
-          selected: y.m.optional(y.m.boolean, !1),
-          date: y.m.optional(y.m.string, ""),
-          hint: y.m.optional(y.m.string, ""),
+        lt = b.m.model({
+          name: b.m.string,
+          text: b.m.string,
+          selected: b.m.optional(b.m.boolean, !1),
+          date: b.m.optional(b.m.string, ""),
+          hint: b.m.optional(b.m.string, ""),
         }),
-        lt = y.m.model({ value: y.m.maybeNull(y.m.string), name: y.m.maybeNull(y.m.string) });
-      var st = y.m
-          .model({ id: y.m.optional(y.m.identifier, N), type: "Dialog", data: y.m.map(it) })
+        st = b.m.model({ value: b.m.maybeNull(b.m.string), name: b.m.maybeNull(b.m.string) });
+      var ct = b.m
+          .model({ id: b.m.optional(b.m.identifier, E), type: "Dialog", data: b.m.map(lt) })
           .views(function(e) {
             return {
               get completion() {
-                return Object(y.g)(e).completionStore.selected;
+                return Object(b.g)(e).completionStore.selected;
               },
             };
           })
@@ -1814,25 +3345,25 @@
               };
             })(e);
           }),
-        ct = y.m.compose(
+        ut = b.m.compose(
           "DialogModel",
-          lt,
           st,
+          ct,
         ),
-        ut = Object(u.b)("store")(
+        mt = Object(u.b)("store")(
           Object(u.c)(function(e) {
             var t = e.store,
               n = e.item;
-            if (!t.task || !t.task.dataObj) return l.a.createElement(tt.a, null);
+            if (!t.task || !t.task.dataObj) return l.a.createElement(nt.a, null);
             var a = [],
               o = n.value;
             return (
               "$" === o.charAt(0) && (o = o.substr(1)),
               t.task.dataObj[o].forEach(function(e, t) {
                 var n;
-                e.name && (n = W(F(e.name), 0.1)),
+                e.name && (n = J(G(e.name), 0.1)),
                   a.push(
-                    l.a.createElement(rt, {
+                    l.a.createElement(it, {
                       key: t,
                       name: e.name,
                       hint: e.hint,
@@ -1861,19 +3392,19 @@
                   },
                   a,
                 ),
-                l.a.createElement(nt.a, { dashed: !0 }),
+                l.a.createElement(at.a, { dashed: !0 }),
               )
             );
           }),
         );
-      S.addTag("dialog", ct, ut);
-      var dt = y.m.model({ name: y.m.maybeNull(y.m.string), value: y.m.maybeNull(y.m.string) }),
-        mt = y.m
-          .model({ id: y.m.optional(y.m.identifier, N), type: "audio", _value: y.m.optional(y.m.string, "") })
+      k.addTag("dialog", ut, mt);
+      var dt = b.m.model({ name: b.m.maybeNull(b.m.string), value: b.m.maybeNull(b.m.string) }),
+        ht = b.m
+          .model({ id: b.m.optional(b.m.identifier, E), type: "audio", _value: b.m.optional(b.m.string, "") })
           .views(function(e) {
             return {
               get completion() {
-                return Object(y.g)(e).completionStore.selected;
+                return Object(b.g)(e).completionStore.selected;
               },
             };
           })
@@ -1885,11 +3416,11 @@
               },
             };
           }),
-        pt = y.m.compose(
+        pt = b.m.compose(
           "AudioModel",
           dt,
-          mt,
-          We,
+          ht,
+          Ge,
         ),
         gt = Object(u.c)(function(e) {
           e.store;
@@ -1900,7 +3431,7 @@
                 null,
                 l.a.createElement(
                   "audio",
-                  { controls: !0 },
+                  { controls: !0, style: { width: "100%" } },
                   l.a.createElement("source", { src: t._value, type: "audio/mpeg" }),
                   "Your browser does not support the audio element.",
                 ),
@@ -1908,18 +3439,22 @@
             : null;
         }),
         ft = Object(u.b)("store")(Object(u.c)(gt));
-      S.addTag("audio", pt, ft);
-      var ht = n(299),
-        bt = n.n(ht),
-        yt = n(300),
-        vt = n.n(yt),
-        kt = n(301),
-        St = n.n(kt),
-        _t = n(302),
-        wt = n.n(_t),
-        xt = n(303),
-        Ot = n.n(xt);
-      function Et(e, t) {
+      k.addTag("audio", pt, ft);
+      var vt = n(307),
+        bt = n.n(vt),
+        yt = n(308),
+        wt = n.n(yt),
+        kt = n(309),
+        xt = n.n(kt),
+        Tt = n(310),
+        Nt = n.n(Tt),
+        St = n(603),
+        It = n(604),
+        Et = n(621),
+        Ot = n(617),
+        _t = n(208),
+        Rt = n.n(_t);
+      function Ct(e, t) {
         e = Number(e);
         var n = Math.floor(e / 60);
         e %= 60;
@@ -1929,7 +3464,7 @@
           n > 0 ? (e < 10 && (a = "0" + a), "".concat(n, ":").concat(a)) : a
         );
       }
-      function Nt(e) {
+      function jt(e) {
         return e >= 2500
           ? 0.01
           : e >= 1e3
@@ -1946,7 +3481,7 @@
           ? 15
           : 60 * Math.ceil(0.5 / e);
       }
-      function jt(e) {
+      function At(e) {
         return e >= 2500
           ? 10
           : e >= 1e3
@@ -1963,54 +3498,68 @@
           ? 15
           : 60 * Math.ceil(0.5 / e);
       }
-      function Ct(e) {
-        return Math.floor(10 / Nt(e));
+      function Dt(e) {
+        return Math.floor(10 / jt(e));
       }
-      var Tt = (function(e) {
+      var Mt = (function(e) {
           function t(e) {
             var n;
             return (
-              Object(d.a)(this, t),
-              ((n = Object(p.a)(this, Object(g.a)(t).call(this, e))).state = {
+              Object(m.a)(this, t),
+              ((n = Object(h.a)(this, Object(p.a)(t).call(this, e))).onChangeZoom = function(e) {
+                n.setState(Object(N.a)({}, n.state, { zoom: e })), n.wavesurfer.zoom(e);
+              }),
+              (n.onChangeVolume = function(e) {
+                n.setState(Object(N.a)({}, n.state, { volume: e })), n.wavesurfer.setVolume(e);
+              }),
+              (n.onChangeSpeed = function(e) {
+                n.setState(Object(N.a)({}, n.state, { speed: e })), n.wavesurfer.setPlaybackRate(e);
+              }),
+              (n.state = {
                 playing: !1,
+                src: n.props.src,
                 pos: 0,
-                colors: { waveColor: "#97A0AF", progressColor: "#36B37E" },
+                colors: { waveColor: "#97A0AF", progressColor: "#52c41a" },
+                zoom: n.props.zoom,
+                speed: n.props.speed,
+                volume: n.props.volume,
               }),
               n
             );
           }
           return (
-            Object(f.a)(t, e),
-            Object(m.a)(t, [
+            Object(g.a)(t, e),
+            Object(d.a)(t, [
               {
                 key: "componentDidMount",
                 value: function() {
                   var e = this;
                   (this.$el = c.a.findDOMNode(this)),
                     (this.$waveform = this.$el.querySelector("#wave")),
-                    (this.regions = vt.a.create({ dragSelection: { slop: 5 } })),
+                    (this.regions = wt.a.create({ dragSelection: { slop: 5 } })),
                     (this.wavesurfer = bt.a.create({
                       container: this.$waveform,
-                      backend: "MediaElement",
                       waveColor: this.state.colors.waveColor,
+                      backend: "MediaElement",
                       progressColor: this.state.colors.progressColor,
                       plugins: [
                         this.regions,
-                        St.a.create({
+                        xt.a.create({
                           container: "#timeline",
-                          formatTimeCallback: Et,
-                          timeInterval: Nt,
-                          primaryLabelInterval: jt,
-                          secondaryLabelInterval: Ct,
+                          formatTimeCallback: Ct,
+                          timeInterval: jt,
+                          primaryLabelInterval: At,
+                          secondaryLabelInterval: Dt,
                           primaryColor: "blue",
-                          secondaryColor: "red",
-                          primaryFontColor: "blue",
-                          secondaryFontColor: "red",
+                          secondaryColor: "blue",
+                          primaryFontColor: "#000",
+                          secondaryFontColor: "#000",
                         }),
-                        wt.a.create({ wrapper: this.$waveform, showTime: !0, opacity: 1 }),
+                        Nt.a.create({ wrapper: this.$waveform, showTime: !0, opacity: 1 }),
                       ],
                     })),
-                    this.wavesurfer.load(this.props.src);
+                    this.wavesurfer.load(this.props.src),
+                    this.wavesurfer.setPlaybackRate(this.state.speed);
                   var t = this;
                   this.wavesurfer.on("region-mouseenter", function(e) {
                     e._region.onMouseOver();
@@ -2021,6 +3570,7 @@
                     this.wavesurfer.on("region-created", function(e) {
                       var n = t.props.addRegion(e);
                       (e._region = n),
+                        (e.color = n.selectedregionbg),
                         e.on("click", function() {
                           return n.onClick(t.wavesurfer);
                         }),
@@ -2050,11 +3600,111 @@
               {
                 key: "render",
                 value: function() {
+                  var e = this;
                   return l.a.createElement(
                     "div",
                     null,
-                    l.a.createElement("div", { id: "wave", className: Ot.a.wave }),
+                    l.a.createElement("div", { id: "wave", className: Rt.a.wave }),
                     l.a.createElement("div", { id: "timeline" }),
+                    l.a.createElement(
+                      St.a,
+                      { className: Rt.a.menu },
+                      l.a.createElement(
+                        It.a,
+                        { span: 24 },
+                        l.a.createElement(
+                          It.a,
+                          { span: 12 },
+                          "Speed:",
+                          " ",
+                          l.a.createElement(Et.a, {
+                            min: 0.5,
+                            max: 3,
+                            value: this.state.speed,
+                            onChange: function(t) {
+                              e.onChangeSpeed(t);
+                            },
+                          }),
+                        ),
+                        l.a.createElement(
+                          It.a,
+                          { span: 24 },
+                          l.a.createElement(Ot.a, {
+                            min: 0.5,
+                            max: 3,
+                            step: 0.1,
+                            value: "number" === typeof this.state.speed ? this.state.speed : 1,
+                            onChange: function(t) {
+                              e.onChangeSpeed(t);
+                            },
+                          }),
+                        ),
+                      ),
+                      l.a.createElement(
+                        It.a,
+                        { span: 24 },
+                        l.a.createElement(
+                          It.a,
+                          { span: 12 },
+                          "Volume:",
+                          " ",
+                          l.a.createElement(Et.a, {
+                            min: 0,
+                            max: 1,
+                            value: this.state.volume,
+                            step: 0.1,
+                            onChange: function(t) {
+                              e.onChangeVolume(t);
+                            },
+                          }),
+                        ),
+                        l.a.createElement(
+                          It.a,
+                          { span: 24 },
+                          l.a.createElement(Ot.a, {
+                            min: 0,
+                            max: 1,
+                            step: 0.1,
+                            value: "number" === typeof this.state.volume ? this.state.volume : 1,
+                            onChange: function(t) {
+                              e.onChangeVolume(t);
+                            },
+                          }),
+                        ),
+                      ),
+                      "true" === this.props.haszoom &&
+                        l.a.createElement(
+                          It.a,
+                          { span: 24 },
+                          l.a.createElement(
+                            It.a,
+                            { span: 12 },
+                            "Zoom:",
+                            " ",
+                            l.a.createElement(Et.a, {
+                              min: 20,
+                              max: 500,
+                              value: this.state.zoom,
+                              onChange: function(t) {
+                                e.onChangeZoom(t);
+                              },
+                            }),
+                          ),
+                          l.a.createElement(
+                            It.a,
+                            { span: 24 },
+                            l.a.createElement(Ot.a, {
+                              min: 20,
+                              step: 10,
+                              max: 500,
+                              value: "number" === typeof this.state.zoom ? this.state.zoom : 0,
+                              onChange: function(t) {
+                                e.onChangeZoom(t);
+                              },
+                            }),
+                          ),
+                        ),
+                    ),
                   );
                 },
               },
@@ -2062,8 +3712,8 @@
             t
           );
         })(l.a.Component),
-        Rt = y.m
-          .model({ selected: y.m.optional(y.m.boolean, !1), highlighted: y.m.optional(y.m.boolean, !1) })
+        Bt = b.m
+          .model({ selected: b.m.optional(b.m.boolean, !1), highlighted: b.m.optional(b.m.boolean, !1) })
           .actions(function(e) {
             return {
               selectRegion: function() {
@@ -2095,8 +3745,8 @@
               },
             };
           }),
-        Mt = y.m
-          .model({ normInput: y.m.maybeNull(y.m.string), normalization: y.m.maybeNull(y.m.string) })
+        Ht = b.m
+          .model({ normInput: b.m.maybeNull(b.m.string), normalization: b.m.maybeNull(b.m.string) })
           .actions(function(e) {
             return {
               setNormalization: function(t) {
@@ -2110,24 +3760,24 @@
               },
             };
           }),
-        It = y.m.model({
-          value: y.m.maybeNull(y.m.string),
-          selected: y.m.optional(y.m.boolean, !1),
-          alias: y.m.maybeNull(y.m.string),
-          hotkey: y.m.maybeNull(y.m.string),
-          showalias: y.m.optional(y.m.string, "false"),
-          aliasstyle: y.m.optional(y.m.string, "opacity: 0.6"),
-          size: y.m.optional(y.m.string, "medium"),
-          background: y.m.optional(y.m.string, "#36B37E"),
-          selectedcolor: y.m.optional(y.m.string, "white"),
+        Wt = b.m.model({
+          value: b.m.maybeNull(b.m.string),
+          selected: b.m.optional(b.m.boolean, !1),
+          alias: b.m.maybeNull(b.m.string),
+          hotkey: b.m.maybeNull(b.m.string),
+          showalias: b.m.optional(b.m.string, "false"),
+          aliasstyle: b.m.optional(b.m.string, "opacity: 0.6"),
+          size: b.m.optional(b.m.string, "medium"),
+          background: b.m.optional(b.m.string, "#36B37E"),
+          selectedcolor: b.m.optional(b.m.string, "white"),
         }),
-        Ht = y.m
-          .model({ id: y.m.optional(y.m.identifier, N), type: "label", _value: y.m.optional(y.m.string, "") })
+        Pt = b.m
+          .model({ id: b.m.optional(b.m.identifier, E), type: "label", _value: b.m.optional(b.m.string, "") })
           .actions(function(e) {
             return {
               toggleSelected: function() {
                 var t = e.selected,
-                  n = Ae.getParentOfTypeString(e, ["LabelsModel", "RectangleLabelsModel", "PolygonLabelsModel"]);
+                  n = Be.getParentOfTypeString(e, ["LabelsModel", "RectangleLabelsModel", "PolygonLabelsModel"]);
                 n.shouldBeUnselected && n.unselectAll(),
                   (n.shouldBeUnselected && !0 === t) || (e.selected = !e.selected);
               },
@@ -2139,13 +3789,13 @@
               },
             };
           }),
-        At = y.m.compose(
+        zt = b.m.compose(
           "LabelModel",
-          It,
-          Ht,
-          We,
+          Wt,
+          Pt,
+          Ge,
         ),
-        Dt = Object(u.b)("store")(
+        Lt = Object(u.b)("store")(
           Object(u.c)(function(e) {
             var t = e.item,
               n = e.store,
@@ -2167,16 +3817,16 @@
               t._value,
               "true" === t.showalias &&
                 t.alias &&
-                l.a.createElement("span", { style: Y.styleToProp(t.aliasstyle) }, "\xa0", t.alias),
+                l.a.createElement("span", { style: q.styleToProp(t.aliasstyle) }, "\xa0", t.alias),
               n.settings.enableTooltips &&
                 n.settings.enableHotkeys &&
                 t.hotkey &&
-                l.a.createElement(ne, null, "[", t.hotkey, "]"),
+                l.a.createElement(ae, null, "[", t.hotkey, "]"),
             );
           }),
         );
-      S.addTag("label", At, Dt);
-      var Lt = y.m
+      k.addTag("label", zt, Lt);
+      var Ft = b.m
           .model()
           .views(function(e) {
             return {
@@ -2212,18 +3862,18 @@
               },
             };
           }),
-        Pt = y.m.model({
-          name: y.m.maybeNull(y.m.string),
-          toname: y.m.maybeNull(y.m.string),
-          choice: y.m.optional(y.m.enumeration(["single", "multiple"]), "single"),
-          selectionstyle: y.m.maybeNull(y.m.optional(y.m.string, "basic", "border", "bottom")),
+        Jt = b.m.model({
+          name: b.m.maybeNull(b.m.string),
+          toname: b.m.maybeNull(b.m.string),
+          choice: b.m.optional(b.m.enumeration(["single", "multiple"]), "single"),
+          selectionstyle: b.m.maybeNull(b.m.optional(b.m.string, "basic", "border", "bottom")),
         }),
-        zt = y.m
+        Gt = b.m
           .model({
-            id: y.m.optional(y.m.identifier, N),
-            pid: y.m.optional(y.m.string, N),
+            id: b.m.optional(b.m.identifier, E),
+            pid: b.m.optional(b.m.string, E),
             type: "labels",
-            children: Ae.unionArray(["labels", "label", "choice"]),
+            children: Be.unionArray(["labels", "label", "choice"]),
           })
           .views(function(e) {
             return {
@@ -2256,13 +3906,13 @@
               },
             };
           }),
-        Jt = y.m.compose(
+        Ut = b.m.compose(
           "LabelsModel",
-          Pt,
-          zt,
-          Lt,
+          Jt,
+          Gt,
+          Ft,
         ),
-        Bt = Object(u.c)(function(e) {
+        Vt = Object(u.c)(function(e) {
           var t = e.item;
           return l.a.createElement(
             "div",
@@ -2276,25 +3926,25 @@
                 flexFlow: "wrap",
               },
             },
-            R.renderChildren(t),
+            C.renderChildren(t),
           );
         });
-      S.addTag("labels", Jt, Bt);
-      var Vt = n(574),
-        Wt = y.m.model({
-          name: y.m.maybeNull(y.m.string),
-          toname: y.m.maybeNull(y.m.string),
-          maxrating: y.m.optional(y.m.string, "5"),
-          icon: y.m.optional(y.m.string, "star"),
-          size: y.m.optional(y.m.string, "large"),
-          hotkey: y.m.maybeNull(y.m.string),
+      k.addTag("labels", Ut, Vt);
+      var Yt = n(629),
+        Xt = b.m.model({
+          name: b.m.maybeNull(b.m.string),
+          toname: b.m.maybeNull(b.m.string),
+          maxrating: b.m.optional(b.m.string, "5"),
+          icon: b.m.optional(b.m.string, "star"),
+          size: b.m.optional(b.m.string, "large"),
+          hotkey: b.m.maybeNull(b.m.string),
         }),
-        Ft = y.m
+        qt = b.m
           .model({
-            id: y.m.optional(y.m.identifier, N),
-            pid: y.m.optional(y.m.string, N),
+            id: b.m.optional(b.m.identifier, E),
+            pid: b.m.optional(b.m.string, E),
             type: "rating",
-            rating: y.m.maybeNull(y.m.number),
+            rating: b.m.maybeNull(b.m.number),
           })
           .views(function(e) {
             return {
@@ -2336,10 +3986,10 @@
               },
             };
           }),
-        Ut = y.m.compose(
+        Kt = b.m.compose(
           "RatingModel",
-          Wt,
-          Ft,
+          Xt,
+          qt,
         ),
         Zt = Object(u.b)("store")(
           Object(u.c)(function(e) {
@@ -2348,7 +3998,7 @@
             return l.a.createElement(
               "div",
               null,
-              l.a.createElement(Vt.a, {
+              l.a.createElement(Yt.a, {
                 icon: "star",
                 size: t.size,
                 defaultRating: 0,
@@ -2364,28 +4014,23 @@
             );
           }),
         );
-      S.addTag("rating", Ut, Zt);
-      var Gt = y.m
-          .model({
-            id: y.m.optional(y.m.identifier, N),
-            pid: y.m.optional(y.m.string, N),
-            start: y.m.number,
-            end: y.m.number,
-            states: y.m.maybeNull(y.m.array(y.m.union(Jt, Ut))),
+      k.addTag("rating", Kt, Zt);
+      var Qt = b.m
+          .model("AudioRegionModel", {
+            id: b.m.optional(b.m.identifier, E),
+            pid: b.m.optional(b.m.string, E),
+            start: b.m.number,
+            end: b.m.number,
+            states: b.m.maybeNull(b.m.array(b.m.union(Ut, Kt))),
+            selectedregionbg: b.m.optional(b.m.string, "rgba(0, 0, 0, 0.5)"),
           })
           .views(function(e) {
             return {
               get parent() {
-                return Object(y.f)(e, $t);
-              },
-              get regionbg() {
-                return e.parent.regionbg;
-              },
-              get selectedregionbg() {
-                return e.parent.selectedregionbg;
+                return Object(b.f)(e, on);
               },
               get completion() {
-                return Object(y.g)(e).completionStore.selected;
+                return Object(b.g)(e).completionStore.selected;
               },
             };
           })
@@ -2411,26 +4056,31 @@
                     })
                   : n(t);
               },
-              unselectRegion: function() {
-                (e.selected = !1), e._ws_region.update({ color: e.regionbg }), e.completion.setHighlightedNode(null);
-              },
               selectRegion: function() {
                 (e.selected = !0),
                   e.completion.setHighlightedNode(e),
-                  e._ws_region.update({ color: e.selectedregionbg });
+                  e._ws_region.update({ color: q.Colors.rgbaChangeAlpha(e.selectedregionbg, 0.8) });
+              },
+              unselectRegion: function() {
+                (e.selected = !1),
+                  e.completion.setHighlightedNode(null),
+                  e._ws_region.update && e._ws_region.update({ color: e.selectedregionbg });
               },
               setHighlight: function(t) {
-                (e.highlighted = t), (e._ws_region.element.style.border = t ? "2px solid red" : "none");
+                (e.highlighted = t),
+                  t
+                    ? (e._ws_region.update({ color: q.Colors.rgbaChangeAlpha(e.selectedregionbg, 0.8) }),
+                      (e._ws_region.element.style.border = "2px solid red"))
+                    : (e._ws_region.update({ color: e.selectedregionbg }),
+                      (e._ws_region.element.style.border = "none"));
               },
+              setNormalization: function(e) {},
               beforeDestroy: function() {
                 e._ws_region && e._ws_region.remove();
               },
               onClick: function(t) {
                 e.completion.relationMode ||
-                  (Object.values(t.regions.list).forEach(function(t) {
-                    t.update({ color: e.regionbg });
-                  }),
-                  e._ws_region.update({ color: e.selectedregionbg })),
+                  e._ws_region.update({ color: q.Colors.rgbaChangeAlpha(e.selectedregionbg, 0.8) }),
                   e.onClickRegion();
               },
               onMouseOver: function() {
@@ -2444,32 +4094,38 @@
               },
             };
           }),
-        Yt = y.m.compose(
+        $t = b.m.compose(
           "AudioRegionModel",
-          Rt,
-          Mt,
-          Gt,
+          Bt,
+          Ht,
+          Qt,
         ),
-        Kt = y.m.model({
-          name: y.m.maybeNull(y.m.string),
-          value: y.m.maybeNull(y.m.string),
-          haszoom: y.m.optional(y.m.string, "true"),
-          regionbg: y.m.optional(y.m.string, "rgba(0,0,0, 0.1)"),
-          selectedregionbg: y.m.optional(y.m.string, "rgba(255,0,0,0.5)"),
-          _value: y.m.optional(y.m.string, ""),
+        en = n(312),
+        tn = n.n(en),
+        nn = b.m.model({
+          name: b.m.maybeNull(b.m.string),
+          value: b.m.maybeNull(b.m.string),
+          haszoom: b.m.optional(b.m.string, "true"),
+          volume: b.m.optional(b.m.number, 1),
+          speed: b.m.optional(b.m.number, 1),
         }),
-        Xt = y.m
-          .model({
-            id: y.m.identifier,
+        an = b.m
+          .model("AudioPlusModel", {
+            id: b.m.identifier,
             type: "audio",
-            playing: y.m.optional(y.m.boolean, !1),
-            regions: y.m.array(Yt),
-            rangeValue: y.m.optional(y.m.string, "20"),
+            _value: b.m.optional(b.m.string, ""),
+            playing: b.m.optional(b.m.boolean, !1),
+            regions: b.m.array($t),
+            rangeValue: b.m.optional(b.m.number, 20),
           })
           .views(function(e) {
             return {
+              get hasStates() {
+                var t = e.states();
+                return t && t.length > 0;
+              },
               get completion() {
-                return Object(y.g)(e).completionStore.selected;
+                return Object(b.g)(e).completionStore.selected;
               },
               states: function() {
                 return e.completion.toNames.get(e.name);
@@ -2478,7 +4134,9 @@
                 var t = e.states();
                 return t
                   ? t.filter(function(e) {
-                      return e.isSelected;
+                      return (
+                        e.isSelected && ("LabelsModel" === Object(b.i)(e).name || "RatingModel" === Object(b.i)(e).name)
+                      );
                     })
                   : null;
               },
@@ -2497,39 +4155,47 @@
                 });
               },
               fromStateJSON: function(t, n) {
-                e.findRegion(t.value.start, t.value.end),
-                  C(n),
-                  e._ws.addRegion({ start: t.value.start, end: t.value.end });
+                var a,
+                  o = { pid: t.id, start: t.value.start, end: t.value.end, normalization: t.normalization };
+                t.value.labels && e.completion.names.get(t.from_name).fromStateJSON(t);
+                var r = e.findRegion(t.value.start, t.value.end),
+                  i = _(n);
+                return i.fromStateJSON(t), r ? r.states.push(i) : ((o.states = [i]), (a = e.addRegion(o))), a;
               },
               setRangeValue: function(t) {
                 e.rangeValue = t;
               },
+              setPlaybackRate: function(t) {
+                e.playBackRate = t;
+              },
               addRegion: function(t) {
-                var n = e.findRegion(t.start, t.end);
-                if (e.findRegion(t.start, t.end)) return (n._ws_region = t), n;
-                var a = e.activeStates(),
-                  o = a
-                    ? a.map(function(e) {
-                        return j(e);
+                var n = e.activeStates(),
+                  a = n
+                    ? n.map(function(e) {
+                        return O(e);
                       })
                     : null,
-                  r = Yt.create({
-                    id: N(),
+                  o = e.findRegion(t.start, t.end);
+                if (e.findRegion(t.start, t.end)) return (o._ws_region = t), o;
+                var r = n && n[0] ? q.Colors.convertToRGBA(n[0].getSelectedColor(), 0.3) : e.selectedregionbg,
+                  i = $t.create({
+                    id: t.id ? t.id : E(),
+                    pid: t.pid ? t.pid : E(),
                     start: t.start,
                     end: t.end,
                     regionbg: e.regionbg,
-                    selectedregionbg: e.selectedregionbg,
-                    states: o,
+                    selectedregionbg: r,
+                    states: a,
                   });
                 return (
-                  (r._ws_region = t),
-                  e.regions.push(r),
-                  e.completion.addRegion(r),
-                  a &&
-                    a.forEach(function(e) {
+                  (i._ws_region = t),
+                  e.regions.push(i),
+                  e.completion.addRegion(i),
+                  n &&
+                    n.forEach(function(e) {
                       return e.unselectAll();
                     }),
-                  r
+                  i
                 );
               },
               handlePlay: function() {
@@ -2546,72 +4212,68 @@
               },
             };
           }),
-        $t = y.m.compose(
+        on = b.m.compose(
           "AudioPlusModel",
-          Kt,
-          Xt,
-          We,
+          nn,
+          an,
+          Ge,
         ),
-        qt = Object(u.c)(function(e) {
+        rn = Object(u.c)(function(e) {
           e.store;
           var t = e.item;
-          return l.a.createElement(
-            "div",
-            null,
-            l.a.createElement(Tt, {
-              src: t._value,
-              selectRegion: t.selectRegion,
-              handlePlay: t.handlePlay,
-              onCreate: t.wsCreated,
-              addRegion: t.addRegion,
-              onLoad: t.onLoad,
-            }),
-            l.a.createElement(
-              "div",
-              { style: { display: "flex", justifyContent: "space-between", marginTop: "1em" } },
-              l.a.createElement(
-                I.a,
-                {
-                  type: "primary",
-                  onClick: function(e) {
-                    t._ws.playPause();
-                  },
-                },
-                t.playing &&
-                  l.a.createElement(i.Fragment, null, l.a.createElement(he.a, { type: "pause-circle" }), " Pause"),
-                !t.playing &&
-                  l.a.createElement(i.Fragment, null, l.a.createElement(he.a, { type: "play-circle" }), " Play"),
-              ),
-              "true" === t.haszoom &&
-                l.a.createElement("input", {
-                  type: "range",
-                  min: "20",
-                  max: "200",
-                  id: "slider",
-                  value: t.rangeValue,
-                  onChange: function(e) {
-                    t.setRangeValue(e.target.value);
-                  },
+          return t._value
+            ? l.a.createElement(
+                "div",
+                null,
+                l.a.createElement(Mt, {
+                  src: t._value,
+                  selectRegion: t.selectRegion,
+                  handlePlay: t.handlePlay,
+                  onCreate: t.wsCreated,
+                  addRegion: t.addRegion,
+                  onLoad: t.onLoad,
+                  speed: t.speed,
+                  haszoom: t.haszoom,
+                  zoom: t.rangeValue,
+                  volume: t.volume,
                 }),
-            ),
-          );
+                l.a.createElement(
+                  "div",
+                  { style: { display: "flex", justifyContent: "space-between", marginTop: "1em" } },
+                  l.a.createElement(
+                    A.a,
+                    {
+                      type: "primary",
+                      className: tn.a.play,
+                      onClick: function(e) {
+                        t._ws.playPause();
+                      },
+                    },
+                    t.playing &&
+                      l.a.createElement(i.Fragment, null, l.a.createElement(ve.a, { type: "pause-circle" }), " Pause"),
+                    !t.playing &&
+                      l.a.createElement(i.Fragment, null, l.a.createElement(ve.a, { type: "play-circle" }), " Play"),
+                  ),
+                ),
+              )
+            : null;
         }),
-        Qt = Object(u.b)("store")(Object(u.c)(qt));
-      S.addTag("audioplus", $t, Qt);
-      var en = n(52),
-        tn =
-          (n(112),
-          y.m.model({
-            name: y.m.maybeNull(y.m.string),
-            toname: y.m.maybeNull(y.m.string),
-            opacity: y.m.optional(y.m.string, "0.6"),
-            fillcolor: y.m.maybeNull(y.m.string),
-            strokewidth: y.m.optional(y.m.string, "1"),
-            strokecolor: y.m.optional(y.m.string, "#f48a42"),
-            canrotate: y.m.optional(y.m.string, "true"),
+        ln = Object(u.b)("store")(Object(u.c)(rn));
+      k.addTag("audioplus", on, ln);
+      var sn = n(85),
+        cn =
+          (n(102),
+          b.m.model({
+            name: b.m.maybeNull(b.m.string),
+            toname: b.m.maybeNull(b.m.string),
+            opacity: b.m.optional(b.m.string, "0.6"),
+            fillcolor: b.m.maybeNull(b.m.string),
+            strokewidth: b.m.optional(b.m.string, "1"),
+            strokecolor: b.m.optional(b.m.string, "#f48a42"),
+            canrotate: b.m.optional(b.m.string, "true"),
           })),
-        nn = y.m
-          .model({ id: y.m.identifier, type: "rectangle" })
+        un = b.m
+          .model({ id: b.m.identifier, type: "rectangle" })
           .views(function(e) {
             return {
               get hasStates() {
@@ -2619,28 +4281,28 @@
                 return t && t.length > 0;
               },
               get completion() {
-                return Object(y.g)(e).completionStore.selected;
+                return Object(b.g)(e).completionStore.selected;
               },
             };
           })
           .actions(function(e) {
             return { fromStateJSON: function(e) {} };
           }),
-        an = y.m.compose(
+        mn = b.m.compose(
           "RectangleModel",
-          tn,
-          nn,
+          cn,
+          un,
         );
-      S.addTag("rectangle", an, function() {
+      k.addTag("rectangle", mn, function() {
         return null;
       });
-      var on = y.m.model({ name: y.m.maybeNull(y.m.string), toname: y.m.maybeNull(y.m.string) }),
-        rn = y.m
+      var dn = b.m.model({ name: b.m.maybeNull(b.m.string), toname: b.m.maybeNull(b.m.string) }),
+        hn = b.m
           .model("RectangleLabelsModel", {
-            id: y.m.optional(y.m.identifier, N),
-            pid: y.m.optional(y.m.string, N),
+            id: b.m.optional(b.m.identifier, E),
+            pid: b.m.optional(b.m.string, E),
             type: "rectanglelabels",
-            children: Ae.unionArray(["labels", "label", "choice"]),
+            children: Be.unionArray(["labels", "label", "choice"]),
           })
           .actions(function(e) {
             return {
@@ -2655,52 +4317,52 @@
               },
             };
           }),
-        ln = y.m.compose(
-          Jt,
-          an,
-          on,
-          rn,
-          Lt,
+        pn = b.m.compose(
+          Ut,
+          mn,
+          dn,
+          hn,
+          Ft,
         ),
-        sn = y.m.compose(
+        gn = b.m.compose(
           "RectangleLabelsModel",
-          ln,
+          pn,
         ),
-        cn = Object(u.c)(function(e) {
+        fn = Object(u.c)(function(e) {
           var t = e.item;
-          return l.a.createElement(Bt, { item: t });
+          return l.a.createElement(Vt, { item: t });
         });
-      S.addTag("rectanglelabels", sn, cn);
-      var un = y.m
+      k.addTag("rectanglelabels", gn, fn);
+      var vn = b.m
           .model({
-            id: y.m.identifier,
-            pid: y.m.optional(y.m.string, N),
+            id: b.m.identifier,
+            pid: b.m.optional(b.m.string, E),
             type: "rectangleregion",
-            x: y.m.number,
-            y: y.m.number,
-            width: y.m.number,
-            height: y.m.number,
-            scaleX: y.m.optional(y.m.number, 1),
-            scaleY: y.m.optional(y.m.number, 1),
-            rotation: y.m.optional(y.m.number, 0),
-            opacity: y.m.number,
-            strokewidth: y.m.number,
-            fillcolor: y.m.maybeNull(y.m.string),
-            strokecolor: y.m.string,
-            states: y.m.maybeNull(y.m.array(y.m.union(Jt, Ut, sn))),
-            wp: y.m.maybeNull(y.m.number),
-            hp: y.m.maybeNull(y.m.number),
-            sw: y.m.maybeNull(y.m.number),
-            sh: y.m.maybeNull(y.m.number),
-            coordstype: y.m.optional(y.m.enumeration(["px", "perc"]), "px"),
+            x: b.m.number,
+            y: b.m.number,
+            width: b.m.number,
+            height: b.m.number,
+            scaleX: b.m.optional(b.m.number, 1),
+            scaleY: b.m.optional(b.m.number, 1),
+            rotation: b.m.optional(b.m.number, 0),
+            opacity: b.m.number,
+            strokewidth: b.m.number,
+            fillcolor: b.m.maybeNull(b.m.string),
+            strokecolor: b.m.string,
+            states: b.m.maybeNull(b.m.array(b.m.union(Ut, Kt, gn))),
+            wp: b.m.maybeNull(b.m.number),
+            hp: b.m.maybeNull(b.m.number),
+            sw: b.m.maybeNull(b.m.number),
+            sh: b.m.maybeNull(b.m.number),
+            coordstype: b.m.optional(b.m.enumeration(["px", "perc"]), "px"),
           })
           .views(function(e) {
             return {
               get parent() {
-                return Object(y.f)(e, Tn);
+                return Object(b.f)(e, Hn);
               },
               get completion() {
-                return Object(y.g)(e).completionStore.selected;
+                return Object(b.g)(e).completionStore.selected;
               },
             };
           })
@@ -2772,13 +4434,13 @@
               },
             };
           }),
-        dn = y.m.compose(
+        bn = b.m.compose(
           "RectRegionModel",
-          Rt,
-          Mt,
-          un,
+          Bt,
+          Ht,
+          vn,
         ),
-        mn = Object(u.b)("store")(
+        yn = Object(u.b)("store")(
           Object(u.c)(function(e) {
             var t = e.store,
               n = e.item,
@@ -2806,7 +4468,7 @@
                 i.Fragment,
                 null,
                 l.a.createElement(
-                  en.Rect,
+                  sn.Rect,
                   Object.assign(
                     {
                       x: a,
@@ -2872,22 +4534,22 @@
             );
           }),
         );
-      S.addTag("rectangleregion", dn, mn);
-      n(310);
-      var pn = n(305),
-        gn = y.m
+      k.addTag("rectangleregion", bn, yn);
+      n(343);
+      var wn = n(313),
+        kn = b.m
           .model({
-            init_x: y.m.optional(y.m.number, 0),
-            init_y: y.m.optional(y.m.number, 0),
-            x: y.m.number,
-            y: y.m.number,
-            style: y.m.string,
-            size: y.m.string,
+            init_x: b.m.optional(b.m.number, 0),
+            init_y: b.m.optional(b.m.number, 0),
+            x: b.m.number,
+            y: b.m.number,
+            style: b.m.string,
+            size: b.m.string,
           })
           .views(function(e) {
             return {
               get parent() {
-                return Object(y.e)(e, 2);
+                return Object(b.e)(e, 2);
               },
             };
           })
@@ -2923,7 +4585,7 @@
               },
             };
           }),
-        fn = Object(u.c)(function(e) {
+        xn = Object(u.c)(function(e) {
           var t = e.item,
             n = e.index,
             a = { small: 1, medium: 2, large: 3 },
@@ -2953,7 +4615,7 @@
               });
           return "circle" == t.style
             ? l.a.createElement(
-                en.Circle,
+                sn.Circle,
                 Object.assign(
                   {
                     key: n,
@@ -2970,7 +4632,7 @@
                 ),
               )
             : l.a.createElement(
-                en.Rect,
+                sn.Rect,
                 Object.assign(
                   {
                     key: n,
@@ -2989,18 +4651,18 @@
                 ),
               );
         }),
-        hn = y.m.model({
-          name: y.m.maybeNull(y.m.string),
-          toname: y.m.maybeNull(y.m.string),
-          opacity: y.m.optional(y.m.string, "0.6"),
-          fillcolor: y.m.maybeNull(y.m.string),
-          strokewidth: y.m.optional(y.m.string, "1"),
-          strokecolor: y.m.optional(y.m.string, "#f48a42"),
-          pointsize: y.m.optional(y.m.string, "medium"),
-          pointstyle: y.m.optional(y.m.string, "rectangle"),
+        Tn = b.m.model({
+          name: b.m.maybeNull(b.m.string),
+          toname: b.m.maybeNull(b.m.string),
+          opacity: b.m.optional(b.m.string, "0.6"),
+          fillcolor: b.m.maybeNull(b.m.string),
+          strokewidth: b.m.optional(b.m.string, "1"),
+          strokecolor: b.m.optional(b.m.string, "#f48a42"),
+          pointsize: b.m.optional(b.m.string, "medium"),
+          pointstyle: b.m.optional(b.m.string, "rectangle"),
         }),
-        bn = y.m
-          .model({ id: y.m.identifier, type: "polygon", _value: y.m.optional(y.m.string, "") })
+        Nn = b.m
+          .model({ id: b.m.identifier, type: "polygon", _value: b.m.optional(b.m.string, "") })
           .views(function(e) {
             return {
               get hasStates() {
@@ -3008,7 +4670,7 @@
                 return t && t.length > 0;
               },
               get completion() {
-                return Object(y.g)(e).completionStore.selected;
+                return Object(b.g)(e).completionStore.selected;
               },
               states: function() {
                 return e.completion.toNames.get(e.name);
@@ -3026,25 +4688,25 @@
           .actions(function(e) {
             return {};
           }),
-        yn = y.m.compose(
+        Sn = b.m.compose(
           "PolygonModel",
-          hn,
-          bn,
+          Tn,
+          Nn,
         ),
-        vn = Object(u.b)("store")(
+        In = Object(u.b)("store")(
           Object(u.c)(function(e) {
             e.store, e.item;
             return null;
           }),
         );
-      S.addTag("polygon", yn, vn);
-      var kn = y.m.model({ name: y.m.maybeNull(y.m.string), toname: y.m.maybeNull(y.m.string) }),
-        Sn = y.m
+      k.addTag("polygon", Sn, In);
+      var En = b.m.model({ name: b.m.maybeNull(b.m.string), toname: b.m.maybeNull(b.m.string) }),
+        On = b.m
           .model("PolygonLabelsModel", {
-            id: y.m.optional(y.m.identifier, N),
-            pid: y.m.optional(y.m.string, N),
+            id: b.m.optional(b.m.identifier, E),
+            pid: b.m.optional(b.m.string, E),
             type: "polygonlabels",
-            children: Ae.unionArray(["labels", "label", "choice"]),
+            children: Be.unionArray(["labels", "label", "choice"]),
           })
           .actions(function(e) {
             return {
@@ -3059,48 +4721,48 @@
               },
             };
           }),
-        _n = y.m.compose(
-          Jt,
-          yn,
-          kn,
+        _n = b.m.compose(
+          Ut,
           Sn,
-          Lt,
+          En,
+          On,
+          Ft,
         ),
-        wn = y.m.compose(
+        Rn = b.m.compose(
           "PolygonLabelsModel",
           _n,
         ),
-        xn = Object(u.c)(function(e) {
+        Cn = Object(u.c)(function(e) {
           var t = e.item;
-          return l.a.createElement(Bt, { item: t });
+          return l.a.createElement(Vt, { item: t });
         });
-      S.addTag("polygonlabels", wn, xn);
-      var On = y.m
+      k.addTag("polygonlabels", Rn, Cn);
+      var jn = b.m
           .model({
-            id: y.m.identifier,
-            pid: y.m.optional(y.m.string, N),
+            id: b.m.identifier,
+            pid: b.m.optional(b.m.string, E),
             type: "polygonregion",
-            opacity: y.m.number,
-            fillcolor: y.m.maybeNull(y.m.string),
-            strokewidth: y.m.number,
-            strokecolor: y.m.string,
-            pointsize: y.m.string,
-            pointstyle: y.m.string,
-            closed: y.m.optional(y.m.boolean, !1),
-            points: y.m.array(gn, []),
-            states: y.m.maybeNull(y.m.array(y.m.union(Jt, Ut, wn))),
-            mouseOverStartPoint: y.m.optional(y.m.boolean, !1),
-            fromName: y.m.maybeNull(y.m.string),
-            wp: y.m.maybeNull(y.m.number),
-            hp: y.m.maybeNull(y.m.number),
+            opacity: b.m.number,
+            fillcolor: b.m.maybeNull(b.m.string),
+            strokewidth: b.m.number,
+            strokecolor: b.m.string,
+            pointsize: b.m.string,
+            pointstyle: b.m.string,
+            closed: b.m.optional(b.m.boolean, !1),
+            points: b.m.array(kn, []),
+            states: b.m.maybeNull(b.m.array(b.m.union(Ut, Kt, Rn))),
+            mouseOverStartPoint: b.m.optional(b.m.boolean, !1),
+            fromName: b.m.maybeNull(b.m.string),
+            wp: b.m.maybeNull(b.m.number),
+            hp: b.m.maybeNull(b.m.number),
           })
           .views(function(e) {
             return {
               get parent() {
-                return Object(y.f)(e, Tn);
+                return Object(b.f)(e, Hn);
               },
               get completion() {
-                return Object(y.g)(e).completionStore.selected;
+                return Object(b.g)(e).completionStore.selected;
               },
               get isCW() {},
               linePoints: function() {
@@ -3143,7 +4805,7 @@
                     s = o[r][1],
                     c = o[i][0],
                     u = o[i][1];
-                  s > n != u > n && t < ((c - l) * (n - s)) / (u - s) + l && (Object(pn.a)("inside"), (a = !a));
+                  s > n != u > n && t < ((c - l) * (n - s)) / (u - s) + l && (Object(wn.a)("inside"), (a = !a));
                 }
                 return a;
               },
@@ -3220,13 +4882,13 @@
               },
             };
           }),
-        En = y.m.compose(
+        An = b.m.compose(
           "PolygonRegionModel",
-          Rt,
-          Mt,
-          On,
+          Bt,
+          Ht,
+          jn,
         );
-      var Nn = Object(u.b)("store")(
+      var Dn = Object(u.b)("store")(
         Object(u.c)(function(e) {
           var t = e.store,
             n = e.item,
@@ -3253,7 +4915,7 @@
               null,
               n.mouseOverStartPoint,
               l.a.createElement(
-                en.Line,
+                sn.Line,
                 Object.assign(
                   {
                     points: n.linePoints(),
@@ -3313,37 +4975,37 @@
               ),
               !n.closed &&
                 n.points.map(function(e, t) {
-                  return l.a.createElement(fn, { item: e, index: t });
+                  return l.a.createElement(xn, { item: e, index: t });
                 }),
               n.closed &&
                 n.selected &&
                 n.points.map(function(e, t) {
-                  return l.a.createElement(fn, { item: e, index: t });
+                  return l.a.createElement(xn, { item: e, index: t });
                 }),
             )
           );
         }),
       );
-      S.addTag("polygonregion", En, Nn);
-      var jn = y.m.model({
-          name: y.m.maybeNull(y.m.string),
-          value: y.m.maybeNull(y.m.string),
-          resize: y.m.maybeNull(y.m.string),
-          width: y.m.optional(y.m.string, "100%"),
-          maxwidth: y.m.optional(y.m.string, "750px"),
+      k.addTag("polygonregion", An, Dn);
+      var Mn = b.m.model({
+          name: b.m.maybeNull(b.m.string),
+          value: b.m.maybeNull(b.m.string),
+          resize: b.m.maybeNull(b.m.string),
+          width: b.m.optional(b.m.string, "100%"),
+          maxwidth: b.m.optional(b.m.string, "750px"),
         }),
-        Cn = y.m
+        Bn = b.m
           .model({
-            id: y.m.identifier,
+            id: b.m.identifier,
             type: "image",
-            _value: y.m.optional(y.m.string, ""),
-            stageWidth: y.m.optional(y.m.integer, 1),
-            stageHeight: y.m.optional(y.m.integer, 1),
-            naturalWidth: y.m.optional(y.m.integer, 1),
-            naturalHeight: y.m.optional(y.m.integer, 1),
-            selectedShape: y.m.safeReference(y.m.union(dn, En)),
-            activePolygon: y.m.maybeNull(y.m.safeReference(En)),
-            shapes: y.m.array(y.m.union(dn, En), []),
+            _value: b.m.optional(b.m.string, ""),
+            stageWidth: b.m.optional(b.m.integer, 1),
+            stageHeight: b.m.optional(b.m.integer, 1),
+            naturalWidth: b.m.optional(b.m.integer, 1),
+            naturalHeight: b.m.optional(b.m.integer, 1),
+            selectedShape: b.m.safeReference(b.m.union(bn, An)),
+            activePolygon: b.m.maybeNull(b.m.safeReference(An)),
+            shapes: b.m.array(b.m.union(bn, An), []),
           })
           .views(function(e) {
             return {
@@ -3352,7 +5014,7 @@
                 return t && t.length > 0;
               },
               get completion() {
-                return Object(y.g)(e).completionStore.selected;
+                return Object(b.g)(e).completionStore.selected;
               },
               states: function() {
                 return e.completion.toNames.get(e.name);
@@ -3362,7 +5024,7 @@
               },
               controlButtonType: function() {
                 var t = e.controlButton();
-                return Object(y.i)(t).name;
+                return Object(b.i)(t).name;
               },
             };
           })
@@ -3390,7 +5052,7 @@
                 e._stageRef = t;
               },
               _deleteSelectedShape: function() {
-                e.selectedShape && Object(y.b)(e.selectedShape);
+                e.selectedShape && Object(b.b)(e.selectedShape);
               },
               setSelected: function(t) {
                 e.selectedShape = t;
@@ -3412,7 +5074,7 @@
                         : null,
                       o = a
                         ? a.map(function(e) {
-                            return j(e);
+                            return O(e);
                           })
                         : null;
                     if (0 === o.length) return;
@@ -3431,7 +5093,7 @@
                       : null,
                     l = i
                       ? i.map(function(e) {
-                          return j(e);
+                          return O(e);
                         })
                       : null;
                   if (0 === l.length) return;
@@ -3452,8 +5114,8 @@
               },
               __addRect: function(t, n, a, o, r, i, l) {
                 var s = e.controlButton(),
-                  c = dn.create({
-                    id: N(),
+                  c = bn.create({
+                    id: E(),
                     x: t,
                     y: n,
                     width: a,
@@ -3475,8 +5137,8 @@
                   if (e.activePolygon) a = e.activePolygon;
                   else {
                     var r = e.controlButton();
-                    (a = En.create({
-                      id: N(),
+                    (a = An.create({
+                      id: E(),
                       x: t.evt.offsetX - 5,
                       y: t.evt.offsetY - 5,
                       width: o,
@@ -3510,27 +5172,27 @@
                   t.value.choices && e.completion.names.get(t.from_name).fromStateJSON(t),
                   t.value.rectanglelabels)
                 ) {
-                  var o = C(n);
+                  var o = _(n);
                   o.fromStateJSON(t),
                     e.__addRect(t.value.x, t.value.y, t.value.width, t.value.height, o.getSelectedColor(), [o], "perc");
                 }
-                t.value.shape && (t.from_name !== t.to_name && ((a = C(n).fromStateJSON(t)), e.shapes.push(a)));
+                t.value.shape && (t.from_name !== t.to_name && ((a = _(n).fromStateJSON(t)), e.shapes.push(a)));
               },
             };
           }),
-        Tn = y.m.compose(
+        Hn = b.m.compose(
           "ImageModel",
-          jn,
-          Cn,
-          We,
+          Mn,
+          Bn,
+          Ge,
         ),
-        Rn = (function(e) {
+        Wn = (function(e) {
           function t() {
-            return Object(d.a)(this, t), Object(p.a)(this, Object(g.a)(t).apply(this, arguments));
+            return Object(m.a)(this, t), Object(h.a)(this, Object(p.a)(t).apply(this, arguments));
           }
           return (
-            Object(f.a)(t, e),
-            Object(m.a)(t, [
+            Object(g.a)(t, e),
+            Object(d.a)(t, [
               {
                 key: "componentDidMount",
                 value: function() {
@@ -3559,7 +5221,7 @@
                 key: "render",
                 value: function() {
                   var e = this;
-                  return l.a.createElement(en.Transformer, {
+                  return l.a.createElement(sn.Transformer, {
                     resizeEnabled: !0,
                     rotateEnabled: this.props.rotateEnabled,
                     anchorSize: 8,
@@ -3573,13 +5235,13 @@
             t
           );
         })(l.a.Component),
-        Mn = (function(e) {
+        Pn = (function(e) {
           function t() {
             var e, n;
-            Object(d.a)(this, t);
+            Object(m.a)(this, t);
             for (var a = arguments.length, o = new Array(a), r = 0; r < a; r++) o[r] = arguments[r];
             return (
-              ((n = Object(p.a)(this, (e = Object(g.a)(t)).call.apply(e, [this].concat(o)))).handleDblClick = function(
+              ((n = Object(h.a)(this, (e = Object(p.a)(t)).call.apply(e, [this].concat(o)))).handleDblClick = function(
                 e,
               ) {}),
               (n.handleOnClick = function(e) {
@@ -3592,8 +5254,8 @@
             );
           }
           return (
-            Object(f.a)(t, e),
-            Object(m.a)(t, [
+            Object(g.a)(t, e),
+            Object(d.a)(t, [
               {
                 key: "render",
                 value: function() {
@@ -3614,7 +5276,7 @@
                         l.a.createElement("img", { style: a, src: t._value, onLoad: t.updateIE }),
                       ),
                       l.a.createElement(
-                        en.Stage,
+                        sn.Stage,
                         {
                           ref: function(e) {
                             t._setStageRef(e);
@@ -3626,12 +5288,12 @@
                           onMouseDown: this.handleStageMouseDown,
                         },
                         l.a.createElement(
-                          en.Layer,
+                          sn.Layer,
                           null,
                           t.shapes.map(function(e) {
-                            return R.renderItem(e);
+                            return C.renderItem(e);
                           }),
-                          l.a.createElement(Rn, { rotateEnabled: o, selectedShapeName: this.props.item.selectedShape }),
+                          l.a.createElement(Wn, { rotateEnabled: o, selectedShapeName: this.props.item.selectedShape }),
                         ),
                       ),
                     );
@@ -3650,22 +5312,22 @@
             t
           );
         })(i.Component),
-        In = Object(u.b)("store")(Object(u.c)(Mn));
-      S.addTag("image", Tn, In);
-      var Hn = n(153),
-        An = n(202),
-        Dn = n.n(An),
-        Ln = function e(t, n, a) {
+        zn = Object(u.b)("store")(Object(u.c)(Pn));
+      k.addTag("image", Hn, zn);
+      var Ln = n(194),
+        Fn = n(209),
+        Jn = n.n(Fn),
+        Gn = function e(t, n, a) {
           var o = arguments.length > 3 && void 0 !== arguments[3] ? arguments[3] : {};
-          Object(d.a)(this, e), (this.start = t), (this.end = n), (this.text = a), (this.data = o);
+          Object(m.a)(this, e), (this.start = t), (this.end = n), (this.text = a), (this.data = o);
         },
-        Pn = (function(e) {
+        Un = (function(e) {
           function t() {
-            return Object(d.a)(this, t), Object(p.a)(this, Object(g.a)(t).apply(this, arguments));
+            return Object(m.a)(this, t), Object(h.a)(this, Object(p.a)(t).apply(this, arguments));
           }
           return (
-            Object(f.a)(t, e),
-            Object(m.a)(t, [
+            Object(g.a)(t, e),
+            Object(d.a)(t, [
               {
                 key: "render",
                 value: function() {
@@ -3685,7 +5347,7 @@
             t
           );
         })(i.Component),
-        zn = Object(u.b)("store")(
+        Vn = Object(u.b)("store")(
           Object(u.c)(function(e) {
             var t,
               n = e.store,
@@ -3696,20 +5358,20 @@
               s = e.charIndex,
               c = e.children,
               u = e.overlap,
-              d = function() {
+              m = function() {
                 return ""
                   .concat(o, "-")
                   .concat(a.start, "-")
                   .concat(s);
               },
-              m = function(e) {
-                return e ? d() : "".concat(o, "-").concat(s);
+              d = function(e) {
+                return e ? m() : "".concat(o, "-").concat(s);
               },
-              p = l.a.createElement(
+              h = l.a.createElement(
                 "span",
                 {
                   "data-position": s,
-                  key: m(a),
+                  key: d(a),
                   style: (function(e) {
                     return e ? r : i;
                   })(a),
@@ -3720,7 +5382,7 @@
               u.length &&
               (a.states &&
                 a.states.map(function(e) {
-                  t = Y.Colors.convertToRGBA(e.getSelectedColor(), 0.3);
+                  t = q.Colors.convertToRGBA(e.getSelectedColor(), 0.3);
                 }),
               n.completionStore.selected.regionStore.regions.map(function(e) {
                 e.selected &&
@@ -3729,20 +5391,20 @@
                   }),
                   e.highlighted && u.includes(e.id) && (t = "#ff4d4f");
               }),
-              (p = u.reduceRight(function(e, n) {
+              (h = u.reduceRight(function(e, n) {
                 return l.a.createElement(
-                  Pn,
-                  { style: { background: t, padding: "2px 0" }, position: s, overlap: n, keyNode: m(a) },
+                  Un,
+                  { style: { background: t, padding: "2px 0" }, position: s, overlap: n, keyNode: d(a) },
                   e,
                 );
               }, c)));
-            return p;
+            return h;
           }),
         ),
-        Jn = function(e) {
+        Yn = function(e) {
           var t = { wordWrap: "break-word" };
           return l.a.createElement(
-            zn,
+            Vn,
             {
               id: e.id,
               highlightStyle: Object.assign({}, t, e.highlightStyle),
@@ -3758,23 +5420,23 @@
             ),
           );
         },
-        Bn = function(e) {
+        Xn = function(e) {
           return l.a.createElement(
-            zn,
+            Vn,
             { id: e.id, highlightStyle: e.highlightStyle, charIndex: e.charIndex, range: e.range, overlap: e.overlap },
             "".concat(e.text[e.charIndex]).concat(e.text[e.charIndex + 1]),
           );
         },
-        Vn = n(306),
-        Wn = n.n(Vn),
-        Fn = (function(e) {
+        qn = n(314),
+        Kn = n.n(qn),
+        Zn = (function(e) {
           function t() {
             var e;
-            return Object(d.a)(this, t), ((e = Object(p.a)(this, Object(g.a)(t).call(this))).dismissMouseUp = 0), e;
+            return Object(m.a)(this, t), ((e = Object(h.a)(this, Object(p.a)(t).call(this))).dismissMouseUp = 0), e;
           }
           return (
-            Object(f.a)(t, e),
-            Object(m.a)(t, [
+            Object(g.a)(t, e),
+            Object(d.a)(t, [
               {
                 key: "getRange",
                 value: function(e) {
@@ -3800,10 +5462,10 @@
                   return (
                     this.props.ranges &&
                       this.props.ranges.map(function(t) {
-                        return e >= t.start && e <= t.end ? (o = [].concat(Object(Hn.a)(o), [t.id])) : o;
+                        return e >= t.start && e <= t.end ? (o = [].concat(Object(Ln.a)(o), [t.id])) : o;
                       }),
                     l.a.createElement(
-                      zn,
+                      Vn,
                       {
                         id: this.props.id,
                         overlap: o,
@@ -3824,9 +5486,9 @@
                   return (
                     this.props.ranges &&
                       this.props.ranges.map(function(t) {
-                        return e >= t.start && e <= t.end ? (n = [].concat(Object(Hn.a)(n), [t.id])) : n;
+                        return e >= t.start && e <= t.end ? (n = [].concat(Object(Ln.a)(n), [t.id])) : n;
                       }),
-                    l.a.createElement(Bn, {
+                    l.a.createElement(Xn, {
                       text: this.props.text,
                       id: this.props.id,
                       overlap: n,
@@ -3845,9 +5507,9 @@
                   return (
                     this.props.ranges &&
                       this.props.ranges.map(function(t) {
-                        return e >= t.start && e <= t.end ? (a = [].concat(Object(Hn.a)(a), [t.id])) : a;
+                        return e >= t.start && e <= t.end ? (a = [].concat(Object(Ln.a)(a), [t.id])) : a;
                       }),
-                    l.a.createElement(Jn, {
+                    l.a.createElement(Yn, {
                       url: n,
                       id: this.props.id,
                       overlap: a,
@@ -3887,7 +5549,7 @@
                   if (!r.startContainer.parentNode.dataset.hint && !r.endContainer.parentNode.dataset.hint) {
                     var i = parseInt(r.startContainer.parentNode.dataset.position),
                       l = parseInt(r.endContainer.parentNode.dataset.position),
-                      s = new Ln(i < l ? i : l, i < l ? l : i, e, Object(x.a)({}, this.props, { ranges: void 0 }));
+                      s = new Gn(i < l ? i : l, i < l ? l : i, e, Object(N.a)({}, this.props, { ranges: void 0 }));
                     this.props.onTextHighlighted(s);
                   }
                 },
@@ -3918,13 +5580,13 @@
                 value: function() {
                   for (var e, t = [], n = 0; n < this.props.text.length; n++) {
                     var a = this.getRange(n),
-                      o = Y.Checkers.getUrl(n, this.props.text),
-                      r = Dn()().test(this.props.text[n] + this.props.text[n + 1]),
+                      o = q.Checkers.getUrl(n, this.props.text),
+                      r = Jn()().test(this.props.text[n] + this.props.text[n + 1]),
                       i = this.getNode(n, a, this.props.text, o, r);
                     if ((o.length ? (n += o.length - 1) : r && n++, a)) {
                       e = a;
                       for (var l = [i], s = n + 1; s < parseInt(a.end) + 1; s++) {
-                        Dn()().test("".concat(this.props.text[s]).concat(this.props.text[s + 1]))
+                        Jn()().test("".concat(this.props.text[s]).concat(this.props.text[s + 1]))
                           ? (l.push(this.getEmojiNode(s, a)), s++)
                           : l.push(this.getLetterNode(s, a)),
                           (n = s);
@@ -3942,7 +5604,7 @@
                   return l.a.createElement(
                     "div",
                     {
-                      className: Wn.a.block,
+                      className: Kn.a.block,
                       style: this.props.style,
                       onMouseUp: this.onMouseUp.bind(this),
                       onMouseDown: this.onMouseDown.bind(this),
@@ -3957,26 +5619,26 @@
             t
           );
         })(i.Component),
-        Un = Object(u.c)(Fn),
-        Zn = n(307),
-        Gn = n.n(Zn),
-        Yn = y.m
+        Qn = Object(u.c)(Zn),
+        $n = n(315),
+        ea = n.n($n),
+        ta = b.m
           .model("TextRegionModel", {
-            id: y.m.optional(y.m.identifier, N),
-            pid: y.m.optional(y.m.string, N),
+            id: b.m.optional(b.m.identifier, E),
+            pid: b.m.optional(b.m.string, E),
             type: "textrange",
-            start: y.m.integer,
-            end: y.m.integer,
-            text: y.m.string,
-            states: y.m.maybeNull(y.m.array(y.m.union(Jt, Ut))),
+            start: b.m.integer,
+            end: b.m.integer,
+            text: b.m.string,
+            states: b.m.maybeNull(b.m.array(b.m.union(Ut, Kt))),
           })
           .views(function(e) {
             return {
               get parent() {
-                return Object(y.f)(e, ea);
+                return Object(b.f)(e, la);
               },
               get completion() {
-                return Object(y.g)(e).completionStore.selected;
+                return Object(b.g)(e).completionStore.selected;
               },
             };
           })
@@ -4005,26 +5667,26 @@
               },
             };
           }),
-        Kn = y.m.compose(
+        na = b.m.compose(
           "TextRegionModel",
-          Rt,
-          Mt,
-          Yn,
+          Bt,
+          Ht,
+          ta,
         ),
-        Xn = function(e) {
+        aa = function(e) {
           var t = e.state,
             n = t.getSelectedString(),
-            a = { background: Y.Colors.convertToRGBA(t.getSelectedColor(), 0.3) };
+            a = { background: q.Colors.convertToRGBA(t.getSelectedColor(), 0.3) };
           return (
-            e.style && (a = Object(x.a)({}, a, { outline: e.style.outline })),
+            e.style && (a = Object(N.a)({}, a, { outline: e.style.outline })),
             l.a.createElement(
-              ne,
-              { className: Gn.a.state, style: a },
+              ae,
+              { className: ea.a.state, style: a },
               l.a.createElement("span", { "data-hint": !0 }, "\xa0[", n, "]"),
             )
           );
         },
-        $n = Object(u.b)("store")(
+        oa = Object(u.b)("store")(
           Object(u.c)(function(e) {
             var t = e.store,
               n = (e.item, e.letterGroup),
@@ -4034,7 +5696,7 @@
               (o = a.states.map(function(e) {
                 return e.getSelectedColor();
               })),
-              0 !== o.length && (o = Y.Colors.convertToRGBA(o[0], 0.3));
+              0 !== o.length && (o = q.Colors.convertToRGBA(o[0], 0.3));
             var r = {
                 padding: "2px 0px",
                 position: "relative",
@@ -4046,7 +5708,7 @@
               (a.states && a.states.length) > 0 &&
                 a.states.map(function(e) {
                   i.push(
-                    l.a.createElement(Xn, {
+                    l.a.createElement(aa, {
                       key: a.id,
                       state: e,
                       bg: o,
@@ -4056,7 +5718,7 @@
                     }),
                   );
                 }),
-              i.length || (r = Object(x.a)({}, r, { background: "rgba(0, 0, 255, 0.1)" })),
+              i.length || (r = Object(N.a)({}, r, { background: "rgba(0, 0, 255, 0.1)" })),
               l.a.createElement(
                 "span",
                 {
@@ -4075,21 +5737,21 @@
             );
           }),
         );
-      S.addTag("textrange", Kn, $n);
-      var qn = y.m.model("TextModel", {
-          name: y.m.maybeNull(y.m.string),
-          value: y.m.maybeNull(y.m.string),
-          selelectwithoutlabel: y.m.optional(y.m.string, "false"),
-          hidden: y.m.optional(y.m.enumeration(["true", "false"]), "false"),
-          adjustselection: y.m.optional(y.m.string, "true"),
-          selectionenabled: y.m.optional(y.m.string, "true"),
+      k.addTag("textrange", na, oa);
+      var ra = b.m.model("TextModel", {
+          name: b.m.maybeNull(b.m.string),
+          value: b.m.maybeNull(b.m.string),
+          selelectwithoutlabel: b.m.optional(b.m.string, "false"),
+          hidden: b.m.optional(b.m.enumeration(["true", "false"]), "false"),
+          adjustselection: b.m.optional(b.m.string, "true"),
+          selectionenabled: b.m.optional(b.m.string, "true"),
         }),
-        Qn = y.m
+        ia = b.m
           .model("TextModel", {
-            id: y.m.optional(y.m.identifier, N),
+            id: b.m.optional(b.m.identifier, E),
             type: "text",
-            regions: y.m.array(Kn),
-            _value: y.m.optional(y.m.string, ""),
+            regions: b.m.array(na),
+            _value: b.m.optional(b.m.string, ""),
           })
           .views(function(e) {
             return {
@@ -4098,7 +5760,7 @@
                 return t && t.length > 0;
               },
               get completion() {
-                return Object(y.g)(e).completionStore.selected;
+                return Object(b.g)(e).completionStore.selected;
               },
               states: function() {
                 return e.completion.toNames.get(e.name);
@@ -4108,7 +5770,7 @@
                 return t
                   ? t.filter(function(e) {
                       return (
-                        e.isSelected && ("LabelsModel" === Object(y.i)(e).name || "RatingModel" === Object(y.i)(e).name)
+                        e.isSelected && ("LabelsModel" === Object(b.i)(e).name || "RatingModel" === Object(b.i)(e).name)
                       );
                     })
                   : null;
@@ -4124,17 +5786,17 @@
                 });
               },
               updateValue: function(t) {
-                e._value = Ve(e.value, t.task.dataObj);
+                e._value = Je(e.value, t.task.dataObj);
               },
               _addRegion: function(t) {
-                var n = Kn.create(t);
+                var n = na.create(t);
                 return e.regions.push(n), e.completion.addRegion(n), n;
               },
               addRegion: function(t) {
                 var n = e.activeStates(),
                   a = n
                     ? n.map(function(e) {
-                        return j(e);
+                        return O(e);
                       })
                     : null;
                 if ("false" === e.selelectwithoutlabel && !a.length) return null;
@@ -4165,7 +5827,7 @@
                   if (t.from_name === t.to_name) a = e._addRegion(o);
                   else {
                     var r = e.findRegion(t.value.start, t.value.end),
-                      i = C(n);
+                      i = _(n);
                     i.fromStateJSON(t), r ? r.states.push(i) : ((o.states = [i]), (a = e._addRegion(o)));
                   }
                   return a;
@@ -4174,22 +5836,22 @@
               },
             };
           }),
-        ea = y.m.compose(
+        la = b.m.compose(
           "TextModel",
-          qn,
-          Qn,
+          ra,
+          ia,
         ),
-        ta = (function(e) {
+        sa = (function(e) {
           function t() {
-            return Object(d.a)(this, t), Object(p.a)(this, Object(g.a)(t).apply(this, arguments));
+            return Object(m.a)(this, t), Object(h.a)(this, Object(p.a)(t).apply(this, arguments));
           }
           return (
-            Object(f.a)(t, e),
-            Object(m.a)(t, [
+            Object(g.a)(t, e),
+            Object(d.a)(t, [
               {
                 key: "renderRegion",
                 value: function(e, t, n, a) {
-                  return l.a.createElement($n, {
+                  return l.a.createElement(oa, {
                     key: t.id,
                     store: this.props.store,
                     item: this.props.item,
@@ -4211,7 +5873,7 @@
                     l.a.createElement(
                       "div",
                       { style: t },
-                      l.a.createElement(Un, {
+                      l.a.createElement(Qn, {
                         id: e.id,
                         key: e.id,
                         text: e._value,
@@ -4231,36 +5893,36 @@
             t
           );
         })(i.Component),
-        na = Object(u.b)("store")(Object(u.c)(ta));
-      S.addTag("text", ea, na);
-      var aa = n(558),
-        oa = n(569),
-        ra =
+        ca = Object(u.b)("store")(Object(u.c)(sa));
+      k.addTag("text", la, ca);
+      var ua = n(611),
+        ma = n(624),
+        da =
           (l.a.Component,
-          y.m.model({
-            selected: y.m.optional(y.m.boolean, !1),
-            alias: y.m.maybeNull(y.m.string),
-            value: y.m.maybeNull(y.m.string),
-            hotkey: y.m.maybeNull(y.m.string),
-            style: y.m.maybeNull(y.m.string),
+          b.m.model({
+            selected: b.m.optional(b.m.boolean, !1),
+            alias: b.m.maybeNull(b.m.string),
+            value: b.m.maybeNull(b.m.string),
+            hotkey: b.m.maybeNull(b.m.string),
+            style: b.m.maybeNull(b.m.string),
           })),
-        ia = y.m
-          .model({ type: "choice", _value: y.m.optional(y.m.string, "") })
+        ha = b.m
+          .model({ type: "choice", _value: b.m.optional(b.m.string, "") })
           .views(function(e) {
             return {
               get isCheckbox() {
-                var t = Object(y.f)(e, da).choice;
+                var t = Object(b.f)(e, ba).choice;
                 return "multiple" === t || "single" === t;
               },
               get name() {
-                return Object(y.f)(e, da).name;
+                return Object(b.f)(e, ba).name;
               },
             };
           })
           .actions(function(e) {
             return {
               toggleSelected: function() {
-                var t = Object(y.f)(e, da);
+                var t = Object(b.f)(e, ba);
                 t.shouldBeUnselected && t.unselectAll(), e.markSelected(!e.selected);
               },
               markSelected: function(t) {
@@ -4271,23 +5933,23 @@
               },
             };
           }),
-        la = y.m.compose(
+        pa = b.m.compose(
           "ChoiceModel",
-          ra,
-          ia,
-          We,
+          da,
+          ha,
+          Ge,
         ),
-        sa = Object(u.b)("store")(
+        ga = Object(u.b)("store")(
           Object(u.c)(function(e) {
             var t = e.item,
               n = e.store,
               a = {};
-            if ((t.style && (a = R.cssConverter(t.style)), t.isCheckbox)) {
+            if ((t.style && (a = C.cssConverter(t.style)), t.isCheckbox)) {
               var o = Object.assign({ marginRight: "1em", display: "flex", alignItems: "center" }, a);
               return l.a.createElement(
                 "div",
                 { style: o },
-                l.a.createElement(aa.a, {
+                l.a.createElement(ua.a, {
                   name: t._value,
                   label: t._value,
                   onChange: function(e) {
@@ -4298,7 +5960,7 @@
                 n.settings.enableTooltips &&
                   n.settings.enableHotkeys &&
                   t.hotkey &&
-                  l.a.createElement(ne, null, "[", t.hotkey, "]"),
+                  l.a.createElement(ae, null, "[", t.hotkey, "]"),
               );
             }
             var r = l.a.createElement(
@@ -4308,7 +5970,7 @@
               n.settings.enableTooltips &&
                 n.settings.enableHotkeys &&
                 t.hotkey &&
-                l.a.createElement(ne, null, "[", t.hotkey, "]"),
+                l.a.createElement(ae, null, "[", t.hotkey, "]"),
             );
             return l.a.createElement(
               "div",
@@ -4325,19 +5987,19 @@
             );
           }),
         );
-      S.addTag("choice", la, sa);
-      var ca = y.m.model({
-          name: y.m.string,
-          toname: y.m.maybeNull(y.m.string),
-          showinline: y.m.optional(y.m.string, "false"),
-          choice: y.m.optional(y.m.enumeration(["single", "single-radio", "multiple"]), "single"),
+      k.addTag("choice", pa, ga);
+      var fa = b.m.model({
+          name: b.m.string,
+          toname: b.m.maybeNull(b.m.string),
+          showinline: b.m.optional(b.m.string, "false"),
+          choice: b.m.optional(b.m.enumeration(["single", "single-radio", "multiple"]), "single"),
         }),
-        ua = y.m
+        va = b.m
           .model({
-            id: y.m.optional(y.m.identifier, N),
-            pid: y.m.optional(y.m.string, N),
+            id: b.m.optional(b.m.identifier, E),
+            pid: b.m.optional(b.m.string, E),
             type: "choices",
-            children: Ae.unionArray(["choice"]),
+            children: Be.unionArray(["choice"]),
           })
           .views(function(e) {
             return {
@@ -4345,7 +6007,7 @@
                 return "single" === e.choice || "single-radio" === e.choice;
               },
               get completion() {
-                return Object(y.g)(e).completionStore.selected;
+                return Object(b.g)(e).completionStore.selected;
               },
               states: function() {
                 return e.completion.toNames.get(e.name);
@@ -4372,13 +6034,13 @@
               },
             };
           }),
-        da = y.m.compose(
+        ba = b.m.compose(
           "ChoicesModel",
-          ca,
-          ua,
-          Lt,
+          fa,
+          va,
+          Ft,
         ),
-        ma = Object(u.c)(function(e) {
+        ya = Object(u.c)(function(e) {
           var t = e.item;
           return l.a.createElement(
             "div",
@@ -4387,47 +6049,47 @@
               ge.a,
               null,
               "true" === t.showinline
-                ? l.a.createElement(ge.a.Group, { inline: !0 }, R.renderChildren(t))
-                : l.a.createElement(ge.a.Group, { grouped: !0 }, R.renderChildren(t)),
+                ? l.a.createElement(ge.a.Group, { inline: !0 }, C.renderChildren(t))
+                : l.a.createElement(ge.a.Group, { grouped: !0 }, C.renderChildren(t)),
             ),
           );
         });
-      S.addTag("choices", da, ma);
-      var pa = n(567),
-        ga = y.m
+      k.addTag("choices", ba, ya);
+      var wa = n(622),
+        ka = b.m
           .model("TextAreaRegionModel", {
-            id: y.m.optional(y.m.identifier, N),
-            pid: y.m.optional(y.m.string, N),
+            id: b.m.optional(b.m.identifier, E),
+            pid: b.m.optional(b.m.string, E),
             type: "textarearegion",
-            _value: y.m.string,
+            _value: b.m.string,
           })
           .views(function(e) {
             return {
               get parent() {
-                return Object(y.f)(e, va);
+                return Object(b.f)(e, Ia);
               },
               get completion() {
-                return Object(y.g)(e).completionStore.selected;
+                return Object(b.g)(e).completionStore.selected;
               },
             };
           }),
-        fa = y.m.compose(
+        xa = b.m.compose(
           "TextAreaRegionModel",
-          Rt,
-          Mt,
-          ga,
+          Bt,
+          Ht,
+          ka,
         ),
-        ha = Object(u.b)("store")(
+        Ta = Object(u.b)("store")(
           Object(u.c)(function(e) {
             var t = e.store,
               n = e.item,
               a = { cursor: t.completionStore.selected.relationMode ? "crosshair" : "pointer" };
             return (
               n.selected
-                ? (a = Object(x.a)({}, a, { border: "1px solid red" }))
-                : n.highlighted && (a = Object(x.a)({}, a, { border: "2px solid red" })),
+                ? (a = Object(N.a)({}, a, { border: "1px solid red" }))
+                : n.highlighted && (a = Object(N.a)({}, a, { border: "2px solid red" })),
               l.a.createElement(
-                pa.a,
+                wa.a,
                 {
                   className: "warning",
                   style: a,
@@ -4444,22 +6106,22 @@
             );
           }),
         );
-      S.addTag("textarearegion", fa, ha);
-      var ba = y.m.model({
-          allowSubmit: y.m.optional(y.m.string, "true"),
-          label: y.m.optional(y.m.string, ""),
-          name: y.m.maybeNull(y.m.string),
-          toname: y.m.maybeNull(y.m.string),
-          value: y.m.maybeNull(y.m.string),
-          placeholder: y.m.maybeNull(y.m.string),
-          maxsubmissions: y.m.maybeNull(y.m.string),
+      k.addTag("textarearegion", xa, Ta);
+      var Na = b.m.model({
+          allowSubmit: b.m.optional(b.m.string, "true"),
+          label: b.m.optional(b.m.string, ""),
+          name: b.m.maybeNull(b.m.string),
+          toname: b.m.maybeNull(b.m.string),
+          value: b.m.maybeNull(b.m.string),
+          placeholder: b.m.maybeNull(b.m.string),
+          maxsubmissions: b.m.maybeNull(b.m.string),
         }),
-        ya = y.m
+        Sa = b.m
           .model({
-            id: y.m.optional(y.m.identifier, N),
+            id: b.m.optional(b.m.identifier, E),
             type: "textarea",
-            regions: y.m.array(fa),
-            _value: y.m.optional(y.m.string, ""),
+            regions: b.m.array(xa),
+            _value: b.m.optional(b.m.string, ""),
           })
           .views(function(e) {
             return {
@@ -4467,7 +6129,7 @@
                 return e.regions.length;
               },
               get completion() {
-                return Object(y.g)(e).completionStore.selected;
+                return Object(b.g)(e).completionStore.selected;
               },
               get showSubmit() {
                 if (e.maxsubmissions) {
@@ -4484,14 +6146,14 @@
                 e._value = t;
               },
               addText: function(t, n) {
-                var a = fa.create({ pid: n, _value: t });
+                var a = xa.create({ pid: n, _value: t });
                 return e.regions.push(a), e.completion.addRegion(a), a;
               },
               beforeSend: function() {
                 e._value && e._value.length && e.addText(e._value);
               },
               deleteText: function(e) {
-                Object(y.b)(e);
+                Object(b.b)(e);
               },
               toStateJSON: function() {
                 var t = e.toname || e.name;
@@ -4506,13 +6168,13 @@
               },
             };
           }),
-        va = y.m.compose(
+        Ia = b.m.compose(
           "TextAreaModel",
-          ba,
-          ya,
-          We,
+          Na,
+          Sa,
+          Ge,
         ),
-        ka = Object(u.c)(function(e) {
+        Ea = Object(u.c)(function(e) {
           var t = e.item;
           return l.a.createElement(
             "div",
@@ -4522,7 +6184,7 @@
                 "div",
                 { style: { marginTop: "1em", marginBottom: "1em" } },
                 t.regions.map(function(e) {
-                  return l.a.createElement(ha, { item: e });
+                  return l.a.createElement(Ta, { item: e });
                 }),
               ),
             t.showSubmit &&
@@ -4546,17 +6208,17 @@
               ),
           );
         });
-      S.addTag("textarea", va, ka);
-      var Sa = n(73),
-        _a = n(103),
-        wa = n.n(_a),
-        xa = y.m
+      k.addTag("textarea", Ia, Ea);
+      var Oa = n(162),
+        _a = n(173),
+        Ra = n.n(_a),
+        Ca = b.m
           .model({
-            backgroundColor: y.m.optional(y.m.string, "transparent"),
-            value: y.m.maybeNull(y.m.string),
-            _value: y.m.maybeNull(y.m.string),
-            selected: y.m.optional(y.m.boolean, !1),
-            idx: y.m.number,
+            backgroundColor: b.m.optional(b.m.string, "transparent"),
+            value: b.m.maybeNull(b.m.string),
+            _value: b.m.maybeNull(b.m.string),
+            selected: b.m.optional(b.m.boolean, !1),
+            idx: b.m.number,
           })
           .views(function(e) {
             return {};
@@ -4574,21 +6236,21 @@
               },
             };
           }),
-        Oa = y.m.model({
-          axis: y.m.optional(y.m.string, "y"),
-          lockaxis: y.m.maybeNull(y.m.string),
-          elementvalue: y.m.maybeNull(y.m.string),
-          elementtag: y.m.optional(y.m.string, "Text"),
-          sortedhighlightcolor: y.m.maybeNull(y.m.string),
-          name: y.m.maybeNull(y.m.string),
-          value: y.m.maybeNull(y.m.string),
+        ja = b.m.model({
+          axis: b.m.optional(b.m.string, "y"),
+          lockaxis: b.m.maybeNull(b.m.string),
+          elementvalue: b.m.maybeNull(b.m.string),
+          elementtag: b.m.optional(b.m.string, "Text"),
+          sortedhighlightcolor: b.m.maybeNull(b.m.string),
+          name: b.m.maybeNull(b.m.string),
+          value: b.m.maybeNull(b.m.string),
         }),
-        Ea = y.m
+        Aa = b.m
           .model({
-            id: y.m.optional(y.m.identifier, N),
+            id: b.m.optional(b.m.identifier, E),
             type: "list",
-            update: y.m.optional(y.m.number, 1),
-            regions: y.m.array(xa),
+            update: b.m.optional(b.m.number, 1),
+            regions: b.m.array(Ca),
           })
           .views(function(e) {
             return {};
@@ -4599,11 +6261,11 @@
                 e.update = e.update + 1;
               },
               addRegion: function(t, n) {
-                var a = xa.create({ value: e.elementvalue, idx: n, _value: Be(e.elementvalue, t[n]) });
+                var a = Ca.create({ value: e.elementvalue, idx: n, _value: Fe(e.elementvalue, t[n]) });
                 e.regions.push(a);
               },
               updateValue: function(t) {
-                var n = Be(e.value, t.task.dataObj);
+                var n = Fe(e.value, t.task.dataObj);
                 (e.regions = []),
                   n.forEach(function(t, a) {
                     return e.addRegion(n, a);
@@ -4620,8 +6282,8 @@
                 n !== a &&
                   (e.sortedhighlightcolor && e.regions[n].setBG(e.sortedhighlightcolor),
                   e.regions[n].setSelected(!0),
-                  e._value && (e._value = wa()(e._value, n, a)),
-                  (e.regions = wa()(e.regions, n, a)),
+                  e._value && (e._value = Ra()(e._value, n, a)),
+                  (e.regions = Ra()(e.regions, n, a)),
                   e.setUpdate());
               },
               toStateJSON: function() {
@@ -4670,26 +6332,26 @@
               },
             };
           }),
-        Na = y.m.compose(
+        Da = b.m.compose(
           "ListModel",
-          Oa,
-          Ea,
+          ja,
+          Aa,
         ),
-        ja = Object(Sa.sortableHandle)(function() {
+        Ma = Object(Oa.sortableHandle)(function() {
           return l.a.createElement("div", { className: "drag-handle" });
         });
-      function Ca() {
+      function Ba() {
         try {
           return "undefined" !== typeof window.orientation || -1 !== navigator.userAgent.indexOf("IEMobile");
         } catch (e) {
           return !1;
         }
       }
-      var Ta = Object(Sa.SortableElement)(function(e) {
+      var Ha = Object(Oa.SortableElement)(function(e) {
           var t,
             n = e.item,
             a = e.value;
-          Ca && (t = "noselect");
+          Ba && (t = "noselect");
           var o = {
             text: function(e) {
               return l.a.createElement("span", { className: t }, e._value);
@@ -4720,18 +6382,18 @@
                 );
               },
             },
-            l.a.createElement(ja, null),
+            l.a.createElement(Ma, null),
             o[n.elementtag.toLowerCase()](a),
           );
         }),
-        Ra = Object(Sa.SortableContainer)(function(e) {
+        Wa = Object(Oa.SortableContainer)(function(e) {
           var t = e.item,
             n = e.items;
           return l.a.createElement(
-            M.a,
+            j.a,
             { celled: !0 },
             n.map(function(e, n) {
-              return l.a.createElement(Ta, {
+              return l.a.createElement(Ha, {
                 key: "item-".concat(n),
                 index: n,
                 value: e,
@@ -4742,31 +6404,31 @@
             }),
           );
         }),
-        Ma = Object(u.c)(function(e) {
+        Pa = Object(u.c)(function(e) {
           e.store;
           var t = e.item,
             n = {};
           return (
-            Ca() ? (n.pressDelay = 100) : (n.distance = 7),
+            Ba() ? (n.pressDelay = 100) : (n.distance = 7),
             l.a.createElement(
               "div",
               null,
               l.a.createElement(
-                Ra,
+                Wa,
                 Object.assign({ update: t.update, item: t, items: t.regions, onSortEnd: t.moveItems }, n),
               ),
             )
           );
         }),
-        Ia = Object(u.b)("store")(Object(u.c)(Ma));
-      S.addTag("list", Na, Ia);
-      var Ha = y.m
+        za = Object(u.b)("store")(Object(u.c)(Pa));
+      k.addTag("list", Da, za);
+      var La = b.m
           .model({
-            backgroundColor: y.m.optional(y.m.string, "transparent"),
-            value: y.m.maybeNull(y.m.string),
-            _value: y.m.maybeNull(y.m.string),
-            selected: y.m.optional(y.m.boolean, !1),
-            idx: y.m.number,
+            backgroundColor: b.m.optional(b.m.string, "transparent"),
+            value: b.m.maybeNull(b.m.string),
+            _value: b.m.maybeNull(b.m.string),
+            selected: b.m.optional(b.m.boolean, !1),
+            idx: b.m.number,
           })
           .views(function(e) {
             return {};
@@ -4784,22 +6446,22 @@
               },
             };
           }),
-        Aa = y.m.model({
-          axis: y.m.optional(y.m.string, "y"),
-          lockaxis: y.m.maybeNull(y.m.string),
-          elementtag: y.m.optional(y.m.string, "Text"),
-          ranked: y.m.optional(y.m.string, "true"),
-          sortable: y.m.optional(y.m.string, "true"),
-          sortedhighlightcolor: y.m.maybeNull(y.m.string),
-          name: y.m.maybeNull(y.m.string),
-          value: y.m.maybeNull(y.m.string),
+        Fa = b.m.model({
+          axis: b.m.optional(b.m.string, "y"),
+          lockaxis: b.m.maybeNull(b.m.string),
+          elementtag: b.m.optional(b.m.string, "Text"),
+          ranked: b.m.optional(b.m.string, "true"),
+          sortable: b.m.optional(b.m.string, "true"),
+          sortedhighlightcolor: b.m.maybeNull(b.m.string),
+          name: b.m.maybeNull(b.m.string),
+          value: b.m.maybeNull(b.m.string),
         }),
-        Da = y.m
+        Ja = b.m
           .model({
-            id: y.m.optional(y.m.identifier, N),
+            id: b.m.optional(b.m.identifier, E),
             type: "ranker",
-            update: y.m.optional(y.m.number, 1),
-            regions: y.m.array(Ha),
+            update: b.m.optional(b.m.number, 1),
+            regions: b.m.array(La),
           })
           .views(function(e) {
             return {};
@@ -4810,7 +6472,7 @@
                 e.update = e.update + 1;
               },
               _addRegion: function(t, n) {
-                var a = Ha.create({ value: t, idx: n, _value: t });
+                var a = La.create({ value: t, idx: n, _value: t });
                 e.regions.push(a);
               },
               moveItems: function(t) {
@@ -4819,8 +6481,8 @@
                 n != a &&
                   (e.sortedhighlightcolor && e.regions[n].setBG(e.sortedhighlightcolor),
                   e.regions[n].setSelected(!0),
-                  e._value && (e._value = wa()(e._value, n, a)),
-                  (e.regions = wa()(e.regions, n, a)),
+                  e._value && (e._value = Ra()(e._value, n, a)),
+                  (e.regions = Ra()(e.regions, n, a)),
                   e.setUpdate());
               },
               toStateJSON: function() {
@@ -4845,26 +6507,26 @@
               },
             };
           }),
-        La = y.m.compose(
+        Ga = b.m.compose(
           "RankerModel",
-          Aa,
-          Da,
+          Fa,
+          Ja,
         ),
-        Pa = Object(Sa.sortableHandle)(function() {
+        Ua = Object(Oa.sortableHandle)(function() {
           return l.a.createElement("div", { className: "drag-handle" });
         });
-      function za() {
+      function Va() {
         try {
           return "undefined" !== typeof window.orientation || -1 !== navigator.userAgent.indexOf("IEMobile");
         } catch (e) {
           return !1;
         }
       }
-      var Ja = Object(Sa.SortableElement)(function(e) {
+      var Ya = Object(Oa.SortableElement)(function(e) {
           var t,
             n = e.item,
             a = e.value;
-          za && (t = "noselect");
+          Va && (t = "noselect");
           var o = {
             text: function(e) {
               return l.a.createElement("span", { className: t }, e._value);
@@ -4895,18 +6557,18 @@
                 );
               },
             },
-            l.a.createElement(Pa, null),
+            l.a.createElement(Ua, null),
             o[n.elementtag.toLowerCase()](a),
           );
         }),
-        Ba = Object(Sa.SortableContainer)(function(e) {
+        Xa = Object(Oa.SortableContainer)(function(e) {
           var t = e.item,
             n = e.items;
           return l.a.createElement(
-            M.a,
+            j.a,
             { celled: !0 },
             n.map(function(e, n) {
-              return l.a.createElement(Ja, {
+              return l.a.createElement(Ya, {
                 key: "item-".concat(n),
                 index: n,
                 value: e,
@@ -4917,73 +6579,73 @@
             }),
           );
         }),
-        Va = Object(u.c)(function(e) {
+        qa = Object(u.c)(function(e) {
           e.store;
           var t = e.item,
             n = {};
           return (
-            za() ? (n.pressDelay = 100) : (n.distance = 7),
+            Va() ? (n.pressDelay = 100) : (n.distance = 7),
             l.a.createElement(
               "div",
               null,
               l.a.createElement(
-                Ba,
+                Xa,
                 Object.assign({ update: t.update, item: t, items: t.regions, onSortEnd: t.moveItems }, n),
               ),
             )
           );
         }),
-        Wa = Object(u.b)("store")(Object(u.c)(Va));
-      S.addTag("ranker", La, Wa);
-      var Fa = n(308),
-        Ua = n.n(Fa),
-        Za = (function(e) {
+        Ka = Object(u.b)("store")(Object(u.c)(qa));
+      k.addTag("ranker", Ga, Ka);
+      var Za = n(316),
+        Qa = n.n(Za),
+        $a = (function(e) {
           function t() {
-            return Object(d.a)(this, t), Object(p.a)(this, Object(g.a)(t).apply(this, arguments));
+            return Object(m.a)(this, t), Object(h.a)(this, Object(p.a)(t).apply(this, arguments));
           }
           return (
-            Object(f.a)(t, e),
-            Object(m.a)(t, [
+            Object(g.a)(t, e),
+            Object(d.a)(t, [
               {
                 key: "render",
                 value: function() {
-                  return l.a.createElement("div", { className: Ua.a.block }, this.props.children);
+                  return l.a.createElement("div", { className: Qa.a.block }, this.props.children);
                 },
               },
             ]),
             t
           );
         })(l.a.Component),
-        Ga = n(203),
-        Ya = n.n(Ga),
-        Ka = Object(u.b)("store")(
+        eo = n(210),
+        to = n.n(eo),
+        no = Object(u.b)("store")(
           Object(u.c)(
             (function(e) {
               function t() {
-                return Object(d.a)(this, t), Object(p.a)(this, Object(g.a)(t).apply(this, arguments));
+                return Object(m.a)(this, t), Object(h.a)(this, Object(p.a)(t).apply(this, arguments));
               }
               return (
-                Object(f.a)(t, e),
-                Object(m.a)(t, [
+                Object(g.a)(t, e),
+                Object(d.a)(t, [
                   {
                     key: "renderSuccess",
                     value: function() {
                       this.props.store;
-                      return l.a.createElement(v.a, { status: "success", title: "Done!" });
+                      return l.a.createElement(y.a, { status: "success", title: "Done!" });
                     },
                   },
                   {
                     key: "renderNoCompletion",
                     value: function() {
                       this.props.store;
-                      return l.a.createElement(v.a, { status: "success", title: "No more completions" });
+                      return l.a.createElement(y.a, { status: "success", title: "No more completions" });
                     },
                   },
                   {
                     key: "renderNothingToLabel",
                     value: function() {
                       this.props.store;
-                      return l.a.createElement(v.a, {
+                      return l.a.createElement(y.a, {
                         status: "success",
                         title: "No more data available for labeling",
                       });
@@ -4992,7 +6654,7 @@
                   {
                     key: "renderLoader",
                     value: function() {
-                      return l.a.createElement(v.a, { icon: l.a.createElement(k.a, { size: "large" }) });
+                      return l.a.createElement(y.a, { icon: l.a.createElement(w.a, { size: "large" }) });
                     },
                   },
                   {
@@ -5006,7 +6668,7 @@
                       var t = e.completionStore.currentCompletion.root;
                       return l.a.createElement(
                         "div",
-                        { className: Ya.a.editor },
+                        { className: to.a.editor },
                         l.a.createElement(de, { store: e }),
                         l.a.createElement(
                           u.a,
@@ -5014,10 +6676,10 @@
                           l.a.createElement(
                             "div",
                             null,
-                            e.hasInterface("panel") && l.a.createElement(se, { store: e }),
+                            e.hasInterface("panel") && l.a.createElement(ce, { store: e }),
                             e.showingDescription &&
                               l.a.createElement(
-                                Za,
+                                $a,
                                 null,
                                 l.a.createElement("div", { dangerouslySetInnerHTML: { __html: e.description } }),
                               ),
@@ -5025,16 +6687,16 @@
                               "div",
                               { className: "common-container" },
                               l.a.createElement(
-                                Za,
+                                $a,
                                 null,
-                                R.renderItem(t),
-                                e.hasInterface("submit") && l.a.createElement(re, null),
+                                C.renderItem(t),
+                                e.hasInterface("submit") && l.a.createElement(ie, null),
                               ),
                               l.a.createElement(
                                 "div",
-                                { className: Ya.a.menu },
-                                e.hasInterface("completions") && l.a.createElement(Q, { store: e }),
-                                e.hasInterface("side-column") && l.a.createElement(Ie, { store: e }),
+                                { className: to.a.menu },
+                                e.hasInterface("completions") && l.a.createElement(ee, { store: e }),
+                                e.hasInterface("side-column") && l.a.createElement(De, { store: e }),
                               ),
                             ),
                           ),
@@ -5053,33 +6715,33 @@
           "[::1]" === window.location.hostname ||
           window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/),
       );
-      var Xa = n(48),
-        $a = n.n(Xa),
-        qa = y.m
+      var ao = n(159),
+        oo = n.n(ao),
+        ro = b.m
           .model("Task", {
-            id: y.m.identifierNumber,
-            data: y.m.maybeNull(y.m.string),
-            project: y.m.maybeNull(y.m.number),
+            id: b.m.identifierNumber,
+            data: b.m.maybeNull(b.m.string),
+            project: b.m.maybeNull(b.m.number),
           })
           .views(function(e) {
             return {
               get app() {
-                return Object(y.e)(e);
+                return Object(b.e)(e);
               },
               get dataObj() {
-                return Y.Checkers.isStringJSON(e.data) ? JSON.parse(e.data) : null;
+                return q.Checkers.isStringJSON(e.data) ? JSON.parse(e.data) : null;
               },
             };
           }),
-        Qa =
-          (n(10),
-          y.m
+        io =
+          (n(11),
+          b.m
             .model("TimeTraveller", {
-              history: y.m.array(y.m.frozen()),
+              history: b.m.array(b.m.frozen()),
               undoIdx: -1,
               targetPath: "",
               createdIdx: 1,
-              isFrozen: y.m.optional(y.m.boolean, !1),
+              isFrozen: b.m.optional(b.m.boolean, !1),
               frozenIdx: -1,
             })
             .views(function(e) {
@@ -5107,14 +6769,14 @@
                 },
                 afterCreate: function() {
                   var a = this;
-                  if (!(t = e.targetPath ? Object(y.l)(e, e.targetPath) : Object(y.d)(e).targetStore))
+                  if (!(t = e.targetPath ? Object(b.l)(e, e.targetPath) : Object(b.d)(e).targetStore))
                     throw new Error(
                       "Failed to find target store for TimeTraveller. Please provide `targetPath`  property, or a `targetStore` in the environment",
                     );
-                  (n = Object(y.k)(t, function(e) {
+                  (n = Object(b.k)(t, function(e) {
                     return a.addUndoState(e);
                   })),
-                    0 === e.history.length && this.addUndoState(Object(y.h)(t)),
+                    0 === e.history.length && this.addUndoState(Object(b.h)(t)),
                     (e.createdIdx = e.undoIdx);
                 },
                 beforeDestroy: function() {
@@ -5122,48 +6784,48 @@
                 },
                 undo: function() {
                   (e.isFrozen && e.frozenIdx <= e.undoIdx) ||
-                    (e.undoIdx--, (a = !0), Object(y.a)(t, e.history[e.undoIdx]));
+                    (e.undoIdx--, (a = !0), Object(b.a)(t, e.history[e.undoIdx]));
                 },
                 redo: function() {
-                  e.undoIdx++, (a = !0), Object(y.a)(t, e.history[e.undoIdx]);
+                  e.undoIdx++, (a = !0), Object(b.a)(t, e.history[e.undoIdx]);
                 },
                 set: function(n) {
-                  (e.undoIdx = n), (a = !0), Object(y.a)(t, e.history[e.undoIdx]);
+                  (e.undoIdx = n), (a = !0), Object(b.a)(t, e.history[e.undoIdx]);
                 },
                 reset: function() {
-                  (e.undoIdx = e.createdIdx), (a = !0), Object(y.a)(t, e.history[e.undoIdx]);
+                  (e.undoIdx = e.createdIdx), (a = !0), Object(b.a)(t, e.history[e.undoIdx]);
                 },
               };
             })),
-        eo = n(152),
-        to = n.n(eo),
-        no = {};
-      var ao = {
+        lo = n(193),
+        so = n.n(lo),
+        co = {};
+      var uo = {
           addKey: function(e, t) {
-            no[e] || ((no[e] = !0), to()(e, "main", t));
+            co[e] || ((co[e] = !0), so()(e, "main", t));
           },
           unbindAll: function() {
-            for (var e = 0, t = Object.keys(no); e < t.length; e++) {
+            for (var e = 0, t = Object.keys(co); e < t.length; e++) {
               var n = t[e];
-              to.a.unbind(n);
+              so.a.unbind(n);
             }
-            no = {};
+            co = {};
           },
           makeComb: function() {
             for (var e = "1234567890qwertasdfgzxcvbyuiophjklnm".split(""), t = 0; t <= e.length; t++) {
               var n = void 0;
-              if (((n = e[t]), !no.hasOwnProperty(n))) return n;
+              if (((n = e[t]), !co.hasOwnProperty(n))) return n;
             }
             return null;
           },
           setScope: function(e) {
-            to.a.setScope(e);
+            so.a.setScope(e);
           },
         },
-        oo = y.m
+        mo = b.m
           .model("Relation", {
-            node1: y.m.reference(y.m.union(Kn, dn, Yt, fa, En)),
-            node2: y.m.reference(y.m.union(Kn, dn, Yt, fa, En)),
+            node1: b.m.reference(b.m.union(na, bn, $t, xa, An)),
+            node2: b.m.reference(b.m.union(na, bn, $t, xa, An)),
           })
           .actions(function(e) {
             return {
@@ -5174,7 +6836,7 @@
               },
             };
           }),
-        ro = y.m.model("RelationStore", { relations: y.m.array(oo) }).actions(function(e) {
+        ho = b.m.model("RelationStore", { relations: b.m.array(mo) }).actions(function(e) {
           return {
             findRelations: function(t, n) {
               return n
@@ -5190,12 +6852,12 @@
             },
             addRelation: function(t, n) {
               if (!e.nodesRelated(t, n)) {
-                var a = oo.create({ node1: t, node2: n });
+                var a = mo.create({ node1: t, node2: n });
                 return e.relations.push(a), a;
               }
             },
             deleteRelation: function(e) {
-              Object(y.b)(e);
+              Object(b.b)(e);
             },
             deleteNodeRelation: function(t) {
               var n = e.findRelations(t);
@@ -5211,8 +6873,48 @@
             },
           };
         }),
-        io = y.m
-          .model("RegionStore", { regions: y.m.array(y.m.safeReference(y.m.union(Kn, dn, En, Yt, fa))) })
+        po = b.m
+          .model("Normalization", {
+            node1: b.m.union(b.m.reference(na), b.m.reference(bn), b.m.reference($t)),
+            node2: b.m.union(b.m.reference(na), b.m.reference(bn), b.m.reference($t)),
+          })
+          .actions(function(e) {
+            return {
+              toggleHighlight: function() {
+                e.node1 == e.node2
+                  ? e.node1.toggleHightlight()
+                  : (e.node1.toggleHightlight(), e.node2.toggleHightlight());
+              },
+            };
+          }),
+        go = b.m.model("NormalizationStore", { normalizations: b.m.array(po) }).actions(function(e) {
+          return {
+            findNormalization: function(t, n) {
+              return n
+                ? e.normalizations.find(function(e) {
+                    return e.node1.id == t.id && e.node2.id == n.id;
+                  })
+                : e.normalizations.find(function(e) {
+                    return e.node1.id == t.id || e.node2.id == t.id;
+                  });
+            },
+            addNormalization: function(t, n) {
+              if (!e.findNormalization(t, n)) {
+                var a = po.create({ node1: t, node2: n });
+                return e.normalizations.unshift(a), a;
+              }
+            },
+            deleteNormalization: function(e) {
+              Object(b.b)(e);
+            },
+            deleteNodeNormalization: function(t) {
+              var n = e.findNormalization(t);
+              n && e.deleteNormalization(n);
+            },
+          };
+        }),
+        fo = b.m
+          .model("RegionStore", { regions: b.m.array(b.m.safeReference(b.m.union(na, bn, An, $t, xa))) })
           .actions(function(e) {
             return {
               addRegion: function(t) {
@@ -5230,7 +6932,7 @@
                 e.regions.forEach(function(e) {
                   return e.unselectRegion();
                 }),
-                  Object(y.e)(e).setHighlightedNode(null);
+                  Object(b.e)(e).setHighlightedNode(null);
               },
               unhighlightAll: function() {
                 e.regions.forEach(function(e) {
@@ -5239,39 +6941,40 @@
               },
             };
           }),
-        lo = y.m
+        vo = b.m
           .model("Completion", {
-            id: y.m.identifier,
-            pk: y.m.optional(y.m.integer, 1),
-            selected: y.m.optional(y.m.boolean, !1),
-            createdDate: y.m.optional(y.m.string, new Date().toISOString()),
-            createdAgo: y.m.maybeNull(y.m.string),
-            createdBy: y.m.optional(y.m.string, "Admin"),
-            honeypot: y.m.optional(y.m.boolean, !1),
-            root: Ae.allModelsTypes(),
-            names: y.m.map(y.m.reference(Ae.allModelsTypes())),
-            toNames: y.m.map(y.m.array(y.m.reference(Ae.allModelsTypes()))),
-            history: y.m.optional(Qa, { targetPath: "../root" }),
-            dragMode: y.m.optional(y.m.boolean, !1),
-            relationMode: y.m.optional(y.m.boolean, !1),
-            relationStore: y.m.optional(ro, { relations: [] }),
-            normalizationMode: y.m.optional(y.m.boolean, !1),
-            regionStore: y.m.optional(io, { regions: [] }),
-            highlightedNode: y.m.maybeNull(
-              y.m.union(
-                y.m.safeReference(Kn),
-                y.m.safeReference(dn),
-                y.m.safeReference(Yt),
-                y.m.safeReference(fa),
-                y.m.safeReference(En),
-                y.m.safeReference(an),
+            id: b.m.identifier,
+            pk: b.m.optional(b.m.integer, 1),
+            selected: b.m.optional(b.m.boolean, !1),
+            createdDate: b.m.optional(b.m.string, new Date().toISOString()),
+            createdAgo: b.m.maybeNull(b.m.string),
+            createdBy: b.m.optional(b.m.string, "Admin"),
+            honeypot: b.m.optional(b.m.boolean, !1),
+            root: Be.allModelsTypes(),
+            names: b.m.map(b.m.reference(Be.allModelsTypes())),
+            toNames: b.m.map(b.m.array(b.m.reference(Be.allModelsTypes()))),
+            history: b.m.optional(io, { targetPath: "../root" }),
+            dragMode: b.m.optional(b.m.boolean, !1),
+            relationMode: b.m.optional(b.m.boolean, !1),
+            relationStore: b.m.optional(ho, { relations: [] }),
+            normalizationMode: b.m.optional(b.m.boolean, !1),
+            normalizationStore: b.m.optional(go, { normalizations: [] }),
+            regionStore: b.m.optional(fo, { regions: [] }),
+            highlightedNode: b.m.maybeNull(
+              b.m.union(
+                b.m.safeReference(na),
+                b.m.safeReference(bn),
+                b.m.safeReference($t),
+                b.m.safeReference(xa),
+                b.m.safeReference(An),
+                b.m.safeReference(mn),
               ),
             ),
           })
           .views(function(e) {
             return {
               get store() {
-                return Object(y.e)(e, 2);
+                return Object(b.e)(e, 2);
               },
             };
           })
@@ -5281,8 +6984,8 @@
                 e.history = { targetPath: "../root" };
               },
               _updateServerState: function(t) {
-                var n = "/api/tasks/" + Object(y.e)(e, 3).task.id + "/completions/" + e.pk + "/";
-                Object(y.d)(e).patch(n, JSON.stringify(t));
+                var n = "/api/tasks/" + Object(b.e)(e, 3).task.id + "/completions/" + e.pk + "/";
+                Object(b.d)(e).patch(n, JSON.stringify(t));
               },
               setHoneypot: function() {
                 (e.honeypot = !0), e._updateServerState({ honeypot: e.honeypot });
@@ -5315,6 +7018,9 @@
               addRelation: function(t) {
                 e.relationStore.addRelation(e._relationObj, t);
               },
+              addNormalization: function(t) {
+                e.normalizationStore.addNormalization();
+              },
               removeHoneypot: function() {
                 (e.honeypot = !1), e._updateServerState({ honeypot: e.honeypot });
               },
@@ -5336,7 +7042,7 @@
                   e.regionStore.unselectAll();
               },
               deleteRegion: function(e) {
-                Object(y.b)(e);
+                Object(b.b)(e);
               },
               afterCreate: function() {
                 e.traverseTree(function(t) {
@@ -5345,18 +7051,18 @@
                     n ? n.push(t.id) : e.toNames.set(t.toname, [t.id]);
                   }
                 }),
-                  ao.unbindAll(),
+                  uo.unbindAll(),
                   e.traverseTree(function(e) {
-                    e && e.onHotKey && e.hotkey && ao.addKey(e.hotkey, e.onHotKey);
+                    e && e.onHotKey && e.hotkey && uo.addKey(e.hotkey, e.onHotKey);
                   }),
                   e.traverseTree(function(e) {
                     if (e && e.onHotKey && !e.hotkey) {
-                      var t = ao.makeComb();
+                      var t = uo.makeComb();
                       if (!t) return;
-                      (e.hotkey = t), ao.addKey(e.hotkey, e.onHotKey);
+                      (e.hotkey = t), uo.addKey(e.hotkey, e.onHotKey);
                     }
                   }),
-                  ao.setScope("main");
+                  uo.setScope("main");
               },
               serializeCompletion: function() {
                 var t = [];
@@ -5392,8 +7098,8 @@
               },
             };
           }),
-        so = y.m
-          .model("CompletionStore", { completions: y.m.array(lo), selected: y.m.maybeNull(y.m.reference(lo)) })
+        bo = b.m
+          .model("CompletionStore", { completions: b.m.array(vo), selected: b.m.maybeNull(b.m.reference(vo)) })
           .views(function(e) {
             return {
               get currentCompletion() {
@@ -5405,7 +7111,7 @@
                 );
               },
               get store() {
-                return Object(y.e)(e);
+                return Object(b.e)(e);
               },
               get savedCompletions() {
                 return e.completions.filter(function(e) {
@@ -5415,9 +7121,9 @@
             };
           })
           .actions(function(e) {
-            var t = Object(y.c)(
-              $a.a.mark(function t(n) {
-                return $a.a.wrap(
+            var t = Object(b.c)(
+              oo.a.mark(function t(n) {
+                return oo.a.wrap(
                   function(t) {
                     for (;;)
                       switch ((t.prev = t.next)) {
@@ -5425,7 +7131,7 @@
                           return (
                             (t.prev = 0),
                             (t.next = 3),
-                            Object(y.d)(e).remove("/api/tasks/" + e.store.task.id + "/completions/" + n + "/")
+                            Object(b.d)(e).remove("/api/tasks/" + e.store.task.id + "/completions/" + n + "/")
                           );
                         case 3:
                           t.sent, (t.next = 9);
@@ -5444,7 +7150,7 @@
               }),
             );
             function n(t) {
-              Object(y.b)(t), (e.selected = null), e.completions.length > 0 && e.selectCompletion(e.completions[0].id);
+              Object(b.b)(t), (e.selected = null), e.completions.length > 0 && e.selectCompletion(e.completions[0].id);
             }
             return {
               selectCompletion: function(t) {
@@ -5457,7 +7163,7 @@
                 (n.selected = !0), (e.selected = n);
               },
               addCompletion: function(t, n) {
-                var a = lo.create(t);
+                var a = vo.create(t);
                 return (
                   e.store.task &&
                     "initial" == n &&
@@ -5473,9 +7179,9 @@
               },
               destroyCompletion: n,
               addInitialCompletion: function() {
-                var t = R.treeToModel(e.store.config),
-                  n = S.getModelByTag(t.type).create(t),
-                  a = { id: N(), root: n };
+                var t = C.treeToModel(e.store.config),
+                  n = k.getModelByTag(t.type).create(t),
+                  a = { id: E(), root: n };
                 if (e.store.expert) {
                   var o = e.store.expert;
                   a.createdBy = o.firstName + " " + o.lastName;
@@ -5483,11 +7189,11 @@
                 return e.addCompletion(a, "initial");
               },
               addSavedCompletion: function(t) {
-                var n = R.treeToModel(e.store.config),
-                  a = S.getModelByTag(n.type).create(n),
+                var n = C.treeToModel(e.store.config),
+                  a = k.getModelByTag(n.type).create(n),
                   o = {
                     pk: t.id,
-                    id: N(),
+                    id: E(),
                     createdAgo: t.created_ago,
                     createdBy: t.created_username,
                     honeypot: t.honeypot,
@@ -5497,17 +7203,26 @@
               },
             };
           }),
-        co = y.m.model("UserStore", { pk: y.m.integer, firstName: y.m.string, lastName: y.m.string }),
-        uo = y.m
+        yo = {
+          MAIN: "/api",
+          TASKS: "/tasks",
+          COMPLETIONS: "/completions",
+          CANCEL: "/cancel",
+          PROJECTS: "/projects",
+          NEXT: "/next",
+          EXPERT_INSRUCTIONS: "/expert_instruction",
+        },
+        wo = b.m.model("UserStore", { pk: b.m.integer, firstName: b.m.string, lastName: b.m.string }),
+        ko = b.m
           .model("SettingsModel", {
-            enableHotkeys: y.m.optional(y.m.boolean, !0),
-            enablePanelHotkeys: y.m.optional(y.m.boolean, !0),
-            enableTooltips: y.m.optional(y.m.boolean, !0),
+            enableHotkeys: b.m.optional(b.m.boolean, !0),
+            enablePanelHotkeys: b.m.optional(b.m.boolean, !0),
+            enableTooltips: b.m.optional(b.m.boolean, !0),
           })
           .actions(function(e) {
             return {
               toggleHotkeys: function() {
-                (e.enableHotkeys = !e.enableHotkeys), e.enableHotkeys ? ao.setScope("main") : ao.setScope("none");
+                (e.enableHotkeys = !e.enableHotkeys), e.enableHotkeys ? uo.setScope("main") : uo.setScope("none");
               },
               togglePanelHotkeys: function() {
                 e.enablePanelHotkeys = !e.enablePanelHotkeys;
@@ -5517,46 +7232,54 @@
               },
             };
           }),
-        mo = y.m
+        xo = b.m
           .model("AppStore", {
-            config: y.m.string,
-            task: y.m.maybeNull(qa),
-            taskID: y.m.maybeNull(y.m.number),
-            interfaces: y.m.array(y.m.string),
-            completionStore: y.m.optional(so, { completions: [] }),
-            projectID: y.m.integer,
-            expert: co,
-            debug: y.m.optional(y.m.boolean, !0),
-            settings: y.m.optional(uo, {}),
-            showingSettings: y.m.optional(y.m.boolean, !1),
-            showingDescription: y.m.optional(y.m.boolean, !1),
-            description: y.m.maybeNull(y.m.string),
-            isLoading: y.m.optional(y.m.boolean, !1),
-            noTask: y.m.optional(y.m.boolean, !1),
-            labeledSuccess: y.m.optional(y.m.boolean, !1),
+            config: b.m.string,
+            task: b.m.maybeNull(ro),
+            taskID: b.m.maybeNull(b.m.number),
+            interfaces: b.m.array(b.m.string),
+            completionStore: b.m.optional(bo, { completions: [] }),
+            projectID: b.m.integer,
+            expert: wo,
+            debug: b.m.optional(b.m.boolean, !0),
+            settings: b.m.optional(ko, {}),
+            showingSettings: b.m.optional(b.m.boolean, !1),
+            showingDescription: b.m.optional(b.m.boolean, !1),
+            description: b.m.maybeNull(b.m.string),
+            isLoading: b.m.optional(b.m.boolean, !1),
+            noTask: b.m.optional(b.m.boolean, !1),
+            labeledSuccess: b.m.optional(b.m.boolean, !1),
           })
           .views(function(e) {
             return {
               get fetch() {
-                return Object(y.d)(e).fetch;
+                return Object(b.d)(e).fetch;
               },
               get alert() {
-                return Object(y.d)(e).alert;
+                return Object(b.d)(e).alert;
               },
               get post() {
-                return Object(y.d)(e).post;
+                return Object(b.d)(e).post;
               },
             };
           })
           .actions(function(e) {
-            var t = Object(y.c)(
-              $a.a.mark(function t() {
+            var t = Object(b.c)(
+              oo.a.mark(function t() {
                 var n, a;
-                return $a.a.wrap(function(t) {
+                return oo.a.wrap(function(t) {
                   for (;;)
                     switch ((t.prev = t.next)) {
                       case 0:
-                        return (n = "/api/projects/" + e.projectID + "/expert_instruction"), (t.next = 3), e.fetch(n);
+                        return (
+                          (n = ""
+                            .concat(yo.MAIN)
+                            .concat(yo.PROJECTS, "/")
+                            .concat(e.projectID)
+                            .concat(yo.EXPERT_INSRUCTIONS)),
+                          (t.next = 3),
+                          e.fetch(n)
+                        );
                       case 3:
                         200 === (a = t.sent).status
                           ? a.text().then(function(t) {
@@ -5577,12 +7300,25 @@
               });
             }
             function a() {
-              return e.taskID ? o("/api/tasks/" + e.taskID + "/") : o("/api/projects/" + e.projectID + "/next");
+              return e.taskID
+                ? o(
+                    ""
+                      .concat(yo.MAIN)
+                      .concat(yo.TASKS, "/")
+                      .concat(e.taskID, "/"),
+                  )
+                : o(
+                    ""
+                      .concat(yo.MAIN)
+                      .concat(yo.PROJECTS, "/")
+                      .concat(e.projectID)
+                      .concat(yo.NEXT),
+                  );
             }
-            var o = Object(y.c)(
-                $a.a.mark(function t(n) {
+            var o = Object(b.c)(
+                oo.a.mark(function t(n) {
                   var a;
-                  return $a.a.wrap(
+                  return oo.a.wrap(
                     function(t) {
                       for (;;)
                         switch ((t.prev = t.next)) {
@@ -5637,9 +7373,9 @@
                   );
                 }),
               ),
-              r = Object(y.c)(
-                $a.a.mark(function t() {
-                  return $a.a.wrap(
+              r = Object(b.c)(
+                oo.a.mark(function t() {
+                  return oo.a.wrap(
                     function(t) {
                       for (;;)
                         switch ((t.prev = t.next)) {
@@ -5649,7 +7385,11 @@
                               (t.prev = 1),
                               (t.next = 4),
                               e.post(
-                                "/api/tasks/" + e.task.id + "/cancel/",
+                                ""
+                                  .concat(yo.MAIN)
+                                  .concat(yo.TASKS, "/")
+                                  .concat(e.task.id)
+                                  .concat(yo.CANCEL),
                                 JSON.stringify({ data: JSON.stringify({ error: "cancelled" }) }),
                               )
                             );
@@ -5668,10 +7408,10 @@
                   );
                 }),
               ),
-              i = Object(y.c)(
-                $a.a.mark(function t() {
+              i = Object(b.c)(
+                oo.a.mark(function t() {
                   var o, r, i, l;
-                  return $a.a.wrap(
+                  return oo.a.wrap(
                     function(t) {
                       for (;;)
                         switch ((t.prev = t.next)) {
@@ -5689,10 +7429,17 @@
                             return (
                               e.markLoading(!0),
                               (t.prev = 7),
-                              (i = Object(y.h)(o)),
+                              (i = Object(b.h)(o)),
                               (l = JSON.stringify({ state: JSON.stringify(i), result: r })),
                               (t.next = 12),
-                              e.post("/api/tasks/" + e.task.id + "/completions/", l)
+                              e.post(
+                                ""
+                                  .concat(yo.MAIN)
+                                  .concat(yo.TASKS, "/")
+                                  .concat(e.task.id)
+                                  .concat(yo.COMPLETIONS, "/"),
+                                l,
+                              )
                             );
                           case 12:
                             if (!n("submit:load")) {
@@ -5721,27 +7468,27 @@
             return {
               afterCreate: function() {
                 e.task || e.loadTask(),
-                  ao.addKey("ctrl+enter", e.sendTask),
-                  e.hasInterface("submit:skip") && ao.addKey("ctrl+space", e.skipTask),
-                  ao.addKey("ctrl+backspace", function() {
+                  uo.addKey("ctrl+enter", e.sendTask),
+                  e.hasInterface("submit:skip") && uo.addKey("ctrl+space", e.skipTask),
+                  uo.addKey("ctrl+backspace", function() {
                     e.completionStore.selected.deleteAllRegions();
                   }),
-                  ao.addKey("ctrl+z", function() {
+                  uo.addKey("ctrl+z", function() {
                     var t = e.completionStore.selected.history;
                     t && t.canUndo && t.undo();
                   }),
-                  ao.addKey("escape", function() {
+                  uo.addKey("escape", function() {
                     var t = e.completionStore.selected;
                     t && t.relationMode && t.stopRelationMode();
                   }),
-                  ao.addKey("backspace", function() {
+                  uo.addKey("backspace", function() {
                     var t = e.completionStore.selected;
                     t && t.highlightedNode && t.highlightedNode.deleteRegion();
                   });
               },
               loadTask: a,
               addTask: function(t) {
-                e.task = qa.create(t);
+                e.task = ro.create(t);
               },
               hasInterface: n,
               skipTask: r,
@@ -5750,7 +7497,7 @@
                 e.isLoading = t;
               },
               resetState: function() {
-                e.completionStore = so.create({ completions: [] });
+                e.completionStore = bo.create({ completions: [] });
                 var t = e.completionStore.addInitialCompletion();
                 e.completionStore.selectCompletion(t.id);
               },
@@ -5791,268 +7538,115 @@
               },
             };
           });
-      var po = {
-        default: {
-          config: '<View><Text name="txt-1" value="$text"></Text></View>',
-          data: {
-            text:
-              "mobx-state-tree is a state container that combines the simplicity and ease of mutable data with the traceability of immutable data and the reactiveness and performance of observable data.\n      Simply put, mobx-state-tree tries to combine the best features of both immutability (transactionality, traceability and composition) and mutability (discoverability, co-location and encapsulation) based approaches to state management; everything to provide the best developer experience possible. Unlike MobX itself, mobx-state-tree is very opinionated about how data should be structured and updated. This makes it possible to solve many common problems out of the box.\n      Central in MST (mobx-state-tree) is the concept of a living tree. The tree consists of mutable, but strictly protected objects enriched with runtime type information. In other words, each tree has a shape (type information) and state (data). From this living tree, immutable, structurally shared, snapshots are automatically generated.",
-          },
-          task: {
-            id: 402324,
-            completions: [],
-            meta: {},
-            accuracy: 0,
-            created_at: "2019-06-14T15:15:47.982764Z",
-            updated_at: "2019-06-14T15:15:47.982771Z",
-            is_labeled: !1,
-            exposed: !0,
-            project: 139,
-          },
-        },
-        gptc: {
-          config:
-            '<View>\n        <Text name="mytext" value="$text"></Text>\n        <Choices name="mytext_class" toName="mytext" choice="single">\n          <Choice value="important" alias="Important document"></Choice>\n          <Choice value="other" alias="Other"></Choice>\n        </Choices>\n      </View>',
-          data: {
-            text:
-              "mobx-state-tree is a state container that combines the simplicity and ease of mutable data with the traceability of immutable data and the reactiveness and performance of observable data.\n      Simply put, mobx-state-tree tries to combine the best features of both immutability (transactionality, traceability and composition) and mutability (discoverability, co-location and encapsulation) based approaches to state management; everything to provide the best developer experience possible. Unlike MobX itself, mobx-state-tree is very opinionated about how data should be structured and updated. This makes it possible to solve many common problems out of the box.\n      Central in MST (mobx-state-tree) is the concept of a living tree. The tree consists of mutable, but strictly protected objects enriched with runtime type information. In other words, each tree has a shape (type information) and state (data). From this living tree, immutable, structurally shared, snapshots are automatically generated.",
-          },
-          task: {
-            id: 402324,
-            completions: [],
-            meta: {},
-            accuracy: 0,
-            created_at: "2019-06-14T15:15:47.982764Z",
-            updated_at: "2019-06-14T15:15:47.982771Z",
-            is_labeled: !1,
-            exposed: !0,
-            project: 139,
-          },
-        },
-        ner: {
-          config:
-            '<View>\n    <Labels name="ner" toName="text">\n      <Label value="Person"></Label>\n      <Label value="Organization"></Label>\n      <Label value="Fact"></Label>\n      <Label value="Money"></Label>\n      <Label value="Date"></Label>\n      <Label value="Time"></Label>\n      <Label value="Ordinal"></Label>\n      <Label value="Percent"></Label>\n      <Label value="Product"></Label>\n      <Label value="Language"></Label>\n      <Label value="Location"></Label>\n    </Labels>\n    <Text name="text" value="$text"></Text>\n  </View>',
-          data: {
-            text:
-              "mobx-state-tree is a state container that combines the simplicity and ease. Apple's and \ud83d\ude0bApp Store are still broken http://t.co/gIrx8G4pcC http://t.co/fwTXH2aSvC",
-            texta: "To have faith is to trust yourself to the water",
-          },
-          task: {
-            id: 402324,
-            completions: [
-              {
-                id: 137601,
-                model_version: "2019-04-10 10:52:20.591839",
-                result: [
-                  {
-                    id: "RuJ2GrJyG8",
-                    from_name: "ner",
-                    to_name: "text",
-                    source: "$text",
-                    type: "labels",
-                    value: { start: 8, end: 12, text: "faith", labels: ["Fact"] },
-                  },
-                ],
-                score: 1,
-                created_at: "2019-04-10T10:53:28.822843Z",
-                updated_at: "2019-04-10T10:53:28.822851Z",
-                task: 71937,
-                was_generated: !0,
-              },
-            ],
-            meta: {},
-            accuracy: 0,
-            created_at: "2019-06-14T15:15:47.982764Z",
-            updated_at: "2019-06-14T15:15:47.982771Z",
-            is_labeled: !1,
-            exposed: !0,
-            project: 139,
-          },
-        },
-        bbox: {
-          config:
-            '<View>\n        <RectangleLabels name="tag" toName="image">\n          <Label value="Cat"></Label>\n          <Label value="Dog" background="blue"></Label>\n        </RectangleLabels>\n        <Image name="image" value="$image_url"></Image>\n      </View>\n    ',
-          task: {
-            id: 402324,
-            meta: {},
-            accuracy: 0,
-            created_at: "2019-06-14T15:15:47.982764Z",
-            updated_at: "2019-06-14T15:15:47.982771Z",
-            is_labeled: !1,
-            exposed: !0,
-            project: 139,
-            completions: [],
-          },
-          data: { image_url: "https://go.heartex.net/static/samples/kittens.jpg" },
-        },
-        image: {
-          config:
-            '<View> <Image name="image" value="$image_url"/> <Choices name="cats_or_dogs" toName="image">   <Choice value="Cat"></Choice>   <Choice value="Dog"></Choice> </Choices></View>',
-          data: { image_url: "http://s3.amazonaws.com/heartex-private/cats_n_dogs/training_set/dogs/dog.887.jpg" },
-          task: {
-            id: 402324,
-            meta: {},
-            accuracy: 0,
-            created_at: "2019-06-14T15:15:47.982764Z",
-            updated_at: "2019-06-14T15:15:47.982771Z",
-            exposed: !0,
-            project: 139,
-            completions: [
-              {
-                completed_by: null,
-                created_ago: "2 months",
-                created_at: "2019-05-14T05:02:41.289000Z",
-                created_username: "",
-                honeypot: !0,
-                id: 1430,
-                result: '[{"type":"choices","value":{"choices":["Dog"]},"to_name":"image","from_name":"cats_or_dogs"}]',
-                state: "{}",
-                task: 163260,
-                updated_at: "2019-05-14T05:02:41.289000Z",
-                was_cancelled: !1,
-                was_generated: !0,
-              },
-            ],
-          },
-        },
-        cda: {
-          config:
-            '<View>\n    <HyperText name="dialog" value="$dialogs"></HyperText>\n    <Header value="Rate last answer:"></Header>\n    <Choices name="chc-1" choice="single-radio" toName="dialog">\n      <Choice value="Bad answer"></Choice>\n      <Choice value="Neutral answer"></Choice>\n      <Choice value="Good answer"></Choice>\n    </Choices>\n    <Header value="Your answer:"></Header>\n    <TextArea name="answer"></TextArea>\n  </View>',
-          task: {},
-          data: {},
-        },
-        dialog: {
-          config:
-            '<View>\n        <Header value="Select choice:"></Header>\n        <Dialog value="$dialoga" name="dial"></Dialog>\n        <Choices showInline="true" name="mytext_class" toName="dial">\n          <Choice value="important"></Choice>\n          <Choice value="other"></Choice>\n        </Choices>\n      </View>',
-          task: {
-            id: 402324,
-            completions: [
-              {
-                completed_by: 55,
-                created_ago: "16 hours, 57 minutes",
-                created_at: "2019-07-19T17:48:15.465239Z",
-                created_username: "",
-                honeypot: !1,
-                id: 8440,
-                result:
-                  '[{"type":"choices","value":{"choices":["important"]},"to_name":"dial","from_name":"mytext_class"}]',
-                task: 761928,
-                updated_at: "2019-07-19T17:48:15.465264Z",
-                was_cancelled: !1,
-                was_generated: !0,
-              },
-            ],
-            meta: {},
-            accuracy: 0,
-            created_at: "2019-06-14T15:15:47.982764Z",
-            updated_at: "2019-06-14T15:15:47.982771Z",
-            is_labeled: !1,
-            exposed: !0,
-            project: 139,
-          },
-          data: {
-            dialoga: [
-              { name: "Jules Winnfield", text: "Okay, so, tell me about the hash bars", id: 100 },
-              { name: "Vasya", text: "So what you want to know?", date: "1 August, 2019" },
-              {
-                name: "Jules Winnfield",
-                text: "Well, hash is legal there, right?",
-                selected: !0,
-                date: "1 August, 2019",
-              },
-              {
-                name: "Vinc\u0443",
-                text:
-                  "Yeah, it's legal, but it ain't a hundred percent legal. I mean, you can't walk into a restaurant,\n   roll a joint, and start puffin' away. They want you to smoke in your home or certain designated places.",
-              },
-              { name: "Jules Winnfield", text: "Those are hash bars?" },
-              {
-                name: "Vincent Vega",
-                text:
-                  "Breaks down like this, okay: it's legal to buy it,\n   it's legal to own it, and if you're the proprietor of a hash bar, it's legal to sell it. It's illegal to carry it,\n   but that doesn't really matter 'cause, get a load of this, all right; if you get stopped by the cops in Amsterdam,\n   it's illegal for them to search you. I mean, that's a right the cops in Amsterdam don't have.",
-              },
-              {
-                name: "Vincent Vega",
-                text:
-                  "Yeah, it's legal, but it ain't a hundred percent legal. I mean, you can't walk into a restaurant,\n   roll a joint, and start puffin' away. They want you to smoke in your home or certain designated places.",
-              },
-              { name: "Jules Winnfield", text: "Those are hash bars?" },
-              {
-                name: "Vincent Vega",
-                text:
-                  "Breaks down like this, okay: it's legal to buy it,\n   it's legal to own it, and if you're the proprietor of a hash bar, it's legal to sell it. It's illegal to carry it,\n   but that doesn't really matter 'cause, get a load of this, all right; if you get stopped by the cops in Amsterdam,\n   it's illegal for them to search you. I mean, that's a right the cops in Amsterdam don't have.",
-              },
-              {
-                name: "Vincent Vega",
-                text:
-                  "Yeah, it's legal, but it ain't a hundred percent legal. I mean, you can't walk into a restaurant,\n   roll a joint, and start puffin' away. They want you to smoke in your home or certain designated places.",
-              },
-              { name: "Jules Winnfield", text: "Those are hash bars?" },
-              {
-                name: "Vincent Vega",
-                text:
-                  "Breaks down like this, okay: it's legal to buy it,\n   it's legal to own it, and if you're the proprietor of a hash bar, it's legal to sell it. It's illegal to carry it,\n   but that doesn't really matter 'cause, get a load of this, all right; if you get stopped by the cops in Amsterdam,\n   it's illegal for them to search you. I mean, that's a right the cops in Amsterdam don't have.",
-              },
-            ],
-          },
-        },
-        audio: {
-          config:
-            '<View>\n        <Header value="Select label:"></Header>\n        <Labels name="label" toName="audio">\n          <Label value="Politics" background="red"></Label>\n          <Label value="Business" background="blue"></Label>\n          <Label value="Education"></Label>\n        </Labels>\n        <Header value="Select audio region:"></Header>\n        <AudioPlus name="audio" value="$url"></AudioPlus>\n      </View>',
-          task: {
-            id: 402324,
-            completions: [
-              {
-                completed_by: 55,
-                created_ago: "16 hours, 57 minutes",
-                created_at: "2019-07-19T17:48:15.465239Z",
-                created_username: "",
-                honeypot: !1,
-                id: 8440,
-                result:
-                  '[{"id":"XPxpLMifV7","from_name":"label","to_name":"audio","source":"$url","type":"labels","value":{"start":0.7047114876227649,"end":2.369030107327593,"labels":["Politics"]}},{"id":"6ycG2nV3mp","from_name":"label","to_name":"audio","source":"$url","type":"labels","value":{"start":2.6014349596287176,"end":5.982550714074112,"labels":["Business"]}}]',
-                task: 761928,
-                updated_at: "2019-07-19T17:48:15.465264Z",
-                was_cancelled: !1,
-              },
-            ],
-            meta: {},
-            accuracy: 0,
-            created_at: "2019-06-14T15:15:47.982764Z",
-            updated_at: "2019-06-14T15:15:47.982771Z",
-            is_labeled: !1,
-            exposed: !0,
-            project: 139,
-          },
-          data: { url: "https://s3-us-west-1.amazonaws.com/heartex-public/cello.mp3" },
-        },
-      };
-      function go() {
-        return (function(e) {
-          var t = po[e].task;
-          return (
-            (window.T = t),
-            (t = Object(x.a)({}, t, { data: JSON.stringify(po[e].data) })),
-            {
-              projectID: 1,
+      var To = {
+          getData: function() {
+            window.taskData && window.taskData.data && (window.taskData.data = JSON.stringify(window.taskData.data));
+            var e = {
+              projectID: window.projectID,
               isLoading: !1,
-              config: po[e].config,
-              task: t,
-              taskID: 1,
-              expert: { pk: 1, lastName: "Jones", firstName: "Oliver" },
-              debug: -1 !== window.location.search.indexOf("debug=true"),
-              interfaces: window.editorInterfaces
-                ? window.editorInterfaces
-                : ["basic", "completions", "submit", "panel", "side-column"],
-            }
-          );
-        })("ner");
-      }
-      var fo = {
-        getState: function() {
-          return { completions: go().task.completions ? go().task.completions : null };
+              config: window.editorAppConfig,
+              task: window.taskData,
+              taskID: window.taskID,
+              expert: window.expertData,
+              debug: window.debugEditor,
+              interfaces: window.editorInterfaces ? window.editorInterfaces : ["basic", "completions"],
+            };
+            return (
+              window.preRender && (e.task = window.taskData),
+              window.explore
+                ? (e.interfaces = window.editorInterfaces ? window.editorInterfaces : ["basic", "completions"])
+                : (e.interfaces = window.editorInterfaces
+                    ? window.editorInterfaces
+                    : ["basic", "submit", "submit:skip", "submit:submit"]),
+              e
+            );
+          },
+          getState: function() {
+            return { completions: window.taskData && window.taskData.completions ? window.taskData.completions : null };
+          },
+          rootElement: function() {
+            var e = document.createElement("div"),
+              t = document.getElementById("root");
+            return (t.innerHTML = ""), t.appendChild(e), e;
+          },
         },
-        getData: go,
+        No = n(317),
+        So = n(318),
+        Io = n.n(So),
+        Eo = (n(319), n(320), Io.a, n(321)),
+        Oo = n.n(Eo),
+        _o = (n(322), n(323), Oo.a, n(324)),
+        Ro = n.n(_o),
+        Co = n(325),
+        jo = n(326),
+        Ao = { config: Ro.a, tasks: Co, completion: jo },
+        Do = n(327),
+        Mo = n.n(Do),
+        Bo = (n(328), n(329), Mo.a, n(330)),
+        Ho = n.n(Bo),
+        Wo = (n(331), n(332), Ho.a, n(333)),
+        Po = n.n(Wo),
+        zo = (n(334), n(335), Po.a, n(336)),
+        Lo = n.n(zo),
+        Fo = (n(337), n(338), Lo.a, n(339)),
+        Jo = n.n(Fo),
+        Go = (n(340), n(341), Jo.a, Ao);
+      function Uo() {
+        return (function() {
+          var e = {
+            projectID: 1,
+            isLoading: !1,
+            taskID: 1,
+            expert: { pk: 1, lastName: "Jones", firstName: "Oliver" },
+            debug: -1 !== window.location.search.indexOf("debug=true"),
+            interfaces: window.editorInterfaces
+              ? window.editorInterfaces
+              : ["basic", "completions", "submit", "panel", "side-column"],
+            task: { data: JSON.stringify(Go.tasks[0]), project: 10, id: 100, completions: [] },
+          };
+          return (
+            Go.completion &&
+              (e = Object(N.a)({}, e, {
+                task: Object(N.a)({}, e.task, { completions: [{ result: Go.completion.completions[0].result }] }),
+              })),
+            fetch(Go.config)
+              .then(function(e) {
+                return e.text();
+              })
+              .then(function(t) {
+                return (e = Object(N.a)({}, e, { config: t }));
+              })
+          );
+        })();
+      }
+      function Vo() {
+        return (Vo = Object(No.a)(
+          oo.a.mark(function e() {
+            var t, n;
+            return oo.a.wrap(function(e) {
+              for (;;)
+                switch ((e.prev = e.next)) {
+                  case 0:
+                    return (e.next = 2), Uo();
+                  case 2:
+                    return (
+                      (t = e.sent),
+                      (n = t.task.completions ? t.task.completions : null),
+                      e.abrupt("return", { completions: n })
+                    );
+                  case 5:
+                  case "end":
+                    return e.stop();
+                }
+            }, e);
+          }),
+        )).apply(this, arguments);
+      }
+      var Yo = {
+        getState: function() {
+          return Vo.apply(this, arguments);
+        },
+        getData: Uo,
         rootElement: function() {
           var e = document.createElement("div"),
             t = document.getElementById("root");
@@ -6067,89 +7661,24 @@
           );
         },
       };
-      fo = {
-        getData: function() {
-          window.taskData && window.taskData.data && (window.taskData.data = JSON.stringify(window.taskData.data));
-          var e = {
-            projectID: window.projectID,
-            isLoading: !1,
-            config: window.editorAppConfig,
-            task: window.taskData,
-            taskID: window.taskID,
-            expert: window.expertData,
-            debug: window.debugEditor,
-            interfaces: window.editorInterfaces ? window.editorInterfaces : ["basic", "completions"],
-          };
-          return (
-            window.preRender && (e.task = window.taskData),
-            window.explore
-              ? (e.interfaces = window.editorInterfaces ? window.editorInterfaces : ["basic", "completions"])
-              : (e.interfaces = window.editorInterfaces
-                  ? window.editorInterfaces
-                  : ["basic", "submit", "submit:skip", "submit:submit"]),
-            e
-          );
-        },
-        getState: function() {
-          return { completions: window.taskData && window.taskData.completions ? window.taskData.completions : null };
-        },
-        rootElement: function() {
-          var e = document.createElement("div"),
-            t = document.getElementById("root");
-          return (t.innerHTML = ""), t.appendChild(e), e;
-        },
-      };
-      var ho = mo.create(fo.getData(), {
-        fetch: w.fetcher,
-        patch: w.patch,
-        post: w.poster,
-        remove: w.remover,
+      Yo = To;
+      var Xo = xo.create(Yo.getData(), {
+        fetch: T.fetcher,
+        patch: T.patch,
+        post: T.poster,
+        remove: T.remover,
         alert: function(e) {
           return console.log(e);
         },
       });
-      ho.initializeStore(fo.getState()),
-        (window.Htx = ho),
-        c.a.render(l.a.createElement(u.a, { store: ho }, l.a.createElement(Ka, null)), fo.rootElement()),
+      Xo.initializeStore(Yo.getState()),
+        (window.Htx = Xo),
+        c.a.render(l.a.createElement(u.a, { store: Xo }, l.a.createElement(no, null)), Yo.rootElement()),
         "serviceWorker" in navigator &&
           navigator.serviceWorker.ready.then(function(e) {
             e.unregister();
           });
     },
-    75: function(e, t, n) {
-      e.exports = {
-        block: "Entity_block__3ckIB",
-        button: "Entity_button__W4DcF",
-        labels: "Entity_labels__1Ldoe",
-        tag: "Entity_tag__3VRfN",
-      };
-    },
-    87: function(e, t, n) {
-      e.exports = {
-        pushable: "Controls_pushable__a1HxL",
-        "hide-dd-icon": "Controls_hide-dd-icon__3MPHE",
-        "drag-handle": "Controls_drag-handle__2yyWu",
-        noselect: "Controls_noselect__1U7-5",
-        "common-container": "Controls_common-container__2x_Gk",
-        "functional-buttons": "Controls_functional-buttons__37irg",
-        "editor-side-column": "Controls_editor-side-column__-zSr5",
-        skip: "Controls_skip__1Km2f",
-        task: "Controls_task__3a2SA",
-        container: "Controls_container__2OOQz",
-        block: "Controls_block__3VbK-",
-        wrapper: "Controls_wrapper__3Yptx",
-      };
-    },
-    88: function(e, t, n) {
-      e.exports = {
-        block: "Dialog_block__3oOBf",
-        block_selected: "Dialog_block_selected__2Do_t",
-        name: "Dialog_name__1MoM3",
-        tag: "Dialog_tag__3NOpX",
-        date: "Dialog_date__28pt2",
-      };
-    },
   },
-  [[323, 2, 1]],
+  [[356, 2, 1]],
 ]);
-//# sourceMappingURL=main.23c00390.chunk.js.map

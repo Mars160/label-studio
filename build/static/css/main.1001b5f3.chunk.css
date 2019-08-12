@@ -393,16 +393,19 @@ body .Panel_pushable__2Zm85 {
 }
 .Entity_block__3ckIB {
   display: flex;
-  flex-flow: column;
   justify-content: flex-start;
   align-items: flex-start;
+  flex-wrap: wrap;
 }
-.Entity_button__W4DcF,
+.Entity_button__W4DcF {
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
 .Entity_labels__1Ldoe {
   margin-bottom: 10px;
 }
 .Entity_tag__3VRfN {
-  margin-left: 10px;
+  margin-bottom: 5px;
 }
 .SideColumn_card__2KVRh {
   width: 320px;
@@ -438,6 +441,17 @@ body .Panel_pushable__2Zm85 {
 }
 .Waveform_wave__yPehs {
   position: relative;
+}
+.Waveform_menu__3Kb8O {
+  margin: 2em 0;
+}
+.AudioPlus_play__1hGxY {
+  background: #52c41a;
+  border: 1px solid #52c41a;
+}
+.AudioPlus_play__1hGxY:hover {
+  background: #73d13d;
+  border: 1px solid #73d13d;
 }
 .TextHighlight_block__z4O-f {
   border: 1px solid #e8e8e8;
@@ -548,6 +562,7 @@ body .Segment_pushable__2gVkh {
 .Segment_block__3-nF9 {
   position: relative;
   max-width: 1200px;
+  width: 100%;
   margin-right: 20px;
   background: #fff;
   padding: 1em;
@@ -692,4 +707,3 @@ body .App_pushable__2_dds {
     border: 0;
   }
 }
-/*# sourceMappingURL=main.d28f49ad.chunk.css.map */
