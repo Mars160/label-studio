@@ -1,7 +1,7 @@
 {% raw %}
 
 <!-- Two dialogs: source and target -->
-<sui-modal v-model="storage.show" v-bind:class="{inverted: 1, small: 1}" size="small"
+<sui-modal v-model="storage.show" v-bind:class="{inverted: 1, small: 1, scrollable: 1}" size="small"
            :id="storage_for + '-storage-settings-dialog'" style="z-index: 1000"
            v-for="(storage, storage_for) in storage_settings" v-bind:key="storage_for">
   <i class="icon close" @click="storage.show=false"></i>
@@ -14,29 +14,21 @@
     ></i>
     <i :class="{active: storage.type_loading}" class="ui loader inline mini grey"></i>
     &nbsp;{{ capitalizeFirstLetter(storage_for) }} storage: {{ storage.description }}
-
-    <br/>
-    <small style="margin-left: 2.2em; color:#555">{{ storage.path }}</small>
   </div>
 
   <!-- Content -->
-  <div class="content">
+  <div class="scrolling content">
     <form class="ui form" :id="storage.storage_for + '-storage-form'">
       <input hidden name="storage_for" :value="storage_for">
 
-      <span>
-        <span v-if="storage.type=='tasks-json'">To add new tasks go to <a href="./import">Import page</a>.<br/></span>
-        To change the storage type restart Label Studio with
-        <a href="https://labelstud.io/guide/storage.html#Create-connection-on-startup">storage arguments</a>.
-      </span>
+      <span v-if="storage.type=='tasks-json'">To add new tasks go to <a href="./import">Import page</a>.<br/></span>
 
       <!-- Storage Type - form needs it to correctly be processed -->
-      <div class="ui field" style="display: none"
-           :class="{disabled: storage.type_loading}">
+      <div class="ui field" :class="{disabled: storage.type_loading}">
         <label>Storage type</label>
         <select class="ui dropdown" name="type" v-model="storage.type">
           <option v-for="(item, name) in storage_settings_all[storage_for]" :value="name">
-            {{ item.description }} {{ item.current ? '*' : ' ' }}
+            {{ item.description }}
           </option>
         </select>
       </div>
@@ -47,9 +39,9 @@
       <div class="ui field"
            :class="{disabled: storage.type_loading, error: field.name in storage.errors}"
            v-for="field in storage.fields"
-           v-if="field.name != 'create_local_copy'"> <!-- TODO: back create_local_copy in next releases -->
+           :style="{display: showStorageField(field.name, storage) ? 'block': 'none'}"> <!-- TODO: back create_local_copy in next releases -->
 
-        <label :for="field.name">{{ field.description }}</label>
+        <label :for="field.name" v-html="field.description"></label>
         <sui-checkbox v-model="field.data" :name="field.name" v-if="field.type=='BooleanField'"></sui-checkbox>
         <input type="text" :placeholder="field.name" :name="field.name" v-model="field.data"
                v-if="field.type!='BooleanField'">
@@ -95,21 +87,23 @@
   <div class="actions">
     <span class="ui green text" v-if="storage.save_success"><i class="fas fa-check"></i> Success</span>
 
-    <!-- Filter & Switch tasks for Source -->
+    <!-- Apply & Sync / Save tasks for Source -->
     <button class="ui button positive approve"
             :class="{disabled: storage.loading || storage.type_loading}"
             @click="saveStorageSettings(storage_for)"
-            v-if="storage_for=='source' && storage.type!='tasks-json'">
+            v-if="storage_for=='source'">
       <!-- don't show button in Local storage for Source -->
       <span class="ui active mini inline loader" v-if="storage.loading"></span>
-      <span v-if="!storage.loading">Filter & Switch Tasks</span>
+      <span v-if="!storage.loading">{{
+        storage.type!='tasks-json' ? 'Apply & Sync Tasks': 'Save'
+      }}</span>
     </button>
 
     <!-- Save for Target -->
     <button class="ui button positive approve"
             :class="{disabled: storage.loading || storage.type_loading}"
             @click="saveStorageSettings(storage_for)"
-            v-if="storage_for=='target' && storage.type!='completions-dir'">
+            v-if="storage_for=='target'">
       <!-- don't show button in Local storage for Source -->
       <span class="ui active mini inline loader" v-if="storage.loading"></span>
       <span v-if="!storage.loading">Save</span>
