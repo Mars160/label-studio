@@ -1,6 +1,6 @@
 /*
- * Label Studio Backend - interlayer code that connects example server
- * implementation with the frontend part. At the moment it's based on
+ * Label Studio Frontend SDK - inter-layer code that connects LSB server
+ * implementation with the Frontend part. At the moment it's based on
  * callbacks.
  */
 
@@ -11,7 +11,7 @@ const API_URL = {
   CANCEL: "/cancel",
   PROJECTS: "/projects",
   NEXT: "/next/",
-  EXPERT_INSRUCTIONS: "/expert_instruction",
+  EXPERT_INSTRUCTIONS: "/expert_instruction"
 };
 
 const Requests = (function(window) {
@@ -86,7 +86,7 @@ const Requests = (function(window) {
   };
 })(window);
 
-const _loadTask = function(ls, url) {
+const _loadTask = function(ls, url, completionID) {
     try {
         const req = Requests.fetcher(url);
 
@@ -118,30 +118,36 @@ const _loadTask = function(ls, url) {
                 if (cs.predictions.length > 0) {
                     c = ls.completionStore.addCompletionFromPrediction(cs.predictions[0]);
                 }
+
+                // we are on history item, take completion id from history
+                else if (ls.completionStore.completions.length > 0 && completionID) {
+                    c = {id: completionID};
+                }
+
                 else {
                     c = ls.completionStore.addCompletion({ userGenerate: true });
                 }
 
-                cs.selectCompletion(c.id);
+                if (c.id) cs.selectCompletion(c.id);
 
                 ls.setFlags({ isLoading: false });
 
-                // getEnv(self).onTaskLoad(self.task);
-            });
+                ls.onTaskLoad(ls, ls.task);
+            })
         });
     } catch (err) {
         console.error("Failed to load next task ", err);
     }
-}
+};
 
 const loadNext = function(ls) {
   var url = `${API_URL.MAIN}${API_URL.PROJECTS}/1${API_URL.NEXT}`;
     return _loadTask(ls, url);
 };
 
-const loadTask = function(ls, taskID) {
+const loadTask = function(ls, taskID, completionID) {
   var url = `${API_URL.MAIN}${API_URL.TASKS}/${taskID}`;
-    return _loadTask(ls, url);
+    return _loadTask(ls, url, completionID);
 };
 
 const _convertTask = function(task) {
@@ -169,16 +175,33 @@ const _convertTask = function(task) {
   return task;
 };
 
-const LSB = function(elid, config, task) {
-  const _prepData = function(c) {
-    const data = c.serializeCompletion();
-    const body = JSON.stringify({
-      lead_time: (new Date() - c.loadedDate) / 1000, // task execution time
-      result: data,
-    });
+const LSF_SDK = function(elid, config, task) {
 
+  const showHistory = task === null;  // show history buttons only if label stream mode, not for task explorer
+    console.log(task === null);
+
+  const _prepData = function(c, includeId) {
+    var completion = {
+      lead_time: (new Date() - c.loadedDate) / 1000,  // task execution time
+      result: c.serializeCompletion()
+    };
+    if (includeId) {
+        completion.id = parseInt(c.id);
+    }
+    const body = JSON.stringify(completion);
     return body;
   };
+
+  function initHistory(ls) {
+      if (!ls.taskHistoryIds) {
+          ls.taskHistoryIds = [];
+          ls.taskHistoryCurrent = -1;
+      }
+  }
+  function addHistory(ls, task_id, completion_id) {
+      ls.taskHistoryIds.push({task_id: task_id, completion_id: completion_id});
+      ls.taskHistoryCurrent = ls.taskHistoryIds.length;
+  }
 
   var LS = new LabelStudio(elid, {
     config: config,
@@ -190,7 +213,7 @@ const LSB = function(elid, config, task) {
       "panel", // undo, redo, reset panel
       "controls", // all control buttons: skip, submit, update
       "submit", // submit button on controls
-      "update", // update button  on controls
+      "update", // update button on controls
       "predictions",
       "predictions:menu", // right menu with prediction items
       "completions:menu", // right menu with completion items
@@ -202,12 +225,14 @@ const LSB = function(elid, config, task) {
 
     onSubmitCompletion: function(ls, c) {
       ls.setFlags({ isLoading: true });
-
       const req = Requests.poster(`${API_URL.MAIN}${API_URL.TASKS}/${ls.task.id}${API_URL.COMPLETIONS}/`, _prepData(c));
 
       req.then(function(httpres) {
         httpres.json().then(function(res) {
-          if (res && res.id) c.updatePersonalKey(res.id.toString());
+          if (res && res.id) {
+              c.updatePersonalKey(res.id.toString());
+              addHistory(ls, ls.task.id, res.id);
+          }
 
           if (task) {
             ls.setFlags({ isLoading: false });
@@ -220,16 +245,38 @@ const LSB = function(elid, config, task) {
       return true;
     },
 
+    onTaskLoad: function(ls) {
+      // render back & next buttons if there are history
+      if (showHistory && ls.taskHistoryIds && ls.taskHistoryIds.length > 0) {
+        var firstBlock = $('[class^=Panel_container]').children().first();
+        var className = firstBlock.attr('class');
+        var block = $('<div class="'+className+'"></div>');
+        // prev button
+        block.append('<button type="button" class="ant-btn ant-btn-ghost" ' +
+                     (ls.taskHistoryCurrent > 0 ? '': 'disabled') +
+                     ' onclick="window.LSF_SDK._sdk.prevButtonClick()">' +
+                     '<i class="ui icon fa-angle-left"></i> Prev</button>');
+        // next button
+        block.append('<button type="button" class="ant-btn ant-btn-ghost"' +
+                     (ls.taskHistoryCurrent < ls.taskHistoryIds.length ? '': 'disabled') +
+                     ' onclick="window.LSF_SDK._sdk.nextButtonClick()">' +
+                     'Next <i class="ui icon fa-angle-right"></i></button>');
+        firstBlock.after(block);
+      }
+    },
+
     onUpdateCompletion: function(ls, c) {
       ls.setFlags({ isLoading: true });
 
       const req = Requests.patch(
         `${API_URL.MAIN}${API_URL.TASKS}/${ls.task.id}${API_URL.COMPLETIONS}/${c.pk}/`,
-        _prepData(c),
+        _prepData(c)
       );
 
       req.then(function(httpres) {
         ls.setFlags({ isLoading: false });
+        // refresh task from server
+        loadTask(ls, ls.task.id, ls.completionStore.selected.id);
       });
     },
 
@@ -242,18 +289,25 @@ const LSB = function(elid, config, task) {
       });
     },
 
-    onSkipTask: function(ls, completion) {
+    onSkipTask: function(ls) {
       ls.setFlags({ loading: true });
+      var c = ls.completionStore.selected;
+      var completion = _prepData(c, true);
 
       Requests.poster(
         `${API_URL.MAIN}${API_URL.TASKS}/${ls.task.id}${API_URL.CANCEL}`,
-        JSON.stringify(completion),
+        completion
       ).then(function(response) {
         response.json().then(function (res) {
-          // if (res && res.id) completion.updatePersonalKey(res.id.toString());
+          if (res && res.id) {
+            c.updatePersonalKey(res.id.toString());
+            addHistory(ls, ls.task.id, res.id);
+          }
 
           if (task) {
             ls.setFlags({ isLoading: false });
+            // refresh task from server
+            loadTask(ls, ls.task.id, res.id);
           } else {
             loadNext(ls);
           }
@@ -266,12 +320,15 @@ const LSB = function(elid, config, task) {
     onGroundTruth: function(ls, c, value) {
       Requests.patch(
         `${API_URL.MAIN}${API_URL.TASKS}/${ls.task.id}${API_URL.COMPLETIONS}/${c.pk}/`,
-        JSON.stringify({ honeypot: value }),
+        JSON.stringify({ honeypot: value })
       );
     },
 
     onLabelStudioLoad: function(ls) {
       var self = ls;
+      ls.onTaskLoad = this.onTaskLoad;  // FIXME: make it inside of LSF
+      ls.onPrevButton = this.onPrevButton; // FIXME: remove it in future
+      initHistory(ls);
 
       if (!task) {
         ls.setFlags({ isLoading: true });
@@ -282,13 +339,28 @@ const LSB = function(elid, config, task) {
               ls.completionStore.selectCompletion(c.id);
           }
       }
-    },
+    }
   });
 
     // TODO WIP here, we will move that code to the SDK
     var sdk = {
         "loadNext": function () { loadNext(LS) },
-        "loadTask": function (taskID) { loadTask(LS, taskID) }
+        "loadTask": function (taskID) { loadTask(LS, taskID) },
+        'prevButtonClick': function() {
+            LS.taskHistoryCurrent--;
+            let prev = LS.taskHistoryIds[LS.taskHistoryCurrent];
+            loadTask(LS, prev.task_id, prev.completion_id);
+        },
+        'nextButtonClick': function() {
+            LS.taskHistoryCurrent++;
+            if (LS.taskHistoryCurrent < LS.taskHistoryIds.length) {
+              let prev = LS.taskHistoryIds[LS.taskHistoryCurrent];
+              loadTask(LS, prev.task_id, prev.completion_id);
+            }
+            else {
+              loadNext(LS);  // new task
+            }
+        }
     };
     
     LS._sdk = sdk;
