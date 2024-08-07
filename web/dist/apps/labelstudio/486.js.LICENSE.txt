@@ -6,22 +6,6 @@ License: MIT
 */
 
 /*!
-	Copyright (c) 2018 Jed Watson.
-	Licensed under the MIT License (MIT), see
-	http://jedwatson.github.io/classnames
-*/
-
-/*!
- * hotkeys-js v3.8.1
- * A simple micro-library for defining and dispatching keyboard shortcuts. It has no dependencies.
- * 
- * Copyright (c) 2020 kenny wong <wowohoo@qq.com>
- * http://jaywcjlove.github.io/hotkeys
- * 
- * Licensed under the MIT license.
- */
-
-/*!
  * index-of <https://github.com/jonschlinkert/index-of>
  *
  * Copyright (c) 2014-2015 Jon Schlinkert.
