@@ -118,7 +118,7 @@ export class LSFWrapper {
       interfaces.push("annotations:deny-empty");
     }
 
-    if (window.APP_SETTINGS.annotator_reviewer_firewall_enabled) {
+    if (window.APP_SETTINGS.annotator_reviewer_firewall_enabled && this.labelStream) {
       interfaces.push("annotations:hide-info");
     }
 
