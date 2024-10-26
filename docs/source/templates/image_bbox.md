@@ -16,19 +16,29 @@ If you want to perform object detection, you need to create a labeled dataset. U
 
 <i>Figure 1: Object detection with bounding boxes.</i>
 
-## Rotation
+## Rotation and anchor point
 
 Note that when you rotate rectangles (bounding boxes), the anchor point is different depending on how you perform the rotation.
 
-**Bounding box rotation in Label Studio UI**
+### Bounding box rotation in Label Studio UI
 
-If you rotate a bounding box using your mouse in the labeling interface, the rotation anchor point is the center of the rectangle.
+If you rotate a bounding box using your mouse in the labeling interface, the rotation anchor point is the **center** of the rectangle.
 
 ![Diagram showing mouse rotation](../images/rectangle_ui_rotation.jpg)
 
-**Bounding box rotation in the Label Studio results**
+### Bounding box rotation in the Label Studio results
 
-If you rotate by directly editing the rotation angle under the **Info** panel of the labeling interface, the rotation anchor point is the top left. This is also how it is saved in the Label Studio results (regardless of how you performed the rotation).
+If you rotate by directly editing the rotation angle under the **Info** panel of the labeling interface, the rotation anchor point is the **top left** of the rectangle. This is also how it is saved in the Label Studio `annotation.result[].value` (regardless of how you performed the rotation): 
+
+```
+ { 
+  "x": 100,  # x-coordinate of the top left corner of the bounding box from 0 to 100% of the image width
+  "y": 100,  # y-coordinate of the top left corner of the bounding box from 0 to 100% of the image height
+  "width": 200,  # width of the bounding box from 0 to 100% of the image width
+  "height": 100,  # height of the bounding box from 0 to 100% of the image height
+  "rotation": 45  # rotation angle in degrees around the top left corner of the bounding box
+}
+```
 
 ![Diagram showing result rotation](../images/rectangle_db_rotation.jpg)
 
