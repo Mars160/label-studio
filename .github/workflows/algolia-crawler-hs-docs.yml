@@ -1,11 +1,11 @@
-name: Algolia Indexer
+name: Algolia Indexer for HumanSignal Docs
 
 on:
   push:
-    branches: [ 'develop' ]
+    branches: ["develop"]
     paths:
-      - 'docs/**'
-      - '.github/workflows/algolia-crawler.yml'
+      - "docs/**"
+      - ".github/workflows/algolia-crawler-hs-docs.yml"
 
 jobs:
   algolia_indexer:
@@ -32,4 +32,4 @@ jobs:
     steps:
       - name: Algolia Docsearch Action
         id: algolia
-        uses:  adapttive/algolia-docsearch-action@1.1.1
+        uses: adapttive/algolia-docsearch-action@1.1.1

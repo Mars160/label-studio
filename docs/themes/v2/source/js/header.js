@@ -41,7 +41,7 @@
 
     const appId = siteVersion == "enterprise" ? 'M7RXTHKYPM' : "HELLEDAKPT";
     const apiKey = siteVersion == "enterprise" ? '8ed23cbc92e0806140603fb62236efee' : '1d0410ef855a968fbc40669df1c4a73e'
-    const indexName = siteVersion == "enterprise" ? 'ghaction' : 'labelstud'
+    const indexName = siteVersion == "enterprise" ? 'ghaction' : 'ghactionls'
     
     if(searchInput) {
 
