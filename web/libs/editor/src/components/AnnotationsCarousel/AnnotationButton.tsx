@@ -74,7 +74,7 @@ export const AnnotationButton = observer(
       // this data can be missing in tests, but we don't have `infoIsHidden` there, so hiding logic like this
       const currentUser = annotationStore.store.user;
       const isCurrentUser = entity.user?.id === currentUser.id || entity.createdBy === currentUser.email;
-      hiddenUser = infoIsHidden ? { email: isCurrentUser ? "Me" : "User" } : null;
+      hiddenUser = { email: isCurrentUser ? "Me" : "User" };
     }
 
     const CommentIcon = renderCommentIcon(entity);
