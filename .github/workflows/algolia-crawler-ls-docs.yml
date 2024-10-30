@@ -34,12 +34,14 @@ jobs:
             {
               "url": "https://labelstud.io/tags"
               
-            },
+            }
+          ],
+          "sitemaps": [
             {
               "url": "https://labelstud.io/sitemap-tutorials.xml",
               "selectors_key": "blog",
             }
-          ],
+          ]
           "selectors": {
             "default": {
               "lvl0": ".content h1, .ResourcesBannerHeading",
