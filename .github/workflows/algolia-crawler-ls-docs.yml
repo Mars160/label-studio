@@ -26,7 +26,7 @@ jobs:
             {
               "url": "https://labelstud.io/blog/openai-structured-outputs-with-label-studio/",
               "selectors_key": "blog"
-            },
+            }
           ],
 
           "selectors": {
