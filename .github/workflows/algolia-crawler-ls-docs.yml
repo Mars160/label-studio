@@ -14,11 +14,11 @@ jobs:
   algolia_indexer:
     runs-on: ubuntu-latest
     env:
-      APPLICATION_ID: "HELLEDAKPT"
+      APPLICATION_ID: "M7RXTHKYPM"
       API_KEY: ${{ secrets.ALGOLIA_ADMIN_API_KEY }}
-      INDEX_NAME: "ghactionls"
+      INDEX_NAME: "labelstudiodocs"
       CONFIG: >
-        {"index_name": "ghactionls",
+        {"index_name": "labelstudiodocs",
         "stop_urls": [], 
         "selectors_exclude": [".home-page-index"], 
         "start_urls": ["https://labelstud.io/guide", "https://labelstud.io/templates", "https://labelstud.io/tags", "https://labelstud.io/blog/categories/tutorials/"],
