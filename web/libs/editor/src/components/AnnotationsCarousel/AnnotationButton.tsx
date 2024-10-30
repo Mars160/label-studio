@@ -67,10 +67,15 @@ export const AnnotationButton = observer(
     );
     const [isGroundTruth, setIsGroundTruth] = useState<boolean>();
     const [isContextMenuOpen, setIsContextMenuOpen] = useState<boolean>(false);
-    const currentUser = annotationStore.store.user;
-    const isCurrentUser = entity.user?.id === currentUser.id || entity.createdBy === currentUser.email;
-    const infoIsHidden = annotationStore.store.hasInterface("annotations:hide-info");
-    const hiddenUser = infoIsHidden ? { email: isCurrentUser ? "Me" : "User" } : null;
+    const infoIsHidden = annotationStore.store?.hasInterface("annotations:hide-info");
+    let hiddenUser = null;
+
+    if (infoIsHidden) {
+      // this data can be missing in tests, but we don't have `infoIsHidden` there, so hiding logic like this
+      const currentUser = annotationStore.store.user;
+      const isCurrentUser = entity.user?.id === currentUser.id || entity.createdBy === currentUser.email;
+      hiddenUser = infoIsHidden ? { email: isCurrentUser ? "Me" : "User" } : null;
+    }
 
     const CommentIcon = renderCommentIcon(entity);
     // need to find a more reliable way to grab this value
