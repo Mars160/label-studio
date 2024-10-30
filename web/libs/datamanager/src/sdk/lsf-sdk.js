@@ -118,6 +118,10 @@ export class LSFWrapper {
       interfaces.push("annotations:deny-empty");
     }
 
+    if (window.APP_SETTINGS.annotator_reviewer_firewall_enabled && this.labelStream) {
+      interfaces.push("annotations:hide-info");
+    }
+
     if (this.labelStream) {
       interfaces.push("infobar");
       if (!window.APP_SETTINGS.label_stream_navigation_disabled) interfaces.push("topbar:prevnext");
@@ -865,6 +869,9 @@ export class LSFWrapper {
   onEntityCreate = (...args) => this.datamanager.invoke("onEntityCreate", ...args);
   onEntityDelete = (...args) => this.datamanager.invoke("onEntityDelete", ...args);
   onSelectAnnotation = (prevAnnotation, nextAnnotation, options) => {
+    if (window.APP_SETTINGS.read_only_quick_view_enabled && !this.labelStream) {
+      prevAnnotation?.setEditable(false);
+    }
     if (isFF(FF_OPTIC_2) && !!nextAnnotation?.history?.undoIdx) {
       this.saveDraft(nextAnnotation).then(() => {
         this.datamanager.invoke("onSelectAnnotation", prevAnnotation, nextAnnotation, options, this);

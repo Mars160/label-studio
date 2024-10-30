@@ -1,6 +1,6 @@
 {
-  "message": "docs: Add more about anchor point in Rectangles (#6561)",
-  "commit": "34931939c7770beb37b014c35e8a4919ade4e1da",
-  "date": "2024-10-27T00:47:57.000Z",
+  "message": "refactor: OPTIC-1270: Remove Stale Feature Flag - fflag_feat_front_prod_309_choice_hint_080523_short (#6576)",
+  "commit": "5a90f673dd159b43881a2130c2593190eb2be82a",
+  "date": "2024-10-30T14:10:03.000Z",
   "branch": "develop"
 }
