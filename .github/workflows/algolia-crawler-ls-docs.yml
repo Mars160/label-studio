@@ -22,20 +22,7 @@ jobs:
           "index_name": "labelstudiodocs",
           "stop_urls": [], 
           "selectors_exclude": [".home-page-index"], 
-          "start_urls": [
-          {
-              "url": "https://labelstud.io/guide"
-              
-            },
-            {
-              "url": "https://labelstud.io/templates"
-              
-            },
-            {
-              "url": "https://labelstud.io/tags"
-              
-            }
-          ],
+          
           "sitemaps": [
             {
               "url": "https://labelstud.io/sitemap-tutorials.xml",
