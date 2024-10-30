@@ -18,4 +18,9 @@
   width: 80px;
   font-size: 14px;
   text-align: right;
+
+  &[readonly] {
+    background-color: var(--sand_100);
+    color: var(--sand_600);
+  }
 }
