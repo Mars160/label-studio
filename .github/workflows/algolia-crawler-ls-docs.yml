@@ -22,7 +22,27 @@ jobs:
           "index_name": "labelstudiodocs",
           "stop_urls": [], 
           "selectors_exclude": [".home-page-index"], 
-          
+          "start_urls": [
+            {
+              "url": "https://labelstud.io/guide",
+              "selectors_key": "docs"
+              
+            },
+            {
+              "url": "https://labelstud.io/templates",
+              "selectors_key": "docs"
+              
+            },
+            {
+              "url": "https://labelstud.io/tags",
+              "selectors_key": "docs"
+              
+            },
+            {
+              "url": "https://labelstud.io/blog/openai-structured-outputs-with-label-studio/**",
+              "selectors_key": "docs"
+            }
+          ],
           "sitemap_urls": ["https://labelstud.io/sitemap-tutorials.xml"],
           "selectors": {
             "docs": {
