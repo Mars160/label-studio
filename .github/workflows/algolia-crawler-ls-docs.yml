@@ -18,19 +18,38 @@ jobs:
       API_KEY: ${{ secrets.ALGOLIA_ADMIN_API_KEY }}
       INDEX_NAME: "labelstudiodocs"
       CONFIG: >
-        {"index_name": "labelstudiodocs",
-        "stop_urls": [], 
-        "selectors_exclude": [".home-page-index"], 
-        "start_urls": ["https://labelstud.io/blog/categories/tutorials/"],
-        "selectors": {
-        "lvl0": ".content h1, .ResourcesBannerHeading, .BlogTitle",
-        "lvl1": ".content h2, .ResourcesContent h2",
-        "lvl2": ".content h3, .ResourcesContent h3",
-        "lvl3": ".content h4, .ResourcesContent h4",
-        "lvl4": ".content h5, .ResourcesContent h5",
-        "lvl5": ".content h6, .ResourcesContent h6", 
-        "content": ".content-markdown > *"
-        }}
+        {
+          "index_name": "labelstudiodocs",
+          "stop_urls": [], 
+          "selectors_exclude": [".home-page-index"], 
+          "start_urls": [
+            {
+              "url": "https://labelstud.io/blog/openai-structured-outputs-with-label-studio/",
+              "selectors_key": "blog"
+            },
+          ],
+
+          "selectors": {
+            "default": {
+              "lvl0": ".content h1, .ResourcesBannerHeading",
+              "lvl1": ".content h2, .ResourcesContent h2",
+              "lvl2": ".content h3, .ResourcesContent h3",
+              "lvl3": ".content h4, .ResourcesContent h4",
+              "lvl4": ".content h5, .ResourcesContent h5",
+              "lvl5": ".content h6, .ResourcesContent h6", 
+              "content": ".content-markdown > *"
+            },
+            "blog": {
+              "lvl0": ".BlogTitle",
+              "lvl1": ".ResourcesContent h1, .ResourcesContent h2",
+              "lvl2": ".ResourcesContent h3",
+              "lvl3": ".ResourcesContent h4",
+              "lvl4": ".ResourcesContent h5",
+              "lvl5": ".ResourcesContent h6", 
+              "content": ".ResourcesContent > .Text"
+            }
+          }
+        }
     name: Index Algolia
     steps:
       - name: Algolia Docsearch Action
