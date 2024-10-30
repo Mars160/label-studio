@@ -24,15 +24,15 @@ jobs:
           "selectors_exclude": [".home-page-index"], 
           "start_urls": [
           {
-              "url": "https://labelstud.io/guide",
+              "url": "https://labelstud.io/guide"
               
             },
             {
-              "url": "https://labelstud.io/templates",
+              "url": "https://labelstud.io/templates"
               
             },
             {
-              "url": "https://labelstud.io/tags",
+              "url": "https://labelstud.io/tags"
               
             },
             {
