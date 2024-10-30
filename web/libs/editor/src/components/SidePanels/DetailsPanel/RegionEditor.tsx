@@ -1,7 +1,6 @@
 import { observe } from "mobx";
 import { observer } from "mobx-react";
 import {
-  getType,
   type IAnyType,
   isLiteralType,
   isOptionalType,
@@ -20,15 +19,16 @@ import {
   useMemo,
   useState,
 } from "react";
+import { Checkbox } from "@humansignal/ui";
 import { IconPropertyAngle } from "../../../assets/icons";
 import { Block, Elem, useBEM } from "../../../utils/bem";
-import "./RegionEditor.scss";
-import { TimeDurationControl } from "../../TimeDurationControl/TimeDurationControl";
 import { FF_DEV_2715, isFF } from "../../../utils/feature-flags";
-import { Checkbox } from "@humansignal/ui";
+import { TimeDurationControl } from "../../TimeDurationControl/TimeDurationControl";
+import { TimelineRegionEditor } from "./TimelineRegionEditor";
+import "./RegionEditor.scss";
 
 interface RegionEditorProps {
-  region: any;
+  region: MSTRegion;
 }
 
 const getPrimitiveType = (type: IAnyType) => {
@@ -59,18 +59,21 @@ const IconMapping = {
 };
 
 const RegionEditorComponent: FC<RegionEditorProps> = ({ region }) => {
+  const isAudioRegion = isFF(FF_DEV_2715) && region.type === "audioregion";
+  const isTimelineRegion = region.type === "timelineregion";
+  const Component = isTimelineRegion ? TimelineRegionEditor : (isAudioRegion ? AudioRegionProperties : RegionProperties);
+
+  return (
+    <Block name="region-editor" mod={{ disabled: region.isReadOnly() }}>
+      <Component region={region} />
+    </Block>
+  );
+};
+
+const RegionProperties = ({ region }: RegionEditorProps) => {
   const fields: any[] = region.editableFields ?? [];
-  const isAudioModel = getType(region).name === "AudioRegionModel";
 
-  const changeStartTimeHandler = (value: number) => {
-    region.setProperty("start", value);
-  };
-
-  const changeEndTimeHandler = (value: number) => {
-    region.setProperty("end", value);
-  };
-
-  const renderRegionProperty = () => (
+  return (
     <Elem name="wrapper">
       {region.editorEnabled &&
         fields.map((field: any, i) => {
@@ -85,36 +88,38 @@ const RegionEditorComponent: FC<RegionEditorProps> = ({ region }) => {
         })}
     </Elem>
   );
+};
 
-  const renderAudioTimeControls = () => {
-    return (
-      <Elem name="wrapper-time-control">
-        <TimeDurationControl
-          startTime={region.start}
-          endTime={region.end}
-          minTime={0}
-          maxTime={region?._ws_region?.duration}
-          isSidepanel={true}
-          onChangeStartTime={changeStartTimeHandler}
-          onChangeEndTime={changeEndTimeHandler}
-          showLabels
-          showDuration
-        />
-      </Elem>
-    );
+const AudioRegionProperties = ({ region }: { region: any }) => {
+  const changeStartTimeHandler = (value: number) => {
+    region.setProperty("start", value);
+  };
+
+  const changeEndTimeHandler = (value: number) => {
+    region.setProperty("end", value);
   };
 
   return (
-    <Block name="region-editor" mod={{ disabled: region.isReadOnly() }}>
-      {isAudioModel && isFF(FF_DEV_2715) ? renderAudioTimeControls() : renderRegionProperty()}
-    </Block>
+    <Elem name="wrapper-time-control">
+      <TimeDurationControl
+        startTime={region.start}
+        endTime={region.end}
+        minTime={0}
+        maxTime={region?._ws_region?.duration}
+        isSidepanel={true}
+        onChangeStartTime={changeStartTimeHandler}
+        onChangeEndTime={changeEndTimeHandler}
+        showLabels
+        showDuration
+      />
+    </Elem>
   );
 };
 
 interface RegionPropertyProps {
   property: string;
   label: string;
-  region: any;
+  region: MSTRegion;
 }
 
 const RegionProperty: FC<RegionPropertyProps> = ({ property, label, region }) => {
@@ -122,9 +127,7 @@ const RegionProperty: FC<RegionPropertyProps> = ({ property, label, region }) =>
   const [value, setValue] = useState(region.getProperty(property));
 
   const propertyType = useMemo(() => {
-    const regionType = getType(region);
-
-    return (regionType as any).properties[property];
+    return region.getPropertyType(property);
   }, [region, property]);
 
   const isPrimitive = useMemo(() => {
