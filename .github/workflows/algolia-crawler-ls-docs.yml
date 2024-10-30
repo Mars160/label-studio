@@ -23,12 +23,24 @@ jobs:
           "stop_urls": [], 
           "selectors_exclude": [".home-page-index"], 
           "start_urls": [
+          {
+              "url": "https://labelstud.io/guide",
+              
+            },
             {
-              "url": "https://labelstud.io/blog/openai-structured-outputs-with-label-studio/",
-              "selectors_key": "blog"
+              "url": "https://labelstud.io/templates",
+              
+            },
+            {
+              "url": "https://labelstud.io/tags",
+              
+            },
+            {
+              "url": "https://labelstud.io/blog/openai-structured-outputs-with-label-studio/**",
+              "selectors_key": "blog",
+              "tags": ["tutorials"]
             }
           ],
-
           "selectors": {
             "default": {
               "lvl0": ".content h1, .ResourcesBannerHeading",
