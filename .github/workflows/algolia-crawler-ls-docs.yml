@@ -23,14 +23,9 @@ jobs:
           "stop_urls": [], 
           "selectors_exclude": [".home-page-index"], 
           
-          "sitemaps": [
-            {
-              "url": "https://labelstud.io/sitemap-tutorials.xml",
-              "selectors_key": "blog"
-            }
-          ],
+          "sitemaps": ["https://labelstud.io/sitemap-tutorials.xml"],
           "selectors": {
-            "default": {
+            "docs": {
               "lvl0": ".content h1, .ResourcesBannerHeading",
               "lvl1": ".content h2, .ResourcesContent h2",
               "lvl2": ".content h3, .ResourcesContent h3",
@@ -39,7 +34,7 @@ jobs:
               "lvl5": ".content h6, .ResourcesContent h6", 
               "content": ".content-markdown > *"
             },
-            "blog": {
+            "default": {
               "lvl0": ".BlogTitle",
               "lvl1": ".ResourcesContent h1, .ResourcesContent h2",
               "lvl2": ".ResourcesContent h3",
