@@ -74,7 +74,7 @@ type MSTEditableRegion = {
   getPropertyType: (string) => any;
   isPropertyEditable: (string) => boolean;
   setProperty: (string, any) => void;
-}
+};
 
 type MSTRegion = MixinMSTArea & MixinMSTRegion & MixinMSTRegionVolatile & MSTEditableRegion;
 

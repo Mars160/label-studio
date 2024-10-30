@@ -1,13 +1,6 @@
 import { observe } from "mobx";
 import { observer } from "mobx-react";
-import {
-  type IAnyType,
-  isLiteralType,
-  isOptionalType,
-  isPrimitiveType,
-  isUnionType,
-  types,
-} from "mobx-state-tree";
+import { type IAnyType, isLiteralType, isOptionalType, isPrimitiveType, isUnionType, types } from "mobx-state-tree";
 import {
   type ChangeEvent,
   type FC,
@@ -61,7 +54,7 @@ const IconMapping = {
 const RegionEditorComponent: FC<RegionEditorProps> = ({ region }) => {
   const isAudioRegion = isFF(FF_DEV_2715) && region.type === "audioregion";
   const isTimelineRegion = region.type === "timelineregion";
-  const Component = isTimelineRegion ? TimelineRegionEditor : (isAudioRegion ? AudioRegionProperties : RegionProperties);
+  const Component = isTimelineRegion ? TimelineRegionEditor : isAudioRegion ? AudioRegionProperties : RegionProperties;
 
   return (
     <Block name="region-editor" mod={{ disabled: region.isReadOnly() }}>

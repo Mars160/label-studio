@@ -42,8 +42,14 @@ const Field = ({ label, value: originalValue, onChange: saveValue, region, min, 
 
   const onChange = (e) => {
     let value = +e.target.value;
-    if (min && value < +min) { e.target.value = min; value = +min; }
-    if (max && value > +max) { e.target.value = max; value = +max; }
+    if (min && value < +min) {
+      e.target.value = min;
+      value = +min;
+    }
+    if (max && value > +max) {
+      e.target.value = max;
+      value = +max;
+    }
     saveValue?.(value);
   };
 
@@ -67,4 +73,4 @@ const Field = ({ label, value: originalValue, onChange: saveValue, region, min, 
       />
     </label>
   );
-}
+};
