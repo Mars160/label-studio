@@ -23,7 +23,7 @@ jobs:
           "stop_urls": [], 
           "selectors_exclude": [".home-page-index"], 
           
-          "sitemaps": ["https://labelstud.io/sitemap-tutorials.xml"],
+          "sitemap_urls": ["https://labelstud.io/sitemap-tutorials.xml"],
           "selectors": {
             "docs": {
               "lvl0": ".content h1, .ResourcesBannerHeading",
