@@ -30,11 +30,11 @@ jobs:
             {
               "url": "https://labelstud.io/templates",
               "selectors_key": "docs"
-            }
+            },
             {
               "url": "https://labelstud.io/tags",
               "selectors_key": "docs"
-            },
+            }
           ],
           "sitemap_urls": ["https://labelstud.io/sitemap-tutorials.xml"],
           "selectors": {
