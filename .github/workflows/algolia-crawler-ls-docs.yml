@@ -22,23 +22,7 @@ jobs:
           "index_name": "labelstudiodocs",
           "stop_urls": ["https://labelstud.io/guide/index.html", "https://labelstud.io/sdk/index.html"], 
           "selectors_exclude": [".home-page-index"], 
-          "start_urls": [
-            {
-              "url": "https://labelstud.io/guide",
-              "selectors_key": "docs"
-            },
-            {
-              "url": "https://labelstud.io/templates",
-              "selectors_key": "docs"
-            },
-            {
-              "url": "https://labelstud.io/tags",
-              "selectors_key": "docs"
-            },
-            {
-              "url": "https://labelstud.io/blog/categories/tutorials"
-            }
-          ],
+          
           "sitemap_urls": ["https://labelstud.io/sitemap-tutorials.xml"],
           "selectors": {
             "docs": {
