@@ -36,7 +36,7 @@ jobs:
               "selectors_key": "docs"
             },
             {
-              "url": "https://labelstud.io/blog/categories/tutorials",
+              "url": "https://labelstud.io/blog/categories/tutorials"
             }
           ],
           "sitemap_urls": ["https://labelstud.io/sitemap-tutorials.xml"],
