@@ -22,17 +22,16 @@ jobs:
           "index_name": "labelstudiodocs",
           "stop_urls": ["https://labelstud.io/guide/index.html", "https://labelstud.io/sdk/index.html"], 
           "selectors_exclude": [".home-page-index"], 
-          
           "sitemap_urls": ["https://labelstud.io/sitemap-tutorials.xml", "https://deploy-preview-6570--heartex-docs.netlify.app/guide/sitemap-docs.xml"],
           "selectors": {
             "default": {
               "lvl0": ".content h1, .ResourcesBannerHeading, .BlogTitle",
-              "lvl1": ".ResourcesContent h1, .ResourcesContent h2",
-              "lvl2": ".ResourcesContent h3",
-              "lvl3": ".ResourcesContent h4",
-              "lvl4": ".ResourcesContent h5",
-              "lvl5": ".ResourcesContent h6", 
-              "content": ".ResourcesContent > .Text"
+              "lvl1": ".content h2, .ResourcesContent h1, .ResourcesContent h2",
+              "lvl2": ".content h3, .ResourcesContent h3",
+              "lvl3": ".content h4, .ResourcesContent h4",
+              "lvl4": ".content h5, .ResourcesContent h5",
+              "lvl5": ".content h6, .ResourcesContent h6", 
+              "content": ".content-markdown > *, .ResourcesContent > .Text"
             }
           }
         }
