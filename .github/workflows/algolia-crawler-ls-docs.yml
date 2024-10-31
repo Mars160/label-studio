@@ -20,7 +20,7 @@ jobs:
       CONFIG: >
         {
           "index_name": "labelstudiodocs",
-          "stop_urls": [], 
+          "stop_urls": ["https://labelstud.io/guide/index.html", "https://labelstud.io/sdk/index.html"], 
           "selectors_exclude": [".home-page-index"], 
           "start_urls": [
             {
@@ -30,7 +30,7 @@ jobs:
             {
               "url": "https://labelstud.io/templates",
               "selectors_key": "docs"
-            },
+            }
             {
               "url": "https://labelstud.io/tags",
               "selectors_key": "docs"
