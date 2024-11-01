@@ -790,6 +790,8 @@ class TaskLock(models.Model):
         related_name='locks',
         help_text='Locked task',
     )
+    created_at = models.DateTimeField(_('created_at'), null=True, default=None, blank=True, help_text='Creation time')
+
     expire_at = models.DateTimeField(_('expire_at'))
     unique_id = models.UUIDField(default=uuid.uuid4, null=True, blank=True, unique=True, editable=False)
     user = models.ForeignKey(
@@ -798,6 +800,15 @@ class TaskLock(models.Model):
         on_delete=models.CASCADE,
         help_text='User who locked this task',
     )
+
+    def save(self, *args, update_fields=None, **kwargs):
+        if update_fields is not None:
+            update_fields = {'created_at'}.union(update_fields)
+
+        if not self.pk:
+            self.created_at = now()
+
+        return super().save(*args, update_fields=update_fields, **kwargs)
 
 
 class AnnotationDraft(models.Model):
