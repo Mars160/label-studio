@@ -17,17 +17,20 @@ jobs:
       CONFIG: >
         {"index_name": "ghaction",
         "stop_urls": ["https://docs.humansignal.com/guide/index.html", "https://docs.humansignal.com/guide/notion-faq.html", "https://labelstud.io/sdk/index.html"], 
-        "selectors_exclude": [".home-page-index"], 
-        "start_urls": ["https://docs.humansignal.com/guide", "https://docs.humansignal.com/templates", "https://docs.humansignal.com/tags", "https://labelstud.io/sdk/"],
+        "selectors_exclude": [".home-page-index"],
+        "sitemap_urls": ["https://docs.humansignal.com/guide/sitemap-docs.xml", "https://labelstud.io/sitemap-blog.xml"],
         "selectors": {
-        "lvl0": ".content h1, .ResourcesBannerHeading",
-        "lvl1": ".content h2, .ResourcesContent h2",
-        "lvl2": ".content h3, .ResourcesContent h3",
-        "lvl3": ".content h4, .ResourcesContent h4",
-        "lvl4": ".content h5, .ResourcesContent h5",
-        "lvl5": ".content h6, .ResourcesContent h6", 
-        "content": ".content-markdown > *"
-        }}
+            "default": {
+              "lvl0": ".content h1, .ResourcesBannerHeading, .BlogTitle",
+              "lvl1": ".content h2, .ResourcesContent h1, .ResourcesContent h2",
+              "lvl2": ".content h3, .ResourcesContent h3",
+              "lvl3": ".content h4, .ResourcesContent h4",
+              "lvl4": ".content h5, .ResourcesContent h5",
+              "lvl5": ".content h6, .ResourcesContent h6", 
+              "content": ".content-markdown > *, .ResourcesContent > .Text"
+            }
+          }
+        }
     name: Index Algolia
     steps:
       - name: Algolia Docsearch Action
