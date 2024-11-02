@@ -6,6 +6,9 @@ on:
     paths:
       - "docs/**"
       - ".github/workflows/algolia-crawler-hs-docs.yml"
+  pull_request:
+    branches:
+      - develop
 
 jobs:
   algolia_indexer:
