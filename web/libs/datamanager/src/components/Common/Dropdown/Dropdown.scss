@@ -9,7 +9,7 @@
   position: absolute;
   box-sizing: border-box;
   background-color: var(--color-neutral-background);
-  box-shadow: 0 5px 20px var(--color-neutral-shadow);
+  box-shadow: 0 4px 16px rgba(var(--color-neutral-shadow-raw) / 12%), 0 2px 4px rgba(var(--color-neutral-shadow-raw) / 8%);
   will-change: transform, opacity;
   border-radius: var(--radius-small);
 

@@ -13,10 +13,11 @@
     position: relative;
     max-width: 100%;
     box-sizing: border-box;
+    transition: all 150ms ease-out;
 
     &:hover,
     &-selected {
-      background-color: var(--selection-color, var(--sand_100));
+      background-color: var(--selection-color, var(--color-neutral-emphasis-subtle));
     }
 
     &:hover .outliner-item__controls {
@@ -145,13 +146,13 @@
     align-items: center;
     display: inline-flex;
     flex: 1;
-    color: var(--text-color, var(--sand_900));
+    color: var(--text-color, var(--color-neutral-content));
     min-width: 0;
   }
 
   &__text {
     margin-left: 5px;
-    color: var(--sand_900);
+    color: var(--color-neutral-content);
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;

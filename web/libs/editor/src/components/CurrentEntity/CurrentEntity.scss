@@ -53,7 +53,7 @@
   }
 
   &__parent_link {
-    color: var(--sand_900);
+    color: var(--color-neutral-content);
     position: absolute;
     top: -20px;
     left: -12px;
@@ -76,7 +76,7 @@
   }
 
   &__parent_text {
-    color: var(--sand_900);
+    color: var(--color-neutral-content);
     opacity: 0.4;
   }
 }

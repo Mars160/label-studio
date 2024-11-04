@@ -44,21 +44,21 @@
 
     &_look {
       &_danger {
-        color: var(--danger_color);
+        color: var(--color-negative-content);
       }
     }
 
     &:not(.menu__item_look_danger):hover {
-      color: var(--grape_700);
+      color: var(--color-neutral-content);
     }
 
     &:not(.menu__item_active):hover {
-      background-color: var(--grape_0);
+      background-color: var(--color-primary-emphasis-subtle);
     }
 
     &_active {
-      color: var(--grape_700);
-      background-color: var(--grape_0);
+      color: var(--color-neutral-content);
+      background-color: var(--color-primary-emphasis);
     }
 
     &_active:not(.sidebar__pin, .menu__item_clickable) {
@@ -78,7 +78,7 @@
   &__divider {
     height: 1px;
     margin: 8px 0;
-    background-color: var(--sand_300);
+    background-color: var(--color-neutral-border);
   }
 
   &_size_compact &__item {

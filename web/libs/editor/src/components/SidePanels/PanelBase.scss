@@ -7,12 +7,12 @@
 
   height: 100%;
   z-index: 10;
-  background-color: var(--sand_0);
+  background-color: var(--color-neutral-background);
   pointer-events: all;
 
   &_newLabelingUI {
-    --header-background-new: var(--sand_200);
-    --icon-color: var(--sand_500);
+    --header-background-new: var(--color-neutral-surface-inset);
+    --icon-color: var(--color-neutral-icon);
   }
 
   .panel {
@@ -21,7 +21,7 @@
       color: var(--icon-color);
 
       &:hover {
-        --icon-color: var(--grape_500);
+        --icon-color: var(--color-primary-icon);
         --header-background-new: var(--grape_0);
       }
     }
@@ -140,7 +140,7 @@
     position: sticky;
     align-items: center;
     justify-content: space-between;
-    background-color: var(--header-background);
+    background-color: var(--color-neutral-surface-inset);
   }
 
   &_hidden:not(.panel_detached) &__header {

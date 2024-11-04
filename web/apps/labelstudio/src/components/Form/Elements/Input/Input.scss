@@ -18,20 +18,33 @@
     color: var(--color-neutral-content-subtler);
   }
 
-  &:hover:not(.disabled, [disabled]) {
-    border-color: var(--color-neutral-border-bolder);
-  }
-  
-
-  &:active {
-    border-color: var(--color-neutral-border-boldest);
-  }
-
   &_ghost {
     border: none;
     padding: 0;
     background-color: transparent;
     outline: none;
+  }
+}
+
+.input-ls,
+.textarea-ls {
+  &:not([disabled]):hover {
+    border-color: var(--color-neutral-border-bold);
+  }
+  
+
+  &:not([disabled]):active {
+    border-color: var(--color-neutral-border-bolder);
+  }
+}
+
+.select-ls {
+  &:not(.disabled):hover {
+    border-color: var(--color-neutral-border-bold);
+  }
+
+  &:not(.disabled):active {
+    border-color: var(--color-neutral-border-bolder);
   }
 }
 

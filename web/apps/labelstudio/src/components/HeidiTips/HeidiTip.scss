@@ -38,6 +38,7 @@
     display: block;
 
     &:hover {
+      color: var(--color-primary-content-hover);
       text-decoration: underline;
     }
 

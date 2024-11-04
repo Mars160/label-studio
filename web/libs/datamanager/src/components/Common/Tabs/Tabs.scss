@@ -5,7 +5,7 @@
   justify-content: space-between;
   box-shadow: 0 -1px 0 var(--color-neutral-border) inset;
   background: var(--color-neutral-surface);
-  padding-top: 2px;
+  padding: 2px 0 0 2px;
 
   &-content {
     &__draggable {
@@ -30,15 +30,15 @@
   }
 
   &__item {
+    background-color: var(--color-neutral-surface);
     color: var(--color-neutral-content-subtler);
-    background-color: var(--color-neutral-surface-active);
     width: 100%;
     overflow: hidden;
     cursor: pointer;
     position: relative;
-    box-shadow: 0 -3px 0 var(--color-neutral-border) inset;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
+    box-shadow: -1px 0 0 var(--color-neutral-border) inset, 1px 0 0 var(--color-neutral-border) inset, 0 1px 0 var(--color-neutral-border-subtle) inset, 0 -3px 0 var(--color-neutral-border) inset;
+    border-top-left-radius: var(--radius-small);
+    border-top-right-radius: var(--radius-small);
 
     &_active {
       color: var(--color-neutral-content);

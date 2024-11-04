@@ -25,8 +25,8 @@
       padding: 0 5px;
     }
 
-    &:hover:not([disabled])  {
-      border: 1px solid var(--color-neutral-border-boldest);
+    &:not(.disabled):hover  {
+      border: 1px solid var(--color-neutral-border-bolder);
     }
   }
 }

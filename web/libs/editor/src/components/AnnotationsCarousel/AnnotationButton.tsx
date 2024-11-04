@@ -7,6 +7,7 @@ import {
   IconDuplicate,
   IconEllipsis,
   IconTrashRect,
+  IconTrashAlt,
   LsCommentResolved,
   LsCommentUnresolved,
   LsSparks,
@@ -147,7 +148,7 @@ export const AnnotationButton = observer(
           {showDuplicateAnnotation && (
             <Elem name="option" mod={{ duplicate: true }} onClick={duplicateAnnotation}>
               <Elem name="icon">
-                <IconDuplicate width={20} height={24} />
+                <IconDuplicate width={24} height={24} />
               </Elem>
               Duplicate Annotation
             </Elem>
@@ -157,7 +158,7 @@ export const AnnotationButton = observer(
               <Elem name="seperator" />
               <Elem name="option" mod={{ delete: true }} onClick={deleteAnnotation}>
                 <Elem name="icon">
-                  <IconTrashRect width={14} height={18} />
+                  <IconTrashRect />
                 </Elem>{" "}
                 Delete Annotation
               </Elem>
@@ -247,7 +248,7 @@ export const AnnotationButton = observer(
             onToggle={(isVisible) => setIsContextMenuOpen(isVisible)}
           >
             <Elem name="ellipsisIcon">
-              <IconEllipsis width={28} height={28} />
+              <IconEllipsis width={24} height={24} />
             </Elem>
           </Dropdown.Trigger>
         </Elem>

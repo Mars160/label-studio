@@ -11,12 +11,13 @@
   border-radius: 0;
   transition: background-color 400ms ease-out;
   border-right: 1px solid var(--color-neutral-border);
+  gap: 2px;
 
   &__item {
     height: 48px;
     display: flex;
     padding: 0 13px;
-    border-radius: 0.5rem;
+    border-radius: var(--radius-xs);
     align-items: center;
     box-sizing: border-box;
     color: var(--color-neutral-content-subtler);

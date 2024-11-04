@@ -80,6 +80,7 @@
     font-size: var(--font-size);
     border-radius: 4px;
     height: calc(var(--height) - calc(var(--padding) * 2));
+    transition: all 150ms ease-out;
 
     &_checked {
       opacity: 1;

@@ -18,10 +18,15 @@
     &:hover {
       border: none;
       filter: none;
-      background: #ebf3fc;
+      background: var(--color-primary-emphasis-subtle);
+
+      &__icon {
+        color: var(--color-neutral-content);
+      }
     }
 
     &:active {
+      color: var(--color-neutral-content);
       background: linear-gradient(0deg, var(--black_2), var(--black_2)), #FFF;
       box-shadow: 0 0 5px 0 var(--black_20);
     }

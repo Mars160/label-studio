@@ -30,6 +30,8 @@
 
     input {
       border: 1px solid var(--color-neutral-border);
+      background: var(--color-neutral-surface);
+      color: var(--color-neutral-content);
       line-height: 1em;
       width: 320px;
       border-radius: 5px 0 0 5px;
@@ -111,6 +113,7 @@
     background: var(--color-primary-background);
     border-radius: 4px;
     cursor: pointer;
+    color: var(--color-primary-content)
   }
 
   &__upload-icon {
@@ -163,11 +166,10 @@
   position: relative;
 
   a {
-    color: var(--color-primary-surface-content);
-    text-decoration: underline;
+    color: var(--color-primary-content);
 
     &:hover {
-      color: var(--color-primary-surface-content-subtle);
+      text-decoration: underline;
     }
   }
 
@@ -178,7 +180,7 @@
       content: "";
       position: absolute;
       inset: 8px;
-      border: 2px dashed var(--grape_500);
+      border: 2px dashed var(--color-primary-border);
       border-radius: 10px;
       pointer-events: none;
     }
@@ -202,8 +204,9 @@
     flex-direction: column;
     align-items: center;
     cursor: pointer;
-    background: var(--color-primary-emphasis-subtle);
+    background: var(--color-primary-background);
     border: 1px dashed var(--color-primary-border);
+    color: var(--color-neutral-content-subtle);
     padding: 2rem;
     width: 40rem;
     border-radius: 8px;
@@ -215,8 +218,8 @@
     header {
       font-size: 24px;
       line-height: 32px;
-      font-weight: 800;
       text-align: center;
+      color: var(--color-neutral-content);
     }
 
     dl {
@@ -226,8 +229,8 @@
       line-height: 20px;
       gap: 0 30px;
 
-      dd {
-        font-weight: 900;
+      dt {
+        color: var(--color-neutral-content);
       }
 
       dt:last-of-type,

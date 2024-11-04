@@ -49,7 +49,7 @@
         color: var(--color-neutral-content-subtler);
 
         &:hover {
-          color: var(--color-primary-content);
+          color: var(--color-primary-content-hover);
         }
       }
     }
@@ -72,10 +72,10 @@
   &__item > span,
   &__item > a {
     text-decoration: none;
-    color: var(--color-neutral-content) ;
+    color: var(--color-neutral-content);
 
     a {
-      color: var(--color-primary-surface-content);
+      color: var(--color-primary-content);
     }
   }
 

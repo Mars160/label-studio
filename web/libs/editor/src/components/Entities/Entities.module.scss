@@ -42,7 +42,7 @@
 
   &:hover {
     cursor: pointer;
-    color: var(--red_7);
+    color: var(--color-negative-content);
   }
 }
 
@@ -55,8 +55,9 @@
   flex-wrap: nowrap;
   position: relative;
   padding: 0;
-  border: 1px solid var(--sand_300);
+  border: 1px solid var(--color-neutral-border);
   border-radius: 5px;
+  transition: all 150ms ease-out;
 
   & > *:not(:last-child),
   & [role="img"] {

@@ -46,7 +46,7 @@ const Select = ({ label, className, options, validate, required, skip, labelProp
     >
       {(ref) => {
         return (
-          <div className={classList}>
+          <div className={`${classList} ${props.disabled ? 'disabled' : ''}`}>
             <select
               {...props}
               value={value}

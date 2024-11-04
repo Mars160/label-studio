@@ -3,12 +3,11 @@
 .tabs-panel {
   --header-height: 24px;
   --header-border-radius: 0;
-  --header-background: var(--color-neutral-surface);
+  --header-background: var(--color-neutral-surface-inset);
   --icon-color: var(--color-neutral-icon);
 
   height: 100%;
   z-index: 10;
-  background-color: var(--color-neutral-background);
   pointer-events: all;
 
   &__header {

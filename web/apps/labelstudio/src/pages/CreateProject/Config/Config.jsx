@@ -105,7 +105,7 @@ const ConfigureControl = ({ control, template }) => {
         <h4>{tagname === "Choices" ? "Add choices" : "Add label names"}</h4>
         <span>Use new line as a separator to add multiple labels</span>
         <textarea name="labels" id="" cols="30" rows="5" ref={refLabels} onKeyPress={onKeyPress} />
-        <input type="button" value="Add" onClick={onAddLabels} />
+        <input className={configClass.elem("add")} type="button" value="Add" onClick={onAddLabels} />
       </form>
       <div className={configClass.elem("current-labels")}>
         <h3>
@@ -163,7 +163,7 @@ const ConfigureSettings = ({ template }) => {
           <li key={key}>
             <label>
               {options.title}{" "}
-              <select value={value} onChange={onChange}>
+              <select className="lsf-select-ls" value={value} onChange={onChange}>
                 {options.type.map((option) => (
                   <option key={option} value={option}>
                     {option}
@@ -466,9 +466,9 @@ const Configurator = ({
       <div className={configClass.elem("container")}>
         <h1>Labeling Interface{hasChanges ? " *" : ""}</h1>
         <header>
-          <button type="button" data-leave={true} onClick={onBrowse}>
+          <Button look="secondary" size="compact" style={{ width: 160 }}  data-leave={true} onClick={onBrowse}>
             Browse Templates
-          </button>
+          </Button>
           <ToggleItems items={{ code: "Code", visual: "Visual" }} active={configure} onSelect={onSelect} />
         </header>
         <div className={configClass.elem("editor")}>

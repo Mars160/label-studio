@@ -82,11 +82,11 @@
     color: var(--color-neutral-content-subtle);
 
     & a {
-      color: var(--color-primary-surface-content);
-      text-decoration: underline;
+      color: var(--color-primary-content);
 
       &:hover {
-        color: var(--color-primary-surface-content-light);
+        color: var(--color-primary-content-hover);
+        text-decoration: underline;
       }
     }
 
@@ -97,8 +97,6 @@
   }
 
   &__close {
-    --button-color: var(--color-primary-surface-content);
-
     border: none;
 
     --icon-size: 16px;

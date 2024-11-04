@@ -5,6 +5,7 @@
   letter-spacing: 0.15px;
   text-align: left;
   font-family: var(--font-sans);
+  color: var(--color-neutral-content);
 }
 
 
@@ -56,7 +57,7 @@
     height: 16px;
     display: inline-flex;
     align-items: center;
-    background: var(--sand_0);
+    background: var(--color-neutral-background);
     border-radius: 2px;
     font-weight: bold;
     font-size: 12px;
@@ -77,12 +78,12 @@
 
   &__key-group + &__key-group {
     margin-top: 5px;
-    border-top: 2px solid var(--sand_200);
+    border-top: 2px solid var(--color-neutral-border);
   }
 }
 
 .settings-modal {
-  --modal-button-text-color-active: var(--primary_link);
+  --modal-button-text-color-active: var(--color-primary-content);
   --modal-border-radius: 8px;
   --modal-padding: 24px;
 
@@ -90,11 +91,11 @@
   max-width: 568px !important;
 
   .ant-pagination-item-active {
-    border-color: var(--primary_link);
+    border-color: var(--color-primary-content);
   }
 
   .ant-pagination-item-active a {
-    color: var(--primary_link);
+    color: var(--color-primary-content);
   }
 
   :global(.ant-tabs-tab .ant-tabs-tab-btn) {
@@ -104,7 +105,7 @@
   }
 
   :global(.ant-tabs-ink-bar) {
-    background: var(--primary_link);
+    background: var(--color-primary-content);
   }
 
   :global(.ant-modal-close) {
@@ -127,7 +128,7 @@
     padding: calc(var(--modal-padding) / 4) var(--modal-padding) !important;
 
     :hover {
-      color: var(--primary_link);
+      color: var(--color-primary-content);
     }
   }
 
@@ -141,6 +142,7 @@
 
   :global(.ant-modal-content) {
     border-radius: var(--modal-border-radius) !important;
+    background-color: var(--color-neutral-background);
   }
 
   :global(.ant-modal-body) {
@@ -148,9 +150,11 @@
   }
 
   :global(.ant-modal-header) {
-    border-radius: var(--modal-border-radius) var(--modal-border-radius) 0 0 !important;
+    border-radius: var(--radius-small) var(--modal-border-radius) 0 0 !important;
     padding: var(--modal-padding) !important;
     border: none !important;
+    background-color: var(--color-neutral-background);
+    color: var(--color-neutral-content);
   }
 
   :global(.ant-modal-title) {
@@ -159,6 +163,7 @@
     line-height: 32px;
     letter-spacing: 0;
     text-align: left;
+    color: var(--color-neutral-content);
   }
 
   .settings-tag {
@@ -166,8 +171,8 @@
     align-items: center;
     justify-content: center;
     padding-inline: 4px;
-    color: var(--grape_700);
-    background-color: var(--grape_0);
+    color: var(--color-accent-grape-bold);
+    background-color: var(--color-accent-grape-subtle);
     border-radius: 2px;
     height: 20px;
     font-size: 11px;

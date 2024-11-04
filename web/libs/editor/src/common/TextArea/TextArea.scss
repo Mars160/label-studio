@@ -1,7 +1,7 @@
 .textarea {
-  --textarea-surface-color: #FAFAFA;
+  --textarea-surface-color: var(--color-neutral-surface);
   --textarea-border-size: 1px;
-  --textarea-border-color: #DFDFDF;
+  --textarea-border-color: var(--color-neutral-border);
   --textarea-border-radius: 4px;
   --textarea-font-size: 16px;
   --textarea-line-height: 24px;

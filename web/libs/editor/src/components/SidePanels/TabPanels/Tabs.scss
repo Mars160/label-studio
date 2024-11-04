@@ -108,6 +108,8 @@
     display: block;
     cursor: grab;
     user-select: none;
+    border-top-left-radius: var(--radius-xs);
+    border-top-right-radius: var(--radius-xs);
 
     &_active {
       overflow: visible;
@@ -115,7 +117,8 @@
       border-width: 1px 1px 0;
       transform: translate(-1px, -1px);
       border-style: solid;
-      background: var(--sand_0);
+      background: var(--color-neutral-background);
+      box-shadow: 1px 4px 0 rgba(var(--color-neutral-shadow-raw) / 4%),  -1px 4px 0 rgba(var(--color-neutral-shadow-raw) / 4%);
     }
 
     &:hover svg {

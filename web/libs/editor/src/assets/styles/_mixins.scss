@@ -11,7 +11,7 @@
 }
 
 @mixin styled-scrollbars(){
-  scrollbar-color: var(--color-neutral-border-boldest) transparent;
+  scrollbar-color: var(--color-neutral-border-bolder) transparent;
   scrollbar-width: thin;
 
   &::-webkit-scrollbar{
