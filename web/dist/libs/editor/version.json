@@ -1,6 +1,6 @@
 {
-  "message": "feat: LEAP-1533: Make Quick View readonly by condition (#6539)",
-  "commit": "466a9005a22f3c20adb7773be39b573826e3767e",
-  "date": "2024-10-29T21:17:19.000Z",
+  "message": "refactor: OPTIC-915: Remove Stale Feature Flag - fflag_feat_front_lsdv_3025_outliner_filter_short (#6584)",
+  "commit": "e9ea423c3174940cea0d52f83834932ff73d37fa",
+  "date": "2024-10-31T20:34:16.000Z",
   "branch": "develop"
 }
