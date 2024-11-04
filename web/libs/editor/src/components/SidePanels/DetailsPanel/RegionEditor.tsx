@@ -64,12 +64,12 @@ const RegionEditorComponent: FC<RegionEditorProps> = ({ region }) => {
 };
 
 const RegionProperties = ({ region }: RegionEditorProps) => {
-  const fields: any[] = region.editableFields ?? [];
+  const fields = region.editableFields ?? [];
 
   return (
     <Elem name="wrapper">
       {region.editorEnabled &&
-        fields.map((field: any, i) => {
+        fields.map((field, i) => {
           return (
             <RegionProperty
               key={`${field.property}-${i}`}
@@ -130,7 +130,7 @@ const RegionProperty: FC<RegionPropertyProps> = ({ property, label, region }) =>
   const options = useMemo(() => {
     if (isPrimitive) return null;
 
-    let result: any[] | null = null;
+    let result: string[] | null = null;
     const isEnum = isUnionType(propertyType);
 
     if (isEnum) {
