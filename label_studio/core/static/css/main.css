@@ -219,6 +219,7 @@ html {
   --color-negative-border-subtler: var(--color-persimmon-300);
   --color-negative-border-subtlest: var(--color-persimmon-200);
   --color-negative-content: var(--color-persimmon-700);
+  --color-negative-content-hover: var(--color-persimmon-500);
   --color-negative-content-subtle: var(--color-persimmon-500);
   --color-negative-focus-outline: var(--color-persimmon-200);
   --color-negative-icon: var(--color-persimmon-500);
@@ -229,8 +230,8 @@ html {
   --color-negative-surface-icon: var(--color-persimmon-100);
   --color-negative-surface-hover: var(--color-persimmon-500);
   --color-neutral-background: var(--color-sand-000);
-  --color-neutral-emphasis: var(--color-sand-200);
   --color-neutral-background-bold: var(--color-sand-000);
+  --color-neutral-emphasis: var(--color-sand-200);
   --color-neutral-emphasis-subtle: var(--color-sand-100);
   --color-neutral-border: var(--color-sand-300);
   --color-neutral-border-bold: var(--color-sand-400);
@@ -247,6 +248,7 @@ html {
   --color-neutral-surface: var(--color-sand-100);
   --color-neutral-surface-active: var(--color-sand-200);
   --color-neutral-surface-hover: var(--color-sand-000);
+  --color-neutral-surface-inset: var(--color-sand-200);
   --color-neutral-inverted-background: var(--color-sand-900);
   --color-neutral-inverted-border: var(--color-sand-800);
   --color-neutral-inverted-content: var(--color-sand-100);
@@ -265,6 +267,7 @@ html {
   --color-positive-border-subtler: var(--color-kale-300);
   --color-positive-border-subtlest: var(--color-kale-200);
   --color-positive-content: var(--color-kale-700);
+  --color-positive-content-hover: var(--color-kale-500);
   --color-positive-content-subtle: var(--color-kale-500);
   --color-positive-focus-outline: var(--color-kale-200);
   --color-positive-icon: var(--color-kale-500);
@@ -283,6 +286,7 @@ html {
   --color-primary-border-subtler: var(--color-grape-300);
   --color-primary-border-subtlest: var(--color-grape-200);
   --color-primary-content: var(--color-grape-700);
+  --color-primary-content-hover: var(--color-grape-500);
   --color-primary-content-subtle: var(--color-grape-500);
   --color-primary-focus-outline: var(--color-grape-200);
   --color-primary-icon: var(--color-grape-500);
@@ -294,14 +298,15 @@ html {
   --color-primary-surface-icon: var(--color-grape-100);
   --color-primary-surface-hover: var(--color-grape-600);
   --color-warning-background: var(--color-canteloupe-000);
-  --color-warning-emphasis: var(--color-canteloupe-100);
-  --color-warning-emphasis-subtle: var(--color-canteloupe-000);
+  --color-warning-emphasis: var(--color-canteloupe-200);
+  --color-warning-emphasis-subtle: var(--color-canteloupe-100);
   --color-warning-border: var(--color-canteloupe-700);
   --color-warning-border-bold: var(--color-canteloupe-800);
   --color-warning-border-subtle: var(--color-canteloupe-500);
   --color-warning-border-subtler: var(--color-canteloupe-300);
   --color-warning-border-subtlest: var(--color-canteloupe-200);
   --color-warning-content: var(--color-canteloupe-700);
+  --color-warning-content-hover: var(--color-canteloupe-500);
   --color-warning-content-subtle: var(--color-canteloupe-500);
   --color-warning-focus-outline: var(--color-canteloupe-200);
   --color-warning-icon: var(--color-canteloupe-500);
@@ -1001,4 +1006,8 @@ hotkey i {
 }
 .button.light-blue:hover {
     background: rgb(50, 149, 230) !important;
+}
+
+.ant-modal-content {
+    background-color: var(--color-neutral-background);
 }
