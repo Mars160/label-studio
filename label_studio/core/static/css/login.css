@@ -207,9 +207,9 @@ html, body {
 }
 
 .login_page_new_ui form .lsf-button-ls.lsf-button-ls_look_primary {
+  --button-color: var(--color-neutral-inverted-content);
   border-radius: 4rem;
   background: var(--color-neutral-inverted-surface);
-  color: var(--color-neutral-inverted-content);
 }
 
 .login_page_new_ui .field_errors {
@@ -318,11 +318,11 @@ label{
   content: '';
   display: block;
   position: absolute;
-  top: 1px;
+  top: 2px;
   left: 8px;
   width: 5px;
-  height: 12px;
-  border: solid var(--color-neutral-inverted-surface-content);
+  height: 10px;
+  border: solid var(--color-primary-surface-content);
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
