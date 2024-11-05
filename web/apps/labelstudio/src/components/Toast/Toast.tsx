@@ -63,7 +63,7 @@ export const ToastAction: FC<ToastActionProps> = ({ children, closeCallback, alt
     </Elem>
   </ToastPrimitive.Action>
 );
-type ToastShowArgs = { message: string; type?: ToastType };
+type ToastShowArgs = { message: string; type?: ToastType, duration?: number };
 type ToastContextType = {
   show: ({ message, type }: ToastShowArgs) => void;
 };
@@ -81,10 +81,11 @@ export const useToast = () => {
 
 export const ToastProvider: FC<ToastProviderWithTypes> = ({ swipeDirection = "down", children, ...props }) => {
   const [toastMessage, setToastMessage] = useState<ToastShowArgs | null>();
-  const duration = 2000;
-  const show = ({ message, type }: ToastShowArgs) => {
+  const defaultDuration = 2000;
+  const duration = toastMessage?.duration ?? defaultDuration;
+  const show = ({ message, type, duration }: ToastShowArgs) => {
     setToastMessage({ message, type });
-    setTimeout(() => setToastMessage(null), duration);
+    setTimeout(() => setToastMessage(null), duration ?? defaultDuration);
   };
 
   return (
