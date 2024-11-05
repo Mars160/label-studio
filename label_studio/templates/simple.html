@@ -23,17 +23,6 @@
 
   {% block head %}
   {% endblock %}
-
-  <script>
-    const systemColor = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "Dark" : "Light"
-    const localStorageColor = window.localStorage.getItem("preferred-color-scheme");
-    console.log(localStorageColor);
-    if (!localStorageColor) {
-      window.localStorage.setItem("preferred-color-scheme", systemColor);
-    }
-    const themeColor = localStorageColor ?? systemColor;
-    document.documentElement.setAttribute("data-color-scheme", themeColor.toLowerCase());
-  </script>
 </head>
 
 <body>
