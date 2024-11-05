@@ -21,7 +21,7 @@ import {
   IconText,
   IconWarning,
 } from "../../assets/icons";
-import { IconFilm } from "../../assets/icons/timeline";
+import { IconFullscreen } from "../../assets/icons/timeline";
 import { NodeView } from "./NodeView";
 import { Tooltip } from "../../common/Tooltip/Tooltip";
 
@@ -118,7 +118,7 @@ const NodeViews = {
 
   TimelineRegionModel: NodeView({
     name: "Timeline Span",
-    icon: IconFilm,
+    icon: IconFullscreen,
   }),
 };
 
