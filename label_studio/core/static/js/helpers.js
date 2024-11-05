@@ -161,10 +161,8 @@ function message_from_response(result) {
 
 function handleThemeColor() {
   let themeColor = window.localStorage.getItem("preferred-color-scheme");
-  console.log(themeColor);
   if (!themeColor || themeColor === "Auto") {
     themeColor = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "Dark" : "Light"
   }
-  console.log("localStorageColor", themeColor)
   document.documentElement.setAttribute("data-color-scheme", themeColor.toLowerCase());
 }
