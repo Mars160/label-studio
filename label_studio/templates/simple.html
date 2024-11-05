@@ -23,15 +23,24 @@
 
   {% block head %}
   {% endblock %}
+
+  {% block theme_colors %}
+    <script>
+      function handleThemeColor() {
+        let themeColor = window.localStorage.getItem("preferred-color-scheme");
+        if (!themeColor || themeColor === "Auto") {
+          themeColor = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "Dark" : "Light"
+        }
+        document.documentElement.setAttribute("data-color-scheme", themeColor.toLowerCase());
+      }
+      handleThemeColor();
+    </script>
+  {% endblock %}
 </head>
 
 <body>
 {% block content %}
 {% endblock %}
 
-{% block bottomjs %}
-  <script src="{{settings.HOSTNAME}}{% static 'js/helpers.js' %}"></script>
-  <script>handleThemeColor()</script>
-{% endblock %}
 </body>
 </html>

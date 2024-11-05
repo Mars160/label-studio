@@ -25,6 +25,19 @@
   <link href="{{settings.HOSTNAME}}{% static 'css/main.css' %}" rel="stylesheet">
   <link href="{{settings.FRONTEND_HOSTNAME}}/react-app/main.css?v={{ versions.backend.commit }}" rel="stylesheet">
 
+  {% block theme_colors %}
+    <script>
+      function handleThemeColor() {
+        let themeColor = window.localStorage.getItem("preferred-color-scheme");
+        if (!themeColor || themeColor === "Auto") {
+          themeColor = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "Dark" : "Light"
+        }
+        document.documentElement.setAttribute("data-color-scheme", themeColor.toLowerCase());
+      }
+      handleThemeColor();
+    </script>
+  {% endblock %}
+  
   {% block app-scripts %}
   {% endblock %}
 
@@ -51,6 +64,7 @@
 
   {% get_current_language as LANGUAGE_CODE %}
   {% get_available_languages as LANGUAGES %}
+
 </head>
 
 <body>
@@ -135,7 +149,6 @@
            $(this).closest('.message').transition('fade');
       });
   </script>
-  <script>handleThemeColor()</script>
 {% endblock %}
 
 <div id="dynamic-content">
