@@ -27,6 +27,7 @@ import { Tooltip } from "./../../common/Tooltip/Tooltip";
 // @ts-ignore
 import { confirm } from "../../common/Modal/Modal";
 import { observer } from "mobx-react";
+
 interface AnnotationButtonInterface {
   entity?: any;
   capabilities?: any;
@@ -67,6 +68,15 @@ export const AnnotationButton = observer(
     );
     const [isGroundTruth, setIsGroundTruth] = useState<boolean>();
     const [isContextMenuOpen, setIsContextMenuOpen] = useState<boolean>(false);
+    const infoIsHidden = annotationStore.store?.hasInterface("annotations:hide-info");
+    let hiddenUser = null;
+
+    if (infoIsHidden) {
+      // this data can be missing in tests, but we don't have `infoIsHidden` there, so hiding logic like this
+      const currentUser = annotationStore.store.user;
+      const isCurrentUser = entity.user?.id === currentUser.id || entity.createdBy === currentUser.email;
+      hiddenUser = { email: isCurrentUser ? "Me" : "User" };
+    }
 
     const CommentIcon = renderCommentIcon(entity);
     // need to find a more reliable way to grab this value
@@ -177,7 +187,7 @@ export const AnnotationButton = observer(
               tag={Userpic}
               showUsername
               username={isPrediction ? entity.createdBy : null}
-              user={entity.user ?? { email: entity.createdBy }}
+              user={hiddenUser ?? entity.user ?? { email: entity.createdBy }}
               mod={{ prediction: isPrediction }}
               size={24}
             >
@@ -199,15 +209,19 @@ export const AnnotationButton = observer(
           <Elem name="main">
             <Elem name="user">
               <Elem tag="span" name="name">
-                {username}
+                {hiddenUser ? hiddenUser.email : username}
               </Elem>
-              <Elem tag="span" name="entity-id">
-                #{entity.pk ?? entity.id}
+              {!infoIsHidden && (
+                <Elem tag="span" name="entity-id">
+                  #{entity.pk ?? entity.id}
+                </Elem>
+              )}
+            </Elem>
+            {!infoIsHidden && (
+              <Elem name="created">
+                <Elem name="date" component={TimeAgo} date={entity.createdDate} />
               </Elem>
-            </Elem>
-            <Elem name="created">
-              <Elem name="date" component={TimeAgo} date={entity.createdDate} />
-            </Elem>
+            )}
           </Elem>
           {!isPrediction && (
             <Elem name="icons">

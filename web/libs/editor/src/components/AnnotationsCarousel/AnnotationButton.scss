@@ -85,6 +85,7 @@
   &_selected {
     background-color: var(--color-neutral-background);
     border-color: var(--color-neutral-border);
+    transform: translate(0, 1px);
 
     &:hover {
       cursor: default;

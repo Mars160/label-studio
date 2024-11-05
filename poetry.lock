@@ -1914,7 +1914,7 @@ description = ""
 optional = false
 python-versions = "^3.8"
 files = [
-    {file = "6e4e079bf97a49773f90ead3cba0e086c2ccf7ec.zip", hash = "sha256:a9c394aa63a3c2c6362a32d5be4ff20ff82743feab68bb925cdd83692be178c4"},
+    {file = "91637159ca49586098d5b5f60fa451cfe980dc0d.zip", hash = "sha256:cedb9435795dc8fc088633035f3ce25e0449aab0b8a5bef8e3319dcc6bfb86be"},
 ]
 
 [package.dependencies]
@@ -1937,7 +1937,7 @@ xmljson = "0.2.1"
 
 [package.source]
 type = "url"
-url = "https://github.com/HumanSignal/label-studio-sdk/archive/6e4e079bf97a49773f90ead3cba0e086c2ccf7ec.zip"
+url = "https://github.com/HumanSignal/label-studio-sdk/archive/91637159ca49586098d5b5f60fa451cfe980dc0d.zip"
 
 [[package]]
 name = "launchdarkly-server-sdk"
@@ -4332,13 +4332,13 @@ files = [
 
 [[package]]
 name = "werkzeug"
-version = "3.0.3"
+version = "3.0.6"
 description = "The comprehensive WSGI web application library."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "werkzeug-3.0.3-py3-none-any.whl", hash = "sha256:fc9645dc43e03e4d630d23143a04a7f947a9a3b5727cd535fdfe155a17cc48c8"},
-    {file = "werkzeug-3.0.3.tar.gz", hash = "sha256:097e5bfda9f0aba8da6b8545146def481d06aa7d3266e7448e2cccf67dd8bd18"},
+    {file = "werkzeug-3.0.6-py3-none-any.whl", hash = "sha256:1bc0c2310d2fbb07b1dd1105eba2f7af72f322e1e455f2f93c993bee8c8a5f17"},
+    {file = "werkzeug-3.0.6.tar.gz", hash = "sha256:a8dd59d4de28ca70471a34cba79bed5f7ef2e036a76b3ab0835474246eb41f8d"},
 ]
 
 [package.dependencies]
@@ -4404,4 +4404,4 @@ mysql = ["mysqlclient"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<4"
-content-hash = "31f5d9ed7b8300d58bee12f853ef56137f2a824c4b3f1f767d10f47aca50e442"
+content-hash = "3fce325518e2f6ed4a75956d2f74bf21d2cda97d10f3a26acf19a05a03ea689f"
