@@ -29,5 +29,9 @@
 {% block content %}
 {% endblock %}
 
+{% block bottomjs %}
+  <script src="{{settings.HOSTNAME}}{% static 'js/helpers.js' %}"></script>
+  <script>handleThemeColor()</script>
+{% endblock %}
 </body>
 </html>

@@ -30,6 +30,8 @@ export const ThemeToggle = () => {
     setAppliedTheme(nextTheme === "Auto" ? systemMode : nextTheme);
   }, [theme]);
 
+  const themeLabel = useMemo(()=> THEME_OPTIONS.find((option) => option.toLowerCase() === theme.toLowerCase()), [theme]);
+
   return (
     <button 
       className={clsx(styles.themeToggle, { [styles.dark]: appliedTheme === "Dark", [styles.light]: appliedTheme === "Light" })} 
@@ -41,7 +43,7 @@ export const ThemeToggle = () => {
           <Sun className={clsx(styles.sun)} />
         </div>
       </div>
-      <span className={clsx(styles.themeToggle__label)}>{theme}</span>
+      <span className={clsx(styles.themeToggle__label)}>{themeLabel}</span>
     </button>
   );
 };
