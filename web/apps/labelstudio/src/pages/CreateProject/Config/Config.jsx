@@ -203,7 +203,7 @@ const ConfigureSettings = ({ template }) => {
         return (
           <li key={key}>
             <label>
-              {options.title} <input type="text" onInput={onChange} value={value} size={size} />
+              {options.title} <input className="lsf-input-ls" type="text" onInput={onChange} value={value} size={size} />
             </label>
           </li>
         );
@@ -280,7 +280,7 @@ const ConfigureColumn = ({ template, obj, columns }) => {
       {template.objects > 1 && ` for ${obj.getAttribute("name")}`}
       {" from "}
       {columns?.length > 0 && columns[0] !== DEFAULT_COLUMN && "field "}
-      <select onChange={selectValue} value={isManual ? "-" : value}>
+      <select className="lsf-select-ls" onChange={selectValue} value={isManual ? "-" : value}>
         {columns?.map((column) => (
           <option key={column} value={column}>
             {column === DEFAULT_COLUMN ? "<imported file>" : `$${column}`}
@@ -289,7 +289,7 @@ const ConfigureColumn = ({ template, obj, columns }) => {
         {!columns?.length && <option value={value}>{"<imported file>"}</option>}
         <option value="-">{"<set manually>"}</option>
       </select>
-      {isManual && <input value={newValue} onChange={handleChange} onBlur={handleBlur} onKeyDown={handleKeyDown} />}
+      {isManual && <input className="lsf-input-ls" value={newValue} onChange={handleChange} onBlur={handleBlur} onKeyDown={handleKeyDown} />}
     </p>
   );
 };
