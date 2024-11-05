@@ -46,11 +46,14 @@
   border-radius: var(--button-radius);
   text-decoration: none;
   gap: var(--button-gap);
+  transition: all 150ms ease-out;
 
   &:hover:not(:disabled, .button-ls_waiting, .button-ls_look_danger, .button-ls_look_primary) {
     --button-color: var(--color-neutral-content);
     --button-background-color: var(--color-neutral-surface-hover);
     --button-border-color: var(--color-neutral-border-bold);
+    background-color: var(--button-background-color);
+    border-color: var(--button-border-color);
   }
 
   &:active {
@@ -169,7 +172,7 @@
       border-color: var(--color-negative-border);
 
       &:hover:not(:disabled, &_waiting) {
-        --button-color: var(--color-negative-content);
+        --button-color: var(--color-neutral-content);
 
         border-color: var(--color-negative-border-bold);
         background: var(--color-negative-emphasis-subtle);
