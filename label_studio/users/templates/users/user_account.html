@@ -4,6 +4,17 @@
 {% block head %}
 <link rel="stylesheet" href="{{ settings.HOSTNAME }}{% static 'css/uikit.css' %}">
 <link rel="stylesheet" href="{{ settings.HOSTNAME }}{% static 'css/users.css' %}">
+
+<script>
+  const systemColor = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "Dark" : "Light"
+  const localStorageColor = window.localStorage.getItem("preferred-color-scheme");
+  console.log(localStorageColor);
+  if (!localStorageColor) {
+    window.localStorage.setItem("preferred-color-scheme", systemColor);
+  }
+  const themeColor = localStorageColor ?? systemColor;
+  document.documentElement.setAttribute("data-color-scheme", themeColor.toLowerCase());
+</script>
 {% endblock %}
 
 {% block divider %}
