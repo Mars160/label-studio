@@ -63,7 +63,7 @@ export const ToastAction: FC<ToastActionProps> = ({ children, closeCallback, alt
     </Elem>
   </ToastPrimitive.Action>
 );
-type ToastShowArgs = { message: string; type?: ToastType, duration?: number };
+type ToastShowArgs = { message: string; type?: ToastType; duration?: number };
 type ToastContextType = {
   show: ({ message, type }: ToastShowArgs) => void;
 };

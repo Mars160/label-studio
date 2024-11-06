@@ -1,7 +1,9 @@
 import { useEffect } from "react";
 import { Menubar } from "../components/Menubar/Menubar";
-import { Toast, useToast } from "../components/Toast/Toast";
+import { useToast } from "../components/Toast/Toast";
 import { ProjectRoutes } from "../routes/ProjectRoutes";
+
+const STORAGE_PERSISTANCE_TIMEOUT = 60000;
 
 export const RootPage = ({ content }) => {
   const toast = useToast();
@@ -9,10 +11,17 @@ export const RootPage = ({ content }) => {
   const opened = pinned && localStorage.getItem("sidebar-opened") === "true";
   useEffect(() => {
     if (window.APP_SETTINGS?.flags?.storage_persistance) return;
-    toast.show({ message: <>
-    Data will be persisted on the node running this container,<br />
-    but all data will be lost if this node goes away.
-    </>, type: "error", duration: 60000 });
+    toast.show({
+      message: (
+        <>
+          Data will be persisted on the node running this container,
+          <br />
+          but all data will be lost if this node goes away.
+        </>
+      ),
+      type: "error",
+      duration: STORAGE_PERSISTANCE_TIMEOUT,
+    });
   }, []);
 
   return (
