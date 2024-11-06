@@ -46,20 +46,21 @@
   &__option {
     cursor: pointer;
     padding: 4px 16px;
+    color: var(--color-neutral-content-subtle);
 
     &:hover,
     &_focused {
-      background-color: #f7f7f7;
+      background-color: var(--color-primary-emphasis-subtle);
     }
 
     &_selected {
-      color: white;
-      background-color: var(--accent_color);
+      color: var(--color-neutral-content);
+      background-color: var(--color-primary-emphasis);
     }
 
     &_selected:hover,
     &_selected.select-dm__option_focused {
-      background-color: hsl(var(--accent_color), 10%);
+      background-color: hsl(var(--color-primary-emphasis), 10%);
     }
   }
 
