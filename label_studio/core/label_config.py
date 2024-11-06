@@ -76,6 +76,10 @@ def _fix_choices(config):
     return config
 
 
+def remove_xml_comments(config_string):
+    return re.sub(r'<!--[\s\S]*?-->', '', config_string)
+
+
 def parse_config_to_json(config_string):
     try:
         xml = etree.fromstring(config_string, forbid_dtd=False)
@@ -90,6 +94,7 @@ def parse_config_to_json(config_string):
 
 def validate_label_config(config_string):
     # xml and schema
+    config_string = remove_xml_comments(config_string)
     try:
         config = parse_config_to_json(config_string)
         jsonschema.validate(config, _LABEL_CONFIG_SCHEMA_DATA)
