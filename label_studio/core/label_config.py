@@ -80,7 +80,9 @@ def _fix_choices(config):
 def remove_xml_comments(config_string: Union[str, None]) -> Union[str, None]:
     if config_string is None:
         return None
-    return re.sub(r'<!--[\s\S]*?-->', '', config_string)
+    parser = etree.XMLParser(remove_comments=True)
+    xml = etree.fromstring(config_string, parser=parser)
+    return etree.tostring(xml, encoding='unicode')
 
 
 def parse_config_to_json(config_string: Union[str, None]) -> Union[OrderedDict, None]:
