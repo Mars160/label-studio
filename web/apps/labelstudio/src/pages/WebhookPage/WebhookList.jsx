@@ -1,5 +1,6 @@
 import { useCallback } from "react";
-import { LsCross, LsPencil } from "../../assets/icons";
+import { LsPencil } from "../../assets/icons";
+import { LsCross } from "@humansignal/ui";
 import { Button } from "../../components";
 import { Toggle } from "../../components/Form";
 import { Block, Elem } from "../../utils/bem";

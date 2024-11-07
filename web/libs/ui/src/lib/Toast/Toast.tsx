@@ -1,15 +1,23 @@
-import { createContext, type FC, type ReactNode, useContext, useState } from "react";
+import { createContext, type FC, type ReactNode, useCallback, useContext, useState } from "react";
 import * as ToastPrimitive from "@radix-ui/react-toast";
-import { type BemComponent, Block, CNComponentProps, Elem } from "../../utils/bem";
+import { type BemComponent, Block, Elem } from "../../utils/bem";
 import "./Toast.scss";
-import { MessageToast } from "./MessageToast";
+import { MessageToast } from "../MessageToast/MessageToast";
 
 export type ToastViewportProps = ToastPrimitive.ToastViewportProps & BemComponent;
-export interface ToastProps extends CNComponentProps {
+export interface ToastProps extends ToastPrimitive.ToastProps {
   title?: string;
   action?: ReactNode;
   closeable?: boolean;
   open?: boolean;
+  onClose?: () => void;
+  theme?: ToastTheme;
+  mod?: Record<string, unknown>;
+}
+
+enum ToastTheme {
+  dark = "dark",
+  light = "light",
 }
 
 export enum ToastType {
@@ -28,10 +36,26 @@ export const ToastViewport: FC<ToastViewportProps> = ({ hotkey, label, ...props 
   );
 };
 
-export const Toast: FC<ToastProps> = ({ title, action, children, closeable = false, ...props }) => {
+export const Toast: FC<ToastProps> = ({
+  title,
+  action,
+  children,
+  closeable = false,
+  theme = "light",
+  onClose,
+  ...props
+}) => {
+  const closeHandler = useCallback(
+    (open: boolean) => {
+      props.onOpenChange?.(open);
+      if (!closeable) return;
+      if (!open) onClose?.();
+    },
+    [closeable, onClose, props.onOpenChange],
+  );
   return (
-    <ToastPrimitive.Root {...props}>
-      <Block name="toast" mod={props?.mod}>
+    <ToastPrimitive.Root {...props} onOpenChange={closeHandler}>
+      <Block name="toast" mod={{ theme, ...(props?.mod ?? {}) }}>
         {title && (
           <ToastPrimitive.Title>
             <Elem name="title">{title}</Elem>
@@ -64,7 +88,11 @@ export const ToastAction: FC<ToastActionProps> = ({ children, closeCallback, alt
     </Elem>
   </ToastPrimitive.Action>
 );
-type ToastShowArgs = { message: string; type?: ToastType; duration?: number };
+type ToastShowArgs = {
+  message: string;
+  type?: ToastType;
+  duration?: number; // -1 for no auto close
+};
 type ToastContextType = {
   show: ({ message, type }: ToastShowArgs) => void;
 };

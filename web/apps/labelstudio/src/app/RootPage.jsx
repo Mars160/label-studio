@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Menubar } from "../components/Menubar/Menubar";
-import { useToast } from "../components/Toast/Toast";
+import { useToast } from "@humansignal/ui";
 import { ProjectRoutes } from "../routes/ProjectRoutes";
 
 const STORAGE_PERSISTANCE_TIMEOUT = -1;
@@ -14,8 +14,7 @@ export const RootPage = ({ content }) => {
     toast.show({
       message: (
         <>
-          Data will be persisted on the node running this container,
-          but all data will be lost if this node goes away.
+          Data will be persisted on the node running this container, but all data will be lost if this node goes away.
         </>
       ),
       type: "alertError",

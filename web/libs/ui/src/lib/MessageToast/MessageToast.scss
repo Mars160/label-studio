@@ -1,6 +1,8 @@
 .MessageToast {
   border-radius: 4px;
+
   --text-color: var(--sand_100);
+
   &_info {
     --background-color: var(--sand_900);
     --hover-background-color: var(--sand_800);
@@ -38,6 +40,7 @@
   &_alertError {
     --text-color: var(--black);
     --hover-background-color: var(--red_3);
+
     position: fixed;
     top: 60px;
     left: calc(50% - 250px);
@@ -46,14 +49,14 @@
     transform: translateY(-200%);
     transition: transform 1s;
     z-index: 100;
+
     .toast {
       background-color: var(--background-color);
-      border-bottom-style: solid;
-      border-bottom-width: 5px;
+      border-bottom: 5px solid var(--red_7);
       border-radius: 4px;
-      box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .2);
+      box-shadow: 0 2px 5px 0 rgb(0 0 0 / 20%);
       text-align: center;
-      border-bottom-color: var(--red_7);
+
       &__action,
       &__content {
         color: var(--black);

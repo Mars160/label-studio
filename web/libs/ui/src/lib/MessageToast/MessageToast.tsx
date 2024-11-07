@@ -1,4 +1,4 @@
-import { Toast, ToastAction, ToastType, type ToastProps } from "../../components/Toast/Toast";
+import { Toast, ToastAction, ToastType, type ToastProps } from "../Toast/Toast";
 import { LsCross } from "../../assets/icons";
 import type { FC } from "react";
 import { Block } from "../../utils/bem";
@@ -10,7 +10,12 @@ export interface MessageToastProps extends ToastProps {
   closeCallback?: () => void;
 }
 
-export const MessageToast: FC<MessageToastProps> = ({ toastType = ToastType.info, closeCallback, children, ...props }) => {
+export const MessageToast: FC<MessageToastProps> = ({
+  toastType = ToastType.info,
+  closeCallback,
+  children,
+  ...props
+}) => {
   return (
     <Block
       name="MessageToast"

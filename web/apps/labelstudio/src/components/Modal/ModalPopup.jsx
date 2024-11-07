@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from "react";
 import { createPortal } from "react-dom";
-import { LsCross } from "../../assets/icons";
+import { LsCross } from "@humansignal/ui";
 import { BemWithSpecifiContext, cn } from "../../utils/bem";
 import { aroundTransition } from "../../utils/transition";
 import { Button } from "../Button/Button";
