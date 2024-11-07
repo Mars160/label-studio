@@ -76,7 +76,9 @@ def _fix_choices(config):
     return config
 
 
-def remove_xml_comments(config_string):
+def remove_xml_comments(config_string: str | None) -> str | None:
+    if config_string is None:
+        return None
     return re.sub(r'<!--[\s\S]*?-->', '', config_string)
 
 
@@ -92,7 +94,7 @@ def parse_config_to_json(config_string):
     return config
 
 
-def validate_label_config(config_string):
+def validate_label_config(config_string: str | None) -> None:
     # xml and schema
     config_string = remove_xml_comments(config_string)
     try:
