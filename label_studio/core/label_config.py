@@ -4,7 +4,7 @@ import json
 import logging
 import re
 from collections import OrderedDict, defaultdict
-from typing import Union 
+from typing import Union
 from urllib.parse import urlencode
 
 import defusedxml.ElementTree as etree
