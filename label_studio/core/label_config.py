@@ -91,6 +91,7 @@ def parse_config_to_xml(config_string: Union[str, None], raise_on_empty: bool = 
 
     return xml
 
+
 def parse_config_to_json(config_string: Union[str, None]) -> Tuple[Union[OrderedDict, None], Union[str, None]]:
     try:
         xml = parse_config_to_xml(config_string, raise_on_empty=True)
