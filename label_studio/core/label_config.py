@@ -4,6 +4,7 @@ import json
 import logging
 import re
 from collections import OrderedDict, defaultdict
+from typing import Union 
 from urllib.parse import urlencode
 
 import defusedxml.ElementTree as etree
@@ -76,13 +77,13 @@ def _fix_choices(config):
     return config
 
 
-def remove_xml_comments(config_string: str | None) -> str | None:
+def remove_xml_comments(config_string: Union[str, None]) -> Union[str, None]:
     if config_string is None:
         return None
     return re.sub(r'<!--[\s\S]*?-->', '', config_string)
 
 
-def parse_config_to_json(config_string):
+def parse_config_to_json(config_string: Union[str, None]) -> Union[OrderedDict, None]:
     try:
         xml = etree.fromstring(config_string, forbid_dtd=False)
     except TypeError:
@@ -94,7 +95,7 @@ def parse_config_to_json(config_string):
     return config
 
 
-def validate_label_config(config_string: str | None) -> None:
+def validate_label_config(config_string: Union[str, None]) -> None:
     # xml and schema
     config_string = remove_xml_comments(config_string)
     try:
