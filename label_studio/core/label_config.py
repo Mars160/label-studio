@@ -77,8 +77,10 @@ def _fix_choices(config):
     return config
 
 
-def parse_config_to_xml(config_string: Union[str, None]) -> Union[OrderedDict, None]:
+def parse_config_to_xml(config_string: Union[str, None], raise_on_empty: bool = False) -> Union[OrderedDict, None]:
     if config_string is None:
+        if raise_on_empty:
+            raise TypeError('config_string is None')
         return None
 
     xml = etree.fromstring(config_string, forbid_dtd=True)
@@ -91,7 +93,7 @@ def parse_config_to_xml(config_string: Union[str, None]) -> Union[OrderedDict, N
 
 def parse_config_to_json(config_string: Union[str, None]) -> Tuple[Union[OrderedDict, None], Union[str, None]]:
     try:
-        xml = parse_config_to_xml(config_string)
+        xml = parse_config_to_xml(config_string, raise_on_empty=True)
     except TypeError:
         raise etree.ParseError('can only parse strings')
     if xml is None:
