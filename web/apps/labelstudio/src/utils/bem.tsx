@@ -45,7 +45,7 @@ type CNTagName =
   | FunctionComponent<unknown>
   | string;
 
-type CNComponentProps = {
+export type CNComponentProps = {
   name: string;
   tag?: CNTagName;
   block?: string;

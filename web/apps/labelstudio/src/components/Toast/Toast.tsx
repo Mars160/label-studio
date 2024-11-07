@@ -1,11 +1,11 @@
 import { createContext, type FC, type ReactNode, useContext, useState } from "react";
 import * as ToastPrimitive from "@radix-ui/react-toast";
-import { type BemComponent, Block, Elem } from "../../utils/bem";
+import { type BemComponent, Block, CNComponentProps, Elem } from "../../utils/bem";
 import "./Toast.scss";
 import { MessageToast } from "./MessageToast";
 
 export type ToastViewportProps = ToastPrimitive.ToastViewportProps & BemComponent;
-export interface ToastProps {
+export interface ToastProps extends CNComponentProps {
   title?: string;
   action?: ReactNode;
   closeable?: boolean;
@@ -15,6 +15,7 @@ export interface ToastProps {
 export enum ToastType {
   info = "info",
   error = "error",
+  alertError = "alertError",
 }
 interface ToastProviderWithTypes extends ToastPrimitive.ToastProviderProps {
   toastType: ToastType;
@@ -30,7 +31,7 @@ export const ToastViewport: FC<ToastViewportProps> = ({ hotkey, label, ...props 
 export const Toast: FC<ToastProps> = ({ title, action, children, closeable = false, ...props }) => {
   return (
     <ToastPrimitive.Root {...props}>
-      <Block name="toast">
+      <Block name="toast" mod={props?.mod}>
         {title && (
           <ToastPrimitive.Title>
             <Elem name="title">{title}</Elem>
@@ -83,9 +84,10 @@ export const ToastProvider: FC<ToastProviderWithTypes> = ({ swipeDirection = "do
   const [toastMessage, setToastMessage] = useState<ToastShowArgs | null>();
   const defaultDuration = 2000;
   const duration = toastMessage?.duration ?? defaultDuration;
-  const show = ({ message, type, duration }: ToastShowArgs) => {
+  const show = ({ message, type, duration = defaultDuration }: ToastShowArgs) => {
     setToastMessage({ message, type });
-    setTimeout(() => setToastMessage(null), duration ?? defaultDuration);
+    if (duration < 0) return;
+    setTimeout(() => setToastMessage(null), duration);
   };
 
   return (
