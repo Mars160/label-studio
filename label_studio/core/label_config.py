@@ -7,8 +7,8 @@ from collections import OrderedDict, defaultdict
 from typing import Tuple, Union
 from urllib.parse import urlencode
 
+import defusedxml.ElementTree as etree
 import jsonschema
-import lxml.etree as etree
 import numpy as np
 import pandas as pd
 import xmljson
@@ -77,11 +77,17 @@ def _fix_choices(config):
     return config
 
 
-def parse_config_to_xml(config_string: Union[str, None]) -> Union[etree.Element, None]:
+def parse_config_to_xml(config_string: Union[str, None]) -> Union[OrderedDict, None]:
     if config_string is None:
         return None
-    return etree.fromstring(config_string, parser=etree.XMLParser(remove_comments=True))
 
+    xml = etree.fromstring(config_string, forbid_dtd=True)
+
+    # Remove comments
+    for comment in xml.findall('.//comment'):
+        comment.getparent().remove(comment)
+
+    return xml
 
 def parse_config_to_json(config_string: Union[str, None]) -> Tuple[Union[OrderedDict, None], Union[str, None]]:
     try:
