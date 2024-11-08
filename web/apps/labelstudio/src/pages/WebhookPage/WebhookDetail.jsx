@@ -4,7 +4,7 @@ import { Form, Input, Label, Toggle } from "../../components/Form";
 import { Block, cn, Elem } from "../../utils/bem";
 import { cloneDeep } from "lodash";
 import { LsPlus } from "../../assets/icons";
-import { LsCross } from "@humansignal/ui";
+import { IconCross } from "@humansignal/ui";
 import { useAPI } from "../../providers/ApiProvider";
 import "./WebhookPage.scss";
 import { Space } from "../../components/Space/Space";
@@ -171,7 +171,7 @@ const WebhookDetail = ({ webhook, webhooksInfo, fetchWebhooks, onBack, onSelectA
                           <Button
                             className={rootClass.elem("headers-remove")}
                             type="button"
-                            icon={<LsCross />}
+                            icon={<IconCross />}
                             onClick={() => onHeaderRemove(index)}
                           />
                         </div>

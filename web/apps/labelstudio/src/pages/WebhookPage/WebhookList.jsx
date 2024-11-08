@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { LsPencil } from "../../assets/icons";
-import { LsCross } from "@humansignal/ui";
+import { IconCross } from "@humansignal/ui";
 import { Button } from "../../components";
 import { Toggle } from "../../components/Form";
 import { Block, Elem } from "../../utils/bem";
@@ -64,7 +64,7 @@ const WebhookList = ({ onSelectActive, onAddWebhook, webhooks, fetchWebhooks }) 
                       })
                     }
                     look="danger"
-                    icon={<LsCross />}
+                    icon={<IconCross />}
                   >
                     Delete
                   </Button>

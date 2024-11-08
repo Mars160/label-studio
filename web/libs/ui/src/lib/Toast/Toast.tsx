@@ -1,10 +1,11 @@
 import { createContext, type FC, type ReactNode, useCallback, useContext, useState } from "react";
 import * as ToastPrimitive from "@radix-ui/react-toast";
-import { type BemComponent, Block, Elem } from "../../utils/bem";
-import "./Toast.scss";
+import styles from "./Toast.module.scss";
 import { MessageToast } from "../MessageToast/MessageToast";
+import clsx from "clsx";
+import { IconCross } from "../../assets/icons";
 
-export type ToastViewportProps = ToastPrimitive.ToastViewportProps & BemComponent;
+export type ToastViewportProps = ToastPrimitive.ToastViewportProps & any;
 export interface ToastProps extends ToastPrimitive.ToastProps {
   title?: string;
   action?: ReactNode;
@@ -30,9 +31,9 @@ interface ToastProviderWithTypes extends ToastPrimitive.ToastProviderProps {
 }
 export const ToastViewport: FC<ToastViewportProps> = ({ hotkey, label, ...props }) => {
   return (
-    <Block name="toast-viewport" tag="div" {...props}>
+    <div className={styles["toast-viewport"]} {...props}>
       <ToastPrimitive.Viewport hotkey={hotkey} label={label} />
-    </Block>
+    </div>
   );
 };
 
@@ -41,7 +42,7 @@ export const Toast: FC<ToastProps> = ({
   action,
   children,
   closeable = false,
-  theme = "light",
+  theme = ToastTheme.light,
   onClose,
   ...props
 }) => {
@@ -55,37 +56,39 @@ export const Toast: FC<ToastProps> = ({
   );
   return (
     <ToastPrimitive.Root {...props} onOpenChange={closeHandler}>
-      <Block name="toast" mod={{ theme, ...(props?.mod ?? {}) }}>
+      <div className={clsx(styles.toast, {
+        [styles.theme_dark] : theme === ToastTheme.dark, 
+        [styles.theme_light] : theme === ToastTheme.light, 
+      })}>
         {title && (
           <ToastPrimitive.Title>
-            <Elem name="title">{title}</Elem>
+            <div className={clsx(styles.toast__title)}>{title}</div>
           </ToastPrimitive.Title>
         )}
         <ToastPrimitive.Description>
-          <Elem name="content">{children}</Elem>
+          <div className={clsx(styles.toast__content)}>{children}</div>
         </ToastPrimitive.Description>
         {action}
         {closeable && (
           <ToastPrimitive.Close asChild>
-            <Elem name="close" aria-label="Close">
-              <span aria-hidden>×</span>
-            </Elem>
+            <div className={clsx(styles.toast__close)} aria-label="Close">
+              <span aria-hidden><IconCross /></span>
+            </div>
           </ToastPrimitive.Close>
         )}
-      </Block>
+      </div>
     </ToastPrimitive.Root>
   );
 };
 
-type ToastWithoutBem = ToastPrimitive.ToastActionProps & Omit<BemComponent, "name">;
-export interface ToastActionProps extends ToastWithoutBem {
+export interface ToastActionProps extends ToastPrimitive.ToastActionProps {
   closeCallback?: () => void;
 }
 export const ToastAction: FC<ToastActionProps> = ({ children, closeCallback, altText, ...props }) => (
   <ToastPrimitive.Action altText={altText} asChild style={{ pointerEvents: "none" }}>
-    <Elem name="action" tag="button" onClick={closeCallback} style={{ pointerEvents: "all" }} {...props}>
+    <button className={styles.toast__action} onClick={closeCallback} style={{ pointerEvents: "all" }} {...props}>
       {children}
-    </Elem>
+    </button>
   </ToastPrimitive.Action>
 );
 export type ToastShowArgs = {

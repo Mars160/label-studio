@@ -122,6 +122,12 @@
     border-left: 1px solid var(--border-color);
     white-space: nowrap;
     background: none;
+    align-items: center;
+    display: flex;
+    align-self: stretch;
+    &:hover {
+      background-color: var(--hover-color);
+    }
   }
 
   &__close {
