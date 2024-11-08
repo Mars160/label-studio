@@ -50,7 +50,13 @@ export const Toast: FC<ToastProps> = ({
 
   return (
     <ToastPrimitive.Root {...props} onOpenChange={closeHandler}>
-      <div className={clsx(styles.toast)}>
+      <div
+        className={clsx(styles.toast, {
+          [styles.toast_info]: type === ToastType.info,
+          [styles.toast_error]: type === ToastType.error,
+          [styles.toast_alertError]: type === ToastType.alertError,
+        })}
+      >
         {title && (
           <ToastPrimitive.Title>
             <div className={clsx(styles.toast__title)}>{title}</div>
@@ -129,6 +135,7 @@ export const ToastProvider: FC<ToastProviderWithTypes> = ({ swipeDirection = "do
               <IconCross />
             </ToastAction>
           }
+          type={toastType}
           {...props}
         >
           {toastMessage?.message}

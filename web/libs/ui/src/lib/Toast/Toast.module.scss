@@ -154,71 +154,54 @@
     }
   }
 
-  &_theme {
-    &_dark {
-      --background-color: var(--sand_900);
-      --text-color: var(--sand_0);
-      --border-color: var(--sand_800);
-      --hover-color: var(--sand_800);
-    }
+  &_info {
+    --text-color: var(--sand_100);
+    --background-color: var(--sand_900);
+    --border-color: var(--sand_700);
+    --hover-color: var(--sand_700);
   }
 
+  &_error {
+    --border-color: var(--sand_300);
+    --background-color: var(--red_7);
+    --hover-color: var(--red_10);
+    --text-color: var(--sand_100);
+  }
+
+  &_alertError {
+    --text-color: var(--sand_900);
+    --border-color: var(--sand_300);
+    --border-color: var(--sand_400);
+
+    border-bottom: 5px solid var(--red_7);
+    border-radius: 4px;
+    text-align: center;
+
+    &__action {
+      display: flex;
+      align-items: center;
+      align-self: stretch;
+    }
+
+    &__content {
+      display: block;
+    }
+
+  }
 
 }
 
 .messageToast {
   border-radius: 4px;
 
-  &_info {
-    .toast {
-      --text-color: var(--sand_100);
-      --background-color: var(--sand_900);
-      --border-color: var(--sand_700);
-      --hover-color: var(--sand_700);
-    }
-  }
-
-  &_error {
-    .toast {
-      --border-color: var(--sand_300);
-      --background-color: var(--red_7);
-      --hover-color: var(--red_10);
-      --text-color: var(--sand_100);
-    }
-  }
-
-  background-color: var(--background-color);
-
   &_alertError {
     position: fixed;
     top: 60px;
-    left: calc(50% - 250px);
-    width: calc(100% - 60px);
+    left: calc(50vw - 250px);
+    width: calc(100vw - 60px);
     max-width: 500px;
     transform: translateY(-200%);
     transition: transform 1s;
     z-index: 100;
-
-    .toast {
-      --text-color: var(--sand_900);
-      --border-color: var(--sand_300);
-      --border-color: var(--sand_400);
-
-      border-bottom: 5px solid var(--red_7);
-      border-radius: 4px;
-      text-align: center;
-
-      &__action {
-        display: flex;
-        align-items: center;
-        align-self: stretch;
-      }
-
-      &__content {
-        display: block;
-      }
-  
-    }
   }
-
 }
