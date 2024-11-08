@@ -101,7 +101,7 @@ def parse_config_to_json(config_string: Union[str, None]) -> Tuple[Union[Ordered
         raise etree.ParseError('xml is empty or incorrect')
     config = xmljson.badgerfish.data(xml)
     config = _fix_choices(config)
-    return config, etree.tostring(xml, encoding='unicode')
+    return config, etree.tostring(xml)
 
 
 def validate_label_config(config_string: Union[str, None]) -> None:
