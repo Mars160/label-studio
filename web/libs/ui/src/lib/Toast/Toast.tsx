@@ -1,25 +1,17 @@
 import { createContext, type FC, type ReactNode, useCallback, useContext, useState } from "react";
 import * as ToastPrimitive from "@radix-ui/react-toast";
 import styles from "./Toast.module.scss";
-import { MessageToast } from "../MessageToast/MessageToast";
 import clsx from "clsx";
 import { IconCross } from "../../assets/icons";
 
 export type ToastViewportProps = ToastPrimitive.ToastViewportProps & any;
-export interface ToastProps extends ToastPrimitive.ToastProps {
+export interface ToastProps extends Omit<ToastPrimitive.ToastProps, 'type'> {
   title?: string;
   action?: ReactNode;
   closeable?: boolean;
   open?: boolean;
   onClose?: () => void;
-  theme?: ToastTheme;
-  mod?: Record<string, unknown>;
-  toastClassName: string;
-}
-
-enum ToastTheme {
-  dark = "dark",
-  light = "light",
+  type?: ToastType;
 }
 
 export enum ToastType {
@@ -28,7 +20,7 @@ export enum ToastType {
   alertError = "alertError",
 }
 interface ToastProviderWithTypes extends ToastPrimitive.ToastProviderProps {
-  toastType: ToastType;
+  type: ToastType;
 }
 export const ToastViewport: FC<ToastViewportProps> = ({ hotkey, label, ...props }) => {
   return (
@@ -43,9 +35,8 @@ export const Toast: FC<ToastProps> = ({
   action,
   children,
   closeable = false,
-  theme = ToastTheme.light,
   onClose,
-  toastClassName,
+  type = ToastType.info,
   ...props
 }) => {
   const closeHandler = useCallback(
@@ -59,10 +50,7 @@ export const Toast: FC<ToastProps> = ({
   
   return (
     <ToastPrimitive.Root {...props} onOpenChange={closeHandler}>
-      <div className={clsx(styles.toast, {
-        [styles.toast_theme_dark] : theme === ToastTheme.dark, 
-        [toastClassName]: !!toastClassName,
-      })}>
+      <div className={clsx(styles.toast)}>
         {title && (
           <ToastPrimitive.Title>
             <div className={clsx(styles.toast__title)}>{title}</div>
@@ -85,11 +73,11 @@ export const Toast: FC<ToastProps> = ({
 };
 
 export interface ToastActionProps extends ToastPrimitive.ToastActionProps {
-  closeCallback?: () => void;
+  onClose?: () => void;
 }
-export const ToastAction: FC<ToastActionProps> = ({ children, closeCallback, altText, ...props }) => (
+export const ToastAction: FC<ToastActionProps> = ({ children, onClose, altText, ...props }) => (
   <ToastPrimitive.Action altText={altText} asChild style={{ pointerEvents: "none" }}>
-    <button className={styles.toast__action} onClick={closeCallback} style={{ pointerEvents: "all" }} {...props}>
+    <button className={styles.toast__action} onClick={onClose} style={{ pointerEvents: "all" }} {...props}>
       {children}
     </button>
   </ToastPrimitive.Action>
@@ -100,7 +88,7 @@ export type ToastShowArgs = {
   duration?: number; // -1 for no auto close
 };
 type ToastContextType = {
-  show: ({ message, type }: ToastShowArgs) => void;
+  show: ({ message, type, duration }: ToastShowArgs) => void;
 };
 
 export const ToastContext = createContext<ToastContextType | undefined>(undefined);
@@ -114,7 +102,7 @@ export const useToast = () => {
   return context;
 };
 
-export const ToastProvider: FC<ToastProviderWithTypes> = ({ swipeDirection = "down", children, ...props }) => {
+export const ToastProvider: FC<ToastProviderWithTypes> = ({ swipeDirection = "down", children, type, ...props }) => {
   const [toastMessage, setToastMessage] = useState<ToastShowArgs | null>();
   const defaultDuration = 2000;
   const duration = toastMessage?.duration ?? defaultDuration;
@@ -123,13 +111,29 @@ export const ToastProvider: FC<ToastProviderWithTypes> = ({ swipeDirection = "do
     if (duration < 0) return;
     setTimeout(() => setToastMessage(null), duration);
   };
-
+  const toastType = toastMessage?.type ?? type ?? ToastType.info;
   return (
     <ToastContext.Provider value={{ show }}>
       <ToastPrimitive.Provider swipeDirection={swipeDirection} duration={duration} {...props}>
-        <MessageToast toastType={toastMessage?.type} closeCallback={() => setToastMessage(null)}>
+        <Toast
+          className={clsx(
+            styles.messageToast,
+            { 
+              [styles.messageToast_info]: toastType === ToastType.info,
+              [styles.messageToast_error]: toastType === ToastType.error,
+              [styles.messageToast_alertError]: toastType === ToastType.alertError, 
+            }
+          )}
+          open={!!toastMessage?.message}
+          action={
+            <ToastAction onClose={() => setToastMessage(null)} altText="x">
+              <IconCross />
+            </ToastAction>
+          }
+          {...props}
+        >
           {toastMessage?.message}
-        </MessageToast>
+        </Toast>
         {children}
       </ToastPrimitive.Provider>
     </ToastContext.Provider>

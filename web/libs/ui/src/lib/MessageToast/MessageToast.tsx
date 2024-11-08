@@ -30,7 +30,7 @@ export const MessageToast: FC<MessageToastProps> = ({
       toastClassName={clsx(styles.toast)}
       open={!!children}
       action={
-        <ToastAction closeCallback={closeCallback} altText="x">
+        <ToastAction onClose={closeCallback} altText="x">
           <IconCross />
         </ToastAction>
       }
