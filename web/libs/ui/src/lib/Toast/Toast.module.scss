@@ -33,7 +33,7 @@
 }
 
 .toast-viewport {
-  --toast-spacing: 8px;
+  --toast-spacing: var(--spacing-small);
 
   position: fixed;
   display: flex;
@@ -87,7 +87,7 @@
   --background-color: var(--sand_100);
   --border-color: var(--sand_300);
   --hover-color: var(--sand_300);
-  --padding: 8px 16px;
+  --padding: var(--toast-spacing) calc(var(--toast-spacing) * 2);
 
   display: flex;
   align-items: center;
@@ -180,7 +180,6 @@
 
   &_error {
     .toast {
-      --text-color: var(--sand_900);
       --border-color: var(--sand_300);
       --background-color: var(--red_7);
       --hover-color: var(--red_10);
@@ -204,7 +203,6 @@
       --text-color: var(--sand_900);
       --border-color: var(--sand_300);
       --border-color: var(--sand_400);
-      --text-color: var(--black);
 
       border-bottom: 5px solid var(--red_7);
       border-radius: 4px;
