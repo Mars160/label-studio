@@ -128,6 +128,7 @@
     align-items: center;
     display: flex;
     align-self: stretch;
+
     &:hover {
       background-color: var(--hover-color);
     }
@@ -164,40 +165,32 @@
 
 
 }
+
 .messageToast {
   border-radius: 4px;
 
   &_info {
-    --background-color: var(--sand_900);
-    --hover-color: var(--sand_800);
-
     .toast {
       --text-color: var(--sand_100);
+      --background-color: var(--sand_900);
+      --border-color: var(--sand_700);
+      --hover-color: var(--sand_700);
     }
   }
 
   &_error {
-    --background-color: var(--red_7);
-    --hover-color: var(--red_10);
-
     .toast {
+      --text-color: var(--sand_900);
+      --border-color: var(--sand_300);
+      --background-color: var(--red_7);
+      --hover-color: var(--red_10);
       --text-color: var(--sand_100);
     }
   }
 
   background-color: var(--background-color);
 
-  .toast {
-    --border-color: var(--sand_900);
-    --padding: 8px 16px;
-
-    background-color: inherit;
-
-  }
-
   &_alertError {
-    --hover-color: var(--red_3);
-
     position: fixed;
     top: 60px;
     left: calc(50% - 250px);
@@ -208,11 +201,13 @@
     z-index: 100;
 
     .toast {
+      --text-color: var(--sand_900);
+      --border-color: var(--sand_300);
+      --border-color: var(--sand_400);
       --text-color: var(--black);
-      background-color: var(--background-color);
+
       border-bottom: 5px solid var(--red_7);
       border-radius: 4px;
-      box-shadow: 0 2px 5px 0 rgb(0 0 0 / 20%);
       text-align: center;
 
       &__action {

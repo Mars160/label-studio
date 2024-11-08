@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { IconCross } from "../../assets/icons";
 
 export type ToastViewportProps = ToastPrimitive.ToastViewportProps & any;
-export interface ToastProps extends Omit<ToastPrimitive.ToastProps, 'type'> {
+export interface ToastProps extends Omit<ToastPrimitive.ToastProps, "type"> {
   title?: string;
   action?: ReactNode;
   closeable?: boolean;
@@ -47,7 +47,7 @@ export const Toast: FC<ToastProps> = ({
     },
     [closeable, onClose, props.onOpenChange],
   );
-  
+
   return (
     <ToastPrimitive.Root {...props} onOpenChange={closeHandler}>
       <div className={clsx(styles.toast)}>
@@ -63,7 +63,9 @@ export const Toast: FC<ToastProps> = ({
         {closeable && (
           <ToastPrimitive.Close asChild>
             <div className={clsx(styles.toast__close)} aria-label="Close">
-              <span aria-hidden><IconCross /></span>
+              <span aria-hidden>
+                <IconCross />
+              </span>
             </div>
           </ToastPrimitive.Close>
         )}
@@ -116,14 +118,11 @@ export const ToastProvider: FC<ToastProviderWithTypes> = ({ swipeDirection = "do
     <ToastContext.Provider value={{ show }}>
       <ToastPrimitive.Provider swipeDirection={swipeDirection} duration={duration} {...props}>
         <Toast
-          className={clsx(
-            styles.messageToast,
-            { 
-              [styles.messageToast_info]: toastType === ToastType.info,
-              [styles.messageToast_error]: toastType === ToastType.error,
-              [styles.messageToast_alertError]: toastType === ToastType.alertError, 
-            }
-          )}
+          className={clsx(styles.messageToast, {
+            [styles.messageToast_info]: toastType === ToastType.info,
+            [styles.messageToast_error]: toastType === ToastType.error,
+            [styles.messageToast_alertError]: toastType === ToastType.alertError,
+          })}
           open={!!toastMessage?.message}
           action={
             <ToastAction onClose={() => setToastMessage(null)} altText="x">
