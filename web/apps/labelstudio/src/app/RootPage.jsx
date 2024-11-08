@@ -17,7 +17,7 @@ export const RootPage = ({ content }) => {
           Data will be persisted on the node running this container, but all data will be lost if this node goes away.
         </>
       ),
-      type: "alertError",
+      type: "info",
       closeable: false,
       duration: STORAGE_PERSISTANCE_TIMEOUT,
     });

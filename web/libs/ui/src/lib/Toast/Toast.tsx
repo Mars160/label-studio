@@ -14,6 +14,7 @@ export interface ToastProps extends ToastPrimitive.ToastProps {
   onClose?: () => void;
   theme?: ToastTheme;
   mod?: Record<string, unknown>;
+  toastClassName: string;
 }
 
 enum ToastTheme {
@@ -44,6 +45,7 @@ export const Toast: FC<ToastProps> = ({
   closeable = false,
   theme = ToastTheme.light,
   onClose,
+  toastClassName,
   ...props
 }) => {
   const closeHandler = useCallback(
@@ -54,11 +56,12 @@ export const Toast: FC<ToastProps> = ({
     },
     [closeable, onClose, props.onOpenChange],
   );
+  
   return (
     <ToastPrimitive.Root {...props} onOpenChange={closeHandler}>
       <div className={clsx(styles.toast, {
-        [styles.theme_dark] : theme === ToastTheme.dark, 
-        [styles.theme_light] : theme === ToastTheme.light, 
+        [styles.toast_theme_dark] : theme === ToastTheme.dark, 
+        [toastClassName]: !!toastClassName,
       })}>
         {title && (
           <ToastPrimitive.Title>

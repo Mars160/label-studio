@@ -4,7 +4,7 @@ import type { FC } from "react";
 import styles from "./MessageToast.module.scss";
 import clsx from "clsx";
 
-export interface MessageToastProps extends ToastProps {
+export interface MessageToastProps extends Omit<ToastProps, "toastClassName"> {
   children?: any;
   toastType?: ToastType | null;
   closeCallback?: () => void;
@@ -16,6 +16,7 @@ export const MessageToast: FC<MessageToastProps> = ({
   children,
   ...props
 }) => {
+  console.log("MessageToast", { toastType, closeCallback, children, props });
   return (
     <Toast
       className={clsx(
@@ -26,6 +27,7 @@ export const MessageToast: FC<MessageToastProps> = ({
           [styles.MessageToast_alertError]: toastType === ToastType.alertError, 
         }
       )}
+      toastClassName={clsx(styles.toast)}
       open={!!children}
       action={
         <ToastAction closeCallback={closeCallback} altText="x">
