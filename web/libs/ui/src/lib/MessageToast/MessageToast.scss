@@ -57,12 +57,16 @@
       box-shadow: 0 2px 5px 0 rgb(0 0 0 / 20%);
       text-align: center;
 
-      &__action,
-      &__content {
+      &__action {
         color: var(--black);
         display: flex;
         align-items: center;
         align-self: stretch;
+      }
+
+      &__content {
+        color: var(--black);
+        display: block;
       }
   
     }

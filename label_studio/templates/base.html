@@ -104,7 +104,7 @@
     {% block app_more_settings %}
       flags: {
         allow_organization_webhooks: {{settings.ALLOW_ORGANIZATION_WEBHOOKS|yesno:"true,false"}},
-        storage_persistance: {{ settings.STORAGE_PERSISTENCE|yesno:"true,false" }}, 
+        storage_persistence: {{ settings.STORAGE_PERSISTENCE|yesno:"true,false" }}, 
       },
     {% endblock %}
 

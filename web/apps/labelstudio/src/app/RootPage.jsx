@@ -10,7 +10,7 @@ export const RootPage = ({ content }) => {
   const pinned = localStorage.getItem("sidebar-pinned") === "true";
   const opened = pinned && localStorage.getItem("sidebar-opened") === "true";
   useEffect(() => {
-    if (window.APP_SETTINGS?.flags?.storage_persistance) return;
+    if (window.APP_SETTINGS?.flags?.storage_persistence) return;
     toast.show({
       message: (
         <>

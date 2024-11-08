@@ -88,7 +88,7 @@ export const ToastAction: FC<ToastActionProps> = ({ children, closeCallback, alt
     </Elem>
   </ToastPrimitive.Action>
 );
-type ToastShowArgs = {
+export type ToastShowArgs = {
   message: string;
   type?: ToastType;
   duration?: number; // -1 for no auto close
