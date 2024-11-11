@@ -76,6 +76,7 @@ def cache_labels(project, queryset, request, **kwargs):
         queryset,
         organization_id=project.organization_id,
         request_data=request.data,
+        job_timeout=60*60*5  # max allowed duration is 5 hours
     )
     return {'response_code': 200}
 
