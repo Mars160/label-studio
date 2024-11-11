@@ -123,12 +123,12 @@ class ToolsManager {
 
     if (selected) {
       this.unselectAll();
-      if (tool.setSelected) tool.setSelected(true);
+      tool.setSelected?.(true);
     } else {
       const drawingTool = this.findDrawingTool();
 
       if (drawingTool) return this.selectTool(drawingTool, true);
-      if (tool.setSelected) tool.setSelected(false);
+      this.selectTool(this._default_tool, true);
     }
   }
 
