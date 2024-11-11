@@ -18,7 +18,7 @@ def cache_labels_job(project, queryset, **kwargs):
     source_class = Annotation if source == 'annotations' else Prediction
     control_tag = request_data.get('custom_control_tag') or request_data.get('control_tag')
     with_counters = request_data.get('with_counters', 'Yes').lower() == 'yes'
-    
+
     if source == 'annotations':
         column_name = 'cache'
     else:
@@ -83,7 +83,7 @@ def cache_labels(project, queryset, request, **kwargs):
         queryset,
         organization_id=project.organization_id,
         request_data=request.data,
-        job_timeout=60*60*5  # max allowed duration is 5 hours
+        job_timeout=60 * 60 * 5,  # max allowed duration is 5 hours
     )
     return {'response_code': 200}
 
