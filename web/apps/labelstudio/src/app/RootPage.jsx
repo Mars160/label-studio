@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Menubar } from "../components/Menubar/Menubar";
 import { ProjectRoutes } from "../routes/ProjectRoutes";
 import { useOrgValidation } from "@humansignal/ui";
