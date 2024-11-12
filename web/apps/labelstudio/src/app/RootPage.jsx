@@ -1,6 +1,6 @@
 import { Menubar } from "../components/Menubar/Menubar";
 import { ProjectRoutes } from "../routes/ProjectRoutes";
-import { useOrgValidation } from "@humansignal/ui";
+import { useOrgValidation } from "../hooks/useOrgValidation";
 
 export const RootPage = ({ content }) => {
   useOrgValidation();
