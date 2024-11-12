@@ -2,8 +2,6 @@ import { Menubar } from "../components/Menubar/Menubar";
 import { ProjectRoutes } from "../routes/ProjectRoutes";
 import { useOrgValidation } from "@humansignal/ui";
 
-const STORAGE_PERSISTANCE_TIMEOUT = -1;
-
 export const RootPage = ({ content }) => {
   useOrgValidation();
   const pinned = localStorage.getItem("sidebar-pinned") === "true";
