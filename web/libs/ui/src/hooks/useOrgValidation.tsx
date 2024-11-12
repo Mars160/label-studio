@@ -11,7 +11,7 @@ export const useOrgValidation = (): void => {
   useEffect(() => {
     if (window.APP_SETTINGS?.flags?.storage_persistence) return;
     toast.show({
-      message: "Data will be persisted on the node running this container, but all data will be lost if this node goes away.",
+      message: <>Data will be persisted on the node running this container, but all data will be lost if this node goes away.</>,
       type: ToastType.alertError,
       duration: -1,
     });
