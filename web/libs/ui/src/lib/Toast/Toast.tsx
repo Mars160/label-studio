@@ -91,7 +91,7 @@ export const ToastAction: FC<ToastActionProps> = ({ children, onClose, altText, 
   </ToastPrimitive.Action>
 );
 export type ToastShowArgs = {
-  message: string;
+  message: string | ReactNode | JSX.Element;
   type?: ToastType;
   duration?: number; // -1 for no auto close
 };

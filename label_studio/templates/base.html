@@ -128,10 +128,6 @@
   <script src="{{settings.HOSTNAME}}{% static 'js/helpers.js' %}"></script>
   <script nonce="{{request.csp_nonce}}">
       applyCsrf();
-
-      $('.message .close').on('click', function () {
-           $(this).closest('.message').transition('fade');
-      });
   </script>
 {% endblock %}
 
