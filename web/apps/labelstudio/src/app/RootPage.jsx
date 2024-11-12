@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Menubar } from "../components/Menubar/Menubar";
 import { ProjectRoutes } from "../routes/ProjectRoutes";
-import { useOrgValidation } from "../hooks/useOrgValidation";
+import { useOrgValidation } from "@humansignal/ui";
 
 const STORAGE_PERSISTANCE_TIMEOUT = -1;
 

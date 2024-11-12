@@ -19,9 +19,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@humansignal/ls": [
-        "apps/labelstudio/src/index.js"
-      ],
       "@humansignal/datamanager": [
         "libs/datamanager/src/index.js"
       ],
