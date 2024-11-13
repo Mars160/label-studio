@@ -6,7 +6,6 @@ import threading
 from urllib.parse import unquote, urlsplit, urlunsplit
 
 import google.auth
-from core.feature_flags import flag_set
 from django.conf import settings
 from django.contrib.staticfiles.storage import ManifestStaticFilesStorage
 from storages.backends.azure_storage import AzureStorage
@@ -64,6 +63,7 @@ class StorageProxyMixin:
         if storage_url is True:
             return super().url(name, *args, **kwargs)
         return f'{settings.HOSTNAME}/storage-data/uploaded/?filepath={name}'
+
 
 class CustomS3Boto3Storage(StorageProxyMixin, S3Boto3Storage):
     pass

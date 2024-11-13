@@ -12,7 +12,6 @@ try:
 except:  # noqa: E722
     import json
 
-from core.feature_flags import flag_set
 from django.conf import settings
 from django.db import models
 from rest_framework.exceptions import ValidationError
