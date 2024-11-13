@@ -65,20 +65,6 @@ input[type=text][disabled] {
   color: rgba(0, 0, 0, 0.4)
 }
 
-a.button,
-input[type=button],
-input[type=submit],
-input[type=reset],
-button {
-  background: white;
-  border-radius: 5px;
-  /* min-width: 140px; */
-  text-align: center;
-  line-height: 1;
-  font-weight: 500;
-  color: #555;
-  cursor: pointer;
-}
 a.button:hover,
 input[type=button]:hover,
 input[type=submit]:hover,
