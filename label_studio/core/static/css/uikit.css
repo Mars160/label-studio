@@ -55,6 +55,7 @@ textarea {
 }
 
 textarea {
+  /* hello world */
   border: 1px solid var(--border-color);
   padding: 9px 16px;
   border-radius: 5px;
@@ -134,6 +135,7 @@ ul.toggle li.active {
   width: 28px;
   height: 28px;
   display: flex;
+  flex: none;
   overflow: hidden;
   position: relative;
   align-items: center;
