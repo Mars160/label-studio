@@ -451,13 +451,7 @@ class Task(TaskMixin, models.Model):
                     # permission check: resolve uploaded files to the project only
                     file_upload = fast_first(FileUpload.objects.filter(project=project, file=prepared_filename))
                     if file_upload is not None:
-                        if flag_set(
-                            'ff_back_dev_2915_storage_nginx_proxy_26092022_short',
-                            self.project.organization.created_by,
-                        ):
-                            task_data[field] = file_upload.url
-                        else:
-                            task_data[field] = default_storage.url(name=prepared_filename)
+                        task_data[field] = file_upload.url
                     # it's very rare case, e.g. user tried to reimport exported file from another project
                     # or user wrote his django storage path manually
                     else:
