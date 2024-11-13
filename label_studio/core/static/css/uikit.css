@@ -54,11 +54,12 @@ textarea {
   font: inherit;
 }
 
+a.button,
+input,
+button,
 textarea {
-  /* hello world */
   border: 1px solid var(--border-color);
   padding: 9px 16px;
-  border-radius: 5px;
 }
 
 input[type=text][disabled] {
@@ -66,6 +67,20 @@ input[type=text][disabled] {
   color: rgba(0, 0, 0, 0.4)
 }
 
+a.button,
+input[type=button],
+input[type=submit],
+input[type=reset],
+button {
+  background: white;
+  border-radius: 5px;
+  /* min-width: 140px; */
+  text-align: center;
+  line-height: 1;
+  font-weight: 500;
+  color: #555;
+  cursor: pointer;
+}
 a.button:hover,
 input[type=button]:hover,
 input[type=submit]:hover,
@@ -135,7 +150,6 @@ ul.toggle li.active {
   width: 28px;
   height: 28px;
   display: flex;
-  flex: none;
   overflow: hidden;
   position: relative;
   align-items: center;
