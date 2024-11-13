@@ -54,6 +54,12 @@ textarea {
   font: inherit;
 }
 
+textarea {
+  border: 1px solid var(--border-color);
+  padding: 9px 16px;
+  border-radius: 5px;
+}
+
 input[type=text][disabled] {
   background: rgba(0, 0, 0, 0.03);
   color: rgba(0, 0, 0, 0.4)
@@ -142,7 +148,6 @@ ul.toggle li.active {
   width: 28px;
   height: 28px;
   display: flex;
-  flex: none;
   overflow: hidden;
   position: relative;
   align-items: center;
