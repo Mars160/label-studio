@@ -127,8 +127,7 @@ class ToolsManager {
     } else {
       const drawingTool = this.findDrawingTool();
 
-      if (drawingTool) return this.selectTool(drawingTool, true);
-      this.selectTool(this._default_tool, true);
+      this.selectTool(drawingTool ?? this._default_tool, true);
     }
   }
 
