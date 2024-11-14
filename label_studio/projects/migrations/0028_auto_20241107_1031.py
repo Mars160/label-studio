@@ -5,14 +5,14 @@ import logging
 
 from core.models import AsyncMigrationStatus
 from core.redis import start_job_async_or_sync
+from django.db.models import Count, Min
+from projects.models import ProjectMember
 
 logger = logging.getLogger(__name__)
 migration_name = '0028_auto_20241107_1031'
 
 
 def forward_migration(migration_name):
-    from django.db.models import Count, Min
-    from projects.models import ProjectMember
 
     logger.info(f'Starting async migration {migration_name}')
     migration = AsyncMigrationStatus.objects.create(
@@ -48,7 +48,6 @@ def forward_migration(migration_name):
                     ProjectMember.objects
                     .filter(user_id=user_id, project_id=project_id)
                     .exclude(id=min_id)
-                    .only('id')  # Minimizing fields selected
                 )
                 deleted_count, _ = entries_to_delete.delete()
                 total_deleted += deleted_count
