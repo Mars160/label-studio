@@ -1,6 +1,6 @@
 {
-  "message": "feat: LEAP-1599: Allow to edit TimelineRegion spans (#6577)",
-  "commit": "5ab2f79db0c6c0f2a36ac6de3e7012b23cad8f5b",
-  "date": "2024-11-06T11:43:23.000Z",
+  "message": "docs: LEAP-1657: Add a note to Text tag about \\r\\n (#6645)",
+  "commit": "525dd190bcb54dc96dccabccc5449620d56c5107",
+  "date": "2024-11-14T01:54:34.000Z",
   "branch": "develop"
 }
