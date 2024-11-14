@@ -11,7 +11,7 @@ import BaseTool from "./Base";
 const ToolView = observer(({ item }) => {
   return (
     <Tool
-      ariaLabel="move"
+      ariaLabel="move-tool"
       active={item.selected}
       icon={<IconMoveTool />}
       label="Move"
