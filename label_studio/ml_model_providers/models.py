@@ -3,7 +3,8 @@
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
+from typing import List
+from tasks.models import PredictionMeta
 
 class ModelProviders(models.TextChoices):
     OPENAI = 'OpenAI', _('OpenAI')
@@ -83,6 +84,8 @@ class ModelProviderConnection(models.Model):
             ('Monthly', 'Monthly'),
             ('Yearly', 'Yearly'),
         ],
+        null=True,
+        blank=True,
         default=None,
         help_text='Budget reset period for the model provider connection (null if not reset)'
     )
@@ -110,3 +113,8 @@ class ModelProviderConnection(models.Model):
         return (
             user.is_administrator or user.is_owner or user.is_manager
         ) and user.active_organization_id == self.organization_id
+        
+    def update_budget_total_spent_from_predictions_meta(self, predictions_meta: List[PredictionMeta]):
+        total_cost = sum(meta.total_cost for meta in predictions_meta)
+        self.budget_total_spent = total_cost
+        self.save(update_fields=['budget_total_spent'])
