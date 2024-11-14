@@ -53,6 +53,55 @@ class ModelProviderConnection(models.Model):
     created_at = models.DateTimeField(_('created at'), auto_now_add=True)
 
     updated_at = models.DateTimeField(_('updated at'), auto_now=True)
+    
+    is_internal = models.BooleanField(
+        _('is_internal'),
+        default=False,
+        help_text='Whether the model provider connection is internal, not visible to the user'
+    )
+
+    budget_limit = models.FloatField(
+        _('budget_limit'),
+        null=True,
+        blank=True,
+        default=None,
+        help_text='Budget limit for the model provider connection (null if unlimited)'
+    )
+
+    budget_last_reset_date = models.DateTimeField(
+        _('budget_last_reset_date'),
+        null=True,
+        blank=True,
+        default=None,
+        help_text='Date and time the budget was last reset'
+    )
+
+    budget_reset_period = models.CharField(
+        _('budget_reset_period'),
+        max_length=20,
+        choices=[
+            ('Monthly', 'Monthly'),
+            ('Yearly', 'Yearly'),
+        ],
+        default=None,
+        help_text='Budget reset period for the model provider connection (null if not reset)'
+    )
+
+    budget_total_spent = models.FloatField(
+        _('budget_total_spent'),
+        null=True,
+        blank=True,
+        default=None,
+        help_text='Tracked total budget spent for the given provider connection within the current budget period'
+    )
+
+    budget_alert_threshold = models.FloatField(
+        _('budget_alert_threshold'),
+        null=True,
+        blank=True,
+        default=None,
+        help_text='Budget alert threshold for the given provider connection'
+    )
 
     # Check if user is Admin or Owner
     # This will need to be updated if we ever use this model in LSO as `is_owner` and
