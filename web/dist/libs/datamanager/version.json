@@ -1,6 +1,6 @@
 {
-  "message": "feat: OPTIC-1245: Add HeidiTips as a json file within source control (#6624)",
-  "commit": "479aa9fab770e83b67ca0e54bd8fc21a2d1cb66b",
-  "date": "2024-11-08T22:42:41.000Z",
+  "message": "docs: LEAP-1657: Add a note to Text tag about \\r\\n (#6645)",
+  "commit": "525dd190bcb54dc96dccabccc5449620d56c5107",
+  "date": "2024-11-14T01:54:34.000Z",
   "branch": "develop"
 }
