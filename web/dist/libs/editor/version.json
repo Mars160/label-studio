@@ -1,6 +1,6 @@
 {
-  "message": "fix: LEAP-1647: Fix comments when user uses OCR textarea (#6622)",
-  "commit": "2d82390dc4328c83f8c03ea3be0bf8f6730c0bf5",
-  "date": "2024-11-13T16:11:45.000Z",
+  "message": "feat: OPTIC-1245: Allow HeidiTips to pull content updates live (#6623)",
+  "commit": "9a7bfc0524b776232ea8e445cafe7fdb95b1f6bc",
+  "date": "2024-11-14T17:07:18.000Z",
   "branch": "develop"
 }
