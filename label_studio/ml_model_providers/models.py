@@ -1,10 +1,12 @@
 """This file and its contents are licensed under the Apache License 2.0. Please see the included NOTICE for copyright information and LICENSE for a copy of the license.
 """
+from typing import List
+
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from typing import List
 from tasks.models import PredictionMeta
+
 
 class ModelProviders(models.TextChoices):
     OPENAI = 'OpenAI', _('OpenAI')
@@ -54,11 +56,11 @@ class ModelProviderConnection(models.Model):
     created_at = models.DateTimeField(_('created at'), auto_now_add=True)
 
     updated_at = models.DateTimeField(_('updated at'), auto_now=True)
-    
+
     is_internal = models.BooleanField(
         _('is_internal'),
         default=False,
-        help_text='Whether the model provider connection is internal, not visible to the user'
+        help_text='Whether the model provider connection is internal, not visible to the user',
     )
 
     budget_limit = models.FloatField(
@@ -66,7 +68,7 @@ class ModelProviderConnection(models.Model):
         null=True,
         blank=True,
         default=None,
-        help_text='Budget limit for the model provider connection (null if unlimited)'
+        help_text='Budget limit for the model provider connection (null if unlimited)',
     )
 
     budget_last_reset_date = models.DateTimeField(
@@ -74,7 +76,7 @@ class ModelProviderConnection(models.Model):
         null=True,
         blank=True,
         default=None,
-        help_text='Date and time the budget was last reset'
+        help_text='Date and time the budget was last reset',
     )
 
     budget_reset_period = models.CharField(
@@ -87,7 +89,7 @@ class ModelProviderConnection(models.Model):
         null=True,
         blank=True,
         default=None,
-        help_text='Budget reset period for the model provider connection (null if not reset)'
+        help_text='Budget reset period for the model provider connection (null if not reset)',
     )
 
     budget_total_spent = models.FloatField(
@@ -95,7 +97,7 @@ class ModelProviderConnection(models.Model):
         null=True,
         blank=True,
         default=None,
-        help_text='Tracked total budget spent for the given provider connection within the current budget period'
+        help_text='Tracked total budget spent for the given provider connection within the current budget period',
     )
 
     budget_alert_threshold = models.FloatField(
@@ -103,7 +105,7 @@ class ModelProviderConnection(models.Model):
         null=True,
         blank=True,
         default=None,
-        help_text='Budget alert threshold for the given provider connection'
+        help_text='Budget alert threshold for the given provider connection',
     )
 
     # Check if user is Admin or Owner
@@ -113,7 +115,7 @@ class ModelProviderConnection(models.Model):
         return (
             user.is_administrator or user.is_owner or user.is_manager
         ) and user.active_organization_id == self.organization_id
-        
+
     def update_budget_total_spent_from_predictions_meta(self, predictions_meta: List[PredictionMeta]):
         total_cost = sum(meta.total_cost or 0 for meta in predictions_meta)
         self.budget_total_spent = total_cost
