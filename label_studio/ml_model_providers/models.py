@@ -61,6 +61,8 @@ class ModelProviderConnection(models.Model):
         _('is_internal'),
         default=False,
         help_text='Whether the model provider connection is internal, not visible to the user',
+        null=True,
+        blank=True,
     )
 
     budget_limit = models.FloatField(
