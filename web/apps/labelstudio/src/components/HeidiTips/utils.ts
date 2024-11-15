@@ -66,6 +66,8 @@ export function getRandomTip(collection: keyof TipsCollection): Tip | null {
 
   if (isTipDismissed(collection)) return null;
 
+  if (!tipsCollection[collection]) return null;
+
   const tips = tipsCollection[collection];
 
   const index = Math.floor(Math.random() * tips.length);
