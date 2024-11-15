@@ -258,18 +258,6 @@ urllib3 = ">=1.25.4,<1.27"
 crt = ["awscrt (==0.16.26)"]
 
 [[package]]
-name = "boxing"
-version = "0.1.4"
-description = "Draw boxes like never before!"
-optional = false
-python-versions = "*"
-files = [
-    {file = "boxing-0.1.4-py2-none-any.whl", hash = "sha256:707221c4d946b330d4ca885bdbf48ed46644fae0abf34246a0dcdd24e4faa628"},
-    {file = "boxing-0.1.4-py3-none-any.whl", hash = "sha256:76fa658edab8344c0917db4b3d543c89340deca602c6736837c206f127ded296"},
-    {file = "boxing-0.1.4.tar.gz", hash = "sha256:b9141bd02d0fb5ebda881e727e16ce7c89034773282b29b8ce938a8117e79d1b"},
-]
-
-[[package]]
 name = "cachetools"
 version = "5.3.2"
 description = "Extensible memoizing collections and decorators"
@@ -1543,13 +1531,13 @@ socks = ["socksio (==1.*)"]
 
 [[package]]
 name = "humansignal-drf-yasg"
-version = "1.21.9"
+version = "1.21.10.post1"
 description = "Automated generation of real Swagger/OpenAPI 2.0 schemas from Django Rest Framework code."
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "humansignal-drf-yasg-1.21.9.tar.gz", hash = "sha256:bc330542f5a5bf926f993fde3fa111ff45d8d6965fffb6c1d4c39f30edf844a4"},
-    {file = "humansignal_drf_yasg-1.21.9-py3-none-any.whl", hash = "sha256:ee3c5b44daec634cc3a666952cf12ab1d5503b5e22786769de121e09505fc549"},
+    {file = "humansignal-drf-yasg-1.21.10.post1.tar.gz", hash = "sha256:ed3cd9c6b305578e8f92afb05e229b1de39aa2da5b3737faf61ec066a1e7cbb4"},
+    {file = "humansignal_drf_yasg-1.21.10.post1-py3-none-any.whl", hash = "sha256:aa6fdd504b727bcc6ef8c05540505b8c53922156058cf64da269cd90bdeed2d8"},
 ]
 
 [package.dependencies]
@@ -2336,22 +2324,6 @@ files = [
 ]
 
 [[package]]
-name = "mysqlclient"
-version = "2.2.0"
-description = "Python interface to MySQL"
-optional = true
-python-versions = ">=3.8"
-files = [
-    {file = "mysqlclient-2.2.0-cp310-cp310-win_amd64.whl", hash = "sha256:68837b6bb23170acffb43ae411e47533a560b6360c06dac39aa55700972c93b2"},
-    {file = "mysqlclient-2.2.0-cp311-cp311-win_amd64.whl", hash = "sha256:5670679ff1be1cc3fef0fa81bf39f0cd70605ba121141050f02743eb878ac114"},
-    {file = "mysqlclient-2.2.0-cp38-cp38-win_amd64.whl", hash = "sha256:004fe1d30d2c2ff8072f8ea513bcec235fd9b896f70dad369461d0ad7e570e98"},
-    {file = "mysqlclient-2.2.0-cp39-cp39-win_amd64.whl", hash = "sha256:9c6b142836c7dba4f723bf9c93cc46b6e5081d65b2af807f400dda9eb85a16d0"},
-    {file = "mysqlclient-2.2.0-pp38-pypy38_pp73-win_amd64.whl", hash = "sha256:955dba905a7443ce4788c63fdb9f8d688316260cf60b20ff51ac3b1c77616ede"},
-    {file = "mysqlclient-2.2.0-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:530ece9995a36cadb6211b9787f0c9e05cdab6702549bdb4236af5e9b535ed6a"},
-    {file = "mysqlclient-2.2.0.tar.gz", hash = "sha256:04368445f9c487d8abb7a878e3d23e923e6072c04a6c320f9e0dc8a82efba14e"},
-]
-
-[[package]]
 name = "nh3"
 version = "0.2.14"
 description = "Ammonia HTML sanitizer Python binding"
@@ -2960,6 +2932,20 @@ files = [
 pyasn1 = ">=0.4.6,<0.6.0"
 
 [[package]]
+name = "pyboxen"
+version = "1.3.0"
+description = "Beautiful, customizable boxes in your terminal using Python"
+optional = false
+python-versions = ">=3.8.0,<4.0.0"
+files = [
+    {file = "pyboxen-1.3.0-py3-none-any.whl", hash = "sha256:ac799533bbdb0a4f4a7c3b8723607dbe3aed3d293d3863e178064027f8177c9c"},
+    {file = "pyboxen-1.3.0.tar.gz", hash = "sha256:f12e6c656769f9d6aa1dd5d11688a62ed12da9dcebfa22a242103c610130b948"},
+]
+
+[package.dependencies]
+rich = ">=12.5.1"
+
+[[package]]
 name = "pycparser"
 version = "2.21"
 description = "C parser in Python"
@@ -3351,6 +3337,70 @@ python-versions = "*"
 files = [
     {file = "pytz-2022.7.1-py2.py3-none-any.whl", hash = "sha256:78f4f37d8198e0627c5f1143240bb0206b8691d8d7ac6d78fee88b78733f8c4a"},
     {file = "pytz-2022.7.1.tar.gz", hash = "sha256:01a0681c4b9684a28304615eba55d1ab31ae00bf68ec157ec3708a8182dbbcd0"},
+]
+
+[[package]]
+name = "pyuwsgi"
+version = "2.0.28.post1"
+description = "The uWSGI server"
+optional = true
+python-versions = "*"
+files = [
+    {file = "pyuwsgi-2.0.28.post1-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:611e6585a51b3a1f9619e1069dcdc1b8bf37ad7aa16b271fce2ca3e1440fc548"},
+    {file = "pyuwsgi-2.0.28.post1-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:5c2caedcc6fd0cd217b65ab863a51e18032b3ce81316d0a079652ed43ed8ba68"},
+    {file = "pyuwsgi-2.0.28.post1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:a9382286b9cf94b5d826388cda7097235b0f1348c7549c8b71100ecfc8d74c58"},
+    {file = "pyuwsgi-2.0.28.post1-cp310-cp310-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:30798db4c0c9b36a12fd831cfe621c69569e226d177b3c28c6a191e2a819604f"},
+    {file = "pyuwsgi-2.0.28.post1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:4a4fbc27ccbe24cffb65ce89fbb7cf2e8a0af625b7706179786a810688cefd7f"},
+    {file = "pyuwsgi-2.0.28.post1-cp310-cp310-musllinux_1_2_aarch64.whl", hash = "sha256:e1289847ba14ae2ba4f918c57e9d257ecd82a43f6c7a026e155577596c6304f1"},
+    {file = "pyuwsgi-2.0.28.post1-cp310-cp310-musllinux_1_2_i686.whl", hash = "sha256:91bdc9fcd1e13088ef57f7e58e427c9539e9d2c6d75157f55b5d17ef599e61ee"},
+    {file = "pyuwsgi-2.0.28.post1-cp310-cp310-musllinux_1_2_x86_64.whl", hash = "sha256:a1b0a27f1b9c63a1ac9788a068e5905b8ebedb1b460b9256ac85d1318fd6a9a6"},
+    {file = "pyuwsgi-2.0.28.post1-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:36d9c628067fc1c58534b800aacbb7499813b214cabe9128fb5ba79ad32ff9b9"},
+    {file = "pyuwsgi-2.0.28.post1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:219032fe8bb8306cb05e7bc509ff134c853cfcbd7d809a867d5b8ecd589bef5d"},
+    {file = "pyuwsgi-2.0.28.post1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:1573ac212201ccbfea00b93d88fde89205d3c2f0a4d0c973058aa0b8745d4a2d"},
+    {file = "pyuwsgi-2.0.28.post1-cp311-cp311-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:6105bd14fa2e61505dc116574ba79f3f6e0f425f206d3bec2337463457167aba"},
+    {file = "pyuwsgi-2.0.28.post1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:44bfebc678b2dde10382197b9199ce546b699a672e05e139a3827efb121e704f"},
+    {file = "pyuwsgi-2.0.28.post1-cp311-cp311-musllinux_1_2_aarch64.whl", hash = "sha256:e4e4775246f2ab079ea4bcf69d70441ffe81eba82a88eb4da6ae9debf334511f"},
+    {file = "pyuwsgi-2.0.28.post1-cp311-cp311-musllinux_1_2_i686.whl", hash = "sha256:e227836984735fdfa26d3be4927a6ae060ad8a0d28ef4a6adcd4f47fbfd7e876"},
+    {file = "pyuwsgi-2.0.28.post1-cp311-cp311-musllinux_1_2_x86_64.whl", hash = "sha256:cf4f03d8b74d9754efd8cc6b0566258ccc1123a8c2fe49a11835242a6fb27efc"},
+    {file = "pyuwsgi-2.0.28.post1-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:9390e8a2297186ede814d5863a06fa98b91295c813fdd3d08fe1357793476486"},
+    {file = "pyuwsgi-2.0.28.post1-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:06a0294910de374ff43032b41333f7f9b62d59308b7f3eea29bc64d78fb93613"},
+    {file = "pyuwsgi-2.0.28.post1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:64b40503a87621e79efe4306b77595a0cbcb69afa4f3428a85e4e8ac46068d88"},
+    {file = "pyuwsgi-2.0.28.post1-cp312-cp312-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:1157f49bfb360c1883feec82553adbed1e4a447e5ced66f36525a92f0e46397e"},
+    {file = "pyuwsgi-2.0.28.post1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:941d44a67760dc173c0f8318f8b7bd1ef7927533d6efb4641b2ea9e934f09981"},
+    {file = "pyuwsgi-2.0.28.post1-cp312-cp312-musllinux_1_2_aarch64.whl", hash = "sha256:5a90b72a25ba1a34299f4958237a12f18154b373a9a0a93a6267af5e8798c1ee"},
+    {file = "pyuwsgi-2.0.28.post1-cp312-cp312-musllinux_1_2_i686.whl", hash = "sha256:2c29fdf5baaff9d717aedb63e7b78b90bec561afc099f952db44699adcb0c575"},
+    {file = "pyuwsgi-2.0.28.post1-cp312-cp312-musllinux_1_2_x86_64.whl", hash = "sha256:7e8fd6f2116d2afce52965c940a96a939e9d9c7409f3e19ba445a25e33779f08"},
+    {file = "pyuwsgi-2.0.28.post1-cp313-cp313-macosx_10_13_x86_64.whl", hash = "sha256:787fd67086df87921bc8837ef018cd7cf02834136f4735811375c1e17b776b40"},
+    {file = "pyuwsgi-2.0.28.post1-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:f27ee3445eab37fabbe3afc6af68220c8f0bd28c5228d6a2ec7886d080614ad4"},
+    {file = "pyuwsgi-2.0.28.post1-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:5bdd7ec17f795049ef346dc10efbfce6c1a9500f3f39262c86107c70b9a83cb9"},
+    {file = "pyuwsgi-2.0.28.post1-cp313-cp313-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:f4563fa76d64a2c309eb902511a1fcdce66865a03785c61494db5c53136ffa7a"},
+    {file = "pyuwsgi-2.0.28.post1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:32838668eab84ac6847876d9da72768552fca556e09a1fe3a63facb976bd12ad"},
+    {file = "pyuwsgi-2.0.28.post1-cp313-cp313-musllinux_1_2_aarch64.whl", hash = "sha256:c9feafdfa73a632767a0cb1bafd285e36fba925b9c9ddd2b3311f2963c917c9f"},
+    {file = "pyuwsgi-2.0.28.post1-cp313-cp313-musllinux_1_2_i686.whl", hash = "sha256:20d23ddbf28a831543d586c9e5727c9c28d7be7bd7cb853c7db2e0c529f605bf"},
+    {file = "pyuwsgi-2.0.28.post1-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:c0b1b09bdf836a6cacf35e2bb06f6ad4b7dff6c6ad48895e1b1c0b0d19bbbfcc"},
+    {file = "pyuwsgi-2.0.28.post1-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:735861b77e607e133f9905a5e0ba6505ef6788df1cfdb6af06e6dfef07dfa9af"},
+    {file = "pyuwsgi-2.0.28.post1-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:1dbe7d0bb8184ef6c9bec1a3593a02bd27de0348807c97533069a7bca2603d19"},
+    {file = "pyuwsgi-2.0.28.post1-cp37-cp37m-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:4fcf8a76ad40af8c3c1a1e98f11be03e999e4957f48da6a180f5b8fc40b963c4"},
+    {file = "pyuwsgi-2.0.28.post1-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6c969668db4599b6a5c927ad4bc1d698ea8c57fb10a943b51402fe80a97cdfc9"},
+    {file = "pyuwsgi-2.0.28.post1-cp37-cp37m-musllinux_1_2_aarch64.whl", hash = "sha256:5b6bec34ca5b200dfc8b10c74b0a9e3da051747f5faa300f681bbb46cf573fd0"},
+    {file = "pyuwsgi-2.0.28.post1-cp37-cp37m-musllinux_1_2_i686.whl", hash = "sha256:8dc521dd980ee431d4e6fc9a018ad1df4840c4551f281a598878083f3d155243"},
+    {file = "pyuwsgi-2.0.28.post1-cp37-cp37m-musllinux_1_2_x86_64.whl", hash = "sha256:1e6afc8916098ca35119dc0c619f29ef572f72c6f4425f29604c17397ae313b2"},
+    {file = "pyuwsgi-2.0.28.post1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:b2f118d7211e4afb7e8248cd380c1eac3e87604c1143bbccac1679c3a3642e22"},
+    {file = "pyuwsgi-2.0.28.post1-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:327800fa58bfba5d6f2bd19331e812e0e1250aaa681874f5b92998f68e6bab75"},
+    {file = "pyuwsgi-2.0.28.post1-cp38-cp38-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:b351e76c9a18dc3e8a635994a98571b9ca7f10e371a0085ae3c8cd95f3db66cd"},
+    {file = "pyuwsgi-2.0.28.post1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:29c6f658625f2470d905276987aec898a690eee33f49c9c3961ca9d912abd046"},
+    {file = "pyuwsgi-2.0.28.post1-cp38-cp38-musllinux_1_2_aarch64.whl", hash = "sha256:9436ac4450730e1bcca4591ebb781eabcfcf93462114e199b951118032144323"},
+    {file = "pyuwsgi-2.0.28.post1-cp38-cp38-musllinux_1_2_i686.whl", hash = "sha256:0b1c131288b6b473e39c5b02e63c34b64422665749dcadee41ef98d64b5db5d0"},
+    {file = "pyuwsgi-2.0.28.post1-cp38-cp38-musllinux_1_2_x86_64.whl", hash = "sha256:a8a932c9d34b2f0007eabf04728ffae7be8bfb87a044daee50a82b6796ad5b34"},
+    {file = "pyuwsgi-2.0.28.post1-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:f55071012ce5d728ac428be78c3710e986acc02dcfc1d72f3a76541b85e25cfb"},
+    {file = "pyuwsgi-2.0.28.post1-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:fa60c4fb1e483c079d1f3767863bc41884f6322f0744ac5d6398b0e505e9d21e"},
+    {file = "pyuwsgi-2.0.28.post1-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:ad20990917364f8f9b3fc62424edc6d9a992146bc5e15d37b1bbc9c3934ddf9b"},
+    {file = "pyuwsgi-2.0.28.post1-cp39-cp39-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:167d05f635c46287ee8709b09f422fbc16310acad3c9bd100a267679c061fe62"},
+    {file = "pyuwsgi-2.0.28.post1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2300dba7037089a23b0eb4d2b037391be4d89b73e597671d0f23903a529cd552"},
+    {file = "pyuwsgi-2.0.28.post1-cp39-cp39-musllinux_1_2_aarch64.whl", hash = "sha256:f61adc1ab15da41675af36256feccd0cafb797c703499930fd5b3b381b0b6273"},
+    {file = "pyuwsgi-2.0.28.post1-cp39-cp39-musllinux_1_2_i686.whl", hash = "sha256:dc85ba45af7a7b89e3a722cf9cbba724fabb2c3b5caf3c25d67286ab329df97c"},
+    {file = "pyuwsgi-2.0.28.post1-cp39-cp39-musllinux_1_2_x86_64.whl", hash = "sha256:81e59789af3b568ed1c4484b4bac9e4b79810f4774d8d3ab9056eb3f500e1e94"},
+    {file = "pyuwsgi-2.0.28.post1.tar.gz", hash = "sha256:3b85217fd489d623512066ffed0cfc4c95bd3321655e9c6ea13cf6c7f064c9b0"},
 ]
 
 [[package]]
@@ -3989,19 +4039,23 @@ tornado = ["tornado (>=6)"]
 
 [[package]]
 name = "setuptools"
-version = "72.1.0"
+version = "75.4.0"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 files = [
-    {file = "setuptools-72.1.0-py3-none-any.whl", hash = "sha256:5a03e1860cf56bb6ef48ce186b0e557fdba433237481a9a625176c2831be15d1"},
-    {file = "setuptools-72.1.0.tar.gz", hash = "sha256:8d243eff56d095e5817f796ede6ae32941278f542e0f941867cc05ae52b162ec"},
+    {file = "setuptools-75.4.0-py3-none-any.whl", hash = "sha256:b3c5d862f98500b06ffdf7cc4499b48c46c317d8d56cb30b5c8bce4d88f5c216"},
+    {file = "setuptools-75.4.0.tar.gz", hash = "sha256:1dc484f5cf56fd3fe7216d7b8df820802e7246cfb534a1db2aa64f14fcb9cdcb"},
 ]
 
 [package.extras]
-core = ["importlib-metadata (>=6)", "importlib-resources (>=5.10.2)", "jaraco.text (>=3.7)", "more-itertools (>=8.8)", "ordered-set (>=3.1.1)", "packaging (>=24)", "platformdirs (>=2.6.2)", "tomli (>=2.0.1)", "wheel (>=0.43.0)"]
-doc = ["furo", "jaraco.packaging (>=9.3)", "jaraco.tidelift (>=1.4)", "pygments-github-lexers (==0.0.5)", "pyproject-hooks (!=1.1)", "rst.linker (>=1.9)", "sphinx (>=3.5)", "sphinx-favicon", "sphinx-inline-tabs", "sphinx-lint", "sphinx-notfound-page (>=1,<2)", "sphinx-reredirects", "sphinxcontrib-towncrier"]
-test = ["build[virtualenv] (>=1.0.3)", "filelock (>=3.4.0)", "importlib-metadata", "ini2toml[lite] (>=0.14)", "jaraco.develop (>=7.21)", "jaraco.envs (>=2.2)", "jaraco.path (>=3.2.0)", "jaraco.test", "mypy (==1.11.*)", "packaging (>=23.2)", "pip (>=19.1)", "pyproject-hooks (!=1.1)", "pytest (>=6,!=8.1.*)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=2.2)", "pytest-home (>=0.5)", "pytest-mypy", "pytest-perf", "pytest-ruff (<0.4)", "pytest-ruff (>=0.2.1)", "pytest-ruff (>=0.3.2)", "pytest-subprocess", "pytest-timeout", "pytest-xdist (>=3)", "tomli", "tomli-w (>=1.0.0)", "virtualenv (>=13.0.0)", "wheel"]
+check = ["pytest-checkdocs (>=2.4)", "pytest-ruff (>=0.2.1)", "ruff (>=0.7.0)"]
+core = ["importlib-metadata (>=6)", "jaraco.collections", "jaraco.functools (>=4)", "jaraco.text (>=3.7)", "more-itertools", "more-itertools (>=8.8)", "packaging", "packaging (>=24.2)", "platformdirs (>=4.2.2)", "tomli (>=2.0.1)", "wheel (>=0.43.0)"]
+cover = ["pytest-cov"]
+doc = ["furo", "jaraco.packaging (>=9.3)", "jaraco.tidelift (>=1.4)", "pygments-github-lexers (==0.0.5)", "pyproject-hooks (!=1.1)", "rst.linker (>=1.9)", "sphinx (>=3.5)", "sphinx-favicon", "sphinx-inline-tabs", "sphinx-lint", "sphinx-notfound-page (>=1,<2)", "sphinx-reredirects", "sphinxcontrib-towncrier", "towncrier (<24.7)"]
+enabler = ["pytest-enabler (>=2.2)"]
+test = ["build[virtualenv] (>=1.0.3)", "filelock (>=3.4.0)", "ini2toml[lite] (>=0.14)", "jaraco.develop (>=7.21)", "jaraco.envs (>=2.2)", "jaraco.path (>=3.2.0)", "jaraco.test (>=5.5)", "packaging (>=24.2)", "pip (>=19.1)", "pyproject-hooks (!=1.1)", "pytest (>=6,!=8.1.*)", "pytest-home (>=0.5)", "pytest-perf", "pytest-subprocess", "pytest-timeout", "pytest-xdist (>=3)", "tomli-w (>=1.0.0)", "virtualenv (>=13.0.0)", "wheel (>=0.44.0)"]
+type = ["importlib-metadata (>=7.0.2)", "jaraco.develop (>=7.21)", "mypy (>=1.12,<1.14)", "pytest-mypy"]
 
 [[package]]
 name = "six"
@@ -4300,6 +4354,16 @@ files = [
 ua-parser = ">=0.10.0"
 
 [[package]]
+name = "uwsgitop"
+version = "0.12"
+description = "uWSGI top-like interface"
+optional = true
+python-versions = "*"
+files = [
+    {file = "uwsgitop-0.12.tar.gz", hash = "sha256:4f9330951f0fb9633226de36cf0c28c04dcf323efab608834aa81f638b6019b2"},
+]
+
+[[package]]
 name = "virtualenv"
 version = "20.24.6"
 description = "Virtual Python Environment builder"
@@ -4399,7 +4463,7 @@ doc = ["furo", "jaraco.packaging (>=9.3)", "jaraco.tidelift (>=1.4)", "rst.linke
 test = ["big-O", "jaraco.functools", "jaraco.itertools", "jaraco.test", "more-itertools", "pytest (>=6,!=8.1.*)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=2.2)", "pytest-ignore-flaky", "pytest-mypy", "pytest-ruff (>=0.2.1)"]
 
 [extras]
-mysql = ["mysqlclient"]
+uwsgi = ["pyuwsgi", "uwsgitop"]
 
 [metadata]
 lock-version = "2.0"
