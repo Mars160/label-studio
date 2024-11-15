@@ -239,7 +239,7 @@
       }
     }
   ],
-  "auth": [
+  "authPage": [
     {
       "title": "Did you know?",
       "description": "You can sync data from all popular cloud storage providers to collect new items for labeling as they are uploaded, and return the annotation results to train and continuously improve models.",
