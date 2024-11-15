@@ -67,7 +67,7 @@ class UserSignupForm(forms.Form):
         widget=forms.TextInput(attrs={'type': 'password'}),
     )
     allow_newsletters = forms.BooleanField(required=False)
-    how_find_us = forms.ChoiceField(choices=FOUND_US_OPTIONS, required=False)
+    how_find_us = forms.CharField(required=False)
     elaborate = forms.CharField(required=False)
 
     def clean_password(self):
@@ -105,7 +105,9 @@ class UserSignupForm(forms.Form):
             how_find_us = cleaned['how_find_us']
         if 'elaborate' in cleaned and how_find_us == FOUND_US_ELABORATE:
             elaborate = cleaned['elaborate']
-        user = User.objects.create_user(email, password, allow_newsletters=allow_newsletters, how_find_us=how_find_us, elaborate=elaborate)
+
+        print('----> UserSignupForm save cleaned', cleaned, how_find_us, elaborate)
+        user = User.objects.create_user(email, password, allow_newsletters=allow_newsletters)
         return user
 
 
