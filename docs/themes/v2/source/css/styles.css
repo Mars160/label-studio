@@ -1223,7 +1223,7 @@ ul {
   margin-top: 1em;
 }
 
-.toc-list-level-3 {
+.toc-list-level-2~.toc-list-level-3 {
   padding-left: 1em;
 }
 
