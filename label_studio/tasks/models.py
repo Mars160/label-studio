@@ -753,10 +753,9 @@ class Annotation(AnnotationMixin, models.Model):
 
         unique_list = {result.get('id') for result in self.result}
             
-        if self.result_count != len(unique_list):
-            self.result_count = len(unique_list)
-            if update_fields is not None:
-                update_fields = {'result_count'}.union(update_fields)
+        self.result_count = len(unique_list)
+        if update_fields is not None:
+            update_fields = {'result_count'}.union(update_fields)
         result = super().save(*args, update_fields=update_fields, **kwargs)
 
         self.update_task()
