@@ -1,4 +1,4 @@
-import React, { type FC } from "react";
+import type { FC } from "react";
 import { getRoot, getType } from "mobx-state-tree";
 import { observer } from "mobx-react";
 import { ApartmentOutlined, AudioOutlined, LineChartOutlined, MessageOutlined } from "@ant-design/icons";
@@ -21,6 +21,7 @@ import {
   IconText,
   IconWarning,
 } from "../../assets/icons";
+import { IconTimelineRegion } from "../../assets/icons/timeline";
 import { NodeView } from "./NodeView";
 import { Tooltip } from "../../common/Tooltip/Tooltip";
 
@@ -113,6 +114,11 @@ const NodeViews = {
   TextAreaModel: NodeView({
     name: "Input",
     icon: MessageOutlined,
+  }),
+
+  TimelineRegionModel: NodeView({
+    name: "Timeline Span",
+    icon: IconTimelineRegion,
   }),
 };
 

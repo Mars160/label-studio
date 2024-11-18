@@ -273,6 +273,13 @@ class Project(ProjectMixin, models.Model):
 
     pinned_at = models.DateTimeField(_('pinned at'), null=True, default=None, help_text='Pinned date and time')
 
+    custom_task_lock_ttl = models.IntegerField(
+        _('custom_task_lock_ttl'),
+        null=True,
+        default=None,
+        help_text='Custom task lock TTL in seconds. If not set, the default value is used',
+    )
+
     def __init__(self, *args, **kwargs):
         super(Project, self).__init__(*args, **kwargs)
         self.__original_label_config = self.label_config
@@ -342,14 +349,6 @@ class Project(ProjectMixin, models.Model):
     @property
     def one_object_in_label_config(self):
         return len(self.data_types) <= 1
-
-    @property
-    def only_undefined_field(self):
-        return (
-            self.one_object_in_label_config
-            and self.summary.common_data_columns
-            and self.summary.common_data_columns[0] == settings.DATA_UNDEFINED_NAME
-        )
 
     @property
     def get_labeled_count(self):

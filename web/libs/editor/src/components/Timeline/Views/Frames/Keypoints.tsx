@@ -1,5 +1,5 @@
 import chroma from "chroma-js";
-import { type CSSProperties, type FC, memo, type MouseEvent, useCallback, useContext, useMemo } from "react";
+import { type FC, memo, type MouseEvent, useCallback, useContext, useMemo } from "react";
 import { Block, Elem } from "../../../../utils/bem";
 import { clamp } from "../../../../utils/utilities";
 import { TimelineContext } from "../../Context";
@@ -136,11 +136,11 @@ const LifespanItem: FC<LifespanItemProps> = memo(
     }, [left, right, finalWidth]);
 
     return (
-      <Elem name="lifespan" mod={{ hidden: !visible }} style={style}>
+      <Elem name="lifespan" mod={{ hidden: !visible, instant: !width }} style={style}>
         {points.map((frame, i) => {
           const left = (frame - start) * step;
 
-          return <Elem key={i} name="point" style={{ left }} />;
+          return <Elem key={i} name="point" style={{ left }} mod={{ last: !!left }} />;
         })}
       </Elem>
     );

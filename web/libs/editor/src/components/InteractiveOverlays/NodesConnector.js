@@ -1,5 +1,5 @@
 import { debounce } from "../../utils/debounce";
-import { FF_PER_FIELD_COMMENTS, isFF } from "../../utils/feature-flags";
+import { FF_DEV_2715, FF_PER_FIELD_COMMENTS, isFF } from "../../utils/feature-flags";
 import { wrapArray } from "../../utils/utilities";
 import { Geometry } from "./Geometry";
 import { RelationShape } from "./RelationShape";
@@ -17,11 +17,26 @@ const parentImagePropsWatch = {
 };
 
 const obtainWatcher = (node) => {
+  // that's a tricky way to get watcher also for an exact result instead of whole region
+  // works for global classifications and per-regions
+  const isResult = !!node.from_name;
+  if (isResult) {
+    return DOMWatcher;
+  }
+
   switch (node.type) {
     case "richtextregion":
-    case "audioregion":
     case "paragraphs":
       return DOMWatcher;
+    case "audioregion": {
+      if (isFF(FF_DEV_2715)) {
+        return createPropertyWatcher(["bboxTriggers"]);
+      }
+      if (node.getRegionElement) {
+        return DOMWatcher;
+      }
+      return null;
+    }
     case "rectangleregion":
       return createPropertyWatcher(["x", "y", "width", "height", "hidden", parentImagePropsWatch]);
     case "ellipseregion":

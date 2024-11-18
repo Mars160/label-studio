@@ -4,6 +4,16 @@ type RawResult = {
   value: object;
 };
 
+type MSTResult = {
+  id: string;
+  area: MSTRegion;
+  annotation: MSTAnnotation;
+  type: string;
+  mainValue: any;
+  // @todo tag
+  from_name: any;
+};
+
 type MSTagProps = {
   isReady?: boolean;
 };
@@ -17,19 +27,17 @@ type MSTTagImage = {
   canvasSize?: { width: number; height: number };
 } & MSTagProps;
 
-type MSTTag = (
-  | MSTTagImage
-  | {
-      type: string;
-    }
-) &
-  MSTagProps;
+type MSTTag = MSTTagImage | (MSTagProps & { type: string });
 
 type MixinMSTArea = {
   id: string;
   ouid: number;
-  results: RawResult[];
+  results: MSTResult[];
   parentID: string | null;
+  control: object;
+  object: object;
+  classification?: boolean;
+  selected: boolean;
 };
 
 type MixinMSTRegion = {
@@ -41,6 +49,8 @@ type MixinMSTRegion = {
   dynamic: boolean;
   origin: "prediction" | "prediction-changed" | "manual";
   item_index: number | null;
+  type: string;
+  isReadOnly: () => boolean;
 };
 
 type MixinMSTRegionVolatile = {
@@ -51,7 +61,22 @@ type MixinMSTRegionVolatile = {
   drawingTimeout: null;
 };
 
-type MSTRegion = MixinMSTArea & MixinMSTRegion & MixinMSTRegionVolatile;
+type MSTEditableRegionPropertyDefinition = {
+  property: string;
+  label: string;
+};
+
+type MSTEditableRegion = {
+  editorEnabled: boolean;
+  editableFields: MSTEditableRegionPropertyDefinition[];
+  hasEditableFields: boolean;
+  getProperty: (string) => any;
+  getPropertyType: (string) => any;
+  isPropertyEditable: (string) => boolean;
+  setProperty: (string, any) => void;
+};
+
+type MSTRegion = MixinMSTArea & MixinMSTRegion & MixinMSTRegionVolatile & MSTEditableRegion;
 
 type MSTAnnotation = {
   id: string;
@@ -66,8 +91,11 @@ type MSTAnnotation = {
     draft?: RawResult[];
     result?: RawResult[];
   };
-  results: RawResult[];
+  regions: MSTRegion[];
+  results: MSTResult[];
   names: Map<string, MSTTag>;
+  isLinkingMode: boolean;
+  linkingMode: "create_relation" | "link_to_comment";
 
   submissionInProgress: () => void;
 };

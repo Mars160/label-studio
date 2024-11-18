@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../../components";
 import { Form, Input, Label, Toggle } from "../../components/Form";
 import { Block, cn, Elem } from "../../utils/bem";
 import { cloneDeep } from "lodash";
-import { LsCross, LsPlus } from "../../assets/icons";
+import { LsPlus } from "../../assets/icons";
+import { IconCross } from "@humansignal/ui";
 import { useAPI } from "../../providers/ApiProvider";
 import "./WebhookPage.scss";
 import { Space } from "../../components/Space/Space";
 import { useProject } from "../../providers/ProjectProvider";
-import { modal } from "../../components/Modal/Modal";
-import { useModalControls } from "../../components/Modal/ModalPopup";
 import { WebhookDeleteModal } from "./WebhookDeleteModal";
-import { format } from "date-fns";
 
 const WebhookDetail = ({ webhook, webhooksInfo, fetchWebhooks, onBack, onSelectActive }) => {
   // if webhook === null - create mod
@@ -173,7 +171,7 @@ const WebhookDetail = ({ webhook, webhooksInfo, fetchWebhooks, onBack, onSelectA
                           <Button
                             className={rootClass.elem("headers-remove")}
                             type="button"
-                            icon={<LsCross />}
+                            icon={<IconCross />}
                             onClick={() => onHeaderRemove(index)}
                           />
                         </div>

@@ -9,7 +9,7 @@
   padding: 6px 4px 5px;
 
   &_display {
-    padding: 2px 9px 5px 4px;
+    padding: 2px 9px 2px 4px;
     gap: 2px;
     font-size: 14px;
     line-height: 22px;
@@ -27,6 +27,10 @@
 
     .link-state_display & {
       color: var(--secondary-action-color-hover);
+
+      // align linked region icon with the rest
+      align-self: flex-start;
+      transform: translateY(2px);
     }
 
     svg {
@@ -39,7 +43,7 @@
 .link-state-region {
   display: flex;
   flex-flow: row nowrap;
-  align-items: center;
+  align-items: flex-start; // text can be multiline
   gap: 4px;
   font-size: 1em;
   line-height: 1.2em;
@@ -71,6 +75,7 @@
   &__index {
     width: 18px;
     height: 18px;
+    margin-top: 3px; // to align with 24px icon
     display: flex;
     font-size: 9px;
     color: var(--sand_0);
@@ -84,29 +89,46 @@
 
   &__title {
     align-items: center;
-    display: inline-flex;
     flex: 1;
     color: var(--text-color, var(--sand_900));
     min-width: 0;
+    margin-top: 3px; // to align with icon and index
+
+    /// text-overflow for multiline texts
+    /// @see https://stackoverflow.com/a/41137262/308527
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    // reset style from parent to densify text
+    white-space: normal;
+
+    * {
+      display: inline;
+    }
   }
 
   &__label {
     flex: auto 1 0;
     max-width: 100%;
+    margin-right: 5px;
 
     & div {
       overflow: hidden;
-      white-space: nowrap;
+
+      //// @todo disabled for now to allow multiline texts
+      // white-space: nowrap;
       text-overflow: ellipsis;
+    }
+
+    .labels-list {
+      display: inline;
     }
   }
 
   &__text {
-    margin-left: 5px;
     color: var(--sand_900);
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
   }
 
   &__close {

@@ -1,6 +1,5 @@
 import throttle from "lodash.throttle";
 import { destroy, detach, flow, getEnv, getParent, getRoot, isAlive, onSnapshot, types } from "mobx-state-tree";
-import Constants from "../../core/Constants";
 import { errorBuilder } from "../../core/DataValidator/ConfigValidator";
 import { guidGenerator } from "../../core/Helpers";
 import { Hotkey } from "../../core/Hotkey";
@@ -360,7 +359,7 @@ const _Annotation = types
       if (self.type === "annotation") self.setInitialValues();
     },
 
-    setEdit(val) {
+    setEditable(val) {
       self.editable = val;
     },
 

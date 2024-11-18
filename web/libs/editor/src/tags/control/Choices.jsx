@@ -1,4 +1,3 @@
-import React from "react";
 import { Select } from "antd";
 import { observer } from "mobx-react";
 import { types } from "mobx-state-tree";
@@ -287,7 +286,11 @@ const ChoicesSelectLayout = observer(({ item }) => {
 
 const HtxChoices = observer(({ item }) => {
   return (
-    <Block name="choices" mod={{ hidden: !item.isVisible || !item.perRegionVisible(), layout: item.layout }}>
+    <Block
+      name="choices"
+      mod={{ hidden: !item.isVisible || !item.perRegionVisible(), layout: item.layout }}
+      ref={item.elementRef}
+    >
       {item.layout === "select" ? <ChoicesSelectLayout item={item} /> : Tree.renderChildren(item, item.annotation)}
     </Block>
   );
