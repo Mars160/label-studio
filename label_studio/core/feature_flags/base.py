@@ -1,4 +1,5 @@
 import logging
+from typing import Callable
 
 import ldclient
 from django.conf import settings
@@ -81,7 +82,7 @@ def _get_user_repr(user):
     return user_data
 
 
-def flag_set(feature_flag, user=None, override_system_default=None):
+def flag_set(feature_flag, user=None, override_system_default=None, user_repr_fn: Callable = _get_user_repr):
     """Use this method to check whether this flag is set ON to the current user, to split the logic on backend
     For example,
     ```
@@ -91,6 +92,8 @@ def flag_set(feature_flag, user=None, override_system_default=None):
         run_old_code()
     ```
     `override_default` is used to override any system defaults in place in case no files or LD API flags provided
+
+    `user_repr_fn` is used in LSE to enrich the user representation with LSE-only properties to be segmented on
 
     stale_feature_flags will be checked to confirm if the feature flags are still active
 
@@ -116,16 +119,16 @@ def flag_set(feature_flag, user=None, override_system_default=None):
         system_default = override_system_default
     else:
         system_default = settings.FEATURE_FLAGS_DEFAULT_VALUE
-    user_dict = _get_user_repr(user)
+    user_dict = user_repr_fn(user)
     return client.variation(feature_flag, user_dict, system_default)
 
 
-def all_flags(user):
+def all_flags(user, user_repr_fn: Callable = _get_user_repr):
     """Return the output of this method in API response, to bootstrap client-side flags.
     More on https://docs.launchdarkly.com/sdk/features/bootstrapping#javascript
     stale_feature_flags will override any client configuration
     """
-    user_dict = _get_user_repr(user)
+    user_dict = user_repr_fn(user)
     logger.debug(f'Resolve all flags state for user {user_dict}')
     state = client.all_flags_state(user_dict)
     flags = state.to_json_dict()
