@@ -98,13 +98,12 @@ class UserSignupForm(forms.Form):
         email = cleaned['email'].lower()
         allow_newsletters = None
         how_find_us = None
-        elaborate = None
         if 'allow_newsletters' in cleaned:
             allow_newsletters = cleaned['allow_newsletters']
         if 'how_find_us' in cleaned:
             how_find_us = cleaned['how_find_us']
         if 'elaborate' in cleaned and how_find_us == FOUND_US_ELABORATE:
-            elaborate = cleaned['elaborate']
+            cleaned['elaborate']
 
         user = User.objects.create_user(email, password, allow_newsletters=allow_newsletters)
         return user
