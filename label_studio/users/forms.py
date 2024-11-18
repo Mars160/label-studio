@@ -106,7 +106,6 @@ class UserSignupForm(forms.Form):
         if 'elaborate' in cleaned and how_find_us == FOUND_US_ELABORATE:
             elaborate = cleaned['elaborate']
 
-        print('----> UserSignupForm save cleaned', cleaned, how_find_us, elaborate)
         user = User.objects.create_user(email, password, allow_newsletters=allow_newsletters)
         return user
 
