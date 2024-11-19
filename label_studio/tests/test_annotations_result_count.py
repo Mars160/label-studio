@@ -1,6 +1,7 @@
 from django.test import TestCase
-from tasks.models import Task, Annotation
 from projects.models import Project
+from tasks.models import Annotation, Task
+
 
 class AnnotationResultCountTests(TestCase):
     def setUp(self):
@@ -9,20 +10,12 @@ class AnnotationResultCountTests(TestCase):
 
     def test_empty_result_gives_zero_count(self):
         """Test that an empty result gives a count of 0"""
-        annotation = Annotation.objects.create(
-            task=self.task,
-            project=self.project,
-            result=[]
-        )
+        annotation = Annotation.objects.create(task=self.task, project=self.project, result=[])
         self.assertEqual(annotation.result_count, 0)
 
     def test_none_result_gives_zero_count(self):
         """Test that None result gives a count of 0"""
-        annotation = Annotation.objects.create(
-            task=self.task,
-            project=self.project,
-            result=None
-        )
+        annotation = Annotation.objects.create(task=self.task, project=self.project, result=None)
         self.assertEqual(annotation.result_count, 0)
 
     def test_unique_ids_counted_correctly(self):
@@ -31,10 +24,10 @@ class AnnotationResultCountTests(TestCase):
             task=self.task,
             project=self.project,
             result=[
-                {"id": "1", "value": "test1"},
-                {"id": "2", "value": "test2"},
-                {"id": "1", "value": "test3"}  # Duplicate ID
-            ]
+                {'id': '1', 'value': 'test1'},
+                {'id': '2', 'value': 'test2'},
+                {'id': '1', 'value': 'test3'},  # Duplicate ID
+            ],
         )
         self.assertEqual(annotation.result_count, 2)  # Should only count unique IDs
 
@@ -43,26 +36,17 @@ class AnnotationResultCountTests(TestCase):
         annotation = Annotation.objects.create(
             task=self.task,
             project=self.project,
-            result=[
-                {"id": "1", "value": "test1"},
-                {"value": "test2"},  # Missing ID
-                {"id": "3", "value": "test3"}
-            ]
+            result=[{'id': '1', 'value': 'test1'}, {'value': 'test2'}, {'id': '3', 'value': 'test3'}],  # Missing ID
         )
         self.assertEqual(annotation.result_count, 2)
 
     def test_update_changes_count(self):
         """Test that updating the result updates the count"""
         annotation = Annotation.objects.create(
-            task=self.task,
-            project=self.project,
-            result=[{"id": "1", "value": "test1"}]
+            task=self.task, project=self.project, result=[{'id': '1', 'value': 'test1'}]
         )
         self.assertEqual(annotation.result_count, 1)
 
-        annotation.result = [
-            {"id": "1", "value": "test1"},
-            {"id": "2", "value": "test2"}
-        ]
+        annotation.result = [{'id': '1', 'value': 'test1'}, {'id': '2', 'value': 'test2'}]
         annotation.save()
-        self.assertEqual(annotation.result_count, 2) 
+        self.assertEqual(annotation.result_count, 2)
