@@ -8,9 +8,9 @@ from ldclient.feature_store import CacheConfig
 from ldclient.integrations import Files, Redis
 
 from label_studio.core.current_request import get_current_request
+from label_studio.core.utils.common import load_func
 from label_studio.core.utils.io import find_node
 from label_studio.core.utils.params import get_all_env_with_prefix, get_bool_env
-from label_studio.core.utils.common import load_func
 
 from .stale_feature_flags import STALE_FEATURE_FLAGS
 
