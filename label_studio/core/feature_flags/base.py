@@ -1,5 +1,5 @@
 import logging
-from typing import Callable
+from typing import Optional
 
 import ldclient
 from django.conf import settings
@@ -82,7 +82,7 @@ def _get_user_repr(user):
     return user_data
 
 
-def flag_set(feature_flag, user=None, override_system_default=None, user_repr_fn: Callable = _get_user_repr):
+def flag_set(feature_flag, user=None, override_system_default=None, user_repr_custom_extra: Optional[dict] = None):
     """Use this method to check whether this flag is set ON to the current user, to split the logic on backend
     For example,
     ```
@@ -119,16 +119,20 @@ def flag_set(feature_flag, user=None, override_system_default=None, user_repr_fn
         system_default = override_system_default
     else:
         system_default = settings.FEATURE_FLAGS_DEFAULT_VALUE
-    user_dict = user_repr_fn(user)
+    user_dict = _get_user_repr(user)
+    if user_repr_custom_extra:
+        user_dict['custom'].update(user_repr_custom_extra)
     return client.variation(feature_flag, user_dict, system_default)
 
 
-def all_flags(user, user_repr_fn: Callable = _get_user_repr):
+def all_flags(user, user_repr_custom_extra: Optional[dict] = None):
     """Return the output of this method in API response, to bootstrap client-side flags.
     More on https://docs.launchdarkly.com/sdk/features/bootstrapping#javascript
     stale_feature_flags will override any client configuration
     """
-    user_dict = user_repr_fn(user)
+    user_dict = _get_user_repr(user)
+    if user_repr_custom_extra:
+        user_dict['custom'].update(user_repr_custom_extra)
     logger.debug(f'Resolve all flags state for user {user_dict}')
     state = client.all_flags_state(user_dict)
     flags = state.to_json_dict()
