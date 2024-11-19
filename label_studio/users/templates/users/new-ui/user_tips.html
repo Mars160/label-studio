@@ -140,11 +140,16 @@
   }
 
   document.addEventListener('DOMContentLoaded', function() {
+    const _container = document.querySelector('.tips');
     const _title = document.querySelector('.tips .title');
     const _description = document.querySelector('.tips .description');
 
     const selectedTip = getRandomTip();
-    if (!selectedTip) return;
+    if (!selectedTip) {
+      // Remove the tips container if there are no tips to show
+      _container.remove();
+      return;
+    }
 
     const linkUrl = createURL(selectedTip.link.url, selectedTip.link.params)
 
