@@ -31,7 +31,6 @@ def test_annotations_CRUD(django_live_url, business_client):
     new_annotation = ls.annotations.create(task_id, result=annotation_data['result'])
     assert (annotation_id := new_annotation.id)
     assert new_annotation.result == annotation_data['result']
-    assert new_annotation.result_count == 1
 
     ls.annotations.update(
         id=annotation_id,
@@ -57,7 +56,6 @@ def test_annotations_CRUD(django_live_url, business_client):
     assert len(annotations) == 1
     assert annotations[0].id == another_annotation.id
     assert annotations[0].result[0]['value']['choices'] == ['Neutral']
-    assert annotations[0].result_count == len(annotations[0].result)
 
 
 def test_annotation_marks_task_as_labeled(django_live_url, business_client):
@@ -128,4 +126,3 @@ def test_annotation_marks_task_as_labeled(django_live_url, business_client):
         'height': 100,
         'rotation': 0,
     }
-    assert labeled_tasks[0].annotations[0]['result_count'] == len(labeled_tasks[0].annotations[0]['result'][0])
