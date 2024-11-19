@@ -116,7 +116,8 @@ const SmartTools = observer(({ tools }) => {
             let nextIndex = selectedIndex + 1;
 
             // if that's a smart button in extra block, it's already selected
-            if (e.target.closest(`.${cn("tool").elem("extra")}`)) return;
+            // if it's a hotkey handler, there are no `e` event
+            if (e?.target?.closest(`.${cn("tool").elem("extra")}`)) return;
 
             if (!hasSelected) nextIndex = 0;
             else if (nextIndex >= tools.length) nextIndex = 0;
