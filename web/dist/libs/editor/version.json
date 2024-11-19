@@ -1,6 +1,6 @@
 {
-  "message": "fix: Text for import dialog about uploads (#6682)",
-  "commit": "08d3299e753ba9240d26c46624cdf8267fefa969",
-  "date": "2024-11-19T03:16:48.000Z",
+  "message": "fix: OPTIC-1353: Make HeidiTips live for auth pages (#6665)",
+  "commit": "f86f208ad53b2b2ed7cbc8c8feec4a069f433650",
+  "date": "2024-11-19T14:43:26.000Z",
   "branch": "develop"
 }
