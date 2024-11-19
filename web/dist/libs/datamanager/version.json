@@ -1,6 +1,6 @@
 {
-  "message": "feat: OPTIC-1245: Allow HeidiTips to pull content updates live (#6623)",
-  "commit": "9a7bfc0524b776232ea8e445cafe7fdb95b1f6bc",
-  "date": "2024-11-14T17:07:18.000Z",
+  "message": "fix: Text for import dialog about uploads (#6682)",
+  "commit": "08d3299e753ba9240d26c46624cdf8267fefa969",
+  "date": "2024-11-19T03:16:48.000Z",
   "branch": "develop"
 }
