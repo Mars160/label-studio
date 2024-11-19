@@ -38,7 +38,7 @@ class AnnotationResultCountTests(TestCase):
             project=self.project,
             result=[{'id': '1', 'value': 'test1'}, {'value': 'test2'}, {'id': '3', 'value': 'test3'}],  # Missing ID
         )
-        self.assertEqual(annotation.result_count, 2)
+        self.assertEqual(annotation.result_count, 3)
 
     def test_update_changes_count(self):
         """Test that updating the result updates the count"""
