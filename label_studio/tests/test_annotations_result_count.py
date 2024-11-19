@@ -6,7 +6,7 @@ from tasks.models import Annotation, Task
 class AnnotationResultCountTests(TestCase):
     def setUp(self):
         self.project = Project.objects.create()
-        self.task = Task.objects.create(project=self.project, data={'text': f'This is task'})
+        self.task = Task.objects.create(project=self.project, data={'text': 'This is task'})
 
     def test_empty_result_gives_zero_count(self):
         """Test that an empty result gives a count of 0"""
