@@ -751,7 +751,7 @@ class Annotation(AnnotationMixin, models.Model):
             if update_fields is not None:
                 update_fields = {'updated_by'}.union(update_fields)
 
-        unique_list = {result.get('id') for result in self.result}
+        unique_list = {result.get('id') for result in (self.result or [])}
 
         self.result_count = len(unique_list)
         if update_fields is not None:
