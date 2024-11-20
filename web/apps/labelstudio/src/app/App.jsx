@@ -45,6 +45,7 @@ const browserHistory = createBrowserHistory({
   },
 });
 
+
 window.LSH = browserHistory;
 
 initSentry(browserHistory);
