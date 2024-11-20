@@ -984,6 +984,11 @@ ul {
   padding-left: 1.5rem;
 }
 
+.content-markdown div.admonition ol,
+.content-markdown div.admonition ul {
+  padding-left: 3.0rem;
+}
+
 /*
 .content-markdown ol li ul li {
   margin-top: 0;
@@ -1221,6 +1226,10 @@ ul {
 
 .toc-list>li+li {
   margin-top: 1em;
+}
+
+.toc-list-level-2~.toc-list-level-3 {
+  padding-left: 1em;
 }
 
 .toc-list-child {

@@ -1,6 +1,6 @@
 {
-  "message": "fix: OPTIC-1243: Version history will navigate to a LabelStudio owned url (#6659)",
-  "commit": "1381748f67a704ca9a7ac3f2796548c80307eb6e",
-  "date": "2024-11-18T16:20:25.000Z",
+  "message": "fix: OPTIC-1353: Make HeidiTips live for auth pages (#6665)",
+  "commit": "f86f208ad53b2b2ed7cbc8c8feec4a069f433650",
+  "date": "2024-11-19T14:43:26.000Z",
   "branch": "develop"
 }
