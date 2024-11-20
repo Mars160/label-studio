@@ -8,6 +8,11 @@
     }
   }
 
+  &__content {
+    margin-left: -4px;
+    padding-inline: 4px;
+  }
+
   &__handle {
     top: 0;
     height: 100%;
@@ -15,7 +20,7 @@
     cursor: col-resize;
     z-index: 100;
     right: -12px;
-    padding: 0 0 0 5px;
+    padding: 0 5px;
 
     &::before {
       top: 0;
