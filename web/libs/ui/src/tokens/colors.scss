@@ -403,7 +403,7 @@
   --color-neutral-content-subtler: var(--color-sand-600);
   --color-neutral-content-subtlest: var(--color-sand-500);
   --color-neutral-icon: var(--color-sand-700);
-  --color-neutral-shadow: var(--color-sand-900);
+  --color-neutral-shadow: var(--color-sand-950);
   --color-neutral-surface: var(--color-sand-100);
   --color-neutral-surface-active: var(--color-sand-200);
   --color-neutral-surface-hover: var(--color-sand-000);
@@ -411,6 +411,7 @@
   --color-neutral-inverted-background: var(--color-sand-900);
   --color-neutral-inverted-border: var(--color-sand-800);
   --color-neutral-inverted-content: var(--color-sand-100);
+  --color-neutral-inverted-icon: var(--color-sand-100);
   --color-neutral-inverted-content-subtle: var(--color-sand-400);
   --color-neutral-inverted-content-subtler: var(--color-sand-300);
   --color-neutral-inverted-content-subtlest: var(--color-sand-500);
@@ -518,7 +519,7 @@
   --color-accent-sand-subtlest-raw: var(--color-sand-100-raw);  
   --color-negative-focus-outline-raw: var(--color-persimmon-200-raw);
   --color-neutral-border-raw: var(--color-sand-300-raw);
-  --color-neutral-shadow-raw: var(--color-sand-900-raw);
+  --color-neutral-shadow-raw: var(--color-sand-950-raw);
   --color-positive-focus-outline-raw: var(--color-kale-200-raw);
   --color-primary-focus-outline-raw: var(--color-grape-200-raw);
   --color-primary-shadow-raw: var(--color-grape-900-raw);
@@ -606,6 +607,7 @@
     --color-neutral-surface-inset: var(--color-sand-950);
     --color-neutral-inverted-background: var(--color-sand-000);
     --color-neutral-inverted-border: var(--color-sand-300);
+    --color-neutral-inverted-icon: var(--color-sand-800);
     --color-neutral-inverted-content: var(--color-sand-800);
     --color-neutral-inverted-content-subtle: var(--color-sand-500);
     --color-neutral-inverted-content-subtler: var(--color-sand-600);

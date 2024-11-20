@@ -10,7 +10,7 @@
   position: absolute;
   align-items: center;
   justify-content: center;
-  background-color: rgb(0 0 0 / 30%);
+  background-color: rgba(var(--color-neutral-shadow-raw) / 30%);
   will-change: opacity;
   overflow: hidden;
 

@@ -4,7 +4,7 @@
   position: relative;
 
   &__draft {
-    border-bottom: 1px solid var(--sand_300);
+    border-bottom: 1px solid var(--color-neutral-border);
   }
 
   &__list {
@@ -17,7 +17,7 @@
   }
 
   &__create {
-    border-bottom: 1px solid var(--sand_300);
+    border-bottom: 1px solid var(--color-neutral-border);
   }
 
   &__create,

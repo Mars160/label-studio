@@ -10,8 +10,9 @@
   position: fixed;
   align-items: center;
   justify-content: center;
-  background-color: rgba(18 17 13 / 30%);
+  background-color: rgba(var(--color-neutral-shadow-raw) / 30%);
   will-change: opacity;
+  backdrop-filter: blur(30px);
 
   &_optimize &__wrapper {
     will-change: transform;
