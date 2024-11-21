@@ -245,6 +245,11 @@ class ContextLog(object):
         elif hasattr(request, 'user') and hasattr(request.user, 'advanced_json'):
             advanced_json = request.user.advanced_json
 
+        # Add metrics payload
+        metrics_payload = None
+        if hasattr(request.GET, '__ls'):
+            metrics_payload = json.loads(request.GET.get('__ls'))
+
         payload = {
             'url': request.build_absolute_uri(),
             'server_id': self.server_id,
@@ -260,7 +265,7 @@ class ContextLog(object):
             'namespace': request.resolver_match.namespace if request.resolver_match else None,
             'scheme': request.scheme,
             'method': request.method,
-            'values': request.GET.dict(),
+            'values': metrics_payload or request.GET.dict(),
             'json': body,
             'advanced_json': advanced_json,
             'language': request.LANGUAGE_CODE,
