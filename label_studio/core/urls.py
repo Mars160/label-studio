@@ -26,7 +26,6 @@ from django.views.generic.base import RedirectView
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .views.metrics import collect_metrics
 
 handler500 = 'core.views.custom_500'
 
@@ -105,8 +104,8 @@ urlpatterns = [
     path('django-rq/', include('django_rq.urls')),
     path('feature-flags/', views.feature_flags, name='feature_flags'),
     path('heidi-tips/', views.heidi_tips, name='heidi_tips'),
+    path('__lsa/', views.collect_metrics, name='collect_metrics'),
     re_path(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('__ls', collect_metrics, name='collect_metrics'),
 ]
 
 if settings.DEBUG:
