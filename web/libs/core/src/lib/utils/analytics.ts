@@ -6,13 +6,12 @@ const logEvent = (eventName: string, metadata: Record<string, unknown> = {}) => 
     ...metadata,
     event: eventName,
     url: window.location.href,
-    ts: Date.now(),
   };
 
   // Use requestIdleCallback to send the event after the main thread is free
   window.requestIdleCallback(() => {
     const params = new URLSearchParams({ __: JSON.stringify(payload) });
-    const url = `/__lsa?${params}`;
+    const url = `/__lsa/?${params}`;
     // Use sendBeacon if available for better reliability during page unload
     if (navigator.sendBeacon) {
       navigator.sendBeacon(url);
