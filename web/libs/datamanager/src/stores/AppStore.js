@@ -224,11 +224,11 @@ export const AppStore = types
         taskPromise.then(() => {
           const annotation = self.LSF?.currentAnnotation;
           const id = annotation?.pk ?? annotation?.id;
-  
+
           self.LSF?.setLSFTask(self.taskStore.selected, id);
-  
+
           self.setLoadingData(false);
-        })
+        });
       }
     }),
 
