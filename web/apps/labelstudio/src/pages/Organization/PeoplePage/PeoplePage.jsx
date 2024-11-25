@@ -29,7 +29,7 @@ const InvitationModal = ({ link }) => {
           target="_blank"
           rel="noreferrer"
           onClick={() =>
-            __lsa("docs.organization.signup_learn_more", { href: "https://labelstud.io/guide/signup.html" })
+            __lsa("docs.organization.add_people.learn_more", { href: "https://labelstud.io/guide/signup.html" })
           }
         >
           Learn more
