@@ -13,12 +13,16 @@ const logEvent = (eventName: string, metadata: Record<string, unknown> = {}) => 
     const params = new URLSearchParams({ __: JSON.stringify(payload) });
     const url = `/__lsa/?${params}`;
     // Use sendBeacon if available for better reliability during page unload
-    if (navigator.sendBeacon) {
-      navigator.sendBeacon(url);
-    } else {
-      // Fallback handling
-      const img = new Image();
-      img.src = url;
+    try {
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(url);
+      } else {
+        // Fallback handling
+        const img = new Image();
+        img.src = url;
+      }
+    } catch {
+      // Ignore errors here
     }
   });
 };
