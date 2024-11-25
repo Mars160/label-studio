@@ -1,8 +1,9 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Button } from "../../components";
-import { Form, TextArea, Toggle } from "../../components/Form";
+import { Form, TextArea } from "../../components/Form";
 import { MenubarContext } from "../../components/Menubar/Menubar";
 import { Block, Elem } from "../../utils/bem";
+import { Toggle } from "@humansignal/ui";
 
 import { ModelVersionSelector } from "./AnnotationSettings/ModelVersionSelector";
 import { ProjectContext } from "../../providers/ProjectProvider";
