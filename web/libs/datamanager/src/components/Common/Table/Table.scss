@@ -44,6 +44,10 @@
     width: 100%;
   }
 
+  &__virual {
+    content-visibility: auto;
+  }
+
   &__auto-size,
   &__virtual {
     width: auto;

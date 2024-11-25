@@ -20,18 +20,26 @@ export const ImageCell = (column) => {
   if (!imgSrc) return null;
 
   return renderImagePreview ? (
-    <img
-      {...imgDefaultProps}
-      key={imgSrc}
-      src={imgSrc}
-      alt="Data"
-      style={{
-        maxHeight: "100%",
-        maxWidth: "100px",
-        objectFit: "contain",
-        borderRadius: 3,
-      }}
-    />
+    // <img
+    //   {...imgDefaultProps}
+    //   key={imgSrc}
+    //   src={imgSrc}
+    //   alt="Data"
+    //   style={{
+    //     maxHeight: "100%",
+    //     maxWidth: "100px",
+    //     objectFit: "contain",
+    //     borderRadius: 3,
+    //   }}
+    // />
+    <div style={{
+      backgroundImage: `url(${imgSrc})`,
+      width: "100%",
+      height: "100%",
+      backgroundSize: "contain",
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: "center",
+    }}></div>
   ) : (
     <AnnotationPreview
       task={original}
