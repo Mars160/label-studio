@@ -22,11 +22,9 @@ STALE_FEATURE_FLAGS = {
     'fflag_fix_back_lsdv_4929_limit_exports_10042023_short': True,
     'fflag_feat_front_lsdv_4620_richtext_opimization_060423_short': True,
     'fflag_feat_front_lsdv_4661_full_uri_resolve_15032023_short': True,
-    'fflag_fix_back_LSDV_4748_annotate_task_number_14032023_short': True,
     'fflag_feat_front_lsdv_4659_skipduplicates_060323_short': True,
     'fflag_fix_font_lsdv_1148_hotkeys_namespaces_01022023_short': True,
     'fflag_fix_back_lsdv_1044_check_annotations_24012023_short': False,
-    'fflag_feat_front_dev_4081_magic_wand_tool': True,
     'fflag_fix_front_dev_4075_taxonomy_overlap_281222_short': True,
     'fflag_fix_front_dev_3730_shortcuts_initial_input_22122022_short': True,
     'ff_back_dev_3865_filters_anno_171222_short': True,
@@ -50,4 +48,6 @@ STALE_FEATURE_FLAGS = {
     'fflag_feat_optic_198_multi_select_users_short': True,
     'fflag_fix_back_lsdv_5410_temporary_disable_auto_inference_jobs_short': True,
     'fflag_feat_front_prod_292_archive_workspaces_short': True,
+    'fflag_feat_all_lsdv_4915_async_task_import_13042023_short': True,
+    'fflag_fix_all_lsdv_4971_async_reimport_09052023_short': True,
 }
