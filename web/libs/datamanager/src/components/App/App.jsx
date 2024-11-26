@@ -38,7 +38,9 @@ const AppComponent = ({ app }) => {
             {app.crashed ? (
               <div className={clsx(rootCN.toString(), rootClassName)}>
                 <span className={rootCN.elem("header").toString()}>Oops...</span>
-                <span className={rootCN.elem("description").toString()}>Project has been deleted or not yet created.</span>
+                <span className={rootCN.elem("description").toString()}>
+                  Project has been deleted or not yet created.
+                </span>
               </div>
             ) : app.loading ? (
               <div className={cn("app-loader").toString()}>

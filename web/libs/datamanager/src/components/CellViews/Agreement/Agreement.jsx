@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { Block, Elem, cn } from "../../../utils/bem";
+import { cn } from "../../../utils/bem";
 import { isDefined } from "../../../utils/utils";
 import "./Agreement.scss";
 
@@ -21,7 +21,7 @@ const formatNumber = (num) => {
 
 export const Agreement = (column) => {
   const agreementCN = cn("agreement");
-  const scoreElem =  agreementCN.elem("score");
+  const scoreElem = agreementCN.elem("score");
   return (
     <div className={agreementCN.toString()}>
       <span className={clsx(scoreElem.toString(), scoreElem.mod({ [agreement(column.value)]: true }).toString())}>
