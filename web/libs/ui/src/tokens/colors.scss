@@ -98,7 +98,7 @@
   --project-title-icon-primary-color: rgba(var(--black-raw), 0.35);
   --project-title-icon-alternate-color: rgba(var(--white-raw), 0.35);
 
-  /* Primitive Tokens [DO NOT USE] */
+  /* Primitive Tokens [DO NOT USE DIRECTLY] */
   // Primitive Tokens: Colors
   --color-blueberry-000: rgb(240 247 254);
   --color-blueberry-100: rgb(212 231 251);
@@ -329,153 +329,153 @@
   // Semantic Tokens: Colors
   
   // Light Color Scheme (Default)
-  --color-accent-blueberry-bold: var(--color-blueberry-600);
-  --color-accent-blueberry-dark: var(--color-blueberry-900);
-  --color-accent-blueberry-subtle: var(--color-blueberry-100);
-  --color-accent-blueberry-subtlest: var(--color-blueberry-000);
-  --color-accent-canteloupe-bold: var(--color-canteloupe-600);
-  --color-accent-canteloupe-dark: var(--color-canteloupe-900);
-  --color-accent-canteloupe-subtle: var(--color-canteloupe-100);
-  --color-accent-canteloupe-subtlest: var(--color-canteloupe-000);
-  --color-accent-fig-bold: var(--color-fig-600);
-  --color-accent-fig-dark: var(--color-fig-900);
-  --color-accent-fig-subtle: var(--color-fig-100);
-  --color-accent-fig-subtlest: var(--color-fig-000);
-  --color-accent-grape-bold: var(--color-grape-600);
-  --color-accent-grape-dark: var(--color-grape-900);
-  --color-accent-grape-subtle: var(--color-grape-100);
-  --color-accent-grape-subtlest: var(--color-grape-000);
-  --color-accent-kale-bold: var(--color-kale-600);
-  --color-accent-kale-dark: var(--color-kale-900);
-  --color-accent-kale-subtle: var(--color-kale-100);
-  --color-accent-kale-subtlest: var(--color-kale-000);
-  --color-accent-kiwi-bold: var(--color-kiwi-600);
-  --color-accent-kiwi-dark: var(--color-kiwi-900);
-  --color-accent-kiwi-subtle: var(--color-kiwi-100);
-  --color-accent-kiwi-subtlest: var(--color-kiwi-000);
-  --color-accent-mango-bold: var(--color-mango-600);
-  --color-accent-mango-dark: var(--color-mango-900);
-  --color-accent-mango-subtle: var(--color-mango-100);
-  --color-accent-mango-subtlest: var(--color-mango-000);
-  --color-accent-persimmon-bold: var(--color-persimmon-600);
-  --color-accent-persimmon-dark: var(--color-persimmon-900);
-  --color-accent-persimmon-subtle: var(--color-persimmon-100);
-  --color-accent-persimmon-subtlest: var(--color-persimmon-000);
-  --color-accent-plum-bold: var(--color-plum-600);
-  --color-accent-plum-dark: var(--color-plum-900);
-  --color-accent-plum-subtle: var(--color-plum-100);
-  --color-accent-plum-subtlest: var(--color-plum-000);
-  --color-accent-sand-bold: var(--color-sand-600);
-  --color-accent-sand-dark: var(--color-sand-900);
-  --color-accent-sand-subtle: var(--color-sand-100);
-  --color-accent-sand-subtlest: var(--color-sand-100);
-  --color-negative-background: var(--color-persimmon-000);
-  --color-negative-emphasis: var(--color-persimmon-200);
-  --color-negative-emphasis-subtle: var(--color-persimmon-100);
-  --color-negative-border: var(--color-persimmon-700);
-  --color-negative-border-bold: var(--color-persimmon-800);
-  --color-negative-border-subtle: var(--color-persimmon-500);
-  --color-negative-border-subtler: var(--color-persimmon-300);
-  --color-negative-border-subtlest: var(--color-persimmon-200);
-  --color-negative-content: var(--color-persimmon-700);
-  --color-negative-content-hover: var(--color-persimmon-500);
-  --color-negative-content-subtle: var(--color-persimmon-500);
-  --color-negative-focus-outline: var(--color-persimmon-200);
-  --color-negative-icon: var(--color-persimmon-500);
-  --color-negative-surface: var(--color-persimmon-600);
-  --color-negative-surface-content: var(--color-persimmon-000);
-  --color-negative-surface-content-subtle: var(--color-persimmon-100);
-  --color-negative-surface-active: var(--color-persimmon-800);
-  --color-negative-surface-icon: var(--color-persimmon-100);
-  --color-negative-surface-hover: var(--color-persimmon-500);
-  --color-neutral-background: var(--color-sand-000);
-  --color-neutral-emphasis: var(--color-sand-200);
-  --color-neutral-background-bold: var(--color-sand-000);
-  --color-neutral-emphasis-subtle: var(--color-sand-100);
-  --color-neutral-border: var(--color-sand-300);
-  --color-neutral-border-bold: var(--color-sand-400);
-  --color-neutral-border-bolder: var(--color-sand-500);
-  --color-neutral-border-boldest: var(--color-sand-600);
-  --color-neutral-border-subtle: var(--color-sand-300);
-  --color-neutral-border-subtler: var(--color-sand-200);
-  --color-neutral-content: var(--color-sand-800);
-  --color-neutral-content-subtle: var(--color-sand-700);
-  --color-neutral-content-subtler: var(--color-sand-600);
-  --color-neutral-content-subtlest: var(--color-sand-500);
-  --color-neutral-icon: var(--color-sand-700);
-  --color-neutral-shadow: var(--color-sand-950);
-  --color-neutral-surface: var(--color-sand-100);
-  --color-neutral-surface-active: var(--color-sand-200);
-  --color-neutral-surface-hover: var(--color-sand-000);
-  --color-neutral-surface-inset: var(--color-sand-200);
-  --color-neutral-inverted-background: var(--color-sand-900);
-  --color-neutral-inverted-border: var(--color-sand-800);
-  --color-neutral-inverted-content: var(--color-sand-100);
-  --color-neutral-inverted-icon: var(--color-sand-100);
-  --color-neutral-inverted-content-subtle: var(--color-sand-400);
-  --color-neutral-inverted-content-subtler: var(--color-sand-300);
-  --color-neutral-inverted-content-subtlest: var(--color-sand-500);
-  --color-neutral-inverted-surface: var(--color-sand-900);
-  --color-neutral-inverted-surface-active: var(--color-sand-700);
-  --color-neutral-inverted-surface-hover: var(--color-sand-800);
-  --color-positive-background: var(--color-kale-000);
-  --color-positive-emphasis: var(--color-kale-100);
-  --color-positive-emphasis-subtle: var(--color-kale-000);
-  --color-positive-border: var(--color-kale-700);
-  --color-positive-border-bold: var(--color-kale-800);
-  --color-positive-border-subtle: var(--color-kale-500);
-  --color-positive-border-subtler: var(--color-kale-300);
-  --color-positive-border-subtlest: var(--color-kale-200);
-  --color-positive-content: var(--color-kale-700);
-  --color-positive-content-hover: var(--color-kale-500);
-  --color-positive-content-subtle: var(--color-kale-500);
-  --color-positive-focus-outline: var(--color-kale-200);
-  --color-positive-icon: var(--color-kale-500);
-  --color-positive-surface: var(--color-kale-600);
-  --color-positive-surface-content: var(--color-kale-000);
-  --color-positive-surface-content-subtle: var(--color-kale-100);
-  --color-positive-surface-active: var(--color-kale-800);
-  --color-positive-surface-icon: var(--color-kale-100);
-  --color-positive-surface-hover: var(--color-kale-500);
-  --color-primary-background: var(--color-grape-000);
-  --color-primary-emphasis: var(--color-grape-200);
-  --color-primary-emphasis-subtle: var(--color-grape-100);
-  --color-primary-border: var(--color-grape-700);
-  --color-primary-border-bold: var(--color-grape-800);
-  --color-primary-border-subtle: var(--color-grape-500);
-  --color-primary-border-subtler: var(--color-grape-300);
-  --color-primary-border-subtlest: var(--color-grape-200);
-  --color-primary-content: var(--color-grape-700);
-  --color-primary-content-hover: var(--color-grape-500);
-  --color-primary-content-subtle: var(--color-grape-500);
-  --color-primary-focus-outline: var(--color-grape-200);
-  --color-primary-icon: var(--color-grape-500);
-  --color-primary-shadow: var(--color-grape-900);
-  --color-primary-surface: var(--color-grape-700);
-  --color-primary-surface-content: var(--color-grape-000);
-  --color-primary-surface-content-subtle: var(--color-grape-100);
-  --color-primary-surface-active: var(--color-grape-800);
-  --color-primary-surface-icon: var(--color-grape-100);
-  --color-primary-surface-hover: var(--color-grape-600);
-  --color-warning-background: var(--color-canteloupe-000);
-  --color-warning-emphasis: var(--color-canteloupe-100);
-  --color-warning-emphasis-subtle: var(--color-canteloupe-000);
-  --color-warning-border: var(--color-canteloupe-700);
-  --color-warning-border-bold: var(--color-canteloupe-800);
-  --color-warning-border-subtle: var(--color-canteloupe-500);
-  --color-warning-border-subtler: var(--color-canteloupe-300);
-  --color-warning-border-subtlest: var(--color-canteloupe-200);
-  --color-warning-content: var(--color-canteloupe-700);
-  --color-warning-content-hover: var(--color-canteloupe-500);
-  --color-warning-content-subtle: var(--color-canteloupe-500);
-  --color-warning-focus-outline: var(--color-canteloupe-200);
-  --color-warning-icon: var(--color-canteloupe-500);
-  --color-warning-surface: var(--color-canteloupe-600);
-  --color-warning-surface-content: var(--color-canteloupe-000);
-  --color-warning-surface-content-subtle: var(--color-canteloupe-100);
-  --color-warning-surface-active: var(--color-canteloupe-800);
-  --color-warning-surface-icon: var(--color-canteloupe-100);
-  --color-warning-surface-hover: var(--color-canteloupe-500);
+  --color-accent-blueberry-bold: var(--color-blueberry-600); // Bold accent color for blueberry
+  --color-accent-blueberry-dark: var(--color-blueberry-900); // Dark accent color for blueberry
+  --color-accent-blueberry-subtle: var(--color-blueberry-100); // Subtle accent color for blueberry
+  --color-accent-blueberry-subtlest: var(--color-blueberry-000); // Subtlest accent color for blueberry (disabled)
+  --color-accent-canteloupe-bold: var(--color-canteloupe-600); // Bold accent color for canteloupe
+  --color-accent-canteloupe-dark: var(--color-canteloupe-900); // Dark accent color for canteloupe
+  --color-accent-canteloupe-subtle: var(--color-canteloupe-100); // Subtle accent color for canteloupe
+  --color-accent-canteloupe-subtlest: var(--color-canteloupe-000); // Subtlest accent color for canteloupe (disabled)
+  --color-accent-fig-bold: var(--color-fig-600); // Bold accent color for fig
+  --color-accent-fig-dark: var(--color-fig-900); // Dark accent color for fig
+  --color-accent-fig-subtle: var(--color-fig-100); // Subtle accent color for fig
+  --color-accent-fig-subtlest: var(--color-fig-000); // Subtlest accent color for fig (disabled)
+  --color-accent-grape-bold: var(--color-grape-600); // Bold accent color for grape
+  --color-accent-grape-dark: var(--color-grape-900); // Dark accent color for grape
+  --color-accent-grape-subtle: var(--color-grape-100); // Subtle accent color for grape
+  --color-accent-grape-subtlest: var(--color-grape-000); // Subtlest accent color for grape (disabled)
+  --color-accent-kale-bold: var(--color-kale-600); // Bold accent color for kale
+  --color-accent-kale-dark: var(--color-kale-900); // Dark accent color for kale
+  --color-accent-kale-subtle: var(--color-kale-100); // Subtle accent color for kale
+  --color-accent-kale-subtlest: var(--color-kale-000); // Subtlest accent color for kale (disabled)
+  --color-accent-kiwi-bold: var(--color-kiwi-600); // Bold accent color for kiwi
+  --color-accent-kiwi-dark: var(--color-kiwi-900); // Dark accent color for kiwi
+  --color-accent-kiwi-subtle: var(--color-kiwi-100); // Subtle accent color for kiwi
+  --color-accent-kiwi-subtlest: var(--color-kiwi-000); // Subtlest accent color for kiwi (disabled)
+  --color-accent-mango-bold: var(--color-mango-600); // Bold accent color for mango
+  --color-accent-mango-dark: var(--color-mango-900); // Dark accent color for mango
+  --color-accent-mango-subtle: var(--color-mango-100); // Subtle accent color for mango
+  --color-accent-mango-subtlest: var(--color-mango-000); // Subtlest accent color for mango (disabled)
+  --color-accent-persimmon-bold: var(--color-persimmon-600); // Bold accent color for persimmon
+  --color-accent-persimmon-dark: var(--color-persimmon-900); // Dark accent color for persimmon
+  --color-accent-persimmon-subtle: var(--color-persimmon-100); // Subtle accent color for persimmon
+  --color-accent-persimmon-subtlest: var(--color-persimmon-000); // Subtlest accent color for persimmon (disabled)
+  --color-accent-plum-bold: var(--color-plum-600); // Bold accent color for plum
+  --color-accent-plum-dark: var(--color-plum-900); // Dark accent color for plum
+  --color-accent-plum-subtle: var(--color-plum-100); // Subtle accent color for plum
+  --color-accent-plum-subtlest: var(--color-plum-000); // Subtlest accent color for plum (disabled)
+  --color-accent-sand-bold: var(--color-sand-600); // Bold accent color for sand
+  --color-accent-sand-dark: var(--color-sand-900); // Dark accent color for sand
+  --color-accent-sand-subtle: var(--color-sand-100); // Subtle accent color for sand
+  --color-accent-sand-subtlest: var(--color-sand-100); // Subtlest accent color for sand (disabled)
+  --color-negative-background: var(--color-persimmon-000); // Background color for negative elements
+  --color-negative-emphasis: var(--color-persimmon-200); // Emphasis color for negative elements
+  --color-negative-emphasis-subtle: var(--color-persimmon-100); // Subtle emphasis color for negative elements
+  --color-negative-border: var(--color-persimmon-700); // Border color for negative elements
+  --color-negative-border-bold: var(--color-persimmon-800); // Bold border color for negative elements
+  --color-negative-border-subtle: var(--color-persimmon-500); // Subtle border color for negative elements
+  --color-negative-border-subtler: var(--color-persimmon-300); // More subtle border color for negative elements
+  --color-negative-border-subtlest: var(--color-persimmon-200); // Subtlest border color for negative elements
+  --color-negative-content: var(--color-persimmon-700); // Content color for negative elements
+  --color-negative-content-hover: var(--color-persimmon-500); // Content color for negative elements on hover
+  --color-negative-content-subtle: var(--color-persimmon-500); // Subtle content color for negative elements
+  --color-negative-focus-outline: var(--color-persimmon-200); // Focus outline color for negative elements
+  --color-negative-icon: var(--color-persimmon-500); // Icon color for negative elements
+  --color-negative-surface: var(--color-persimmon-600); // Surface color for negative elements
+  --color-negative-surface-content: var(--color-persimmon-000); // Content color on negative surfaces
+  --color-negative-surface-content-subtle: var(--color-persimmon-100); // Subtle content color on negative surfaces
+  --color-negative-surface-active: var(--color-persimmon-800); // Active state color for negative surfaces
+  --color-negative-surface-icon: var(--color-persimmon-100); // Icon color on negative surfaces
+  --color-negative-surface-hover: var(--color-persimmon-500); // Hover color for negative surfaces
+  --color-neutral-background: var(--color-sand-000); // Background color for neutral elements
+  --color-neutral-emphasis: var(--color-sand-200); // Emphasis color for neutral elements
+  --color-neutral-background-bold: var(--color-sand-000); // Bold background color for neutral elements
+  --color-neutral-emphasis-subtle: var(--color-sand-100); // Subtle emphasis color for neutral elements
+  --color-neutral-border: var(--color-sand-300); // Border color for neutral elements
+  --color-neutral-border-bold: var(--color-sand-400); // Bold border color for neutral elements
+  --color-neutral-border-bolder: var(--color-sand-500); // Bolder border color for neutral elements
+  --color-neutral-border-boldest: var(--color-sand-600); // Boldest border color for neutral elements
+  --color-neutral-border-subtle: var(--color-sand-300); // Subtle border color for neutral elements
+  --color-neutral-border-subtler: var(--color-sand-200); // More subtle border color for neutral elements
+  --color-neutral-content: var(--color-sand-800); // Content color for neutral elements
+  --color-neutral-content-subtle: var(--color-sand-700); // Subtle content color for neutral elements
+  --color-neutral-content-subtler: var(--color-sand-600); // More subtle content color for neutral elements
+  --color-neutral-content-subtlest: var(--color-sand-500); // Subtlest content color for neutral elements
+  --color-neutral-icon: var(--color-sand-700); // Icon color for neutral elements
+  --color-neutral-shadow: var(--color-sand-950); // Shadow color for neutral elements
+  --color-neutral-surface: var(--color-sand-100); // Surface color for neutral elements
+  --color-neutral-surface-active: var(--color-sand-200); // Active state color for neutral surfaces
+  --color-neutral-surface-hover: var(--color-sand-000); // Hover color for neutral surfaces
+  --color-neutral-surface-inset: var(--color-sand-200); // Inset color for neutral surfaces
+  --color-neutral-inverted-background: var(--color-sand-900); // Inverted background color for neutral elements
+  --color-neutral-inverted-border: var(--color-sand-800); // Inverted border color for neutral elements
+  --color-neutral-inverted-content: var(--color-sand-100); // Inverted content color for neutral elements
+  --color-neutral-inverted-icon: var(--color-sand-100); // Inverted icon color for neutral elements
+  --color-neutral-inverted-content-subtle: var(--color-sand-400); // Subtle inverted content color for neutral elements
+  --color-neutral-inverted-content-subtler: var(--color-sand-300); // More subtle inverted content color for neutral elements
+  --color-neutral-inverted-content-subtlest: var(--color-sand-500); // Subtlest inverted content color for neutral elements
+  --color-neutral-inverted-surface: var(--color-sand-900); // Inverted surface color for neutral elements
+  --color-neutral-inverted-surface-active: var(--color-sand-700); // Active state color for inverted surfaces
+  --color-neutral-inverted-surface-hover: var(--color-sand-800); // Hover color for inverted surfaces
+  --color-positive-background: var(--color-kale-000); // Background color for positive elements
+  --color-positive-emphasis: var(--color-kale-100); // Emphasis color for positive elements
+  --color-positive-emphasis-subtle: var(--color-kale-000); // Subtle emphasis color for positive elements
+  --color-positive-border: var(--color-kale-700); // Border color for positive elements
+  --color-positive-border-bold: var(--color-kale-800); // Bold border color for positive elements
+  --color-positive-border-subtle: var(--color-kale-500); // Subtle border color for positive elements
+  --color-positive-border-subtler: var(--color-kale-300); // More subtle border color for positive elements
+  --color-positive-border-subtlest: var(--color-kale-200); // Subtlest border color for positive elements
+  --color-positive-content: var(--color-kale-700); // Content color for positive elements
+  --color-positive-content-hover: var(--color-kale-500); // Content color for positive elements on hover
+  --color-positive-content-subtle: var(--color-kale-500); // Subtle content color for positive elements
+  --color-positive-focus-outline: var(--color-kale-200); // Focus outline color for positive elements
+  --color-positive-icon: var(--color-kale-500); // Icon color for positive elements
+  --color-positive-surface: var(--color-kale-600); // Surface color for positive elements
+  --color-positive-surface-content: var(--color-kale-000); // Content color on positive surfaces
+  --color-positive-surface-content-subtle: var(--color-kale-100); // Subtle content color on positive surfaces
+  --color-positive-surface-active: var(--color-kale-800); // Active state color for positive surfaces
+  --color-positive-surface-icon: var(--color-kale-100); // Icon color on positive surfaces
+  --color-positive-surface-hover: var(--color-kale-500); // Hover color for positive surfaces
+  --color-primary-background: var(--color-grape-000); // Background color for primary elements
+  --color-primary-emphasis: var(--color-grape-200); // Emphasis color for primary elements
+  --color-primary-emphasis-subtle: var(--color-grape-100); // Subtle emphasis color for primary elements
+  --color-primary-border: var(--color-grape-700); // Border color for primary elements
+  --color-primary-border-bold: var(--color-grape-800); // Bold border color for primary elements
+  --color-primary-border-subtle: var(--color-grape-500); // Subtle border color for primary elements
+  --color-primary-border-subtler: var(--color-grape-300); // More subtle border color for primary elements
+  --color-primary-border-subtlest: var(--color-grape-200); // Subtlest border color for primary elements
+  --color-primary-content: var(--color-grape-700); // Content color for primary elements
+  --color-primary-content-hover: var(--color-grape-500); // Content color for primary elements on hover
+  --color-primary-content-subtle: var(--color-grape-500); // Subtle content color for primary elements
+  --color-primary-focus-outline: var(--color-grape-200); // Focus outline color for primary elements
+  --color-primary-icon: var(--color-grape-500); // Icon color for primary elements
+  --color-primary-shadow: var(--color-grape-900); // Shadow color for primary elements
+  --color-primary-surface: var(--color-grape-700); // Surface color for primary elements
+  --color-primary-surface-content: var(--color-grape-000); // Content color on primary surfaces
+  --color-primary-surface-content-subtle: var(--color-grape-100); // Subtle content color on primary surfaces
+  --color-primary-surface-active: var(--color-grape-800); // Active state color for primary surfaces
+  --color-primary-surface-icon: var(--color-grape-100); // Icon color on primary surfaces
+  --color-primary-surface-hover: var(--color-grape-600); // Hover color for primary surfaces
+  --color-warning-background: var(--color-canteloupe-000); // Background color for warning elements
+  --color-warning-emphasis: var(--color-canteloupe-100); // Emphasis color for warning elements
+  --color-warning-emphasis-subtle: var(--color-canteloupe-000); // Subtle emphasis color for warning elements
+  --color-warning-border: var(--color-canteloupe-700); // Border color for warning elements
+  --color-warning-border-bold: var(--color-canteloupe-800); // Bold border color for warning elements
+  --color-warning-border-subtle: var(--color-canteloupe-500); // Subtle border color for warning elements
+  --color-warning-border-subtler: var(--color-canteloupe-300); // More subtle border color for warning elements
+  --color-warning-border-subtlest: var(--color-canteloupe-200); // Subtlest border color for warning elements
+  --color-warning-content: var(--color-canteloupe-700); // Content color for warning elements
+  --color-warning-content-hover: var(--color-canteloupe-500); // Content color for warning elements on hover
+  --color-warning-content-subtle: var(--color-canteloupe-500); // Subtle content color for warning elements
+  --color-warning-focus-outline: var(--color-canteloupe-200); // Focus outline color for warning elements
+  --color-warning-icon: var(--color-canteloupe-500); // Icon color for warning elements
+  --color-warning-surface: var(--color-canteloupe-600); // Surface color for warning elements
+  --color-warning-surface-content: var(--color-canteloupe-000); // Content color on warning surfaces
+  --color-warning-surface-content-subtle: var(--color-canteloupe-100); // Subtle content color on warning surfaces
+  --color-warning-surface-active: var(--color-canteloupe-800); // Active state color for warning surfaces
+  --color-warning-surface-icon: var(--color-canteloupe-100); // Icon color on warning surfaces
+  --color-warning-surface-hover: var(--color-canteloupe-500); // Hover color for warning surfaces
 
   --color-accent-blueberry-bold-raw: var(--color-blueberry-600-raw);
   --color-accent-blueberry-dark-raw: var(--color-blueberry-900-raw);
