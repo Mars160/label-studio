@@ -164,6 +164,7 @@ export const AnnotationPreview = injector(
         />
         {isMemoryLeakFixEnabled ? (
           <div
+            data-testid="annotation-preview-image"
             {...imgDefaultProps}
             style={{
               backgroundImage: `url(${props.fallbackImage})`,

@@ -22,14 +22,17 @@ export const ImageCell = (column) => {
 
   return renderImagePreview ? (
     isMemoryLeakFixEnabled ? (
-      <div style={{
-        backgroundImage: `url(${imgSrc})`,
-        width: "100%",
-        height: "100%",
-        backgroundSize: "contain",
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
-      }}></div>
+      <div
+        data-testid="image-cell"
+        style={{
+          backgroundImage: `url(${imgSrc})`,
+          width: "100%",
+          height: "100%",
+          backgroundSize: "contain",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+        }}
+      ></div>
     ) : (
       <img
         {...imgDefaultProps}
