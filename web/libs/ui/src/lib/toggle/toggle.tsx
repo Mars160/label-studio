@@ -1,29 +1,25 @@
 import { forwardRef, useEffect, useMemo, useState } from "react";
 import clsx from "clsx";
-import Label from "../label/label";
+import {Label} from "@humansignal/ui";
 import styles from "./toggle.module.scss";
 
-const Toggle = forwardRef(
+export const Toggle = forwardRef(
   (
-    { className, label, labelProps, description, checked, defaultChecked, onChange, required, style, ...props },
+    { className, label, labelProps, description, checked, defaultChecked, onChange, required, style, ...props }, ref
   ) => {
     const initialChecked = useMemo(() => defaultChecked ?? checked ?? false, [defaultChecked, checked]);
     const [isChecked, setIsChecked] = useState(defaultChecked ?? checked ?? false);
-
-    const mods = {};
-
+    console.log(isChecked);
     useEffect(() => {
       setIsChecked(initialChecked);
     }, [initialChecked]);
 
-    if (isChecked) mods.checked = isChecked;
-    mods.disabled = props.disabled;
-
     const formField = (
-      <div className={clsx(styles.toggle)} mod={mods} style={style}>
+      <div ref={ref} className={clsx(styles.toggle, { [styles.toggle_disabled]: props.disabled, [styles.toggle_checked]: isChecked })} style={style}>
         <input
           {...props}
-          className={clsx(styles.toggle_input)}
+          ref={ref}
+          className={clsx(styles.toggle__input)}
           type="checkbox"
           checked={isChecked}
           onChange={(e) => {
@@ -31,7 +27,7 @@ const Toggle = forwardRef(
             onChange?.(e);
           }}
         />
-        <span className={clsx(styles.toggle_indicator)} />
+        <span className={clsx(styles.toggle__indicator)} />
       </div>
     );
 
@@ -40,14 +36,11 @@ const Toggle = forwardRef(
         placement="right"
         required={required}
         text={label}
-        children={formField}
         description={description}
         {...(labelProps ?? {})}
-      />
+      >{formField}</Label>
     ) : (
       formField
     );
   },
 );
-
-export default Toggle;

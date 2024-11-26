@@ -1,4 +1,4 @@
-.field-label {
+.label {
   margin-bottom: 0;
 
   &__text {
@@ -9,6 +9,10 @@
     font-size: 14px;
     line-height: 22px;
     justify-content: space-between;
+  }
+
+  &__content{
+    
   }
 
   &__description {
