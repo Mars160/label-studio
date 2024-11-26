@@ -1,4 +1,12 @@
-const logEvent = (eventName: string, metadata: Record<string, unknown> = {}) => {
+type LogEventFn = (eventName: string, metadata?: Record<string, unknown>) => void;
+
+declare global {
+  interface Window {
+    __lsa: LogEventFn;
+  }
+}
+
+const logEvent: LogEventFn = (eventName, metadata = {}) => {
   // Don't send if collect_analytics is falsey
   if (!(window as any).APP_SETTINGS?.collect_analytics) return;
 
@@ -27,13 +35,9 @@ const logEvent = (eventName: string, metadata: Record<string, unknown> = {}) => 
   });
 };
 
-(window as any).__lsa = logEvent;
-// Formality to ensure there is a single entry point for analytics
-// that can be included in the bundle.
-// Ensure this is imported first in the main entry file of the application.
 export const registerAnalytics = () => {
-  // Already registered, do nothing
-}
+  window.__lsa = logEvent;
+};
 
 // Usage examples:
 // __lsa("data_import.view");
