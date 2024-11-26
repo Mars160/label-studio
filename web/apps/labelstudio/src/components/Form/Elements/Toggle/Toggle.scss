@@ -49,7 +49,8 @@
       width: 16px;
       height: 16px;
       background: var(--color-primary-surface);
-      box-shadow: 0 5px 10px var(--color-primary-shadow), inset 0 -1px 0 rgba(var(--color-primary-shadow) / 10%);    }
+      box-shadow: 0 5px 10px var(--color-primary-shadow), inset 0 -1px 0 rgba(var(--color-primary-shadow-raw) / 10%);
+    }
   }
 
   &_disabled &__indicator {
