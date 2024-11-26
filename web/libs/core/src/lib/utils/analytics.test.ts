@@ -1,6 +1,7 @@
 import { registerAnalytics } from "./analytics";
 
 describe("analytics", () => {
+  const testUrl = "http://test.com/page";
   let originalRequestIdleCallback: any;
   let originalSendBeacon: any;
   let mockSendBeacon: jest.Mock;
@@ -25,7 +26,7 @@ describe("analytics", () => {
 
     // Mock window.location
     Object.defineProperty(window, "location", {
-      value: { href: "http://test.com/page" },
+      value: { href: testUrl },
       configurable: true,
     });
   });
@@ -68,7 +69,7 @@ describe("analytics", () => {
     expect(payload).toEqual({
       data: "value",
       event: "test.event",
-      url: "http://test.com/page",
+      url: testUrl,
     });
   });
 
@@ -117,7 +118,7 @@ describe("analytics", () => {
 
     expect(payload).toEqual({
       event: "test.event",
-      url: "http://test.com/page",
+      url: testUrl,
     });
   });
 });
