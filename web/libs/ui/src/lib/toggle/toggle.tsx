@@ -1,28 +1,40 @@
-import { forwardRef, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, forwardRef, useEffect, useMemo, useState } from "react";
 import clsx from "clsx";
 import {Label} from "@humansignal/ui";
 import styles from "./toggle.module.scss";
 
+type ToggleProps = {
+  className?: string;
+  label?: string;
+  labelProps: any;
+  description?: string;
+  checked: false;
+  defaultChecked: false;
+  onChange: (e:React.ChangeEvent<HTMLInputElement>) => void;
+  required: false;
+  style: any;
+  disabled: false;
+}
+
 export const Toggle = forwardRef(
   (
-    { className, label, labelProps, description, checked, defaultChecked, onChange, required, style, ...props }, ref
+    { className, label, labelProps, description, checked, defaultChecked, onChange, required, style, ...props }:ToggleProps, ref
   ) => {
     const initialChecked = useMemo(() => defaultChecked ?? checked ?? false, [defaultChecked, checked]);
-    const [isChecked, setIsChecked] = useState(defaultChecked ?? checked ?? false);
-    console.log(isChecked);
+    const [isChecked, setIsChecked] = useState<boolean>(defaultChecked ?? checked ?? false);
     useEffect(() => {
       setIsChecked(initialChecked);
     }, [initialChecked]);
 
     const formField = (
-      <div ref={ref} className={clsx(styles.toggle, { [styles.toggle_disabled]: props.disabled, [styles.toggle_checked]: isChecked })} style={style}>
+      <div className={clsx(styles.toggle, { [styles.toggle_disabled]: props.disabled, [styles.toggle_checked]: isChecked })} style={style}>
         <input
           {...props}
           ref={ref}
           className={clsx(styles.toggle__input)}
           type="checkbox"
           checked={isChecked}
-          onChange={(e) => {
+          onChange={(e:React.ChangeEvent<HTMLInputElement>) => {
             setIsChecked(e.target.checked);
             onChange?.(e);
           }}

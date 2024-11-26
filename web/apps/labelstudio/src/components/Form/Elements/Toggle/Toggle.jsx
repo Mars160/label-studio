@@ -39,7 +39,7 @@ const Toggle = forwardRef(
 
     classList.push(rootClass.mod(mods), className);
 
-    return (
+    const formField = (
       <FormField
         ref={label ? null : ref}
         label={label}
@@ -50,17 +50,10 @@ const Toggle = forwardRef(
         setValue={(value) => setIsChecked(value)}
         {...props}
       >
-        {/* {(ref) => (
-          <UiToggle ref={ref} {...props} label={label} labelProps={labelProps} required={required} checked={isChecked}
-          onChange={(e) => {
-            setIsChecked(e.target.checked);
-            onChange?.(e);
-          }}
-          /> 
-        )} */}
         {(ref) => (
           <div className={classList.join(" ")}>
-            <UiToggle ref={ref} 
+            <UiToggle ref={ref}
+              {...props}
               checked={isChecked} onChange={(e) => {
                 setIsChecked(e.target.checked);
                 onChange?.(e);
@@ -68,6 +61,19 @@ const Toggle = forwardRef(
           </div>
         )}
       </FormField>
+    );
+    return label ? (
+      <Label
+        ref={ref}
+        placement="right"
+        required={required}
+        text={label}
+        children={formField}
+        description={description}
+        {...(labelProps ?? {})}
+      />
+    ) : (
+      formField
     );
   },
 );
