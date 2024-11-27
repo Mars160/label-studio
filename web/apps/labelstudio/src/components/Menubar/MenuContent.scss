@@ -2,6 +2,7 @@
   display: flex;
   min-height: 100vh;
   flex-direction: column;
+  background-color: var(--color-neutral-background);
 
   &__body {
     flex: 1;
@@ -18,7 +19,6 @@
     flex-direction: column;
     margin-left: 0;
     height: 100%;
-    background-color: var(--color-neutral-background);
     will-change: margin-left;
     transition: background-color 400ms ease-out;
     

@@ -5,13 +5,13 @@
 
   top: -1000px;
   left: -1000px;
-  color: var(--white);
+  color: var(--color-neutral-inverted-content);
   display: none;
   z-index: 10000;
   padding: 4px 10px;
   position: absolute;
   pointer-events: none;
-  background-color: var(--black);
+  background-color: var(--color-neutral-inverted-background);
   border-radius: 3px;
 
   &::before {
@@ -22,7 +22,7 @@
     height: 10px;
     display: block;
     position: absolute;
-    background-color: var(--black);
+    background-color: inherit;
     transform: translate(-50%, 50%) rotate(45deg);
   }
 

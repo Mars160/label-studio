@@ -1,5 +1,5 @@
 .select {
-  --select-surface-color: var(--sand_0);
+  --select-surface-color: var(--color-neutral-surface);
 
   height: 40px;
   background-color: var(--select-surface-color);
@@ -12,7 +12,7 @@
 
   &_surface {
     &_emphasis {
-      --select-surface-color: var(--sand_0);
+      --select-surface-color: var(--color-neutral-surface);
     }
   }
 
