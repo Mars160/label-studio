@@ -17,7 +17,7 @@ import { tableCN, TableContext } from "./TableContext";
 import { TableHead } from "./TableHead/TableHead";
 import { TableRow } from "./TableRow/TableRow";
 import { prepareColumns } from "./utils";
-import { Block } from "../../../utils/bem";
+import { cn } from "../../../utils/bem";
 import { FieldsButton } from "../FieldsButton";
 import { LsGear, LsGearNewUI } from "../../../assets/icons";
 import { FF_DEV_3873, FF_LOPS_E_10, FF_LOPS_E_3, isFF } from "../../../utils/feature-flags";
@@ -285,18 +285,19 @@ export const Table = observer(
       tableWrapper.current?.firstChild?.firstChild.offsetWidth -
         tableWrapper.current?.firstChild?.firstChild?.firstChild.offsetWidth || 0;
 
+    const columnsSelectorCN = cn("columns__selector");
     return (
       <>
         {view.root.isLabeling && (
-          <Block
-            name="columns__selector"
+          <div
+            className={columnsSelectorCN.toString()}
             style={{
               right,
             }}
           >
             {isFF(FF_DEV_3873) ? (
               <FieldsButton
-                className={"columns__selector__button-new"}
+                className={columnsSelectorCN.elem("button-new").toString()}
                 wrapper={FieldsButton.Checkbox}
                 icon={<LsGearNewUI />}
                 style={{ padding: "0" }}
@@ -316,7 +317,7 @@ export const Table = observer(
                 }}
               />
             )}
-          </Block>
+          </div>
         )}
         <div ref={tableWrapper} className={tableCN.mod({ fit: props.fitToContent }).toString()}>
           <TableContext.Provider value={contextValue}>
