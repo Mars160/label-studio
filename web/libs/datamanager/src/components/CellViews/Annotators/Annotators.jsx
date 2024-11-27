@@ -1,7 +1,8 @@
 import { inject } from "mobx-react";
+import clsx from "clsx";
 import { LsCheckAlt, LsCrossAlt } from "../../../assets/icons";
 import { useSDK } from "../../../providers/SDKProvider";
-import { Block, Elem } from "../../../utils/bem";
+import { Block, Elem, cn } from "../../../utils/bem";
 import { isDefined } from "../../../utils/utils";
 import { Space } from "../../Common/Space/Space";
 import { Tooltip } from "../../Common/Tooltip/Tooltip";
@@ -16,6 +17,7 @@ export const Annotators = (cell) => {
   const userList = Array.from(value);
   const renderable = userList.slice(0, 10);
   const extra = userList.length - renderable.length;
+  const userPickBadge = cn("userpic-badge");
 
   return (
     <Block name="annotators">
@@ -43,9 +45,9 @@ export const Annotators = (cell) => {
                 faded={userpicIsFaded}
                 badge={{
                   bottomRight: review && (
-                    <Block name="userpic-badge" mod={{ [review]: true }}>
+                    <div className={clsx(userPickBadge.toString(), userPickBadge.mod({ [review]: true }).toString())}>
                       {review === "rejected" ? <LsCrossAlt /> : <LsCheckAlt />}
-                    </Block>
+                    </div>
                   ),
                 }}
               />
