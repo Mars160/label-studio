@@ -889,8 +889,12 @@ class Project(ProjectMixin, models.Model):
 
     def get_parsed_config(self, autosave_cache=True):
         if self.parsed_label_config is None:
-            self.parsed_label_config = parse_config(self.label_config)
-            self.save(update_fields=['parsed_label_config'])
+            try:
+                self.parsed_label_config = parse_config(self.label_config)
+                self.save(update_fields=['parsed_label_config'])
+            except Exception as e:
+                logger.error(f'Error parsing label config for project {self.id}: {e}', exc_info=True)
+                return {}
 
         return self.parsed_label_config
 
