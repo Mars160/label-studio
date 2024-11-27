@@ -10,7 +10,7 @@ import { Resizer } from "../../Resizer/Resizer";
 import { Space } from "../../Space/Space";
 import { Tag } from "../../Tag/Tag";
 import { TableCell, TableCellContent } from "../TableCell/TableCell";
-import { TableContext, TableElem } from "../TableContext";
+import { TableContext, tableCN } from "../TableContext";
 import { getStyle } from "../utils";
 import "./TableHead.scss";
 import { FF_DEV_2984, FF_DEV_3873, isFF } from "../../../../utils/feature-flags";
@@ -95,9 +95,9 @@ const ColumnRenderer = observer(
       const { cellClassName: _, headerClassName, ...rest } = column;
 
       return (
-        <TableElem {...rest} name="cell" key={id} mix={["th", headerClassName]}>
+        <div {...rest} className={tableCN.elem("cell").mix(["th", headerClassName]).toString()} key={id}>
           <Header />
-        </TableElem>
+        </div>
       );
     }
 

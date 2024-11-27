@@ -13,7 +13,7 @@ import { modal } from "../Modal/Modal";
 import { Tooltip } from "../Tooltip/Tooltip";
 import "./Table.scss";
 import { TableCheckboxCell } from "./TableCheckbox";
-import { TableBlock, TableContext, TableElem } from "./TableContext";
+import { tableCN, TableContext } from "./TableContext";
 import { TableHead } from "./TableHead/TableHead";
 import { TableRow } from "./TableRow/TableRow";
 import { prepareColumns } from "./utils";
@@ -318,7 +318,7 @@ export const Table = observer(
             )}
           </Block>
         )}
-        <TableBlock ref={tableWrapper} name="table" mod={{ fit: props.fitToContent }}>
+        <div ref={tableWrapper} className={tableCN.mod({ fit: props.fitToContent }).toString()}>
           <TableContext.Provider value={contextValue}>
             <StickyList
               ref={listRef}
@@ -338,7 +338,7 @@ export const Table = observer(
               {renderRow}
             </StickyList>
           </TableContext.Provider>
-        </TableBlock>
+        </div>
       </>
     );
   },
@@ -388,7 +388,7 @@ const StickyList = observer(
 
     return (
       <StickyListContext.Provider value={itemData}>
-        <TableElem tag={AutoSizer} name="auto-size">
+        <AutoSizer className={tableCN.elem("auto-size")}>
           {({ width, height }) => (
             <InfiniteLoader
               ref={listRef}
@@ -399,9 +399,8 @@ const StickyList = observer(
               minimumBatchSize={30}
             >
               {({ onItemsRendered, ref }) => (
-                <TableElem
-                  name="virual"
-                  tag={VariableSizeList}
+                <VariableSizeList
+                  className={tableCN.elem("virual").toString()}
                   {...rest}
                   ref={ref}
                   width={width}
@@ -412,11 +411,11 @@ const StickyList = observer(
                   initialScrollOffset={initialScrollOffset?.(height) ?? 0}
                 >
                   {ItemWrapper}
-                </TableElem>
+                </VariableSizeList>
               )}
             </InfiniteLoader>
           )}
-        </TableElem>
+        </AutoSizer>
       </StickyListContext.Provider>
     );
   }),
@@ -430,9 +429,8 @@ const innerElementType = forwardRef(({ children, ...rest }, ref) => {
       {({ stickyItems, stickyItemsHeight, StickyComponent }) => (
         <div ref={ref} {...rest}>
           {stickyItems.map((index) => (
-            <TableElem
-              name="sticky-header"
-              tag={StickyComponent}
+            <StickyComponent
+              className={tableCN.elem("sticky-header").toString()}
               key={index}
               index={index}
               style={{
