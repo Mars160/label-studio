@@ -23,10 +23,10 @@ const AudioUltraView: FC<AudioUltraProps> = ({ item }) => {
   const { waveform, ...controls } = useWaveform(rootRef, {
     src: item._value,
     autoLoad: false,
-    waveColor: "#BEB9C5",
-    gridColor: "#BEB9C5",
+    waveColor: "rgba(150,150,150,0.8)",
+    gridColor: "rgba(150,150,150,0.9)",
     gridWidth: 1,
-    backgroundColor: "#fafafa",
+    backgroundColor: "transparent",
     autoCenter: true,
     zoomToCursor: true,
     height: item.height && !isNaN(Number(item.height)) ? Number(item.height) : 96,
@@ -51,7 +51,7 @@ const AudioUltraView: FC<AudioUltraProps> = ({ item }) => {
       deleteable: !item.readonly,
     },
     timeline: {
-      backgroundColor: "#ffffff",
+      backgroundColor: "transparent",
     },
     experimental: {
       backgroundCompute: true,

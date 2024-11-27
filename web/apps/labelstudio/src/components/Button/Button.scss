@@ -2,7 +2,7 @@
   --button-color: var(--color-neutral-content);
   --button-background-color: var(--color-neutral-surface-hover);
   --button-background-image: none;
-  --button-shadow: inset 0px -1px 0px rgb(0 0 0 / 10%), inset 0px 0px 0px 1px rgb(0 0 0 / 15%);
+  --button-shadow: inset 0px -2px 1px rgba(var(--color-neutral-shadow-raw) / 4%);
   --button-content-align: center;
   --button-content-justify: center;
   --button-events: all;
@@ -27,6 +27,7 @@
   transition: all 100ms ease;
   position: relative;
   box-sizing: border-box;
+  box-shadow: var(--button-shadow);
   color: var(--button-color) !important;
   font-size: var(--button-font-size);
   font-family: var(--font-sans);
@@ -59,7 +60,7 @@
   &:active {
     color: var(--button-color);
 
-    --button-background-image: linear-gradient(0deg, rgb(18 17 13 / 2%), rgb(18 17 13 / 2%)), var(--sand_0);
+    --button-background-image: linear-gradient(0deg, transparent, rgba(var(--color-neutral-shadow-raw) / 4%));
   }
 
   &:focus {
@@ -309,14 +310,14 @@
     background-size: 37px 100%;
 
     --button-background-image: var(--button-waiting-animation-bg);
-    --button-background-color: var(--sand_0);
+    --button-background-color: var(--color-neutral-background);
 
     animation: button-waiting 1s linear infinite;
   }
 
   &_waiting.button-ls_look_primary {
     --button-background-image: var(--primary-button-waiting-animation-bg);
-    --button-background-color: var(--primary_link);
+    --button-background-color: var(--color-primary-surface);
   }
 
   &_size_small &__icon {

@@ -42,7 +42,7 @@
     min-height: 64px;
     border-radius: 4px;
     outline: none;
-    background-color: var(--sand_100);
+    background-color: var(--color-neutral-surface);
     transition-property: background-color, border-color;
     transition-duration: 80ms;
     transition-timing-function: ease;
@@ -101,7 +101,7 @@
       &_text {
         padding: 3px 6px;
         border-radius: 4px;
-        background-color: var(--sand_100);
+        background-color: var(--color-neutral-surface);
         white-space: pre-wrap;
         line-break: loose;
         word-break: break-all;

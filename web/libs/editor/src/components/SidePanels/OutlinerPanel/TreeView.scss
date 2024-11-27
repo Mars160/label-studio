@@ -133,13 +133,13 @@
     height: 18px;
     display: flex;
     font-size: 9px;
-    color: var(--sand_0);
+    color: var(--color-neutral-content);
     margin-right: 4px;
     text-align: center;
     align-items: center;
     border-radius: 4px;
     justify-content: center;
-    background-color: var(--text-color, var(--sand_900));
+    background-color: var(--text-color, var(--color-neutral-inverted-background));
   }
 
   &__title {

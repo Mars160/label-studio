@@ -277,6 +277,7 @@ $scroll-width: 5px;
   :global(.react-codemirror2) {
     flex: 1;
     font-family: var(--font-mono);
+    caret-color: var(--color-neutral-content);
 
     :global(.CodeMirror) {
       height: 100%;
@@ -284,6 +285,10 @@ $scroll-width: 5px;
       color: var(--color-neutral-content-subtle);
       border-radius: var(--radius-small);
       border: 1px solid var(--color-neutral-border);
+    }
+
+    :global(.CodeMirror-cursor) {
+      border-color: var(--color-neutral-content);
     }
 
     :global(.cm-attribute) {
@@ -512,7 +517,7 @@ $scroll-width: 5px;
     }
 
     &:hover {
-      background: var(--sand_100);
+      background: var(--color-neutral-surface);
 
       label::before {
         border-radius: 0;

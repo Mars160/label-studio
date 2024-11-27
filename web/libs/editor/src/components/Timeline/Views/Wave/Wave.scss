@@ -53,7 +53,7 @@
 
     &_edge {
       &_relaxed {
-        background-color: var(--sand_100);
+        background-color: var(--color-neutral-surface);
 
       & .wave__timeline{
         background-color: var(--sand_0);
@@ -74,7 +74,7 @@
   &__body {
     flex: 1;
     position: relative;
-    background-color: var(--sand_100);
+    background-color: var(--color-neutral-surface);
     overflow: hidden;
   }
 

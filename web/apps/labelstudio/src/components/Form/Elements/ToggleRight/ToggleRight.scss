@@ -57,7 +57,7 @@
   }
 
   &_disabled &__indicator::before {
-    background-color: var(--sand_100);
+    background-color: var(--color-neutral-surface);
     box-shadow: none;
     transition: none;
   }

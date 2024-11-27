@@ -5,7 +5,7 @@
   flex-direction: column;
 
   &__error {
-    color: var(--danger_color);
+    color: var(--color-negative-content);
     padding: 0 32px;
   }
 
@@ -149,7 +149,7 @@
   }
 
   &__csv-splash {
-    background: var(--sand_100);
+    background: var(--color-neutral-surface);
     position: absolute;
     inset: 0;
     z-index: 10;
