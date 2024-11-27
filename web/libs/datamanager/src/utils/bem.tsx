@@ -219,22 +219,18 @@ export const BemWithSpecifiContext = (context?: Context<CN | null>) => {
 
       const finalMix = ([] as [CNMix?]).concat(mix).filter((cn) => !!cn);
 
-      try {
-        const className = (block ? cn(block) : blockCtx)!
-          .elem(name)
-          .mod(mod)
-          .mix(...(finalMix as CNMix[]), rest.className)
-          .toClassName();
+      const className = (block ? cn(block) : blockCtx)!
+        .elem(name)
+        .mod(mod)
+        .mix(...(finalMix as CNMix[]), rest.className)
+        .toClassName();
 
-        const finalProps: any = { ...rest, ref, className };
+      const finalProps: any = { ...rest, ref, className };
 
-        if (typeof tag !== "string") finalProps.block = blockCtx;
-        if (component) finalProps.tag = tag;
+      if (typeof tag !== "string") finalProps.block = blockCtx;
+      if (component) finalProps.tag = tag;
 
-        return createElement(component ?? tag, finalProps);
-      } catch (e) {
-        console.error("Error while assembling classnames", name, e);
-      }
+      return createElement(component ?? tag, finalProps);
     },
   );
 
