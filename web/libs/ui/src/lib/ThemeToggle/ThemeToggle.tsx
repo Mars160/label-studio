@@ -6,6 +6,10 @@ import { ReactComponent as Moon } from "./icons/moon.svg";
 
 const THEME_OPTIONS = ["Auto", "Light", "Dark"];
 const PREFERRED_COLOR_SCHEME_KEY = "preferred-color-scheme";
+export const getCurrentTheme = () => {
+  const themeSelection = window.localStorage.getItem(PREFERRED_COLOR_SCHEME_KEY) ?? THEME_OPTIONS[0];
+  return themeSelection === THEME_OPTIONS[0] ? window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "Dark" : "Light" : themeSelection;
+};
 export const ThemeToggle = () => {
   const presetTheme = window.localStorage.getItem(PREFERRED_COLOR_SCHEME_KEY) ?? THEME_OPTIONS[0];
   const [theme, setTheme] = useState(presetTheme);

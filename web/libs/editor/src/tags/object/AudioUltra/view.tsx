@@ -10,6 +10,7 @@ import { Block } from "../../../utils/bem";
 import { ErrorMessage } from "../../../components/ErrorMessage/ErrorMessage";
 
 import "./view.scss";
+import { getCurrentTheme } from "@humansignal/ui";
 
 interface AudioUltraProps {
   item: any;
@@ -19,14 +20,15 @@ const NORMALIZED_STEP = 0.1;
 
 const AudioUltraView: FC<AudioUltraProps> = ({ item }) => {
   const rootRef = useRef<HTMLElement | null>();
+  const isDarkMode = getCurrentTheme() === "Dark";
 
   const { waveform, ...controls } = useWaveform(rootRef, {
     src: item._value,
     autoLoad: false,
-    waveColor: "rgba(150,150,150,0.8)",
-    gridColor: "rgba(150,150,150,0.9)",
+    waveColor: isDarkMode ? "rgba(150,150,150,0.8)" : "rgba(150,150,150,0.8)",
+    gridColor: isDarkMode ? "rgba(150,150,150,0.8)" : "rgba(150,150,150,0.9)",
     gridWidth: 1,
-    backgroundColor: "transparent",
+    backgroundColor: isDarkMode ? "rgba(150,150,150,0.8)" : "transparent",
     autoCenter: true,
     zoomToCursor: true,
     height: item.height && !isNaN(Number(item.height)) ? Number(item.height) : 96,
@@ -51,7 +53,7 @@ const AudioUltraView: FC<AudioUltraProps> = ({ item }) => {
       deleteable: !item.readonly,
     },
     timeline: {
-      backgroundColor: "transparent",
+      backgroundColor: isDarkMode ? "rgba(150,150,150,0.8)" : "transparent",
     },
     experimental: {
       backgroundCompute: true,
