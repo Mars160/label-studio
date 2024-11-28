@@ -86,12 +86,12 @@
 
   &_smart {
     & .tool_active > .tool__icon {
-      background: var(--color-accent-plum-bold);
+      background: var(--color-accent-plum-base);
       box-shadow: inset 0 1px 0 var(--color-accent-plum-bold), inset 0 0 0 1px var(--color-accent-plum-subtlest);
     }
 
     --text-color: var(--color-accent-plum-subtle);
-    --text-color-hover: var(--color-accent-plum-bold);
+    --text-color-hover: var(--color-accent-plum-subtlest);
   }
 
   &__tooltip {

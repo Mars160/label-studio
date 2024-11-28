@@ -9,6 +9,10 @@
   flex-grow: 1;
   color: var(--color-neutral-content);
 
+  &:global(.ant-typography) {
+    color: var(--color-neutral-content);
+  }
+
   &.ant-typography {
     margin-bottom: 0;
   }
@@ -66,3 +70,4 @@
     }
   }
 }
+

@@ -333,38 +333,47 @@
   --color-accent-blueberry-dark: var(--color-blueberry-900); // Dark accent color for blueberry
   --color-accent-blueberry-subtle: var(--color-blueberry-100); // Subtle accent color for blueberry
   --color-accent-blueberry-subtlest: var(--color-blueberry-000); // Subtlest accent color for blueberry (disabled)
+  --color-accent-blueberry-base: var(--color-blueberry-400); // Base accent color for blueberry, associated with the 400 variant
   --color-accent-canteloupe-bold: var(--color-canteloupe-600); // Bold accent color for canteloupe
   --color-accent-canteloupe-dark: var(--color-canteloupe-900); // Dark accent color for canteloupe
   --color-accent-canteloupe-subtle: var(--color-canteloupe-100); // Subtle accent color for canteloupe
   --color-accent-canteloupe-subtlest: var(--color-canteloupe-000); // Subtlest accent color for canteloupe (disabled)
+  --color-accent-canteloupe-base: var(--color-canteloupe-400); // Base accent color for canteloupe, associated with the 400 variant
   --color-accent-fig-bold: var(--color-fig-600); // Bold accent color for fig
   --color-accent-fig-dark: var(--color-fig-900); // Dark accent color for fig
   --color-accent-fig-subtle: var(--color-fig-100); // Subtle accent color for fig
   --color-accent-fig-subtlest: var(--color-fig-000); // Subtlest accent color for fig (disabled)
+  --color-accent-fig-base: var(--color-fig-400); // Base accent color for fig, associated with the 400 variant
   --color-accent-grape-bold: var(--color-grape-600); // Bold accent color for grape
   --color-accent-grape-dark: var(--color-grape-900); // Dark accent color for grape
   --color-accent-grape-subtle: var(--color-grape-100); // Subtle accent color for grape
   --color-accent-grape-subtlest: var(--color-grape-000); // Subtlest accent color for grape (disabled)
+  --color-accent-grape-base: var(--color-grape-400); // Base accent color for grape, associated with the 400 variant
   --color-accent-kale-bold: var(--color-kale-600); // Bold accent color for kale
   --color-accent-kale-dark: var(--color-kale-900); // Dark accent color for kale
   --color-accent-kale-subtle: var(--color-kale-100); // Subtle accent color for kale
   --color-accent-kale-subtlest: var(--color-kale-000); // Subtlest accent color for kale (disabled)
+  --color-accent-kale-base: var(--color-kale-400); // Base accent color for kale, associated with the 400 variant
   --color-accent-kiwi-bold: var(--color-kiwi-600); // Bold accent color for kiwi
   --color-accent-kiwi-dark: var(--color-kiwi-900); // Dark accent color for kiwi
   --color-accent-kiwi-subtle: var(--color-kiwi-100); // Subtle accent color for kiwi
   --color-accent-kiwi-subtlest: var(--color-kiwi-000); // Subtlest accent color for kiwi (disabled)
+  --color-accent-kiwi-base: var(--color-kiwi-400); // Base accent color for kiwi, associated with the 400 variant
   --color-accent-mango-bold: var(--color-mango-600); // Bold accent color for mango
   --color-accent-mango-dark: var(--color-mango-900); // Dark accent color for mango
   --color-accent-mango-subtle: var(--color-mango-100); // Subtle accent color for mango
   --color-accent-mango-subtlest: var(--color-mango-000); // Subtlest accent color for mango (disabled)
+  --color-accent-mango-base: var(--color-mango-400); // Base accent color for mango, associated with the 400 variant
   --color-accent-persimmon-bold: var(--color-persimmon-600); // Bold accent color for persimmon
   --color-accent-persimmon-dark: var(--color-persimmon-900); // Dark accent color for persimmon
   --color-accent-persimmon-subtle: var(--color-persimmon-100); // Subtle accent color for persimmon
   --color-accent-persimmon-subtlest: var(--color-persimmon-000); // Subtlest accent color for persimmon (disabled)
+  --color-accent-persimmon-base: var(--color-persimmon-400); // Base accent color for persimmon, associated with the 400 variant
   --color-accent-plum-bold: var(--color-plum-600); // Bold accent color for plum
   --color-accent-plum-dark: var(--color-plum-900); // Dark accent color for plum
   --color-accent-plum-subtle: var(--color-plum-100); // Subtle accent color for plum
   --color-accent-plum-subtlest: var(--color-plum-000); // Subtlest accent color for plum (disabled)
+  --color-accent-plum-base: var(--color-plum-400); // Base accent color for plum, associated with the 400 variant
   --color-accent-sand-bold: var(--color-sand-600); // Bold accent color for sand
   --color-accent-sand-dark: var(--color-sand-900); // Dark accent color for sand
   --color-accent-sand-subtle: var(--color-sand-100); // Subtle accent color for sand
@@ -531,38 +540,47 @@
     --color-accent-blueberry-dark: var(--color-blueberry-300);
     --color-accent-blueberry-subtle: var(--color-blueberry-900);
     --color-accent-blueberry-subtlest: var(--color-blueberry-950);
+    --color-accent-blueberry-base: var(--color-blueberry-400); // Base accent color for blueberry, associated with the 400 variant
     --color-accent-canteloupe-bold: var(--color-canteloupe-500);
     --color-accent-canteloupe-dark: var(--color-canteloupe-300);
     --color-accent-canteloupe-subtle: var(--color-canteloupe-900);
     --color-accent-canteloupe-subtlest: var(--color-canteloupe-950);
+    --color-accent-canteloupe-base: var(--color-canteloupe-400); // Base accent color for canteloupe, associated with the 400 variant
     --color-accent-fig-bold: var(--color-fig-500);
     --color-accent-fig-dark: var(--color-fig-300);
     --color-accent-fig-subtle: var(--color-fig-900);
     --color-accent-fig-subtlest: var(--color-fig-950);
+    --color-accent-fig-base: var(--color-fig-400); // Base accent color for fig, associated with the 400 variant
     --color-accent-grape-bold: var(--color-grape-500);
     --color-accent-grape-dark: var(--color-grape-300);
     --color-accent-grape-subtle: var(--color-grape-900);
     --color-accent-grape-subtlest: var(--color-grape-950);
+    --color-accent-grape-base: var(--color-grape-400); // Base accent color for grape, associated with the 400 variant
     --color-accent-kale-bold: var(--color-kale-500);
     --color-accent-kale-dark: var(--color-kale-300);
     --color-accent-kale-subtle: var(--color-kale-900);
     --color-accent-kale-subtlest: var(--color-kale-950);
+    --color-accent-kale-base: var(--color-kale-400); // Base accent color for kale, associated with the 400 variant
     --color-accent-kiwi-bold: var(--color-kiwi-500);
     --color-accent-kiwi-dark: var(--color-kiwi-300);
     --color-accent-kiwi-subtle: var(--color-kiwi-900);
     --color-accent-kiwi-subtlest: var(--color-kiwi-950);
+    --color-accent-kiwi-base: var(--color-kiwi-400); // Base accent color for kiwi, associated with the 400 variant
     --color-accent-mango-bold: var(--color-mango-500);
     --color-accent-mango-dark: var(--color-mango-300);
     --color-accent-mango-subtle: var(--color-mango-900);
     --color-accent-mango-subtlest: var(--color-mango-950);
+    --color-accent-mango-base: var(--color-mango-400); // Base accent color for mango, associated with the 400 variant
     --color-accent-persimmon-bold: var(--color-persimmon-500);
     --color-accent-persimmon-dark: var(--color-persimmon-300);
     --color-accent-persimmon-subtle: var(--color-persimmon-900);
     --color-accent-persimmon-subtlest: var(--color-persimmon-950);
+    --color-accent-persimmon-base: var(--color-persimmon-400); // Base accent color for persimmon, associated with the 400 variant
     --color-accent-plum-bold: var(--color-plum-500);
     --color-accent-plum-dark: var(--color-plum-300);
     --color-accent-plum-subtle: var(--color-plum-900);
     --color-accent-plum-subtlest: var(--color-plum-950);
+    --color-accent-plum-base: var(--color-plum-400); // Base accent color for plum, associated with the 400 variant
     --color-accent-sand-bold: var(--color-sand-500);
     --color-accent-sand-dark: var(--color-sand-300);
     --color-accent-sand-subtle: var(--color-sand-900);

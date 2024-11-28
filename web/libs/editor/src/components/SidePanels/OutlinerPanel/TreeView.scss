@@ -103,6 +103,13 @@
   &__node {
     border: 1px dashed transparent;
 
+    &_type_tool {
+      .tree-iconEle,
+      .outliner-item__title {
+        color: var(--color-neutral-content);
+      }
+    }
+
     &_hidden {
       opacity: 0.4;
     }
