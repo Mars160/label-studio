@@ -224,7 +224,7 @@ class TaskPagination(PageNumberPagination):
         self.total_predictions = Prediction.objects.filter(task_id__in=queryset).count()
         self.total_annotations = Annotation.objects.filter(task_id__in=queryset, was_cancelled=False).count()
         return super().paginate_queryset(queryset, request, view)
-    
+
     def paginate_totals_queryset(self, queryset, request, view=None):
         totals = queryset.values('id', 'total_predictions', 'total_annotations', 'cancelled_annotations').aggregate(
             total_annotations=Sum('total_annotations') - Sum('cancelled_annotations'),
