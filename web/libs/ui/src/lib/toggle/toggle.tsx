@@ -43,7 +43,7 @@ export const Toggle = forwardRef(
         className={clsx(styles.toggle, {
           [styles.toggle_disabled]: props.disabled,
           [styles.toggle_checked]: isChecked,
-        })}
+        }, className)}
         style={style}
       >
         <input
