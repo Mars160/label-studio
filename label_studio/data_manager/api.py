@@ -20,6 +20,7 @@ from data_manager.serializers import (
 )
 from django.conf import settings
 from django.db.models import Sum
+from django.db.models.functions import Coalesce
 from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg import openapi
@@ -226,14 +227,12 @@ class TaskPagination(PageNumberPagination):
         return super().paginate_queryset(queryset, request, view)
 
     def paginate_totals_queryset(self, queryset, request, view=None):
-        totals = queryset.values('id', 'total_predictions', 'total_annotations', 'cancelled_annotations').aggregate(
-            total_annotations=Sum('total_annotations') - Sum('cancelled_annotations'),
-            total_predictions=Sum('total_predictions'),
+        totals = queryset.values('id').aggregate(
+            total_annotations=Coalesce(Sum('total_annotations'), 0),
+            total_predictions=Coalesce(Sum('total_predictions'), 0),
         )
-        # if the total is None, set it to 0
-        # the default value of the aggregate function is None
-        self.total_annotations = totals['total_annotations'] or 0
-        self.total_predictions = totals['total_predictions'] or 0
+        self.total_annotations = totals['total_annotations']
+        self.total_predictions = totals['total_predictions']
         return super().paginate_queryset(queryset, request, view)
 
     def paginate_queryset(self, queryset, request, view=None):
