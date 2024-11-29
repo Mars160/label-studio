@@ -230,8 +230,8 @@ class TaskPagination(PageNumberPagination):
             total_annotations=Sum('total_annotations') - Sum('cancelled_annotations'),
             total_predictions=Sum('total_predictions'),
         )
-        self.total_annotations = totals['total_annotations']
-        self.total_predictions = totals['total_predictions']
+        self.total_annotations = totals.get('total_annotations', 0)
+        self.total_predictions = totals.get('total_predictions', 0)
         return super().paginate_queryset(queryset, request, view)
 
     def paginate_queryset(self, queryset, request, view=None):
