@@ -14,6 +14,7 @@ from organizations.models import Organization, OrganizationMember
 from organizations.serializers import (
     OrganizationIdSerializer,
     OrganizationInviteSerializer,
+    OrganizationMemberSerializer,
     OrganizationMemberUserSerializer,
     OrganizationSerializer,
     OrganizationsParamsSerializer,
@@ -160,13 +161,30 @@ class OrganizationMemberListAPI(generics.ListAPIView):
 )
 class OrganizationMemberDetailAPI(GetParentObjectMixin, generics.RetrieveDestroyAPIView):
     permission_required = ViewClassPermission(
+        GET=all_permissions.organizations_view,
         DELETE=all_permissions.organizations_change,
     )
     parent_queryset = Organization.objects.all()
     parser_classes = (JSONParser, FormParser, MultiPartParser)
     permission_classes = (IsAuthenticated, HasObjectPermission)
-    serializer_class = OrganizationMemberUserSerializer  # Assuming this is the right serializer
-    http_method_names = ['delete']
+    serializer_class = OrganizationMemberSerializer
+    http_method_names = ['delete', 'get']
+
+    def get_queryset(self):
+        return OrganizationMember.objects.filter(organization=self.get_parent_object())
+
+    def get_serializer_context(self):
+        return {
+            **super().get_serializer_context(),
+            'organization': self.get_parent_object(),
+        }
+
+    def get(self, request, pk, user_pk):
+        org = self.get_parent_object()
+        user = get_object_or_404(User, pk=user_pk)
+        member = get_object_or_404(OrganizationMember, user=user, organization=org)
+        serializer = self.get_serializer(member)
+        return Response(serializer.data)
 
     def delete(self, request, pk=None, user_pk=None):
         org = self.get_parent_object()
