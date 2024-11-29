@@ -53,6 +53,15 @@
     }
   }
 
+  &_alwaysBlue &__indicator {
+    &::before {
+      width: 16px;
+      height: 16px;
+      background: var(--primary_link);
+      box-shadow: 0 5px 10px var(--grape_100), inset 0 -1px 0 rgb(0 0 0 / 10%);
+    }
+  }
+
   &_disabled {
     box-shadow: none;
     pointer-events: none;

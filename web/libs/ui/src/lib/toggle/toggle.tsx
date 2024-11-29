@@ -8,12 +8,13 @@ type ToggleProps = {
   label?: string;
   labelProps: any;
   description?: string;
-  checked: false;
-  defaultChecked: false;
+  checked?: boolean;
+  defaultChecked?: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  required: false;
+  required?: boolean;
   style: any;
-  disabled: false;
+  disabled?: boolean;
+  alwaysBlue?: boolean;
 };
 
 export const Toggle = forwardRef(
@@ -23,11 +24,12 @@ export const Toggle = forwardRef(
       label,
       labelProps,
       description,
-      checked,
-      defaultChecked,
+      checked = false,
+      defaultChecked = false,
       onChange,
-      required,
+      required = false,
       style,
+      alwaysBlue = false,
       ...props
     }: ToggleProps,
     ref,
@@ -40,10 +42,15 @@ export const Toggle = forwardRef(
 
     const formField = (
       <div
-        className={clsx(styles.toggle, {
-          [styles.toggle_disabled]: props.disabled,
-          [styles.toggle_checked]: isChecked,
-        }, className)}
+        className={clsx(
+          styles.toggle,
+          {
+            [styles.toggle_disabled]: props.disabled,
+            [styles.toggle_checked]: isChecked,
+            [styles.toggle_alwaysBlue]: alwaysBlue,
+          },
+          className,
+        )}
         style={style}
       >
         <input
