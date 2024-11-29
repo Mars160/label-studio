@@ -234,19 +234,16 @@ class TaskPagination(PageNumberPagination):
         # the default value of the aggregate function is None
         self.total_annotations = totals['total_annotations'] or 0
         self.total_predictions = totals['total_predictions'] or 0
-        print(f"paginate_totals_queryset: total_annotations: {self.total_annotations}, total_predictions: {self.total_predictions}")
         return super().paginate_queryset(queryset, request, view)
 
     def paginate_queryset(self, queryset, request, view=None):
         if flag_set('fflag_fix_back_optic_1407_optimize_tasks_api_pagination_counts'):
             return self.paginate_totals_queryset(queryset, request, view)
-        elif flag_set('fflag_fix_back_leap_24_tasks_api_optimization_05092023_short'):
+        if flag_set('fflag_fix_back_leap_24_tasks_api_optimization_05092023_short'):
             return self.async_paginate_queryset(queryset, request, view)
-        else:
-            return self.sync_paginate_queryset(queryset, request, view)
+        return self.sync_paginate_queryset(queryset, request, view)
 
     def get_paginated_response(self, data):
-        print(f"paginated_response: total_annotations: {self.total_annotations}, total_predictions: {self.total_predictions}")
         return Response(
             {
                 'total_annotations': self.total_annotations,

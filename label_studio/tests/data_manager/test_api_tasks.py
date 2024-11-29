@@ -4,7 +4,6 @@ import json
 
 import pytest
 from projects.models import Project
-from tasks.functions import update_tasks_counters
 
 from ..utils import make_annotation, make_prediction, make_task, project_id  # noqa
 
@@ -121,8 +120,6 @@ def test_views_total_counters(tasks_count, annotations_count, predictions_count,
 
         for _ in range(0, predictions_count):
             make_prediction({'result': []}, task_id)
-
-    update_tasks_counters(project.tasks.all())
 
     response = business_client.get(f'/api/tasks?fields=all&view={view_id}')
 
