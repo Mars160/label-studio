@@ -1,6 +1,6 @@
-import { ChangeEvent, forwardRef, useEffect, useMemo, useState } from "react";
+import { forwardRef, useEffect, useMemo, useState } from "react";
 import clsx from "clsx";
-import {Label} from "@humansignal/ui";
+import { Label } from "@humansignal/ui";
 import styles from "./toggle.module.scss";
 
 type ToggleProps = {
@@ -10,15 +10,27 @@ type ToggleProps = {
   description?: string;
   checked: false;
   defaultChecked: false;
-  onChange: (e:React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required: false;
   style: any;
   disabled: false;
-}
+};
 
 export const Toggle = forwardRef(
   (
-    { className, label, labelProps, description, checked, defaultChecked, onChange, required, style, ...props }:ToggleProps, ref
+    {
+      className,
+      label,
+      labelProps,
+      description,
+      checked,
+      defaultChecked,
+      onChange,
+      required,
+      style,
+      ...props
+    }: ToggleProps,
+    ref,
   ) => {
     const initialChecked = useMemo(() => defaultChecked ?? checked ?? false, [defaultChecked, checked]);
     const [isChecked, setIsChecked] = useState<boolean>(defaultChecked ?? checked ?? false);
@@ -27,14 +39,20 @@ export const Toggle = forwardRef(
     }, [initialChecked]);
 
     const formField = (
-      <div className={clsx(styles.toggle, { [styles.toggle_disabled]: props.disabled, [styles.toggle_checked]: isChecked })} style={style}>
+      <div
+        className={clsx(styles.toggle, {
+          [styles.toggle_disabled]: props.disabled,
+          [styles.toggle_checked]: isChecked,
+        })}
+        style={style}
+      >
         <input
           {...props}
           ref={ref}
           className={clsx(styles.toggle__input)}
           type="checkbox"
           checked={isChecked}
-          onChange={(e:React.ChangeEvent<HTMLInputElement>) => {
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             setIsChecked(e.target.checked);
             onChange?.(e);
           }}
@@ -44,13 +62,9 @@ export const Toggle = forwardRef(
     );
 
     return label ? (
-      <Label
-        placement="right"
-        required={required}
-        text={label}
-        description={description}
-        {...(labelProps ?? {})}
-      >{formField}</Label>
+      <Label placement="right" required={required} text={label} description={description} {...(labelProps ?? {})}>
+        {formField}
+      </Label>
     ) : (
       formField
     );

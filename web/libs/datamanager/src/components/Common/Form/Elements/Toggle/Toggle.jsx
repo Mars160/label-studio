@@ -1,4 +1,5 @@
 import { forwardRef, useEffect, useMemo, useState } from "react";
+import { Toggle as UiToggle } from "@humansignal/ui";
 import { cn } from "../../../../../utils/bem";
 import { FormField } from "../../FormField";
 import { default as Label } from "../Label/Label";
@@ -50,18 +51,15 @@ const Toggle = forwardRef(
       >
         {({ ref }) => (
           <div className={classList.join(" ")}>
-            <input
+            <UiToggle
               ref={ref}
               {...props}
-              className={rootClass.elem("input")}
-              type="checkbox"
               checked={isChecked}
               onChange={(e) => {
                 setIsChecked(e.target.checked);
                 onChange?.(e);
               }}
             />
-            <span className={rootClass.elem("indicator")} />
           </div>
         )}
       </FormField>

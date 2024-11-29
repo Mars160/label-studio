@@ -1,10 +1,10 @@
 import { forwardRef, useEffect, useMemo } from "react";
+import { Toggle as UiToggle } from "@humansignal/ui";
 import { cn } from "../../../../utils/bem";
 import { FormField } from "../../FormField";
 import { useValueTracker } from "../../Utils";
-import { default as Label } from "../Label/Label";
+import { Label } from "@humansignal/ui";
 import "./Toggle.scss";
-import { Toggle as UiToggle } from "@humansignal/ui";
 
 const Toggle = forwardRef(
   (
@@ -52,12 +52,15 @@ const Toggle = forwardRef(
       >
         {(ref) => (
           <div className={classList.join(" ")}>
-            <UiToggle ref={ref}
+            <UiToggle
+              ref={ref}
               {...props}
-              checked={isChecked} onChange={(e) => {
+              checked={isChecked}
+              onChange={(e) => {
                 setIsChecked(e.target.checked);
                 onChange?.(e);
-              }} />
+              }}
+            />
           </div>
         )}
       </FormField>
