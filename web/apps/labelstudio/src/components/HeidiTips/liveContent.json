@@ -189,6 +189,55 @@
   ],
   "authPage": [
     {
+      "title": "Placeholder: Prompts for auto labeling",
+      "description": "TODO",
+      "link": {
+        "label": "Learn more",
+        "url": "https://humansignal.com/",
+        "params": {
+          "experiment": "login_revamp",
+          "treatment": "prompts_auto_labeling"
+        }
+      }
+    },
+    {
+      "title": "Placeholder: Prompts something else",
+      "description": "TODO",
+      "link": {
+        "label": "Learn more",
+        "url": "https://humansignal.com/",
+        "params": {
+          "experiment": "login_revamp",
+          "treatment": "prompts_something_else"
+        }
+      }
+    },
+    {
+      "title": "Placeholder: New feature",
+      "description": "TODO.",
+      "link": {
+        "label": "Learn more",
+        "url": "https://humansignal.com/",
+        "params": {
+          "experiment": "login_revamp",
+          "treatment": "leap_new_feature"
+        }
+      }
+    },
+    {
+      "title": "Announcing Starter Cloud",
+      "description": "Optimized for small teams and projects, you can now add workflows and permissions starting at $99.",
+      "link": {
+        "label": "Learn more",
+        "url": "https://humansignal.com/pricing/",
+        "params": {
+          "experiment": "login_revamp",
+          "treatment": "starter_cloud"
+        }
+      }
+    },
+
+    {
       "title": "Did you know?",
       "description": "You can sync data from all popular cloud storage providers to collect new items for labeling as they are uploaded, and return the annotation results to train and continuously improve models.",
       "link": {
