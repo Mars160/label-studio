@@ -3,12 +3,12 @@ import { EmailPreferences } from "./EmailPreferences";
 import React from "react";
 import { PersonalAccessToken } from "./PersonalAccessToken";
 import { MembershipInfo } from "./MembershipInfo";
-// type SectionType = {
-//   title: string;
-//   id: string;
-//   component: React.ReactNode;
-// }
-export const accountSettingsSections = [
+type SectionType = {
+  title: string;
+  id: string;
+  component: React.FC;
+}
+export const accountSettingsSections: SectionType[] = [
   {
     title: "Personal Info",
     id: "personal-info",

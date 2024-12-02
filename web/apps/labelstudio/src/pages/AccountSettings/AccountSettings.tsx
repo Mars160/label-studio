@@ -2,22 +2,20 @@ import React, { useMemo, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { useAPI } from "../../providers/ApiProvider";
 import { SidebarMenu } from "../../components/SidebarMenu/SidebarMenu";
-import "./AccountSettings.scss";
-import { useCurrentUser } from "../../providers/CurrentUser";
+import styles from "./AccountSettings.module.scss";
 import { accountSettingsSections } from "./sections";
+import { Card } from "../../components/Card/Card";
 
 export const AccountSettingsPage = () => {
   const api = useAPI();
-  const { user } = useCurrentUser();
-  // const abortController = useAbortController();
-
-  console.log("user", api, user, accountSettingsSections);
 
   return (
-    <div className="account-settings">
+    <div className={styles.accountSettings}>
       
       {accountSettingsSections?.map(({component: Section, id}: any) => (
-        <Section key={id} />
+        <Card key={id}>
+          <Section />
+        </Card>
       ))}
     </div>
   );
