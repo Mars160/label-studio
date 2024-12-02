@@ -90,8 +90,8 @@ export const GridView = observer(({ data, view, loadMore, fields, onChange, hidd
   const renderItem = React.useCallback(
     ({ style, rowIndex, columnIndex }) => {
       const index = getCellIndex(rowIndex, columnIndex);
-      if (index >= data.length || !data?.[index]) return null;
       const row = data?.[index];
+      if(!row) return null;
 
       const props = {
         style: {
