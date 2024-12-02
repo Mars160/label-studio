@@ -6,11 +6,15 @@ import { useCurrentUser } from "../../../providers/CurrentUser";
 
 export const PersonalInfo = () => {
   const { user } = useCurrentUser();
+  const [fname, setFName] = useState(user?.first_name);
+  const [lname, setLName] = useState(user?.first_name);
+  const [email, setEmail] = useState(user?.first_name);
+  const [phone, setPhone] = useState(user?.first_name);
   console.log("user", user);
   return (
-    <div className="">
+    <form className="" action={`users/${user?.id}`} method="PATCH">
       <a id="personal-info" />
-      <h2>Personal Info</h2>
+      <h1>Personal Info</h1>
       <div className="">
         <Userpic user={user} />
         <Input className="file-input" type="file" name="avatar" accept="image/png, image/jpeg, image/jpg"/>
@@ -26,6 +30,6 @@ export const PersonalInfo = () => {
       <div className="">
         <Button look="primary" size="compact">Save</Button>
       </div>
-    </div>
+    </form>
   )
 };

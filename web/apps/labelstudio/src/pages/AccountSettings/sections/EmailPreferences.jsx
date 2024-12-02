@@ -29,7 +29,7 @@ export const EmailPreferences = () => {
   return (
     <div className="">
       <a id="email-preferences" />
-      <h2>Email Preferences</h2>
+      <h1>Email Preferences</h1>
 
       {isLoading ? <Spinner /> : (
         <Checkbox checked={isAllowNewsLetter} onChange={toggleHandler}>
