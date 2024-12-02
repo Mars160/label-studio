@@ -138,6 +138,25 @@ class OrganizationMemberListAPI(generics.ListAPIView):
 
 
 @method_decorator(
+    name='get',
+    decorator=swagger_auto_schema(
+        tags=['Organizations'],
+        x_fern_sdk_group_name=['organizations', 'members'],
+        x_fern_sdk_method_name='get',
+        operation_summary='Get organization member details',
+        operation_description='Get organization member details by user ID.',
+        manual_parameters=[
+            openapi.Parameter(
+                name='user_pk',
+                type=openapi.TYPE_INTEGER,
+                in_=openapi.IN_PATH,
+                description='A unique integer value identifying the user to get organization details for.',
+            ),
+        ],
+        responses={200: OrganizationMemberSerializer()},
+    ),
+)
+@method_decorator(
     name='delete',
     decorator=swagger_auto_schema(
         tags=['Organizations'],
