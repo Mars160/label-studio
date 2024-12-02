@@ -26,6 +26,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.settings import api_settings
 from rest_framework.views import APIView
 from users.models import User
 
@@ -166,9 +167,14 @@ class OrganizationMemberDetailAPI(GetParentObjectMixin, generics.RetrieveDestroy
     )
     parent_queryset = Organization.objects.all()
     parser_classes = (JSONParser, FormParser, MultiPartParser)
-    permission_classes = (IsAuthenticated, HasObjectPermission)
     serializer_class = OrganizationMemberSerializer
     http_method_names = ['delete', 'get']
+
+    @property
+    def permission_classes(self):
+        if self.request.method == 'delete':
+            return [IsAuthenticated, HasObjectPermission]
+        return api_settings.DEFAULT_PERMISSION_CLASSES
 
     def get_queryset(self):
         return OrganizationMember.objects.filter(organization=self.get_parent_object())
@@ -180,9 +186,10 @@ class OrganizationMemberDetailAPI(GetParentObjectMixin, generics.RetrieveDestroy
         }
 
     def get(self, request, pk, user_pk):
-        org = self.get_parent_object()
+        queryset = self.get_queryset()
         user = get_object_or_404(User, pk=user_pk)
-        member = get_object_or_404(OrganizationMember, user=user, organization=org)
+        member = get_object_or_404(queryset, user=user)
+        self.check_object_permissions(request, member)
         serializer = self.get_serializer(member)
         return Response(serializer.data)
 
