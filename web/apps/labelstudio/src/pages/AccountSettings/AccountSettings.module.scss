@@ -1,5 +1,8 @@
 .accountSettings {
-  height: calc(100vh - var(--header-height));
-  padding: var(--spacing-large);
+  display: flex;
+  flex-direction: column;
+  &__content {
+    max-width: 660px;
+  }
 }
 

@@ -6,27 +6,26 @@ import styles from "./AccountSettings.module.scss";
 import { accountSettingsSections } from "./sections";
 import { Card } from "../../components/Card/Card";
 
+
 export const AccountSettingsPage = () => {
   const api = useAPI();
+  const menuItems = useMemo(() => accountSettingsSections.map(({title, id}) => ({title, path: `#${id}`})), [accountSettingsSections]);
 
   return (
     <div className={styles.accountSettings}>
-      
-      {accountSettingsSections?.map(({component: Section, id}: any) => (
-        <Card key={id}>
-          <Section />
-        </Card>
-      ))}
+      <SidebarMenu menuItems={menuItems} path={AccountSettingsPage.path} >
+        <div className={styles.accountSettings__content}>
+          {accountSettingsSections?.map(({component: Section, id}: any) => (
+            <Card key={id}>
+              <Section />
+            </Card>
+          ))}
+        </div>
+      </SidebarMenu>
     </div>
   );
 };
 
-
-const MenuLayout = ({ children, ...routeProps }: { children: any, routeProps: any}) => {
-  const menuItems = useMemo(() => accountSettingsSections.map(({title, id}) => ({title, path: `#${id}`})), [accountSettingsSections]);
-
-  return <SidebarMenu menuItems={menuItems} path={routeProps.match.url} children={children} />;
-};
 
 AccountSettingsPage.title = "My Account";
 AccountSettingsPage.path = "/user/account";
@@ -38,7 +37,6 @@ AccountSettingsPage.routes = () => [
     component: () => {
       return <Redirect to={AccountSettingsPage.path} />;
     },
-    layout: MenuLayout,
     // pages: {
     //   DataManagerPage,
     //   SettingsPage,
