@@ -32,7 +32,7 @@ export const ImageCell = (column) => {
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
         }}
-      ></div>
+      />
     ) : (
       <img
         {...imgDefaultProps}
