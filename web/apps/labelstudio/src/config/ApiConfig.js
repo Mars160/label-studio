@@ -3,6 +3,7 @@ export const API_CONFIG = {
   endpoints: {
     // Users
     users: "/users",
+    updateUser: "PATCH:/users/:pk",
     me: "/current-user/whoami",
 
     // Organization
