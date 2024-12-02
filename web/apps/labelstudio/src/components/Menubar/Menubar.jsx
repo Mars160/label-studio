@@ -27,6 +27,7 @@ import "./MenuContent.scss";
 import "./MenuSidebar.scss";
 import { ModelsPage } from "../../pages/Organization/Models/ModelsPage";
 import { FF_DIA_835, isFF } from "../../utils/feature-flags";
+import { AccountSettingsPage } from "../../pages/AccountSettings/AccountSettings";
 
 export const MenubarContext = createContext();
 
@@ -148,13 +149,13 @@ export const Menubar = ({ enabled, defaultOpened, defaultPinned, children, onSid
             align="right"
             content={
               <Menu>
-                <Menu.Item icon={<LsSettings />} label="Account &amp; Settings" href="/user/account" data-external />
+                <Menu.Item icon={<LsSettings />} label="Account &amp; Settings" href={AccountSettingsPage.path} />
                 {/* <Menu.Item label="Dark Mode"/> */}
                 <Menu.Item icon={<LsDoor />} label="Log Out" href={absoluteURL("/logout")} data-external />
                 {showNewsletterDot && (
                   <>
                     <Menu.Divider />
-                    <Menu.Item className={cn("newsletter-menu-item")} href="/user/account" data-external>
+                    <Menu.Item className={cn("newsletter-menu-item")} href={AccountSettingsPage.path}>
                       <span>Please check new notification settings in the Account & Settings page</span>
                       <span className={cn("newsletter-menu-badge")} />
                     </Menu.Item>
