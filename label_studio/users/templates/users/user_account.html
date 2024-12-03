@@ -20,7 +20,83 @@
 {% endblock %}
 
 {% block content %}
+<script>
+  // Take closest form (or form by id) and submit it,
+  // optional: prevent page refresh if done passed as function
+  function smart_submit(done, form_id) {
+    // use form id or take closest form to the event target
+    var f = typeof form_id === 'string' ? $(form_id) : $(event.target).closest('form');
+    console.log('smart_submit found form to use', f);
 
+    if (typeof f === 'undefined') {
+      console.log('smart_submit event target', event.target);
+      alert("Closest form not found for smart_submit")
+    }
+    console.log('YYYYYYY' +  $(f).serialize());
+    var params = {
+      url: $(f).attr('action'),
+      type: $(f).attr('method'),
+      data: $(f).serialize(),
+
+      error: function (result, textStatus, errorThrown) {
+        console.log('smart_submit ajax error', result);
+
+        // call done function if it's defined and ignore all the rest
+        if (typeof done === "function") {
+          done(result)
+        }
+        // default error handle
+        else {
+          if (typeof result.responseText !== 'undefined') {
+            alert("Error: " + message_from_response(result));
+          } else {
+            alert("Request error: " + errorThrown);
+          }
+          window.location.reload();
+        }
+      },
+
+      success: function (data, textStatus, result) {
+        // call done function if it's defined and ignore all the rest
+        if (typeof done === "function") {
+          done(result)
+        }
+        // default success handle
+        else {
+          window.location.reload();
+        }
+      }
+    };
+
+    console.log('smart_submit ajax params', params);
+    $.ajax(params);
+    event.preventDefault();
+    return false;
+  }
+
+  function message_from_response(result) {
+    console.log(result);
+
+    // result is dict
+    if (result.hasOwnProperty('detail') && result.detail)
+      return result.detail;
+
+    // result is object from XHR, check responseText first, it is always presented
+    if (!result.responseText)
+      return 'Critical error on server';
+
+    // grab responseJSON detail
+    else if (result.responseJSON && result.responseJSON.hasOwnProperty('detail'))
+      return result.responseJSON['detail'];
+
+    // something strange inside of responseJSON
+    else if (result.responseJSON)
+      return JSON.stringify(result.responseJSON);
+
+    else
+      return JSON.stringify(result)
+  }
+</script>
 
 <div class="full_content">
   <div class="account-page">
@@ -31,19 +107,19 @@
       <ul>
         <li class="field">
           <label for="">E-mail</label>
-          <input type="text" class="ls-input" value="{{user.email}}" disabled />
+          <input type="text" class="lsf-input-ls" value="{{user.email}}" disabled />
         </li>
         <li class="field">
           <label for="">First Name</label>
-          <input type="text" class="ls-input" name="first_name" value="{{user.first_name}}" />
+          <input type="text" class="lsf-input-ls" name="first_name" value="{{user.first_name}}" />
         </li>
         <li class="field">
           <label for="">Last Name</label>
-          <input type="text" class="ls-input" name="last_name" value="{{user.last_name}}" />
+          <input type="text" class="lsf-input-ls" name="last_name" value="{{user.last_name}}" />
         </li>
         <li class="field">
           <label for="">Phone</label>
-          <input type="text" class="ls-input" name="phone" value="{{user.phone}}" />
+          <input type="text" class="lsf-input-ls" name="phone" value="{{user.phone}}" />
           <!-- <span>We'll send you sms with code if you change your number</span>
           <span class="error">Incorrect phone number!</span> -->
         </li>
@@ -63,7 +139,7 @@
             {% endif %}
           </div>
 
-          <button class="ls-button ls-button_look_danger" name="delete-avatar" type="button">
+          <button class="lsf-button-ls lsf-button-ls_look_danger" name="delete-avatar" type="button">
             Delete
           </button>
 
@@ -78,7 +154,7 @@
       </div>
       <footer>
         <p class="secondary">Registered {{ user.date_joined|date:"M j, Y" }}, user ID {{ user.id }}</p>
-        <button class="ls-button ls-button_look_primary" onclick="smart_submit()">Save</button>
+        <button class="lsf-button-ls lsf-button-ls_look_primary" onclick="smart_submit()">Save</button>
       </footer>
     </form>
 
@@ -87,10 +163,10 @@
       <header>Access Token</header>
       <div class="field field--wide">
         <label for="access_token">Use this token to authenticate with our API:</label>
-        <input id="access_token" class="ls-input" name="access_token" type="text" value="{{token}}" readonly />
+        <input id="access_token" class="lsf-input-ls" name="access_token" type="text" value="{{token}}" readonly />
         <p class="actions">
-          <button type="button" class="blinking-status ls-button" data-copy="access_token">Copy</button>
-          <button type="button" class="blinking-status ls-button" name="renew">Renew</button>
+          <button type="button" class="blinking-status lsf-button-ls" data-copy="access_token">Copy</button>
+          <button type="button" class="blinking-status lsf-button-ls" name="renew">Renew</button>
         </p>
       </div>
       <!-- Example -->
@@ -101,18 +177,21 @@
           {% if settings.HOSTNAME %}
             curl -X GET {{ settings.HOSTNAME }}/api/projects/ -H 'Authorization: Token {{token}}'
           {% else %}
-            curl -X GET http://localhost:8080/api/projects/ -H 'Authorization: Token {{token}}'
+          curl -X GET {{ request.scheme }}://{{ request.get_host }}/api/projects/ -H 'Authorization: Token {{token}}'
           {% endif %}
         </textarea>
         <p class="actions">
-          <button type="button" class="blinking-status ls-button" data-copy="example_fetch">Copy</button>
-          <a class="ls-button"
-             {% if settings.VERSION_EDITION == 'Enterprise' %}
-             href="https://docs.heartex.com/guide/api.html"
-             {% else %}
-             href="https://labelstud.io/guide/api.html"
-             {% endif %} target="_blank">Documentation
+          <button type="button" class="blinking-status lsf-button-ls" data-copy="example_fetch">Copy</button>
+
+          {% block api_docs %}
+          <a
+            class="lsf-button-ls"
+            href="https://labelstud.io/guide/api.html"
+            target="_blank"
+          >
+            Documentation
           </a>
+          {% endblock %}
         </p>
       </div>
     </form>
@@ -123,7 +202,7 @@
       <header>
         {{ user.active_organization.title }}
         <br>
-        <sub style="font-size: 16px; margin-top: 0; color: rgba(0,0,0,0.2); ">Your active organization</sub>
+        <sub>Your active organization</sub>
       </header>
 
       <table>
@@ -143,19 +222,16 @@
     </form>
 
     <!-- Notifications -->
+    {% block notifications %}
     <form action="{% url 'user-detail' pk=user.pk %}?update-notifications=1" method="patch" class="notifications block-info" id="notifications">
       <header>
         Notifications
         <br>
-        <sub style="font-size: 16px; margin-top: 0; color: rgba(0,0,0,0.2);">Email and other notifications</sub>
+        <sub>Email and other notifications</sub>
       </header>
 
       <table>
         <tr><td style="{% if user.allow_newsletters is None %}border: 1px red solid; border-radius: 5px{% endif %}">
-
-          <input name="email" type="hidden" value="{{ user.email }}">
-          <input name="first_name" type="hidden" value="{{ user.first_name }}">
-          <input name="last_name" type="hidden" value="{{ user.last_name }}">
 
           <input name="allow_newsletters" type="hidden"
                  value="{% if user.allow_newsletters is None %}true{% else %}{{ user.allow_newsletters|yesno:"false,true" }}{% endif %}">
@@ -175,6 +251,7 @@
       </table>
 
     </form>
+    {% endblock %}
 
 
   </div>
@@ -184,7 +261,7 @@
       {% if settings.HOSTNAME %}
       const hostname = '{{ settings.HOSTNAME }}';
       {% else %}
-      const hostname = 'http://localhost:8080';
+      const hostname = '{{ request.scheme }}://{{ request.get_host }}';
       {% endif %}
 
       document.querySelectorAll('[data-copy]').forEach(button => {

@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Group, Image, Layer, Shape } from "react-konva";
 import { observer } from "mobx-react";
 import { getParent, getRoot, getType, hasParent, isAlive, types } from "mobx-state-tree";
@@ -10,7 +10,7 @@ import Canvas from "../utils/canvas";
 
 import { ImageViewContext } from "../components/ImageView/ImageViewContext";
 import { LabelOnMask } from "../components/ImageView/LabelOnRegion";
-import { Geometry } from "../components/RelationsOverlay/Geometry";
+import { Geometry } from "../components/InteractiveOverlays/Geometry";
 import { defaultStyle } from "../core/Constants";
 import { guidGenerator } from "../core/Helpers";
 import { AreaMixin } from "../mixins/AreaMixin";
@@ -18,7 +18,7 @@ import IsReadyMixin from "../mixins/IsReadyMixin";
 import { KonvaRegionMixin } from "../mixins/KonvaRegion";
 import { ImageModel } from "../tags/object/Image";
 import { colorToRGBAArray, rgbArrayToHex } from "../utils/colors";
-import { FF_DEV_3793, FF_DEV_4081, FF_ZOOM_OPTIM, isFF } from "../utils/feature-flags";
+import { FF_DEV_3793, FF_ZOOM_OPTIM, isFF } from "../utils/feature-flags";
 import { AliveRegion } from "./AliveRegion";
 import { RegionWrapper } from "./RegionWrapper";
 
@@ -523,7 +523,7 @@ const HtxBrushView = ({ item, setShapeRef }) => {
 
     let img;
 
-    if (item.maskDataURL && isFF(FF_DEV_4081)) {
+    if (item.maskDataURL) {
       img = await Canvas.maskDataURL2Image(item.maskDataURL, { color: item.strokeColor });
     } else if (item.rle) {
       img = Canvas.RLE2Region(item, { color: item.strokeColor });
@@ -695,12 +695,12 @@ const HtxBrushView = ({ item, setShapeRef }) => {
           //     e.cancelBubble = false;
           // }}
           onMouseDown={(e) => {
-            if (store.annotationStore.selected.relationMode) {
+            if (store.annotationStore.selected.isLinkingMode) {
               e.cancelBubble = true;
             }
           }}
           onMouseOver={() => {
-            if (store.annotationStore.selected.relationMode) {
+            if (store.annotationStore.selected.isLinkingMode) {
               item.setHighlight(true);
               stage.container().style.cursor = "crosshair";
             } else {
@@ -709,7 +709,7 @@ const HtxBrushView = ({ item, setShapeRef }) => {
             }
           }}
           onMouseOut={() => {
-            if (store.annotationStore.selected.relationMode) {
+            if (store.annotationStore.selected.isLinkingMode) {
               item.setHighlight(false);
             }
 
@@ -719,7 +719,7 @@ const HtxBrushView = ({ item, setShapeRef }) => {
           }}
           onClick={(e) => {
             if (item.parent.getSkipInteractions()) return;
-            if (store.annotationStore.selected.relationMode) {
+            if (store.annotationStore.selected.isLinkingMode) {
               item.onClickRegion(e);
               return;
             }
@@ -731,7 +731,7 @@ const HtxBrushView = ({ item, setShapeRef }) => {
               if (tool && !isMoveTool) return;
             }
 
-            if (store.annotationStore.selected.relationMode) {
+            if (store.annotationStore.selected.isLinkingMode) {
               stage.container().style.cursor = "default";
             }
 

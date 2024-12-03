@@ -4,33 +4,42 @@ import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeGrid } from "react-window";
 import InfiniteLoader from "react-window-infinite-loader";
 import { Block, Elem } from "../../../utils/bem";
-import { Checkbox } from "../../Common/Checkbox/Checkbox";
+import { Checkbox } from "@humansignal/ui";
 import { Space } from "../../Common/Space/Space";
 import { getProperty, prepareColumns } from "../../Common/Table/utils";
 import * as DataGroups from "../../DataGroups";
-import "./GridView.styl";
+import "./GridView.scss";
 import { FF_LOPS_E_3, isFF } from "../../../utils/feature-flags";
 import { SkeletonLoader } from "../../Common/SkeletonLoader";
 
 const GridHeader = observer(({ row, selected }) => {
+  const isSelected = selected.isSelected(row.id);
   return (
     <Elem name="cell-header">
       <Space>
-        <Checkbox checked={selected.isSelected(row.id)} />
+        <Checkbox checked={isSelected} ariaLabel={`${isSelected ? "Unselect" : "Select"} Task ${row.id}`} />
         <span>{row.id}</span>
       </Space>
     </Elem>
   );
 });
 
-const GridBody = observer(({ row, fields }) => {
+export const GridBody = observer(({ row, fields }) => {
   const dataFields = fields.filter((f) => f.parent?.alias === "data");
 
   return dataFields.map((field, index) => {
     const valuePath = field.id.split(":")[1] ?? field.id;
-    const value = getProperty(row, valuePath);
+    const field_type = field.currentType;
+    let value = getProperty(row, valuePath);
 
-    return <GridDataGroup key={`${row.id}-${index}`} type={field.currentType} value={value} field={field} row={row} />;
+    /**The value is an array...
+     * In this case, we take the first element of the array
+     */
+    if (Array.isArray(value)) {
+      value = value[0];
+    }
+
+    return <GridDataGroup key={`${row.id}-${index}`} type={field_type} value={value} field={field} row={row} />;
   });
 });
 
@@ -126,7 +135,7 @@ export const GridView = observer(({ data, view, loadMore, fields, onChange, hidd
   );
 
   return (
-    <Block name="grid-view" style={{ flex: 1, "--column-count": `${columnCount}n` }}>
+    <Block name="grid-view" mod={{ columnCount }}>
       <Elem tag={AutoSizer} name="resize">
         {({ width, height }) => (
           <InfiniteLoader

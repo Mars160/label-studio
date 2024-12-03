@@ -1,9 +1,9 @@
 import { format } from "date-fns";
-import React, { createContext, useCallback, useContext, useEffect, useReducer } from "react";
+import { createContext, useCallback, useContext, useEffect, useReducer } from "react";
 import { Link } from "react-router-dom";
 import { useAPI } from "../../providers/ApiProvider";
 import { Block, Elem } from "../../utils/bem";
-import "./VersionNotifier.styl";
+import "./VersionNotifier.scss";
 import { IconBell } from "../../assets/icons";
 
 const VersionContext = createContext();
@@ -43,8 +43,8 @@ export const VersionProvider = ({ children }) => {
 };
 
 export const VersionNotifier = ({ showNewVersion, showCurrentVersion }) => {
-  const url = "https://pypi.org/project/label-studio/#history";
   const { newVersion, updateTime, latestVersion, version } = useContext(VersionContext) ?? {};
+  const url = `https://labelstud.io/redirect/update?version=${version}`;
 
   return newVersion && showNewVersion ? (
     <Block tag="li" name="version-notifier">

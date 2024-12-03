@@ -33,6 +33,23 @@ jobs:
     steps:
       - uses: hmarr/debug-action@v3.0.0
 
+      - name: Check user's membership
+        uses: actions/github-script@v7
+        id: actor-membership
+        env:
+          ACTOR: ${{ github.actor }}
+        with:
+          github-token: ${{ secrets.GIT_PAT }}
+          script: |
+            const { repo, owner } = context.repo;
+            const actor = process.env.ACTOR;
+            const { data: membership } = await github.rest.orgs.getMembershipForUser({
+              org: owner,
+              username: actor,
+            });
+            core.setOutput("state", membership.state);
+            core.setOutput("active", membership.state == "active");
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -48,17 +65,19 @@ jobs:
           set -x
           sha="$(git rev-parse HEAD)"
           echo "sha=$sha" >> $GITHUB_OUTPUT
-          regexp='^ls-release\/(.*)$'; 
+           
+          pretty_branch_name="$(echo -n "${BRANCH_NAME#refs/heads/}" | sed 's#/#-#g' | sed 's#_#-#g'| sed 's#\.#-#g' | tr '[:upper:]' '[:lower:]')"
+          echo "pretty_branch_name=$pretty_branch_name" >> $GITHUB_OUTPUT
+
+          regexp='^ls-release\/(.*)$';
           if [[ "$BRANCH_NAME" =~ $regexp ]]; then
             image_version="${BASH_REMATCH[1]}rc${sha}"
           else
-            image_version=$BRANCH_NAME
+            image_version="${pretty_branch_name}"
           fi
           echo "image_version=${image_version}" >> $GITHUB_OUTPUT
           echo "ubi_image_version=ubi_${image_version}" >> $GITHUB_OUTPUT
           
-          pretty_branch_name="$(echo -n "${BRANCH_NAME#refs/heads/}" | sed 's#/#-#g' | sed 's#_#-#g'| sed 's#\.#-#g' | tr '[:upper:]' '[:lower:]')"
-          echo "pretty_branch_name=$pretty_branch_name" >> $GITHUB_OUTPUT
           current_time="$(date +'%Y%m%d.%H%M%S')"
           branch="-${pretty_branch_name}"
           short_sha="$(git rev-parse --short HEAD)"
@@ -70,26 +89,13 @@ jobs:
           echo "build_version=$version" >> $GITHUB_OUTPUT
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3.3.0
+        uses: docker/setup-buildx-action@v3.7.1
 
       - name: Login to DockerHub
-        uses: docker/login-action@v3.1.0
+        uses: docker/login-action@v3.3.0
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Create version_.py
-        env:
-          BRANCH_OVERRIDE: ${{ inputs.branch_name }}
-          VERSION_OVERRIDE: ${{ steps.version.outputs.build_version }}
-        run: |
-          python3 $(pwd)/label_studio/core/version.py
-          cat $(pwd)/label_studio/core/version_.py
 
       - name: Download LaunchDarkly Community config
         env:
@@ -111,17 +117,34 @@ jobs:
             exit 1
           fi
 
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_NAME }}
+          labels: |
+            org.opencontainers.image.revision=${{ inputs.sha }}
+          tags: |
+            type=raw,value=${{ steps.version.outputs.image_version }}
+            type=raw,value=${{ steps.version.outputs.build_version }}
+
       - name: Push Docker image
-        uses: docker/build-push-action@v5.3.0
+        uses: docker/build-push-action@v6.10.0
         id: docker_build_and_push
         with:
           context: .
           file: Dockerfile
           platforms: linux/amd64,linux/arm64
-          push: true
-          tags: ${{ env.IMAGE_NAME }}:${{ steps.version.outputs.image_version }},${{ env.IMAGE_NAME }}:${{ steps.version.outputs.build_version }}
+          push: ${{ steps.actor-membership.outputs.active }}
+          sbom: true
+          provenance: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            BRANCH_OVERRIDE: ${{ inputs.branch_name }}
+            VERSION_OVERRIDE: ${{ steps.version.outputs.build_version }}
 
       - name: Create Docker image tag Check
         uses: actions/github-script@v7
@@ -160,7 +183,7 @@ jobs:
           GITHUB_RUN_ID: "${{ github.run_id }}"
           GITHUB_SHA: "${{ github.sha }}"
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_LSE_BOT_TOKEN }}
-        uses: slackapi/slack-github-action@v1.26
+        uses: slackapi/slack-github-action@v1.27
         with:
           channel-id: 'C01RJV08UJK'
           payload: "{\"text\": \":alert:<!subteam^${{ vars.SLACK_GR_DEVOPS }}>\\n*Branch: ${{ inputs.branch_name }}*\\n*Build status: <https://github.com/${{ env.GITHUB_REPOSITORY }}/actions/runs/${{ env.GITHUB_RUN_ID }}|FAILED>*\\n*Commit: <https://github.com/${{ env.GITHUB_REPOSITORY }}/commit/${{ steps.version.outputs.sha }}|${{ steps.version.outputs.sha }}>*\"}"

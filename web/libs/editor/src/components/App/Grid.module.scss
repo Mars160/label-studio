@@ -1,5 +1,5 @@
 /* Grid (View All mode) */
-@import "../../assets/styles/global.scss";
+@import "../../assets/styles/global";
 
 $gap: 30px;
 
@@ -7,9 +7,11 @@ $gap: 30px;
   flex-grow: 1;
   display: grid;
   grid-auto-columns: calc(50% - 15px);
+
   @include respond("tablet") {
     grid-auto-columns: 100%;
   }
+
   grid-auto-flow: column;
   grid-column-gap: $gap;
   margin: 0 30px;
@@ -34,7 +36,7 @@ $gap: 30px;
   height: 100%;
 
   &:hover {
-    background: #eee;
+    background: var(--sand_200);
   }
 }
 
@@ -48,8 +50,9 @@ $gap: 30px;
 
 .grid > div:global(.hover) {
   background: #eee;
+
   h4 {
-    color: #1890ff;
+    color: var(--primary_link);
   }
 }
 

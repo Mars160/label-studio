@@ -3,21 +3,21 @@ import ReactDOM from "react-dom";
 import { Block, cn } from "../../../utils/bem";
 import { alignElements } from "../../../utils/dom";
 import { aroundTransition } from "../../../utils/transition";
-import "./Dropdown.styl";
+import "./Dropdown.scss";
 import { DropdownContext } from "./DropdownContext";
 import { DropdownTrigger } from "./DropdownTrigger";
 
 let lastIndex = 1;
 
 export const Dropdown = React.forwardRef(({ animated = true, visible = false, ...props }, ref) => {
-  const rootName = cn("dropdown");
+  const rootName = cn("dropdown-dm");
 
   /**@type {import('react').RefObject<HTMLElement>} */
   const dropdown = React.useRef();
   const { triggerRef } = React.useContext(DropdownContext) ?? {};
   const isInline = triggerRef === undefined;
 
-  const { children, align } = props;
+  const { children, align, openUpwardForShortViewport } = props;
   const [currentVisible, setVisible] = React.useState(visible);
   const [offset, setOffset] = React.useState({});
   const [visibility, setVisibility] = React.useState(visible ? "visible" : null);
@@ -25,7 +25,13 @@ export const Dropdown = React.forwardRef(({ animated = true, visible = false, ..
   const calculatePosition = React.useCallback(() => {
     const dropdownEl = dropdown.current;
     const parent = triggerRef?.current ?? dropdownEl.parentNode;
-    const { left, top } = alignElements(parent, dropdownEl, align ?? "bottom-left");
+    const { left, top } = alignElements(
+      parent,
+      dropdownEl,
+      align ?? "bottom-left",
+      0,
+      openUpwardForShortViewport ?? true,
+    );
 
     setOffset({ left, top });
   }, [triggerRef]);
@@ -149,7 +155,7 @@ export const Dropdown = React.forwardRef(({ animated = true, visible = false, ..
   const result = (
     <Block
       ref={dropdown}
-      name="dropdown"
+      name="dropdown-dm"
       mix={[props.className, visibilityClasses]}
       style={compositeStyles}
       onClick={(e) => e.stopPropagation()}

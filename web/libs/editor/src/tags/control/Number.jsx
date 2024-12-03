@@ -1,4 +1,3 @@
-import React from "react";
 import { inject, observer } from "mobx-react";
 import { types } from "mobx-state-tree";
 
@@ -14,13 +13,12 @@ import { ReadOnlyControlMixin } from "../../mixins/ReadOnlyMixin";
 import ClassificationBase from "./ClassificationBase";
 import PerItemMixin from "../../mixins/PerItem";
 import { FF_LSDV_4583, isFF } from "../../utils/feature-flags";
+import { cn } from "../../utils/bem";
 
 /**
  * The Number tag supports numeric classification. Use to classify tasks using numbers.
  *
  * Use with the following data types: audio, image, HTML, paragraphs, text, time series, video
- *
- * [^FF_LSDV_4583]: `fflag_feat_front_lsdv_4583_multi_image_segmentation_short` should be enabled for `perItem` functionality
  *
  * @example
  * <!--Basic labeling configuration for numeric classification of text -->
@@ -42,7 +40,7 @@ import { FF_LSDV_4583, isFF } from "../../utils/feature-flags";
  * @param {boolean} [required=false]          - Whether number is required or not
  * @param {string} [requiredMessage]          - Message to show if validation fails
  * @param {boolean} [perRegion]               - Use this tag to classify specific regions instead of the whole object
- * @param {boolean} [perItem]                 - Use this tag to classify specific items inside the object instead of the whole object[^FF_LSDV_4583]
+ * @param {boolean} [perItem]                 - Use this tag to classify specific items inside the object instead of the whole object
  * @param {boolean} [slider=false]            - Use slider look instead of input; use min and max to add your constraints
  */
 const TagAttrs = types.model({
@@ -201,9 +199,10 @@ const HtxNumber = inject("store")(
     const visibleStyle = item.perRegionVisible() ? { display: "flex", alignItems: "center" } : { display: "none" };
     const sliderStyle = item.slider ? { padding: "9px 0px", border: 0 } : {};
     const disabled = item.isReadOnly();
+    const numberClassName = cn("number").toClassName();
 
     return (
-      <div className="lsf-number" style={visibleStyle}>
+      <div className={numberClassName} style={visibleStyle} ref={item.elementRef}>
         <input
           disabled={disabled}
           style={sliderStyle}

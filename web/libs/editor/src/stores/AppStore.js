@@ -5,19 +5,29 @@ import { destroy, detach, flow, getEnv, getParent, getSnapshot, isRoot, types, w
 import uniqBy from "lodash/uniqBy";
 import InfoModal from "../components/Infomodal/Infomodal";
 import { Hotkey } from "../core/Hotkey";
+import { destroy as destroySharedStore } from "../mixins/SharedChoiceStore/mixin";
 import ToolsManager from "../tools/Manager";
 import Utils from "../utils";
 import { guidGenerator } from "../utils/unique";
 import { clamp, delay, isDefined } from "../utils/utilities";
+import { CREATE_RELATION_MODE } from "./Annotation/LinkingModes";
 import AnnotationStore from "./Annotation/store";
 import Project from "./ProjectStore";
 import Settings from "./SettingsStore";
 import Task from "./TaskStore";
 import { UserExtended } from "./UserStore";
 import { UserLabels } from "./UserLabels";
-import { FF_DEV_1536, FF_LSDV_4620_3_ML, FF_LSDV_4998, FF_SIMPLE_INIT, isFF } from "../utils/feature-flags";
+import {
+  FF_CUSTOM_SCRIPT,
+  FF_DEV_1536,
+  FF_LSDV_4620_3_ML,
+  FF_LSDV_4998,
+  FF_REVIEWER_FLOW,
+  FF_SIMPLE_INIT,
+  isFF,
+} from "../utils/feature-flags";
 import { CommentStore } from "./Comment/CommentStore";
-import { destroy as destroySharedStore } from "../mixins/SharedChoiceStore/mixin";
+import { CustomButton } from "./CustomButton";
 
 const hotkeys = Hotkey("AppStore", "Global Hotkeys");
 
@@ -150,6 +160,15 @@ export default types
     queueTotal: types.optional(types.number, 0),
 
     queuePosition: types.optional(types.number, 0),
+
+    /**
+     * Project field used for applying classifications to comments
+     */
+    commentClassificationConfig: types.maybeNull(types.string),
+
+    customButtons: types.map(
+      types.union(types.string, CustomButton, types.array(types.union(types.string, CustomButton))),
+    ),
   })
   .preProcessSnapshot((sn) => {
     // This should only be handled if the sn.user value is an object, and converted to a reference id for other
@@ -165,6 +184,11 @@ export default types
           ? [currentUser, ...sn.users.filter(({ id }) => id !== currentUser.id)]
           : [currentUser];
       }
+    }
+    // fix for old version of custom buttons which were just an array
+    // @todo remove after a short time
+    if (Array.isArray(sn.customButtons)) {
+      sn.customButtons = { _replace: sn.customButtons };
     }
     return {
       ...sn,
@@ -322,15 +346,22 @@ export default types
           const shouldDenyEmptyAnnotation = self.hasInterface("annotations:deny-empty");
           const entity = annotationStore.selected;
           const areResultsEmpty = entity.results.length === 0;
+          const isReview = self.hasInterface("review") || entity.canBeReviewed;
+          const isUpdate = !isReview && isDefined(entity.pk);
+          // no changes were made over previously submitted version — no drafts, no pending changes
+          const noChanges = !entity.history.canUndo && !entity.draftId;
+          const isUpdateDisabled = isFF(FF_REVIEWER_FLOW) && isUpdate && noChanges;
 
           if (shouldDenyEmptyAnnotation && areResultsEmpty) return;
           if (annotationStore.viewingAll) return;
+          if (isUpdateDisabled) return;
+          if (entity.isReadOnly()) return;
 
           entity?.submissionInProgress();
 
-          if (self.hasInterface("review")) {
+          if (isReview) {
             self.acceptAnnotation();
-          } else if (!isDefined(entity.pk) && self.hasInterface("submit")) {
+          } else if (!isUpdate && self.hasInterface("submit")) {
             self.submitAnnotation();
           } else if (self.hasInterface("update")) {
             self.updateAnnotation();
@@ -372,8 +403,8 @@ export default types
       hotkeys.addNamed("region:relation", () => {
         const c = self.annotationStore.selected;
 
-        if (c && c.highlightedNode && !c.relationMode) {
-          c.startRelationMode(c.highlightedNode);
+        if (c && c.highlightedNode && !c.isLinkingMode) {
+          c.startLinkingMode(CREATE_RELATION_MODE, c.highlightedNode);
         }
       });
 
@@ -382,7 +413,7 @@ export default types
         e.preventDefault();
         const c = self.annotationStore.selected;
 
-        if (c && c.highlightedNode && !c.relationMode) {
+        if (c && c.highlightedNode && !c.isLinkingMode) {
           c.highlightedNode.requestPerRegionFocus();
         }
       });
@@ -391,7 +422,7 @@ export default types
       hotkeys.addNamed("region:unselect", () => {
         const c = self.annotationStore.selected;
 
-        if (c && !c.relationMode && !c.isDrawing) {
+        if (c && !c.isLinkingMode && !c.isDrawing) {
           self.annotationStore.history.forEach((obj) => {
             obj.unselectAll();
           });
@@ -403,9 +434,14 @@ export default types
       hotkeys.addNamed("region:visibility", () => {
         const c = self.annotationStore.selected;
 
-        if (c && !c.relationMode) {
+        if (c && !c.isLinkingMode) {
           c.hideSelectedRegions();
         }
+      });
+
+      hotkeys.addNamed("region:visibility-all", () => {
+        const { selected } = self.annotationStore;
+        selected.regionStore.toggleVisibility();
       });
 
       hotkeys.addNamed("annotation:undo", () => {
@@ -423,8 +459,8 @@ export default types
       hotkeys.addNamed("region:exit", () => {
         const c = self.annotationStore.selected;
 
-        if (c && c.relationMode) {
-          c.stopRelationMode();
+        if (c && c.isLinkingMode) {
+          c.stopLinkingMode();
         } else if (!c.isDrawing) {
           c.unselectAll();
         }
@@ -510,6 +546,19 @@ export default types
       });
     }
 
+    function waitForDraftSubmission() {
+      return new Promise((resolve) => {
+        if (!self.annotationStore.selected.isDraftSaving) resolve();
+
+        const checkInterval = setInterval(() => {
+          if (!self.annotationStore.selected.isDraftSaving) {
+            clearInterval(checkInterval);
+            resolve();
+          }
+        }, 100);
+      });
+    }
+
     // Set `isSubmitting` flag to block [Submit] and related buttons during request
     // to prevent from sending duplicating requests.
     // Better to return request's Promise from SDK to make this work perfect.
@@ -519,9 +568,9 @@ export default types
       const res = fn();
 
       self.commentStore.setAddedCommentThisSession(false);
+
       // Wait for request, max 5s to not make disabled forever broken button;
       // but block for at least 0.2s to prevent from double clicking.
-
       Promise.race([Promise.all([res, delay(200)]), delay(5000)])
         .catch((err) => {
           showModal(err?.message || err || defaultMessage);
@@ -529,6 +578,7 @@ export default types
         })
         .then(() => self.setFlags({ isSubmitting: false }));
     }
+
     function incrementQueuePosition(number = 1) {
       self.queuePosition = clamp(self.queuePosition + number, 1, self.queueTotal);
     }
@@ -543,12 +593,26 @@ export default types
 
       if (!entity.validate()) return;
 
-      entity.sendUserGenerate();
+      if (!isFF(FF_CUSTOM_SCRIPT)) {
+        entity.sendUserGenerate();
+      }
       handleSubmittingFlag(async () => {
+        if (isFF(FF_CUSTOM_SCRIPT)) {
+          await self.waitForDraftSubmission();
+          const allowedToSave = await getEnv(self).events.invoke("beforeSaveAnnotation", self, entity, { event });
+          if (allowedToSave && allowedToSave.some((x) => x === false)) return;
+
+          entity.sendUserGenerate();
+        }
         await getEnv(self).events.invoke(event, self, entity);
         self.incrementQueuePosition();
+        if (isFF(FF_CUSTOM_SCRIPT)) {
+          entity.dropDraft();
+        }
       });
-      entity.dropDraft();
+      if (!isFF(FF_CUSTOM_SCRIPT)) {
+        entity.dropDraft();
+      }
     }
 
     function updateAnnotation(extraData) {
@@ -561,11 +625,23 @@ export default types
       if (!entity.validate()) return;
 
       handleSubmittingFlag(async () => {
+        if (isFF(FF_CUSTOM_SCRIPT)) {
+          const allowedToSave = await getEnv(self).events.invoke("beforeSaveAnnotation", self, entity, {
+            event: "updateAnnotation",
+          });
+          if (allowedToSave && allowedToSave.some((x) => x === false)) return;
+        }
         await getEnv(self).events.invoke("updateAnnotation", self, entity, extraData);
         self.incrementQueuePosition();
+        if (isFF(FF_CUSTOM_SCRIPT)) {
+          entity.dropDraft();
+          !entity.sentUserGenerate && entity.sendUserGenerate();
+        }
       });
-      entity.dropDraft();
-      !entity.sentUserGenerate && entity.sendUserGenerate();
+      if (!isFF(FF_CUSTOM_SCRIPT)) {
+        entity.dropDraft();
+        !entity.sentUserGenerate && entity.sendUserGenerate();
+      }
     }
 
     function skipTask(extraData) {
@@ -591,6 +667,12 @@ export default types
 
         entity.beforeSend();
         if (!entity.validate()) return;
+        if (isFF(FF_CUSTOM_SCRIPT)) {
+          const allowedToSave = await getEnv(self).events.invoke("beforeSaveAnnotation", self, entity, {
+            event: "acceptAnnotation",
+          });
+          if (allowedToSave && allowedToSave.some((x) => x === false)) return;
+        }
 
         const isDirty = entity.history.canUndo;
 
@@ -608,6 +690,12 @@ export default types
 
         entity.beforeSend();
         if (!entity.validate()) return;
+        if (isFF(FF_CUSTOM_SCRIPT)) {
+          const allowedToSave = await getEnv(self).events.invoke("beforeSaveAnnotation", self, entity, {
+            event: "rejectAnnotation",
+          });
+          if (allowedToSave && allowedToSave.some((x) => x === false)) return;
+        }
 
         const isDirty = entity.history.canUndo;
 
@@ -615,6 +703,24 @@ export default types
         await getEnv(self).events.invoke("rejectAnnotation", self, { isDirty, entity, comment });
         self.incrementQueuePosition(-1);
       }, "Error during reject, try again");
+    }
+
+    function handleCustomButton(button) {
+      if (self.isSubmitting) return;
+
+      handleSubmittingFlag(async () => {
+        const entity = self.annotationStore.selected;
+
+        entity.beforeSend();
+        // @todo add needsValidation or something like that as a parameter to custom buttons
+        // if (!entity.validate()) return;
+
+        const isDirty = entity.history.canUndo;
+
+        await getEnv(self).events.invoke("customButton", self, button, { isDirty, entity });
+        self.incrementQueuePosition();
+        entity.dropDraft();
+      }, `Error during handling ${button} button, try again`);
     }
 
     /**
@@ -886,10 +992,12 @@ export default types
       unskipTask,
       setTaskHistory,
       submitDraft,
+      waitForDraftSubmission,
       submitAnnotation,
       updateAnnotation,
       acceptAnnotation,
       rejectAnnotation,
+      handleCustomButton,
       presignUrlForProject,
       setUsers,
       mergeUsers,

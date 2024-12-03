@@ -17,7 +17,7 @@ Label Studio is an open source data labeling tool. It lets you label data types 
 - [Set up machine learning models with Label Studio](#set-up-machine-learning-models-with-Label-Studio)
 - [Integrate Label Studio with your existing tools](#integrate-label-studio-with-your-existing-tools)
 
-![Gif of Label Studio annotating different types of data](https://raw.githubusercontent.com/heartexlabs/label-studio/master/images/annotation_examples.gif)
+![Gif of Label Studio annotating different types of data](/images/annotation_examples.gif)
 
 Have a custom dataset? You can customize Label Studio to fit your needs. Read an [introductory blog post](https://towardsdatascience.com/introducing-label-studio-a-swiss-army-knife-of-data-labeling-140c1be92881) to learn more. 
 
@@ -142,7 +142,7 @@ You can deploy Label Studio with one click in Heroku, Microsoft Azure, or Google
 
 #### Apply frontend changes
 
-For information about updating the frontend, see [label-studio/web/README.md](https://github.com/HumanSignal/label-studio/blob/develop/web/README.md#usage-instructions).
+For information about updating the frontend, see [label-studio/web/README.md](https://github.com/HumanSignal/label-studio/blob/develop/web/README.md#installation-instructions).
 
 
 #### Install dependencies on Windows 
@@ -187,11 +187,10 @@ DJANGO_DB=sqlite DJANGO_SETTINGS_MODULE=core.settings.label_studio pytest -vv
 # testing container without additional configuration)
 DJANGO_DB=default DJANGO_SETTINGS_MODULE=core.settings.label_studio pytest -vv
 ```
-
-
+ 
 ## What you get from Label Studio
 
-![Screenshot of Label Studio data manager grid view with images](https://raw.githubusercontent.com/heartexlabs/label-studio/master/images/labelstudio-ui.gif)
+https://github.com/user-attachments/assets/525ad5ff-6904-4398-b507-7e8954268d69
 
 - **Multi-user labeling** sign up and login, when you create an annotation it's tied to your account.
 - **Multiple projects** to work on all your datasets in one instance.
@@ -206,7 +205,7 @@ DJANGO_DB=default DJANGO_SETTINGS_MODULE=core.settings.label_studio pytest -vv
 
 Label Studio includes a variety of templates to help you label your data, or you can create your own using specifically designed configuration language. The most common templates and use cases for labeling include the following cases:
 
-<img src="https://raw.githubusercontent.com/heartexlabs/label-studio/master/images/templates-categories.jpg" />
+<img src="/images/template-types.png" />
 
 ## Set up machine learning models with Label Studio
 
@@ -232,32 +231,27 @@ You can use Label Studio as an independent part of your machine learning workflo
 | label-studio | Server, distributed as a pip package |
 | [Frontend library](web/libs/editor/) | The Label Studio frontend library. This uses React to build the UI and mobx-state-tree for state management. |  
 | [Data Manager library](web/libs/datamanager/) | A library for the Data Manager, our data exploration tool. | 
-| [label-studio-converter](https://github.com/heartexlabs/label-studio-converter) | Encode labels in the format of your favorite machine learning library | 
-| [label-studio-transformers](https://github.com/heartexlabs/label-studio-transformers) | Transformers library connected and configured for use with Label Studio |
-
-
-## Roadmap
-
-Want to use **The Coolest Feature X** but Label Studio doesn't support it? Check out [our public roadmap](roadmap.md)!
+| [label-studio-converter](https://github.com/HumanSignal/label-studio-converter) | Encode labels in the format of your favorite machine learning library | 
+| [label-studio-transformers](https://github.com/HumanSignal/label-studio-transformers) | Transformers library connected and configured for use with Label Studio |
 
 ## Citation
 
 ```tex
 @misc{Label Studio,
   title={{Label Studio}: Data labeling software},
-  url={https://github.com/heartexlabs/label-studio},
-  note={Open source software available from https://github.com/heartexlabs/label-studio},
+  url={https://github.com/HumanSignal/label-studio},
+  note={Open source software available from https://github.com/HumanSignal/label-studio},
   author={
     Maxim Tkachenko and
     Mikhail Malyuk and
     Andrey Holmanyuk and
     Nikolai Liubimov},
-  year={2020-2022},
+  year={2020-2024},
 }
 ```
 
 ## License
 
-This software is licensed under the [Apache 2.0 LICENSE](/LICENSE) © [Heartex](https://www.heartex.com/). 2020-2022
+This software is licensed under the [Apache 2.0 LICENSE](/LICENSE) © [Heartex](https://www.heartex.com/). 2020-2024
 
 <img src="https://user-images.githubusercontent.com/12534576/192582529-cf628f58-abc5-479b-a0d4-8a3542a4b35e.png" title="Hey everyone!" width="180" />

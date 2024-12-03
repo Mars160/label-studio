@@ -1,4 +1,4 @@
-import React, { createRef, useCallback } from "react";
+import { createRef, useCallback } from "react";
 import Button from "antd/lib/button/index";
 import Form from "antd/lib/form/index";
 import Input from "antd/lib/input/index";
@@ -17,19 +17,13 @@ import ProcessAttrsMixin from "../../../mixins/ProcessAttrs";
 import { ReadOnlyControlMixin } from "../../../mixins/ReadOnlyMixin";
 import RequiredMixin from "../../../mixins/Required";
 import { HtxTextAreaRegion, TextAreaRegionModel } from "../../../regions/TextAreaRegion";
-import {
-  FF_DEV_1564_DEV_1565,
-  FF_DEV_3730,
-  FF_LEAD_TIME,
-  FF_LSDV_4583,
-  FF_LSDV_4659,
-  isFF,
-} from "../../../utils/feature-flags";
+import { FF_DEV_3730, FF_LEAD_TIME, FF_LSDV_4583, FF_LSDV_4659, isFF } from "../../../utils/feature-flags";
 import ControlBase from "../Base";
 import ClassificationBase from "../ClassificationBase";
 import "./TextAreaRegionView";
 
-import "./TextArea.styl";
+import "./TextArea.scss";
+import { cn } from "../../../utils/bem";
 
 const { TextArea } = Input;
 
@@ -37,10 +31,6 @@ const { TextArea } = Input;
  * The `TextArea` tag is used to display a text area for user input. Use for transcription, paraphrasing, or captioning tasks.
  *
  * Use with the following data types: audio, image, HTML, paragraphs, text, time series, video.
- *
- * [^FF_LSDV_4659]: `fflag_feat_front_lsdv_4659_skipduplicates_060323_short` should be enabled to use `skipDuplicates` attribute
- * [^FF_LSDV_4712]: `fflag_feat_front_lsdv_4712_skipduplicates_editing_110423_short` should be enabled to keep submissions unique during editing existed results
- * [^FF_LSDV_4583]: `fflag_feat_front_lsdv_4583_multi_image_segmentation_short` should be enabled for `perItem` functionality
  *
  * @example
  * <!--Basic labeling configuration to display only a text area -->
@@ -60,7 +50,7 @@ const { TextArea } = Input;
  * </View>
  * @example
  * <!--
- *  You can keep submissions unique[^FF_LSDV_4659][^FF_LSDV_4712]
+ *  You can keep submissions unique.
  * -->
  * <View>
  *   <Audio name="audio" value="$audio"/>
@@ -76,7 +66,7 @@ const { TextArea } = Input;
  * @param {string=} [placeholder]          - Placeholder text
  * @param {string=} [maxSubmissions]       - Maximum number of submissions
  * @param {boolean=} [editable=false]      - Whether to display an editable textarea
- * @param {boolean} [skipDuplicates=false] - Prevent duplicates in textarea inputs[^FF_LSDV_4659][^FF_LSDV_4712] (see example below)
+ * @param {boolean} [skipDuplicates=false] - Prevent duplicates in textarea inputs
  * @param {boolean=} [transcription=false] - If false, always show editor
  * @param {tag|region-list} [displayMode=tag] - Display mode for the textarea; region-list shows it for every region in regions list
  * @param {number} [rows]                  - Number of rows in the textarea
@@ -84,7 +74,7 @@ const { TextArea } = Input;
  * @param {string} [requiredMessage]       - Message to show if validation fails
  * @param {boolean=} [showSubmitButton]    - Whether to show or hide the submit button. By default it shows when there are more than one rows of text, such as in textarea mode.
  * @param {boolean} [perRegion]            - Use this tag to label regions instead of whole objects
- * @param {boolean} [perItem]              - Use this tag to label items inside objects instead of whole objects[^FF_LSDV_4583]
+ * @param {boolean} [perItem]              - Use this tag to label items inside objects instead of whole objects
  */
 const TagAttrs = types.model({
   toname: types.maybeNull(types.string),
@@ -308,33 +298,24 @@ const Model = types
       },
 
       onShortcut(value) {
-        if (isFF(FF_DEV_1564_DEV_1565)) {
-          if (!isAvailableElement(lastActiveElement, lastActiveElementModel)) {
-            if (isFF(FF_DEV_3730)) {
-              // Try to use main textarea element
-              const textareaElement =
-                self.textareaRef.current?.input || self.textareaRef.current?.resizableTextArea?.textArea;
+        if (!isAvailableElement(lastActiveElement, lastActiveElementModel)) {
+          if (isFF(FF_DEV_3730)) {
+            // Try to use main textarea element
+            const textareaElement =
+              self.textareaRef.current?.input || self.textareaRef.current?.resizableTextArea?.textArea;
 
-              if (isAvailableElement(textareaElement, self)) {
-                lastActiveElement = textareaElement;
-                lastActiveElementModel = self;
-              } else {
-                return;
-              }
+            if (isAvailableElement(textareaElement, self)) {
+              lastActiveElement = textareaElement;
+              lastActiveElementModel = self;
             } else {
               return;
             }
+          } else {
+            return;
           }
-          lastActiveElement.setRangeText(
-            value,
-            lastActiveElement.selectionStart,
-            lastActiveElement.selectionEnd,
-            "end",
-          );
-          lastActiveElementModel.setValue(lastActiveElement.value);
-        } else {
-          self.setValue(self._value + value);
         }
+        lastActiveElement.setRangeText(value, lastActiveElement.selectionStart, lastActiveElement.selectionEnd, "end");
+        lastActiveElementModel.setValue(lastActiveElement.value);
       },
 
       setLastFocusedElement(element, model = self) {
@@ -367,9 +348,7 @@ const HtxTextArea = observer(({ item }) => {
   const rows = Number.parseInt(item.rows);
   const onFocus = useCallback(
     (ev, model) => {
-      if (isFF(FF_DEV_1564_DEV_1565)) {
-        item.setLastFocusedElement(ev.target, model);
-      }
+      item.setLastFocusedElement(ev.target, model);
     },
     [item],
   );
@@ -417,13 +396,14 @@ const HtxTextArea = observer(({ item }) => {
 
   const showAddButton = !item.isReadOnly() && (item.showsubmitbutton ?? rows !== 1);
   const itemStyle = {};
+  const textareaClassName = cn("text-area").toClassName();
 
   if (showAddButton) itemStyle.marginBottom = 0;
 
   visibleStyle.marginTop = "4px";
 
   return item.displaymode === PER_REGION_MODES.TAG ? (
-    <div className="lsf-text-area" style={visibleStyle}>
+    <div className={textareaClassName} style={visibleStyle} ref={item.elementRef}>
       {Tree.renderChildren(item, item.annotation)}
 
       {item.showSubmit && (

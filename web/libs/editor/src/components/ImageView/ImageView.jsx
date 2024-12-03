@@ -1,4 +1,4 @@
-import React, { Component, createRef, forwardRef, Fragment, memo, useEffect, useRef, useState } from "react";
+import { Component, createRef, forwardRef, Fragment, memo, useEffect, useRef, useState } from "react";
 import { Group, Layer, Line, Rect, Stage } from "react-konva";
 import { observer } from "mobx-react";
 import { getEnv, getRoot, isAlive } from "mobx-state-tree";
@@ -22,11 +22,9 @@ import Constants from "../../core/Constants";
 import { fixRectToFit } from "../../utils/image";
 import {
   FF_DBLCLICK_DELAY,
-  FF_DEV_1285,
   FF_DEV_1442,
   FF_DEV_3077,
   FF_DEV_3793,
-  FF_DEV_4081,
   FF_LSDV_4583_6,
   FF_LSDV_4711,
   FF_LSDV_4930,
@@ -228,7 +226,7 @@ const TransformerBack = observer(({ item }) => {
             item.annotation.unselectAreas();
           }}
           onMouseOver={(ev) => {
-            if (!item.annotation.relationMode) {
+            if (!item.annotation.isLinkingMode) {
               ev.target.getStage().container().style.cursor = Constants.POINTER_CURSOR;
             }
           }}
@@ -385,11 +383,7 @@ const Crosshair = memo(
     const [visible, setVisible] = useState(false);
     const strokeWidth = 1;
     const dashStyle = [3, 3];
-    let enableStrokeScale = true;
-
-    if (isFF(FF_DEV_1285)) {
-      enableStrokeScale = false;
-    }
+    const enableStrokeScale = false;
 
     if (ref) {
       ref.current = {
@@ -456,7 +450,7 @@ const Crosshair = memo(
  * of the image to support Magic Wand tool
  */
 const CanvasOverlay = observer(({ item }) => {
-  return isFF(FF_DEV_4081) ? (
+  return (
     <canvas
       className={styles.overlay}
       ref={(ref) => {
@@ -464,7 +458,7 @@ const CanvasOverlay = observer(({ item }) => {
       }}
       style={item.imageTransform}
     />
-  ) : null;
+  );
 });
 
 export default observer(
@@ -689,7 +683,6 @@ export default observer(
       }
 
       item.freezeHistory();
-      item.setSkipInteractions(false);
 
       return this.triggerMouseUp(e, e.evt.offsetX, e.evt.offsetY);
     };
@@ -738,12 +731,7 @@ export default observer(
     updateCrosshair = (e) => {
       if (this.crosshairRef.current) {
         const { x, y } = e.currentTarget.getPointerPosition();
-
-        if (isFF(FF_DEV_1285)) {
-          this.crosshairRef.current.updatePointer(...this.props.item.fixZoomedCoords([x, y]));
-        } else {
-          this.crosshairRef.current.updatePointer(x, y);
-        }
+        this.crosshairRef.current.updatePointer(...this.props.item.fixZoomedCoords([x, y]));
       }
     };
 
@@ -937,11 +925,15 @@ export default observer(
       const [toolsReady, stageLoading] = isFF(FF_LSDV_4583_6) ? [true, false] : [item.hasTools, item.stageWidth <= 1];
 
       const imageIsLoaded = item.imageIsLoaded || !isFF(FF_LSDV_4583_6);
+      const isViewingAll = store.annotationStore.viewingAll;
 
       return (
         <ObjectTag item={item} className={wrapperClasses.join(" ")}>
           {paginationEnabled ? (
-            <div className={styles.pagination}>
+            <div
+              className={styles.pagination}
+              title={isViewingAll ? "Pagination is not supported in View All Annotations" : undefined}
+            >
               <Pagination
                 size="small"
                 outline={false}
@@ -955,6 +947,7 @@ export default observer(
                 totalPages={item.parsedValueList.length}
                 onChange={(n) => item.setCurrentImage(n - 1)}
                 pageSizeSelectable={false}
+                disabled={isViewingAll}
               />
             </div>
           ) : null}
@@ -1199,20 +1192,8 @@ const StageContent = observer(({ item, store, state, crosshairRef }) => {
       {item.crosshair && (
         <Crosshair
           ref={crosshairRef}
-          width={
-            isFF(FF_ZOOM_OPTIM)
-              ? item.containerWidth
-              : isFF(FF_DEV_1285)
-                ? item.stageWidth
-                : item.stageComponentSize.width
-          }
-          height={
-            isFF(FF_ZOOM_OPTIM)
-              ? item.containerHeight
-              : isFF(FF_DEV_1285)
-                ? item.stageHeight
-                : item.stageComponentSize.height
-          }
+          width={isFF(FF_ZOOM_OPTIM) ? item.containerWidth : item.stageWidth}
+          height={isFF(FF_ZOOM_OPTIM) ? item.containerHeight : item.stageHeight}
         />
       )}
     </>

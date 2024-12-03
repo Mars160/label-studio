@@ -1,6 +1,5 @@
 import { defineConfig } from "cypress";
 import path from "path";
-import { setupTypescript } from "./plugins/typescript";
 import installLogsPrinter from "cypress-terminal-report/src/installLogsPrinter";
 import * as tasks from "./tasks";
 import { disableChromeGPU } from "./plugins/disable_gpu";
@@ -27,6 +26,7 @@ export default function (configModifier, setupNodeEvents) {
     fixturesFolder: localPath("./fixtures"),
     trashAssetsBeforeRuns: false, // Kills ability to run in parallel, must be off
     videoUploadOnPasses: false,
+    numTestsKeptInMemory: 1,
     env: {
       coverage: COLLECT_COVERAGE,
     },

@@ -11,9 +11,9 @@ import { useConfig } from "../../../providers/ConfigProvider";
 import { Block, Elem } from "../../../utils/bem";
 import { FF_LSDV_E_297, isFF } from "../../../utils/feature-flags";
 import { copyText } from "../../../utils/helpers";
-import "./PeopleInvitation.styl";
+import "./PeopleInvitation.scss";
 import { PeopleList } from "./PeopleList";
-import "./PeoplePage.styl";
+import "./PeoplePage.scss";
 import { SelectedUser } from "./SelectedUser";
 
 const InvitationModal = ({ link }) => {
@@ -21,10 +21,17 @@ const InvitationModal = ({ link }) => {
     <Block name="invite">
       <Input value={link} style={{ width: "100%" }} readOnly />
 
-      <Description style={{ width: "70%", marginTop: 16 }}>
+      <Description style={{ marginTop: 16 }}>
         Invite people to join your Label Studio instance. People that you invite have full access to all of your
         projects.{" "}
-        <a href="https://labelstud.io/guide/signup.html" target="_blank" rel="noreferrer">
+        <a
+          href="https://labelstud.io/guide/signup.html"
+          target="_blank"
+          rel="noreferrer"
+          onClick={() =>
+            __lsa("docs.organization.add_people.learn_more", { href: "https://labelstud.io/guide/signup.html" })
+          }
+        >
           Learn more
         </a>
         .
@@ -77,6 +84,7 @@ export const PeoplePage = () => {
           setCopied(true);
           copyText(link);
           setTimeout(() => setCopied(false), 1500);
+          __lsa("organization.add_people.copy_link");
         }, []);
 
         return (
@@ -101,6 +109,7 @@ export const PeoplePage = () => {
 
   const showInvitationModal = useCallback(() => {
     inviteModal.current = modal(inviteModalProps(link));
+    __lsa("organization.add_people");
   }, [inviteModalProps, link]);
 
   const defaultSelected = useMemo(() => {

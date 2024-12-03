@@ -3,6 +3,7 @@ import { observer } from "mobx-react";
 import { Badge, Form, Input } from "antd";
 import { CompressOutlined, DeleteOutlined, LinkOutlined, PlusOutlined } from "@ant-design/icons";
 import { Typography } from "antd";
+import { CREATE_RELATION_MODE } from "../../stores/Annotation/LinkingModes";
 
 import { NodeDebug, NodeMinimal } from "../Node/Node";
 import Hint from "../Hint/Hint";
@@ -11,8 +12,8 @@ import { Tooltip } from "../../common/Tooltip/Tooltip";
 import { Button } from "../../common/Button/Button";
 import { Tag } from "../../common/Tag/Tag";
 import { Space } from "../../common/Space/Space";
-import { Block, Elem } from "../../utils/bem";
-import "./Entity.styl";
+import { Block, cn, Elem } from "../../utils/bem";
+import "./Entity.scss";
 import { PER_REGION_MODES } from "../../mixins/PerRegion";
 import { Hotkey } from "../../core/Hotkey";
 import { IconWarning } from "../../assets/icons";
@@ -80,7 +81,7 @@ export default observer(({ store, annotation }) => {
           aria-label="Create Relation"
           className={styles.button}
           onClick={() => {
-            annotation.startRelationMode(node);
+            annotation.startLinkingMode(CREATE_RELATION_MODE, node);
           }}
           disabled={!node}
         >
@@ -121,6 +122,9 @@ export default observer(({ store, annotation }) => {
     </Hotkey.Tooltip>,
   );
 
+  const entityStatesClassName = cn("entity-states").toClassName();
+  const entityButtonsClassName = cn("entity-buttons").toClassName();
+
   return (
     <Block name="entity">
       <Elem name="info" tag={Space} spread>
@@ -135,7 +139,7 @@ export default observer(({ store, annotation }) => {
         </Elem>
         {!hasEditableNodes && <Badge count={"readonly"} style={{ backgroundColor: "#ccc" }} />}
       </Elem>
-      <div className={`${styles.statesblk} ls-entity-states`}>
+      <div className={`${styles.statesblk} ${entityStatesClassName}`}>
         {node?.score && (
           <Fragment>
             <Text>
@@ -168,7 +172,7 @@ export default observer(({ store, annotation }) => {
         </Elem>
       )}
 
-      <div className={`${styles.block} ls-entity-buttons`}>
+      <div className={`${styles.block} ${entityButtonsClassName}`}>
         <Space spread>
           <Space>{entityButtons}</Space>
 
@@ -195,7 +199,7 @@ export default observer(({ store, annotation }) => {
         {/*         node.toggleHidden(); */}
         {/*         //node.unselectRegion(); */}
         {/*         //node.selectRegion(); */}
-        {/*         // annotation.startRelationMode(node); */}
+        {/*         // annotation.startLinkingMode(CREATE_RELATION_MODE, node); */}
         {/*     }} */}
         {/*   > */}
         {/*     { node.hidden ? <EyeOutlined /> : <EyeInvisibleOutlined /> } */}

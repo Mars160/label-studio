@@ -1,4 +1,3 @@
-import React from "react";
 import { observer } from "mobx-react";
 import { Button } from "antd";
 import {
@@ -27,9 +26,10 @@ export default observer(({ store }) => {
   const classname = [styles.block, styles.block__controls, store.annotationStore.viewingAll ? styles.hidden : ""]
     .filter(Boolean)
     .join(" ");
+  const panelClassName = cn("panel").toClassName();
 
   return (
-    <div className={`${styles.container} ls-panel`}>
+    <div className={`${styles.container} ${panelClassName}`}>
       <div className={classname}>
         <Button
           type="ghost"
@@ -112,7 +112,7 @@ export default observer(({ store }) => {
           }}
         />
         <Button
-          className="ls-fs"
+          className="lsf-fs"
           icon={store.settings.fullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
           onClick={(ev) => {
             store.settings.toggleFullscreen();

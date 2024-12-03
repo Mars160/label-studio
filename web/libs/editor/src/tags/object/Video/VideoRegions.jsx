@@ -16,7 +16,7 @@ const SelectionRect = (props) => {
   return (
     <>
       <Rect {...props} strokeWidth={2} stroke="#fff" />
-      <Rect {...props} fill={chroma("#0099FF").alpha(0.1).css()} strokeWidth={2} stroke="#0099FF" dash={[2, 2]} />
+      <Rect {...props} fill={chroma("#617ADA").alpha(0.1).css()} strokeWidth={2} stroke="#617ADA" dash={[2, 2]} />
     </>
   );
 };
@@ -116,7 +116,7 @@ const VideoRegionsPure = ({
 
       const fixedRegion = { x, y, width, height };
 
-      item.addRegion(fixedRegion);
+      item.addVideoRegion(fixedRegion);
       setNewRegion(null);
     }
   }, [isDrawing, workinAreaCoordinates, videoDimensions]);
@@ -271,7 +271,7 @@ const Shape = observer(({ reg, frame, stageRef, ...props }) => {
         onClick={(e) => {
           const annotation = getParentOfType(reg, Annotation);
 
-          if (annotation && annotation.relationMode) {
+          if (annotation && annotation.isLinkingMode) {
             stageRef.current.container().style.cursor = Constants.DEFAULT_CURSOR;
           }
 

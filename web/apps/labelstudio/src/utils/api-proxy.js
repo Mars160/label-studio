@@ -219,6 +219,7 @@ export class APIProxy {
           headers: new Map(Array.from(rawResponse.headers)),
           status: rawResponse.status,
           url: rawResponse.url,
+          ok: rawResponse.ok,
         };
 
         if (raw) return rawResponse;
@@ -459,6 +460,11 @@ export class APIProxy {
           json() {
             return Promise.resolve(response);
           },
+          text() {
+            return typeof response === "string" ? response : JSON.stringify(response);
+          },
+          headers: {},
+          status: 200,
         });
       }, this.mockDelay);
     });

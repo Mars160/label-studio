@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 import calendar
 import contextlib
 import copy
+import importlib
 import logging
 import os
 import random
@@ -18,11 +19,9 @@ from functools import wraps
 from typing import Any, Callable, Generator, Iterable, Mapping, Optional
 
 import drf_yasg.openapi as openapi
-import pkg_resources
 import pytz
 import requests
 import ujson as json
-from boxing import boxing
 from colorama import Fore
 from core.utils.params import get_env
 from django.conf import settings
@@ -46,8 +45,11 @@ from django.utils.crypto import get_random_string
 from django.utils.module_loading import import_string
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.inspectors import CoreAPICompatInspector, NotHandled
-from label_studio_tools.core.utils.exceptions import LabelStudioXMLSyntaxErrorSentryIgnored
-from pkg_resources import parse_version
+from label_studio_sdk._extensions.label_studio_tools.core.utils.exceptions import (
+    LabelStudioXMLSyntaxErrorSentryIgnored,
+)
+from packaging.version import parse as parse_version
+from pyboxen import boxen
 from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.views import Response, exception_handler
@@ -205,20 +207,6 @@ def paginator_help(objects_name, tag):
     )
 
 
-def find_editor_files():
-    """Find label studio files"""
-
-    # playground uses another LSF build
-    prefix = '/label-studio/'
-    editor_dir = settings.EDITOR_ROOT
-
-    # find editor files to include in html
-    editor_js = [prefix + f for f in os.listdir(editor_dir) if f.endswith('.js')]
-    editor_css = [prefix + f for f in os.listdir(editor_dir) if f.endswith('.css')]
-
-    return {'editor_js': editor_js, 'editor_css': editor_css}
-
-
 def string_is_url(url):
     try:
         url_validator(url)
@@ -362,11 +350,7 @@ def retry_database_locked():
 
 
 def get_app_version():
-    version = pkg_resources.get_distribution('label-studio').version
-    if isinstance(version, str):
-        return version
-    elif isinstance(version, dict):
-        return version.get('version') or version.get('latest_version')
+    return importlib.metadata.version('label-studio')
 
 
 def get_latest_version():
@@ -409,13 +393,13 @@ def check_for_the_latest_version(print_message):
     outdated = latest_version and current_version_is_outdated(latest_version)
 
     def update_package_message():
-        update_command = Fore.CYAN + 'pip install -U ' + label_studio.package_name + Fore.RESET
-        return boxing(
+        update_command = 'pip install -U ' + label_studio.package_name
+        return boxen(
             'Update available {curr_version} → {latest_version}\nRun {command}'.format(
                 curr_version=label_studio.__version__, latest_version=latest_version, command=update_command
             ),
             style='double',
-        )
+        ).replace(update_command, Fore.CYAN + update_command + Fore.RESET)
 
     if outdated and print_message:
         print(update_package_message())
@@ -476,11 +460,11 @@ def collect_versions(force=False):
     except:  # noqa: E722
         pass
 
-    # converter
+    # converter from label-studio-sdk
     try:
-        import label_studio_converter
+        import label_studio_sdk.converter
 
-        result['label-studio-converter'] = {'version': label_studio_converter.__version__}
+        result['label-studio-converter'] = {'version': label_studio_sdk.__version__}
     except Exception:
         pass
 
@@ -546,8 +530,8 @@ def import_from_string(func_string):
     """
     try:
         return import_string(func_string)
-    except ImportError:
-        msg = f'Could not import {func_string} from settings'
+    except ImportError as e:
+        msg = f'Could not import {func_string} from settings: {e}'
         raise ImportError(msg)
 
 

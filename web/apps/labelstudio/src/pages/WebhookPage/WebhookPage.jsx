@@ -1,12 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { useAPI } from "../../providers/ApiProvider";
-import "./WebhookPage.styl";
+import "./WebhookPage.scss";
 
 import WebhookList from "./WebhookList";
 import WebhookDetail from "./WebhookDetail";
 import { useProject } from "../../providers/ProjectProvider";
-import { Button, Spinner } from "../../components";
 import { Block, Elem } from "../../utils/bem";
 import { IconInfo } from "../../assets/icons";
 import { useHistory } from "react-router";
@@ -31,7 +30,6 @@ const Webhook = () => {
     return undefined;
   }, [project, history]);
 
-  console.log(projectId, history.location.pathname);
   const fetchWebhooks = useCallback(async () => {
     if (projectId === null) {
       setWebhooks(null);

@@ -1,4 +1,3 @@
-import React from "react";
 import { Dropdown } from "antd";
 import { observer } from "mobx-react";
 
@@ -10,7 +9,7 @@ import { Oneof } from "../../common/Oneof/Oneof";
 import { Space } from "../../common/Space/Space";
 import { Block, Elem } from "../../utils/bem";
 import { RadioGroup } from "../../common/RadioGroup/RadioGroup";
-import "./Entities.styl";
+import "./Entities.scss";
 import { Button } from "../../common/Button/Button";
 import { LsInvisible, LsTrash, LsVisible } from "../../assets/icons";
 import { confirm } from "../../common/Modal/Modal";

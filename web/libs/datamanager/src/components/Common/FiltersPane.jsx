@@ -33,7 +33,7 @@ export const FiltersButton = buttonInjector(
           {isFF(FF_LOPS_E_10) ? (
             <FaChevronDown size="12" style={{ marginLeft: 8, marginRight: -7 }} color="#1F1F1F" />
           ) : (
-            <FaAngleDown size="16" style={{ marginLeft: 4 }} color="#0077FF" />
+            <FaAngleDown size="16" style={{ marginLeft: 4 }} color="#566fcf" />
           )}
         </Button>
       );
@@ -58,7 +58,12 @@ export const FiltersPane = injector(
     }, [sidebarEnabled]);
 
     return (
-      <Dropdown.Trigger ref={dropdown} disabled={sidebarEnabled} content={<Filters />}>
+      <Dropdown.Trigger
+        ref={dropdown}
+        disabled={sidebarEnabled}
+        content={<Filters />}
+        openUpwardForShortViewport={false}
+      >
         <FiltersButton {...rest} size={size} />
       </Dropdown.Trigger>
     );

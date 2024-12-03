@@ -1,6 +1,6 @@
 import { inject } from "mobx-react";
 import { observer } from "mobx-react-lite";
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { FaCaretDown, FaChevronLeft, FaColumns } from "react-icons/fa";
 import { Block, Elem } from "../../utils/bem";
 import { FF_DEV_1170, isFF } from "../../utils/feature-flags";
@@ -10,7 +10,7 @@ import { Icon } from "../Common/Icon/Icon";
 import { Resizer } from "../Common/Resizer/Resizer";
 import { Space } from "../Common/Space/Space";
 import { DataView } from "../MainView";
-import "./Label.styl";
+import "./Label.scss";
 
 const LabelingHeader = ({ SDK, onClick, isExplorerMode }) => {
   return (

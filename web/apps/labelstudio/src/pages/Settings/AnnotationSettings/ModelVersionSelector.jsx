@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useAPI } from "../../../providers/ApiProvider";
-import { Label, Select } from "../../../components/Form";
+import { Select } from "../../../components/Form";
 import { ProjectContext } from "../../../providers/ProjectProvider";
 
 export const ModelVersionSelector = ({
@@ -73,7 +73,7 @@ export const ModelVersionSelector = ({
 
   return (
     <div>
-      <p>Select which predictions or which model you want to use:</p>
+      <label>Select which predictions or which model you want to use:</label>
       <div style={{ display: "flex", alignItems: "center", width: 400 }}>
         <div style={{ flex: 1, paddingRight: 16 }}>
           <Select

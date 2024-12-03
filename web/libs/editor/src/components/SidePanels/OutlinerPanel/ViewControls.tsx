@@ -19,9 +19,8 @@ import { Dropdown } from "../../../common/Dropdown/Dropdown";
 import { Menu } from "../../../common/Menu/Menu";
 import { BemWithSpecifiContext } from "../../../utils/bem";
 import { SidePanelsContext } from "../SidePanelsContext";
-import "./ViewControls.styl";
-import { Filter } from "../../Filter/Filter";
-import { FF_DEV_3873, FF_LSDV_3025, FF_LSDV_4992, isFF } from "../../../utils/feature-flags";
+import "./ViewControls.scss";
+import { FF_DEV_3873, FF_LSDV_4992, isFF } from "../../../utils/feature-flags";
 import { observer } from "mobx-react";
 
 const { Block, Elem } = BemWithSpecifiContext();
@@ -115,24 +114,6 @@ export const ViewControls: FC<ViewControlsProps> = observer(
               extraIcon={renderOrderingDirectionIcon}
             />
           </Elem>
-        )}
-        {isFF(FF_LSDV_3025) && (
-          <Filter
-            onChange={onFilterChange}
-            filterData={regions?.regions}
-            availableFilters={[
-              {
-                label: "Annotation results",
-                path: "labelName",
-                type: "String",
-              },
-              {
-                label: "Confidence score",
-                path: "score",
-                type: "Number",
-              },
-            ]}
-          />
         )}
         {isFF(FF_LSDV_4992) ? <ToggleRegionsVisibilityButton regions={regions} /> : null}
       </Block>

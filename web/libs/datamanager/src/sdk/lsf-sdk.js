@@ -17,7 +17,6 @@ import {
   FF_DEV_2186,
   FF_DEV_2887,
   FF_DEV_3034,
-  FF_DEV_3734,
   FF_LSDV_4620_3_ML,
   FF_OPTIC_2,
   isFF,
@@ -89,15 +88,29 @@ export class LSFWrapper {
    * @param {LSFOptions} options
    */
   constructor(dm, element, options) {
+    // we need to pass the rest of the options to LSF below
+    const {
+      task,
+      preload,
+      isLabelStream,
+      annotation,
+      interfacesModifier,
+      isInteractivePreannotations,
+      user,
+      keymap,
+      messages,
+      ...restOptions
+    } = options;
+
     this.datamanager = dm;
     this.store = dm.store;
     this.root = element;
-    this.task = options.task;
-    this.preload = options.preload;
-    this.labelStream = options.isLabelStream ?? false;
-    this.initialAnnotation = options.annotation;
-    this.interfacesModifier = options.interfacesModifier;
-    this.isInteractivePreannotations = options.isInteractivePreannotations ?? false;
+    this.task = task;
+    this.preload = preload;
+    this.labelStream = isLabelStream ?? false;
+    this.initialAnnotation = annotation;
+    this.interfacesModifier = interfacesModifier;
+    this.isInteractivePreannotations = isInteractivePreannotations ?? false;
 
     let interfaces = [...DEFAULT_INTERFACES];
 
@@ -105,9 +118,13 @@ export class LSFWrapper {
       interfaces.push("annotations:deny-empty");
     }
 
+    if (window.APP_SETTINGS.annotator_reviewer_firewall_enabled && this.labelStream) {
+      interfaces.push("annotations:hide-info");
+    }
+
     if (this.labelStream) {
       interfaces.push("infobar");
-      interfaces.push("topbar:prevnext");
+      if (!window.APP_SETTINGS.label_stream_navigation_disabled) interfaces.push("topbar:prevnext");
       if (FF_DEV_2186 && this.project.review_settings?.require_comment_on_reject) {
         interfaces.push("comments:update");
       }
@@ -136,11 +153,18 @@ export class LSFWrapper {
     if (this.datamanager.hasInterface("autoAnnotation")) {
       interfaces.push("auto-annotation");
     }
-    if (this.interfacesModifier) {
-      interfaces = this.interfacesModifier(interfaces, this.labelStream);
-    }
+
     if (isFF(FF_DEV_2887)) {
       interfaces.push("annotations:comments");
+      interfaces.push("comments:resolve-any");
+    }
+
+    if (this.project.review_settings?.require_comment_on_reject) {
+      interfaces.push("comments:reject");
+    }
+
+    if (this.interfacesModifier) {
+      interfaces = this.interfacesModifier(interfaces, this.labelStream);
     }
 
     console.group("Interfaces");
@@ -158,6 +182,7 @@ export class LSFWrapper {
     const queueDone = dm.store.project.queue_done;
     const queueLeft = dm.store.project.queue_left;
     const queuePosition = queueDone ? queueDone + 1 : queueLeft ? queueTotal - queueLeft + 1 : 1;
+    const commentClassificationConfig = dm.store.project.comment_classification_config;
 
     const lsfProperties = {
       user: options.user,
@@ -172,6 +197,7 @@ export class LSFWrapper {
       messages: options.messages,
       queueTotal,
       queuePosition,
+      commentClassificationConfig,
 
       /* EVENTS */
       onSubmitDraft: this.onSubmitDraft,
@@ -190,6 +216,8 @@ export class LSFWrapper {
       onSelectAnnotation: this.onSelectAnnotation,
       onNextTask: this.onNextTask,
       onPrevTask: this.onPrevTask,
+
+      ...restOptions,
     };
 
     this.initLabelStudio(lsfProperties);
@@ -215,6 +243,8 @@ export class LSFWrapper {
       if (isFF(FF_DEV_2887)) {
         new CommentsSdk(this.lsfInstance, this.datamanager);
       }
+
+      this.datamanager.invoke("lsfInit", this, this.lsfInstance);
     } catch (err) {
       console.error("Failed to initialize LabelStudio", settings);
       console.error(err);
@@ -362,7 +392,7 @@ export class LSFWrapper {
 
     // undefined or true for backward compatibility
     this.lsf.toggleInterface("postpone", this.task.allow_postpone !== false);
-    this.lsf.toggleInterface("topbar:task-counter", !isFF(FF_DEV_3734));
+    this.lsf.toggleInterface("topbar:task-counter", true);
     this.lsf.assignTask(task);
     this.lsf.initializeStore(lsfTask);
     this.setAnnotation(annotationID, fromHistory || isRejectedQueue);
@@ -703,7 +733,7 @@ export class LSFWrapper {
 
   onSubmitDraft = async (studio, annotation, params = {}) => {
     const annotationDoesntExist = !annotation.pk;
-    const data = { body: this.prepareData(annotation, { draft: true }) }; // serializedAnnotation
+    const data = { body: this.prepareData(annotation, { isNewDraft: true }) }; // serializedAnnotation
     const hasChanges = this.needsDraftSave(annotation);
     const showToast = params?.useToast && hasChanges;
     // console.log('onSubmitDraft', params?.useToast, hasChanges);
@@ -839,6 +869,9 @@ export class LSFWrapper {
   onEntityCreate = (...args) => this.datamanager.invoke("onEntityCreate", ...args);
   onEntityDelete = (...args) => this.datamanager.invoke("onEntityDelete", ...args);
   onSelectAnnotation = (prevAnnotation, nextAnnotation, options) => {
+    if (window.APP_SETTINGS.read_only_quick_view_enabled && !this.labelStream) {
+      prevAnnotation?.setEditable(false);
+    }
     if (isFF(FF_OPTIC_2) && !!nextAnnotation?.history?.undoIdx) {
       this.saveDraft(nextAnnotation).then(() => {
         this.datamanager.invoke("onSelectAnnotation", prevAnnotation, nextAnnotation, options, this);
@@ -904,21 +937,64 @@ export class LSFWrapper {
     return result;
   }
 
-  /** @private */
-  prepareData(annotation, { includeId, draft } = {}) {
-    const userGenerate = !annotation.userGenerate || annotation.sentUserGenerate;
+  /**
+   * Finds the active draft for the given annotation.
+   * @param {Object} annotation - The annotation object.
+   * @returns {Object|undefined} The active draft or undefined if no draft is found.
+   * @private
+   */
+  findActiveDraft(annotation) {
+    if (isDefined(annotation.draftId)) {
+      return this.task.drafts.find((possibleDraft) => possibleDraft.id === annotation.draftId);
+    }
+    return undefined;
+  }
 
-    const sessionTime = (new Date() - annotation.loadedDate) / 1000;
-    const submittedTime = Number(annotation.leadTime ?? 0);
-    const draftTime = Number(this.task.drafts[0]?.lead_time ?? 0);
-    const lead_time = sessionTime + submittedTime + draftTime;
+  /**
+   * Calculates the startedAt time for an annotation.
+   * @param {Object|undefined} currentDraft - The current draft object, if any.
+   * @param {Date} loadedDate - The date when the annotation was loaded.
+   * @returns {Date} The calculated startedAt time.
+   * @private
+   */
+  calculateStartedAt(currentDraft, loadedDate) {
+    if (currentDraft) {
+      const draftStartedAt = new Date(currentDraft.created_at);
+      const draftLeadTime = Number(currentDraft.lead_time ?? 0);
+      const adjustedStartedAt = new Date(Date.now() - draftLeadTime * 1000);
+
+      if (adjustedStartedAt < draftStartedAt) return draftStartedAt;
+
+      return adjustedStartedAt;
+    }
+    return loadedDate;
+  }
+
+  /**
+   * Prepare data for draft/submission of annotation
+   * @param {Object} annotation - The annotation object.
+   * @param {Object} options - The options object.
+   * @param {boolean} options.includeId - Whether to include the id in the result.
+   * @param {boolean} options.isNewDraft - Whether the draft is new.
+   * @returns {Object} The prepared data.
+   * @private
+   */
+  prepareData(annotation, { includeId, isNewDraft } = {}) {
+    const userGenerate = !annotation.userGenerate || annotation.sentUserGenerate;
+    const currentDraft = this.findActiveDraft(annotation);
+    const sessionTime = (Date.now() - annotation.loadedDate.getTime()) / 1000;
+    const submittedTime = isNewDraft ? 0 : Number(annotation.leadTime ?? 0);
+    const draftTime = Number(currentDraft?.lead_time ?? 0);
+    const leadTime = submittedTime + draftTime + sessionTime;
+    const startedAt = this.calculateStartedAt(currentDraft, annotation.loadedDate);
 
     const result = {
-      lead_time,
-      result: (draft ? annotation.versions.draft : annotation.serializeAnnotation()) ?? [],
+      lead_time: leadTime,
+      result: (isNewDraft ? annotation.versions.draft : annotation.serializeAnnotation()) ?? [],
       draft_id: annotation.draftId,
       parent_prediction: annotation.parent_prediction,
       parent_annotation: annotation.parent_annotation,
+      started_at: startedAt.toISOString(),
     };
 
     if (includeId && userGenerate) {

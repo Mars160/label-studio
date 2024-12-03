@@ -1,5 +1,4 @@
 import { format } from "date-fns/esm";
-import { React } from "react";
 import { Button } from "../../../components";
 import { DescriptionList } from "../../../components/DescriptionList/DescriptionList";
 import { Tooltip } from "../../../components/Tooltip/Tooltip";
@@ -158,7 +157,7 @@ const RedisStorage = ({ storage }) => {
       <DescriptionList.Item term="Path">{storage.path}</DescriptionList.Item>
       <DescriptionList.Item term="Host">
         {storage.host}
-        {storage.port ? `:${storage.post}` : ""}
+        {storage.port ? `:${storage.port}` : ""}
       </DescriptionList.Item>
     </>
   );

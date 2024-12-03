@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router";
 import { Button } from "../../components";
 import { Form, Input } from "../../components/Form";
@@ -8,7 +8,7 @@ import { useAPI } from "../../providers/ApiProvider";
 import { useFixedLocation, useParams } from "../../providers/RoutesProvider";
 import { BemWithSpecifiContext } from "../../utils/bem";
 import { isDefined } from "../../utils/helpers";
-import "./ExportPage.styl";
+import "./ExportPage.scss";
 
 // const formats = {
 //   json: 'JSON',

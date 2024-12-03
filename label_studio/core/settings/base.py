@@ -1,5 +1,5 @@
-"""This file and its contents are licensed under the Apache License 2.0. Please see the included NOTICE for copyright information and LICENSE for a copy of the license.
-"""
+"""This file and its contents are licensed under the Apache License 2.0. Please see the included NOTICE for copyright information and LICENSE for a copy of the license."""
+
 """
 Django Base settings for Label Studio.
 
@@ -104,6 +104,9 @@ if HOSTNAME:
             if FORCE_SCRIPT_NAME:
                 logger.info('=> Django URL prefix is set to: %s', FORCE_SCRIPT_NAME)
 
+FRONTEND_HMR = get_bool_env('FRONTEND_HMR', False)
+FRONTEND_HOSTNAME = get_env('FRONTEND_HOSTNAME', 'http://localhost:8010' if FRONTEND_HMR else HOSTNAME)
+
 DOMAIN_FROM_REQUEST = get_bool_env('DOMAIN_FROM_REQUEST', False)
 
 if DOMAIN_FROM_REQUEST:
@@ -134,6 +137,9 @@ if BASE_DATA_DIR is None:
     BASE_DATA_DIR = get_data_dir()
 os.makedirs(BASE_DATA_DIR, exist_ok=True)
 logger.info('=> Database and media directory: %s', BASE_DATA_DIR)
+
+# This indicates whether the code is running in a Continuous Integration environment.
+CI = get_bool_env('CI', False)
 
 # Databases
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
@@ -236,7 +242,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'core.middleware.CommonMiddlewareAppendSlashWithoutRedirect',  # instead of 'CommonMiddleware'
-    'core.middleware.CommonMiddleware',
     'django_user_agents.middleware.UserAgentMiddleware',
     'core.middleware.SetSessionUIDMiddleware',
     'core.middleware.ContextLogMiddleware',
@@ -567,6 +572,7 @@ INTERACTIVE_DATA_SERIALIZER = 'data_export.serializers.BaseExportDataSerializerF
 STORAGE_PERMISSION = 'io_storages.permissions.StoragePermission'
 PROJECT_IMPORT_PERMISSION = 'projects.permissions.ProjectImportPermission'
 DELETE_TASKS_ANNOTATIONS_POSTPROCESS = None
+FEATURE_FLAGS_GET_USER_REPR = 'core.feature_flags.utils.get_user_repr'
 
 
 def project_delete(project):
@@ -752,3 +758,22 @@ CLOUD_STORAGE_CHECK_FOR_RECORDS_TIMEOUT = get_env('CLOUD_STORAGE_CHECK_FOR_RECOR
 CONTEXTLOG_SYNC = False
 TEST_ENVIRONMENT = get_bool_env('TEST_ENVIRONMENT', False)
 DEBUG_CONTEXTLOG = get_bool_env('DEBUG_CONTEXTLOG', False)
+
+_REDIS_SSL_CERTS_REQS = get_env('REDIS_SSL_CERTS_REQS', 'required')
+REDIS_SSL_SETTINGS = {
+    'ssl_cert_reqs': None if _REDIS_SSL_CERTS_REQS.lower() == 'none' else _REDIS_SSL_CERTS_REQS,
+    'ssl_ca_certs': get_env('REDIS_SSL_CA_CERTS', None),
+    'ssl_keyfile': get_env('REDIS_SSL_KEYFILE', None),
+    'ssl_certfile': get_env('REDIS_SSL_CERTFILE', None),
+}
+
+OPENAI_API_VERSION = get_env('OPENAI_API_VERSION', '2024-06-01')
+APPEND_SLASH = False
+
+if CI:
+    INSTALLED_APPS += ['django_migration_linter']
+    MIGRATION_LINTER_OPTIONS = {
+        'no_cache': True,
+        'ignore_name': '0002_auto_20210304_1457',
+        'sql-analyser': 'postgresql',
+    }

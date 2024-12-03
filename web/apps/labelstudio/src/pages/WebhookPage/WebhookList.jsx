@@ -1,14 +1,13 @@
-import React, { useCallback } from "react";
-import { LsCross, LsPencil, LsPlus } from "../../assets/icons";
+import { useCallback } from "react";
+import { LsPencil } from "../../assets/icons";
+import { IconCross } from "@humansignal/ui";
 import { Button } from "../../components";
-import { Form, Input, Label, Toggle } from "../../components/Form";
-import { modal } from "../../components/Modal/Modal";
+import { Toggle } from "../../components/Form";
 import { Block, Elem } from "../../utils/bem";
-import "./WebhookPage.styl";
+import "./WebhookPage.scss";
 import { format } from "date-fns";
 import { useAPI } from "../../providers/ApiProvider";
 import { WebhookDeleteModal } from "./WebhookDeleteModal";
-import { useProject } from "../../providers/ProjectProvider";
 
 const WebhookList = ({ onSelectActive, onAddWebhook, webhooks, fetchWebhooks }) => {
   const api = useAPI();
@@ -31,6 +30,7 @@ const WebhookList = ({ onSelectActive, onAddWebhook, webhooks, fetchWebhooks }) 
 
   return (
     <Block name="webhook">
+      <h1>Webhooks</h1>
       <Elem name="controls">
         <Button onClick={onAddWebhook}>Add Webhook</Button>
       </Elem>
@@ -39,13 +39,17 @@ const WebhookList = ({ onSelectActive, onAddWebhook, webhooks, fetchWebhooks }) 
           <Block name="webhook-list">
             {webhooks.map((obj) => (
               <Elem key={obj.id} name="item">
-                <Elem name="item-active">
-                  <Toggle name={obj.id} checked={obj.is_active} onChange={onActiveChange} />
+                <Elem name="info-wrap">
+                  <Elem name="url-wrap">
+                    <Elem name="item-active">
+                      <Toggle name={obj.id} checked={obj.is_active} onChange={onActiveChange} />
+                    </Elem>
+                    <Elem name="item-url" onClick={() => onSelectActive(obj.id)}>
+                      {obj.url}
+                    </Elem>
+                  </Elem>
+                  <Elem name="item-date">Created {format(new Date(obj.created_at), "dd MMM yyyy, HH:mm")}</Elem>
                 </Elem>
-                <Elem name="item-url" onClick={() => onSelectActive(obj.id)}>
-                  {obj.url}
-                </Elem>
-                <Elem name="item-date">Created {format(new Date(obj.created_at), "dd MMM yyyy, HH:mm")}</Elem>
                 <Elem name="item-control">
                   <Button onClick={() => onSelectActive(obj.id)} icon={<LsPencil />}>
                     Edit
@@ -60,7 +64,7 @@ const WebhookList = ({ onSelectActive, onAddWebhook, webhooks, fetchWebhooks }) 
                       })
                     }
                     look="danger"
-                    icon={<LsCross />}
+                    icon={<IconCross />}
                   >
                     Delete
                   </Button>

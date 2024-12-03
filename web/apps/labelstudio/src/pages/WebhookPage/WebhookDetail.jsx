@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../../components";
 import { Form, Input, Label, Toggle } from "../../components/Form";
 import { Block, cn, Elem } from "../../utils/bem";
 import { cloneDeep } from "lodash";
-import { LsCross, LsPlus } from "../../assets/icons";
+import { LsPlus } from "../../assets/icons";
+import { IconCross } from "@humansignal/ui";
 import { useAPI } from "../../providers/ApiProvider";
-import "./WebhookPage.styl";
+import "./WebhookPage.scss";
 import { Space } from "../../components/Space/Space";
 import { useProject } from "../../providers/ProjectProvider";
-import { modal } from "../../components/Modal/Modal";
-import { useModalControls } from "../../components/Modal/ModalPopup";
 import { WebhookDeleteModal } from "./WebhookDeleteModal";
-import { format } from "date-fns";
 
 const WebhookDetail = ({ webhook, webhooksInfo, fetchWebhooks, onBack, onSelectActive }) => {
   // if webhook === null - create mod
@@ -124,8 +122,8 @@ const WebhookDetail = ({ webhook, webhooksInfo, fetchWebhooks, onBack, onSelectA
               }
             }}
           >
-            <Form.Row style={{ marginBottom: "40px" }} columnCount={1}>
-              <Label text="Payload URL" style={{ marginLeft: "-16px" }} large />
+            <Form.Row columnCount={1}>
+              <Label text="Payload URL" large />
               <Space className={rootClass.elem("url-space")}>
                 <Input name="url" className={rootClass.elem("url-input")} placeholder="URL" />
                 <Space align="end" className={rootClass.elem("activator")}>
@@ -140,7 +138,7 @@ const WebhookDetail = ({ webhook, webhooksInfo, fetchWebhooks, onBack, onSelectA
                 </Space>
               </Space>
             </Form.Row>
-            <Form.Row style={{ marginBottom: "40px" }} columnCount={1}>
+            <Form.Row columnCount={1}>
               <div className={rootClass.elem("headers")}>
                 <div className={rootClass.elem("headers-content")}>
                   <Space spread className={rootClass.elem("headers-control")}>
@@ -173,7 +171,7 @@ const WebhookDetail = ({ webhook, webhooksInfo, fetchWebhooks, onBack, onSelectA
                           <Button
                             className={rootClass.elem("headers-remove")}
                             type="button"
-                            icon={<LsCross />}
+                            icon={<IconCross />}
                             onClick={() => onHeaderRemove(index)}
                           />
                         </div>
@@ -183,7 +181,7 @@ const WebhookDetail = ({ webhook, webhooksInfo, fetchWebhooks, onBack, onSelectA
                 </div>
               </div>
             </Form.Row>
-            <Block name="webhook-payload" style={{ marginBottom: "40px" }}>
+            <Block name="webhook-payload">
               <Elem name="title">
                 <Label text="Payload" large />
               </Elem>
@@ -253,7 +251,7 @@ const WebhookDetail = ({ webhook, webhooksInfo, fetchWebhooks, onBack, onSelectA
                     })
                   }
                 >
-                  Delete Webhook...
+                  Delete Webhook
                 </Button>
               )}
               <div className={rootClass.elem("status")}>

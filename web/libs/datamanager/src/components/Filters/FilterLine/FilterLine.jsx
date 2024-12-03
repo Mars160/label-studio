@@ -1,12 +1,12 @@
 import { observer } from "mobx-react";
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import { FaTrash } from "react-icons/fa";
 import { BemWithSpecifiContext } from "../../../utils/bem";
 import { Button } from "../../Common/Button/Button";
 import { Icon } from "../../Common/Icon/Icon";
 import { Tag } from "../../Common/Tag/Tag";
 import { FilterDropdown } from "../FilterDropdown";
-import "./FilterLine.styl";
+import "./FilterLine.scss";
 import { FilterOperation } from "./FilterOperation";
 
 const { Block, Elem } = BemWithSpecifiContext();

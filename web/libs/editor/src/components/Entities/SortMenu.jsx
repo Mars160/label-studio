@@ -1,10 +1,9 @@
 import { Menu } from "antd";
 import { observer } from "mobx-react";
 import { ThunderboltOutlined } from "@ant-design/icons";
-import React from "react";
 import { LsDate } from "../../assets/icons";
 import { Block, Elem } from "../../utils/bem";
-import "./SortMenu.styl";
+import "./SortMenu.scss";
 
 export const SortMenuIcon = ({ sortKey }) => {
   switch (sortKey) {

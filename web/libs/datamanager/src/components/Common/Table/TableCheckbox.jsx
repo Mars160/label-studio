@@ -1,18 +1,17 @@
-import { observer } from "mobx-react";
-import React from "react";
-import { Checkbox } from "../Checkbox/Checkbox";
+import { Checkbox } from "@humansignal/ui";
 
-const IndeterminateCheckbox = observer(({ checked, indeterminate, ...props }) => {
+const IndeterminateCheckbox = ({ checked, indeterminate, ...props }) => {
   return <Checkbox indeterminate={indeterminate && !checked} checked={checked} {...props} />;
-});
+};
 
-export const TableCheckboxCell = observer(({ checked, indeterminate, onChange }) => {
+export const TableCheckboxCell = ({ checked, indeterminate, onChange, ariaLabel }) => {
   return (
     <IndeterminateCheckbox
       type="checkbox"
       checked={checked ?? false}
       indeterminate={indeterminate ?? false}
       onChange={(e) => onChange(e.target.checked)}
+      ariaLabel={ariaLabel}
     />
   );
-});
+};

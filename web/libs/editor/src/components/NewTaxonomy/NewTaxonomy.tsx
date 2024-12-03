@@ -4,14 +4,14 @@ import { type ReactNode, useCallback, useEffect, useRef, useState } from "react"
 
 import { Tooltip } from "../../common/Tooltip/Tooltip";
 
-import "./NewTaxonomy.styl";
+import "./NewTaxonomy.scss";
 import { TaxonomySearch, type TaxonomySearchRef } from "./TaxonomySearch";
 
-type TaxonomyPath = string[];
+export type TaxonomyPath = string[];
 type onAddLabelCallback = (path: string[]) => any;
 type onDeleteLabelCallback = (path: string[]) => any;
 
-type TaxonomyItem = {
+export type TaxonomyItem = {
   label: string;
   path: TaxonomyPath;
   depth: number;
@@ -42,7 +42,7 @@ type TaxonomyOptions = {
   placeholder?: string;
 };
 
-type SelectedItem = {
+export type SelectedItem = {
   label: string;
   value: string;
 }[];

@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import { observer } from "mobx-react";
 import { types } from "mobx-state-tree";
 
@@ -82,6 +82,9 @@ const _Tool = types
     },
   }))
   .actions((self) => ({
+    /**
+     * Indicates that zoom tool can't interact with regions at all
+     */
     shouldSkipInteractions() {
       return true;
     },

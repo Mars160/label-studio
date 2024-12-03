@@ -6,7 +6,6 @@ import { customTypes } from "../../core/CustomTypes";
 import { AnnotationMixin } from "../../mixins/AnnotationMixin";
 import SeparatedControlMixin from "../../mixins/SeparatedControlMixin";
 import { ToolManagerMixin } from "../../mixins/ToolManagerMixin";
-import { FF_DEV_4081, isFF } from "../../utils/feature-flags";
 
 /**
  * The `Magicwand` tag makes it possible to click in a region of an image a user is doing segmentation
@@ -23,14 +22,6 @@ import { FF_DEV_4081, isFF } from "../../utils/feature-flags";
  *
  * ![Animated GIF showing Magic Wand clicking on cloud and dragging, automatically segmenting and selecting
  * pixels to create a mask](../images/magicwand_example.gif)
- *
- * ### Feature Flag
- *
- * The Magic Wand is currently turned off by default behind a feature flag. If you want to turn it on, you
- * must enable it by either:
- * - Setting an environment variable when starting the Label Studio server, either by starting up the
- *   server with `fflag_feat_front_dev_4081_magic_wand_tool=1 label-studio`, or manually finding the flag
- * `flag_feat_front_dev_4081_magic_wand_tool` and setting it to true.
  *
  * ### CORS Configuration
  *
@@ -133,6 +124,6 @@ const HtxView = () => {
   return null;
 };
 
-isFF(FF_DEV_4081) && Registry.addTag("magicwand", MagicWandModel, HtxView);
+Registry.addTag("magicwand", MagicWandModel, HtxView);
 
 export { HtxView, MagicWandModel };

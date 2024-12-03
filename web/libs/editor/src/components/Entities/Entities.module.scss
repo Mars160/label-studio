@@ -6,6 +6,7 @@
     padding-right: 4px;
     align-items: center;
   }
+
   .title {
     flex: 1;
   }
@@ -41,7 +42,7 @@
 
   &:hover {
     cursor: pointer;
-    color: #f5222d;
+    color: var(--red_7);
   }
 }
 
@@ -54,16 +55,12 @@
   flex-wrap: nowrap;
   position: relative;
   padding: 0;
-  border: 1px solid #e5e5e5;
+  border: 1px solid var(--sand_300);
   border-radius: 5px;
 
   & > *:not(:last-child),
   & [role="img"] {
     margin-right: 6px;
-  }
-
-  &.flat {
-
   }
 
   & button.hidden,
@@ -72,6 +69,7 @@
     display: flex;
     align-items: flex-end;
     opacity: 0.8;
+
     span {
       margin-right: 0;
     }
@@ -82,8 +80,8 @@
   }
 
   &.selected {
-    //noinspection CssInvalidFunction
-    box-shadow: 0 0 0 4px var(--labelBgColor, rgba(0,0,0,0.2));
+    // noinspection CssInvalidFunction
+    box-shadow: 0 0 0 4px var(--labelBgColor, rgb(0 0 0 / 20%));
   }
 
   &_label {

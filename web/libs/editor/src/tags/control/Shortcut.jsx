@@ -1,4 +1,3 @@
-import React from "react";
 import { Tag } from "antd";
 import { inject, observer } from "mobx-react";
 import { getParent, types } from "mobx-state-tree";
@@ -8,7 +7,6 @@ import ProcessAttrsMixin from "../../mixins/ProcessAttrs";
 import Registry from "../../core/Registry";
 import { guidGenerator } from "../../core/Helpers";
 import { Hotkey } from "../../core/Hotkey";
-import { FF_DEV_1564_DEV_1565, FF_DEV_1566, isFF } from "../../utils/feature-flags";
 import { customTypes } from "../../core/CustomTypes";
 import chroma from "chroma-js";
 
@@ -66,9 +64,7 @@ const Model = types
 
       if (textarea.onShortcut) {
         textarea.onShortcut(self.value);
-        if (isFF(FF_DEV_1564_DEV_1565)) {
-          textarea.returnFocus?.();
-        }
+        textarea.returnFocus?.();
       }
     },
 
@@ -77,10 +73,8 @@ const Model = types
       const name = (event.target || event.srcElement).name;
       // fired on a wrong element
 
-      if (textarea.name !== name && (!isFF(FF_DEV_1566) || !name.startsWith(`${textarea.name}:`))) return;
-      if (isFF(FF_DEV_1564_DEV_1565)) {
-        event.preventDefault();
-      }
+      if (textarea.name !== name && !name.startsWith(`${textarea.name}:`)) return;
+      event.preventDefault();
       return self.onClick();
     },
   }));
@@ -98,12 +92,10 @@ const HtxShortcutView = inject("store")(
 
     return (
       <Tag
-        {...(isFF(FF_DEV_1566) ? { "data-shortcut": true } : {})}
+        data-shortcut={true}
         onClick={(e) => {
-          if (isFF(FF_DEV_1564_DEV_1565)) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
+          e.preventDefault();
+          e.stopPropagation();
           item.onClick();
           return false;
         }}

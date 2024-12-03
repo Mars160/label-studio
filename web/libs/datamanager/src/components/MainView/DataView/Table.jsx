@@ -4,16 +4,16 @@ import { useCallback, useMemo } from "react";
 import { FaQuestionCircle } from "react-icons/fa";
 import { useShortcut } from "../../../sdk/hotkeys";
 import { Block, Elem } from "../../../utils/bem";
-import { FF_DEV_2536, FF_DEV_4008, FF_LOPS_86, FF_OPTIC_2, isFF } from "../../../utils/feature-flags";
+import { FF_DEV_2536, FF_LOPS_86, FF_OPTIC_2, isFF } from "../../../utils/feature-flags";
 import * as CellViews from "../../CellViews";
 import { Icon } from "../../Common/Icon/Icon";
 import { ImportButton } from "../../Common/SDKButtons";
 import { Spinner } from "../../Common/Spinner";
-import { Table } from "../../Common/TableOld/Table";
+import { Table } from "../../Common/Table/Table";
 import { Tag } from "../../Common/Tag/Tag";
 import { Tooltip } from "../../Common/Tooltip/Tooltip";
 import { GridView } from "../GridView/GridView";
-import "./Table.styl";
+import "./Table.scss";
 import { Button } from "../../Common/Button/Button";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -325,7 +325,7 @@ export const DataView = injector(
 
       const task = dataStore.focusPrev();
 
-      if (isFF(FF_DEV_4008)) getRoot(view).startLabeling(task);
+      getRoot(view).startLabeling(task);
     });
 
     useShortcut("dm.focus-next", () => {
@@ -333,7 +333,7 @@ export const DataView = injector(
 
       const task = dataStore.focusNext();
 
-      if (isFF(FF_DEV_4008)) getRoot(view).startLabeling(task);
+      getRoot(view).startLabeling(task);
     });
 
     useShortcut("dm.close-labeling", () => {
@@ -360,7 +360,7 @@ export const DataView = injector(
 
     // Render the UI for your table
     return (
-      <Block name="data-view" className="dm-content" style={{ pointerEvents: isLocked ? "none" : "auto" }}>
+      <Block name="data-view-dm" className="dm-content" style={{ pointerEvents: isLocked ? "none" : "auto" }}>
         {renderContent(content)}
       </Block>
     );

@@ -33,7 +33,7 @@ from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import models, transaction
 from django.db.models import Avg, BooleanField, Case, Count, JSONField, Max, Q, Sum, Value, When
 from django.utils.translation import gettext_lazy as _
-from label_studio_tools.core.label_config import parse_config
+from label_studio_sdk._extensions.label_studio_tools.core.label_config import parse_config
 from labels_manager.models import Label
 from projects.functions import (
     annotate_finished_task_number,
@@ -273,6 +273,13 @@ class Project(ProjectMixin, models.Model):
 
     pinned_at = models.DateTimeField(_('pinned at'), null=True, default=None, help_text='Pinned date and time')
 
+    custom_task_lock_ttl = models.IntegerField(
+        _('custom_task_lock_ttl'),
+        null=True,
+        default=None,
+        help_text='Custom task lock TTL in seconds. If not set, the default value is used',
+    )
+
     def __init__(self, *args, **kwargs):
         super(Project, self).__init__(*args, **kwargs)
         self.__original_label_config = self.label_config
@@ -342,14 +349,6 @@ class Project(ProjectMixin, models.Model):
     @property
     def one_object_in_label_config(self):
         return len(self.data_types) <= 1
-
-    @property
-    def only_undefined_field(self):
-        return (
-            self.one_object_in_label_config
-            and self.summary.common_data_columns
-            and self.summary.common_data_columns[0] == settings.DATA_UNDEFINED_NAME
-        )
 
     @property
     def get_labeled_count(self):
@@ -697,7 +696,7 @@ class Project(ProjectMixin, models.Model):
         return {'deleted_predictions': count}
 
     def get_updated_weights(self):
-        outputs = self.get_parsed_config(autosave_cache=False)
+        outputs = self.get_parsed_config()
         control_weights = {}
         exclude_control_types = ('Filter',)
 
@@ -725,7 +724,7 @@ class Project(ProjectMixin, models.Model):
             }
         return control_weights
 
-    def save(self, *args, recalc=True, **kwargs):
+    def save(self, *args, update_fields=None, recalc=True, **kwargs):
         exists = True if self.pk else False
         project_with_config_just_created = not exists and self.label_config
 
@@ -733,14 +732,18 @@ class Project(ProjectMixin, models.Model):
             self.data_types = extract_data_types(self.label_config)
             self.parsed_label_config = parse_config(self.label_config)
             self.label_config_hash = hash(str(self.parsed_label_config))
+            if update_fields is not None:
+                update_fields = {'data_types', 'parsed_label_config', 'label_config_hash'}.union(update_fields)
 
         if self.label_config and (self._label_config_has_changed() or not exists or not self.control_weights):
             self.control_weights = self.get_updated_weights()
+            if update_fields is not None:
+                update_fields = {'control_weights'}.union(update_fields)
 
         if self._label_config_has_changed():
             self.__original_label_config = self.label_config
 
-        super(Project, self).save(*args, **kwargs)
+        super(Project, self).save(*args, update_fields=update_fields, **kwargs)
 
         if not exists:
             steps = ProjectOnboardingSteps.objects.all()
@@ -884,12 +887,14 @@ class Project(ProjectMixin, models.Model):
     def max_tasks_file_size():
         return settings.TASKS_MAX_FILE_SIZE
 
-    def get_parsed_config(self, autosave_cache=True):
+    def get_parsed_config(self):
         if self.parsed_label_config is None:
-            self.parsed_label_config = parse_config(self.label_config)
-
-            # if autosave_cache:
-            #    Project.objects.filter(id=self.id).update(parsed_label_config=self.parsed_label_config)
+            try:
+                self.parsed_label_config = parse_config(self.label_config)
+                self.save(update_fields=['parsed_label_config'])
+            except Exception as e:
+                logger.error(f'Error parsing label config for project {self.id}: {e}', exc_info=True)
+                return {}
 
         return self.parsed_label_config
 

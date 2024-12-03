@@ -1,4 +1,3 @@
-import React from "react";
 import { observer } from "mobx-react";
 import { flow, getRoot, types } from "mobx-state-tree";
 import { Spin } from "antd";
@@ -32,7 +31,7 @@ import {
 import ControlBase from "../Base";
 import ClassificationBase from "../ClassificationBase";
 
-import styles from "./Taxonomy.styl";
+import styles from "./Taxonomy.scss";
 import messages from "../../../utils/messages";
 import { errorBuilder } from "../../../core/DataValidator/ConfigValidator";
 
@@ -53,8 +52,6 @@ import { errorBuilder } from "../../../core/DataValidator/ConfigValidator";
  * You can define nested classifications using the `Choice` tag, or retrieve external classifications using the `apiUrl` parameter. For more information on these options, see the [Taxonomy template page](/templates/taxonomy).
  *
  * Use with the following data types: audio, image, HTML, paragraphs, text, time series, video.
- *
- * [^FF_LSDV_4583]: `fflag_feat_front_lsdv_4583_multi_image_segmentation_short` should be enabled for `perItem` functionality
  *
  * @example
  * <!--Labeling configuration for providing a taxonomy of choices in response to a passage of text -->
@@ -88,7 +85,7 @@ import { errorBuilder } from "../../../core/DataValidator/ConfigValidator";
  * @param {string} [requiredMessage]      - Message to show if validation fails
  * @param {string} [placeholder=]         - What to display as prompt on the input
  * @param {boolean} [perRegion]           - Use this tag to classify specific regions instead of the whole object
- * @param {boolean} [perItem]             - Use this tag to classify specific items inside the object instead of the whole object[^FF_LSDV_4583]
+ * @param {boolean} [perItem]             - Use this tag to classify specific items inside the object instead of the whole object
  * @param {boolean} [legacy]              - Use this tag to enable the legacy version of the Taxonomy tag. The legacy version supports the ability for annotators to add labels as needed. However, when true, the `apiUrl` parameter is not usable.
  */
 const TagAttrs = types.model({
@@ -632,7 +629,7 @@ const HtxTaxonomy = observer(({ item }) => {
   }
 
   return (
-    <div className={className} style={visibleStyle}>
+    <div className={className} style={visibleStyle} ref={item.elementRef}>
       {isFF(FF_TAXONOMY_ASYNC) && !item.legacy ? (
         <NewTaxonomy
           items={item.items}

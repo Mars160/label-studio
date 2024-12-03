@@ -1,11 +1,11 @@
-import React, { Fragment, useCallback, useMemo, useState } from "react";
+import { Fragment, useCallback, useMemo, useState } from "react";
 import sanitizeHtml from "sanitize-html";
 import { LsSlack } from "../../assets/icons";
 import { Block, Elem } from "../../utils/bem";
 import { absoluteURL, copyText } from "../../utils/helpers";
 import { Button } from "../Button/Button";
 import { Space } from "../Space/Space";
-import "./Error.styl";
+import "./Error.scss";
 
 const SLACK_INVITE_URL = "https://slack.labelstud.io/?source=product-error-msg";
 

@@ -1,4 +1,3 @@
-import React from "react";
 import { Button, List, Select } from "antd";
 import { getRoot, isValidReference } from "mobx-state-tree";
 import { observer } from "mobx-react";
@@ -11,7 +10,7 @@ import globalStyles from "../../styles/global.module.scss";
 
 import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 import { Block, Elem } from "../../utils/bem";
-import "./Relations.styl";
+import "./Relations.scss";
 
 const { Option } = Select;
 

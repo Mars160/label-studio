@@ -2,7 +2,7 @@ import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { Modal } from "../../../components/Modal/Modal";
 import { cn } from "../../../utils/bem";
 import { unique } from "../../../utils/helpers";
-import "./Import.styl";
+import "./Import.scss";
 import { IconError, IconInfo, IconUpload } from "../../../assets/icons";
 import { useAPI } from "../../../providers/ApiProvider";
 
@@ -339,6 +339,7 @@ export const ImportPage = ({
         </form>
         <span>or</span>
         <button
+          type="button"
           onClick={() => document.getElementById("file-input").click()}
           className={importClass.elem("upload-button")}
         >
@@ -392,11 +393,13 @@ export const ImportPage = ({
                 </dl>
                 <b>
                   * – Support depends on the browser
-                  <br />* – Use{" "}
+                  <br />* – Direct media uploads have{" "}
+                  <a href="https://labelstud.io/guide/tasks.html#Import-data-from-the-Label-Studio-UI">limitations</a>{" "}
+                  and we strongly recommend using{" "}
                   <a href="https://labelstud.io/guide/storage.html" target="_blank" rel="noreferrer">
-                    Cloud Storages
+                    Cloud Storage
                   </a>{" "}
-                  if you want to import a large number of files
+                  instead
                 </b>
               </div>
             </label>

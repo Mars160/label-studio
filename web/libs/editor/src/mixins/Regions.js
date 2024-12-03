@@ -198,14 +198,15 @@ const RegionsMixin = types
        */
       unselectRegion(tryToKeepStates = false) {
         console.log("UNSELECT REGION", "you should not be here");
-        // eslint-disable-next-line no-constant-condition
+
+        // biome-ignore lint/correctness/noConstantCondition:
         if (1) return;
         const annotation = self.annotation;
         const parent = self.parent;
         const keepStates = tryToKeepStates && self.store.settings.continuousLabeling;
 
-        if (annotation.relationMode) {
-          annotation.stopRelationMode();
+        if (annotation.isLinkingMode) {
+          annotation.stopLinkingMode();
         }
         if (parent.setSelected) {
           parent.setSelected(undefined);
@@ -228,9 +229,9 @@ const RegionsMixin = types
 
         if (!self.isReadOnly() && (self.isDrawing || annotation.isDrawing)) return;
 
-        if (!self.isReadOnly() && annotation.relationMode) {
-          annotation.addRelation(self);
-          annotation.stopRelationMode();
+        if (!self.isReadOnly() && annotation.isLinkingMode) {
+          annotation.addLinkedRegion(self);
+          annotation.stopLinkingMode();
           annotation.regionStore.unselectAll();
         } else {
           self._selectArea(ev?.ctrlKey || ev?.metaKey);

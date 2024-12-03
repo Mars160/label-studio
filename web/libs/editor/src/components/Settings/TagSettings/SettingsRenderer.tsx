@@ -1,4 +1,5 @@
-import { Checkbox, Input } from "antd";
+import { Input } from "antd";
+import { Checkbox } from "@humansignal/ui";
 import { observer } from "mobx-react";
 import type { FC } from "react";
 import type { SettingsProperties, SettingsProperty } from "../../../core/settings/types";
@@ -41,7 +42,8 @@ const SettingsField: FC<{
   }
 
   if (value.type !== "boolean") {
-    (props.type = value.type), (props.value = store.settings[name]);
+    props.type = value.type;
+    props.value = store.settings[name];
     props.placeholder = value.description;
   }
 

@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { isAlive } from "mobx-state-tree";
 
@@ -13,7 +13,7 @@ import { PER_REGION_MODES } from "../../../mixins/PerRegion";
 import { Block, Elem } from "../../../utils/bem";
 import { FF_LSDV_4712, isFF } from "../../../utils/feature-flags";
 
-import "./TextArea.styl";
+import "./TextArea.scss";
 
 const { TextArea } = Input;
 

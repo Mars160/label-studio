@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useConfig } from "../../providers/ConfigProvider";
 import { useBreadcrumbs, useFindRouteComponent } from "../../providers/RoutesProvider";
@@ -6,7 +6,7 @@ import { BemWithSpecifiContext } from "../../utils/bem";
 import { absoluteURL } from "../../utils/helpers";
 import { Dropdown } from "../Dropdown/Dropdown";
 import { Menu } from "../Menu/Menu";
-import "./Breadcrumbs.styl";
+import "./Breadcrumbs.scss";
 
 const { Block, Elem } = BemWithSpecifiContext();
 

@@ -1,18 +1,31 @@
 # Run Django dev server with Sqlite
 run-dev:
-	DJANGO_DB=sqlite LOG_DIR=tmp DEBUG=true LOG_LEVEL=DEBUG DJANGO_SETTINGS_MODULE=core.settings.label_studio python label_studio/manage.py runserver
+	DJANGO_DB=sqlite LOG_DIR=tmp DEBUG=true LOG_LEVEL=DEBUG DJANGO_SETTINGS_MODULE=core.settings.label_studio poetry run python label_studio/manage.py runserver
 
 # Run Django dev migrations with Sqlite
 migrate-dev:
-	DJANGO_DB=sqlite LOG_DIR=tmp DEBUG=true LOG_LEVEL=DEBUG DJANGO_SETTINGS_MODULE=core.settings.label_studio python label_studio/manage.py migrate
+	DJANGO_DB=sqlite LOG_DIR=tmp DEBUG=true LOG_LEVEL=DEBUG DJANGO_SETTINGS_MODULE=core.settings.label_studio poetry run python label_studio/manage.py migrate
 
 # Run Django dev make migrations with Sqlite
 makemigrations-dev:
-	DJANGO_DB=sqlite LOG_DIR=tmp DEBUG=true LOG_LEVEL=DEBUG DJANGO_SETTINGS_MODULE=core.settings.label_studio python label_studio/manage.py makemigrations
+	DJANGO_DB=sqlite LOG_DIR=tmp DEBUG=true LOG_LEVEL=DEBUG DJANGO_SETTINGS_MODULE=core.settings.label_studio poetry run python label_studio/manage.py makemigrations
 
 # Run Django dev shell environment with Sqlite
 shell-dev:
-	DJANGO_DB=sqlite LOG_DIR=tmp DEBUG=true LOG_LEVEL=DEBUG DJANGO_SETTINGS_MODULE=core.settings.label_studio python label_studio/manage.py shell_plus
+	DJANGO_DB=sqlite LOG_DIR=tmp DEBUG=true LOG_LEVEL=DEBUG DJANGO_SETTINGS_MODULE=core.settings.label_studio poetry run python label_studio/manage.py shell_plus
+
+env-dev-setup:
+	if [ ! -f .env ]; then \
+		cp .env.development .env; \
+	fi
+
+docker-dev-override:
+	if [ ! -f docker-compose.override.yml ]; then \
+		cp docker-compose.override.example.yml docker-compose.override.yml; \
+	fi
+
+# Configure Django dev server with Hot Module Replacement in docker
+docker-dev-setup: env-dev-setup docker-dev-override
 
 docker-run-dev:
 	docker-compose up --build
@@ -20,15 +33,18 @@ docker-run-dev:
 docker-migrate-dev:
 	docker-compose run app python3 /label-studio/label_studio/manage.py migrate
 
-
 # Install modules
-frontend-setup:
+frontend-install:
 	cd web && yarn install --frozen-lockfile;
 
-# Keep it here for potential rollback
-## Fetch DM and LSF
-#frontend-fetch:
-#	cd label_studio/frontend && yarn run download:all;
+# Alias for backward compatibility
+frontend-setup: frontend-install
+
+# Run frontend dev server in Hot Module Replacement mode
+# For more information on HMR, see the "Environment Configuration" section in:
+# web/README.md
+frontend-dev:
+	cd web && yarn run dev
 
 # Build frontend continuously on files changes
 frontend-watch:
@@ -56,7 +72,7 @@ docker-testing-shell:
 
 # Update urls
 update-urls:
-	DJANGO_DB=sqlite LOG_DIR=tmp DEBUG=true LOG_LEVEL=DEBUG DJANGO_SETTINGS_MODULE=core.settings.label_studio python label_studio/manage.py show_urls --format pretty-json > ./label_studio/core/all_urls.json
+	DJANGO_DB=sqlite LOG_DIR=tmp DEBUG=true LOG_LEVEL=DEBUG DJANGO_SETTINGS_MODULE=core.settings.label_studio poetry run python label_studio/manage.py show_urls --format pretty-json > ./label_studio/core/all_urls.json
 
 # Format changed files on branch
 fmt:
@@ -80,4 +96,4 @@ configure-hooks:
 
 # Generate swagger.json
 generate-swagger:
-	DJANGO_DB=sqlite LOG_DIR=tmp DEBUG=true LOG_LEVEL=DEBUG DJANGO_SETTINGS_MODULE=core.settings.label_studio python label_studio/manage.py generate_swagger swagger.json
+	DJANGO_DB=sqlite LOG_DIR=tmp DEBUG=true LOG_LEVEL=DEBUG DJANGO_SETTINGS_MODULE=core.settings.label_studio poetry run python label_studio/manage.py generate_swagger swagger.json

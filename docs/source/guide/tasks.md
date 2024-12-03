@@ -41,12 +41,20 @@ Get data into Label Studio by importing files, referencing URLs, or syncing with
 * It’s best to keep about 100k tasks / 100k annotations per project for optimal performance.
 * Avoid frequent imports because each new import requires lengthy background operations. One import per 30 seconds will work without overloads.
 
-!!! warning
-    For large projects or business critical projects, do not [upload media files through the Label Studio interface](#Import-data-from-the-Label-Studio-UI). This is especially true for files such as images, audio, video, timeseries, etc.  
+!!! attention 
+    For large projects or business critical projects, do not [upload media files through the Label Studio interface](#Import-data-from-the-Label-Studio-UI). This is especially true for files such as images, audio, video, timeseries, etc.
+
+    Uploading data through the Label Studio UI works fine for proof of concept projects, but it is not recommended for larger projects. Label Studio is not designed as a hosting service at scale and does not have backups for imported media resources. 
     
-    Uploading data through the Label Studio UI works fine for proof of concept projects, but it is not recommended for larger projects. You will also face challenges when you want export your data or move it to another Label Studio instance or even just redeploy Label Studio. Finally, Label Studio is not designed as a hosting service at scale and does not have backups for imported media resources. 
-    
-    We strongly recommend that you configure [source storage](storage) instead.
+    **Risks when uploading through the UI**:<br />
+    You will face challenges when attempting to do the following: 
+
+        * Importing tasks with predictions
+        * Exporting your data
+        * Moving your data to another Label Studio instance 
+        * Redeploying Label Studio
+
+    We ***strongly*** recommend that you configure [source storage](storage) instead.
 
 
 ## Types of data you can import into Label Studio
@@ -193,15 +201,6 @@ For example:
     For example: 
     ```xml
     <Image name="image" value="$images[0]"/>
-    ```
-
-3. The `value` parameter can include [`Repeater`](/tags/repeater.html) tag substitution, by default `{{idx}}`.
-
-    For example:
-    ```xml
-    <Repeater on="$audios">
-      <Audio name="audio_{{idx}}" value="$audios[{{idx}}].url"/>
-    </Repeater>
     ```
 
 
@@ -510,17 +509,25 @@ http-server -p 3000 --cors
 
 ### Add the file directory as source storage in the Label Studio UI
 
-If you're running Label Studio on Docker and want to add local file storage, you need to mount the file directory and set up environment variables. See [Run Label Studio on Docker and use local storage](start.html#Run-Label-Studio-on-Docker-and-use-local-storage).
+If you're running Label Studio on Docker and want to add local file storage, you need to mount the file directory and set up environment variables. See [Run Label Studio on Docker and use local storage](https://labelstud.io/guide/start#Run-Label-Studio-on-Docker-and-use-Local-Storage).
 
 
 ## Import data from the Label Studio UI
 
-!!! warning
-    For large projects or business critical projects, do not upload media files through the Label Studio interface. This is especially true for files such as images, audio, video, timeseries, etc.  
+!!! attention 
+    For large projects or business critical projects, do not [upload media files through the Label Studio interface](#Import-data-from-the-Label-Studio-UI). This is especially true for files such as images, audio, video, timeseries, etc.
+
+    Uploading data through the Label Studio UI works fine for proof of concept projects, but it is not recommended for larger projects. Label Studio is not designed as a hosting service at scale and does not have backups for imported media resources. 
     
-    Uploading data through the Label Studio UI works fine for proof of concept projects, but it is not recommended for larger projects. You will also face challenges when you want export your data or move it to another Label Studio instance or even just redeploy Label Studio. Finally, Label Studio is not designed as a hosting service at scale and does not have backups for imported media resources. 
-    
-    We strongly recommend that you configure [source storage](storage) instead.
+    **Risks when uploading through the UI**:<br />
+    You will face challenges when attempting to do the following: 
+
+        * Importing tasks with predictions
+        * Exporting your data
+        * Moving your data to another Label Studio instance 
+        * Redeploying Label Studio
+
+    We ***strongly*** recommend that you configure [source storage](storage) instead.
 
 To import data from the Label Studio UI, do the following:
 1. On the Label Studio UI, open the Data Manager page for a specific project.

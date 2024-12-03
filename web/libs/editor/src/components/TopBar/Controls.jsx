@@ -1,3 +1,7 @@
+/**
+ * @deprecated It was used only without FF_3873 in old interface.
+ */
+
 import { inject, observer } from "mobx-react";
 import { Button } from "../../common/Button/Button";
 import { Tooltip } from "../../common/Tooltip/Tooltip";
@@ -5,7 +9,7 @@ import { Block, Elem } from "../../utils/bem";
 import { isDefined } from "../../utils/utilities";
 import { IconBan } from "../../assets/icons";
 
-import "./Controls.styl";
+import "./Controls.scss";
 import { useCallback, useMemo, useState } from "react";
 
 const TOOLTIP_DELAY = 0.8;

@@ -1,9 +1,9 @@
-import React, { forwardRef, useEffect, useMemo } from "react";
+import { forwardRef, useEffect, useMemo } from "react";
 import { cn } from "../../../../utils/bem";
 import { FormField } from "../../FormField";
 import { useValueTracker } from "../../Utils";
 import { default as Label } from "../Label/Label";
-import "./ToggleRight.styl";
+import "./ToggleRight.scss";
 
 const ToggleRight = forwardRef(
   (

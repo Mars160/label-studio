@@ -48,6 +48,7 @@ const Result = types
       "brushlabels",
       "ellipselabels",
       "timeserieslabels",
+      "timelinelabels",
       "choices",
       "datetime",
       "number",
@@ -80,6 +81,7 @@ const Result = types
       ellipselabels: types.maybe(types.array(types.string)),
       brushlabels: types.maybe(types.array(types.string)),
       timeserieslabels: types.maybe(types.array(types.string)),
+      timelinelabels: types.maybe(types.array(types.string)), // new one
       taxonomy: types.frozen(), // array of arrays of strings
       sequence: types.frozen(),
     }),
@@ -248,6 +250,16 @@ const Result = types
 
       return { strokecolor, strokewidth, fillcolor, fillopacity, opacity };
     },
+
+    /**
+     *  This name historically is used for the region elements for getting their bboxes.
+     *  Now we need it for a result also.
+     *  Let's say "Region" here means just an area on the screen.
+     *  So that it's an element through which we can get the bbox for an area where classification takes place.
+     */
+    getRegionElement() {
+      return self.from_name?.getRegionElement?.();
+    },
   }))
   .volatile(() => ({
     pid: "",
@@ -298,9 +310,13 @@ const Result = types
       if (!isDefined(data.value)) data.value = {};
       // with `mergeLabelsAndResults` control uses only one result even with external `Labels`
       if (self.to_name.mergeLabelsAndResults) {
+        // we are in labeling result, so skipping it, labels will be added to the main result
         if (type === "labels") return null;
-        // add labels to the main region, not nested ones
-        if (self.area?.labels?.length && !self.from_name.perregion) data.value.labels = self.area.labels;
+        // add labels to the main result, not nested ones
+        // if this is specialized labels, then labels will be already part of it, so skipping it
+        if (!type.endsWith("labels") && self.area?.labels?.length && !self.from_name.perregion) {
+          data.value.labels = self.area.labels;
+        }
       }
 
       const contolMeta = self.from_name.metaValue;
