@@ -26,6 +26,7 @@ export const GridViewContext = createContext<GridViewContextType>({
 const TaskModal = observer(({ tasks, currentTaskId, setCurrentTaskId }: TaskModalProps) => {
   const index = tasks.findIndex(task => task.id === currentTaskId);
   const task = tasks[index];
+  const src = task?.data?.image;
 
   const goToNext = () => {
     if (index < tasks.length - 1) {
@@ -38,6 +39,20 @@ const TaskModal = observer(({ tasks, currentTaskId, setCurrentTaskId }: TaskModa
       setCurrentTaskId(tasks[index - 1].id);
     }
   };
+
+  // assign hotkeys
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowLeft") {
+        goToPrev();
+      } else if (event.key === "ArrowRight") {
+        goToNext();
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [goToNext, goToPrev]);
 
   if (!task) {
     return null;
@@ -53,7 +68,7 @@ const TaskModal = observer(({ tasks, currentTaskId, setCurrentTaskId }: TaskModa
       <div className={styles.container}>
         <img
           className={styles.image}
-          src={task.data.image ?? task.data[0]}
+          src={src}
           alt="Task Preview"
         />
       </div>
