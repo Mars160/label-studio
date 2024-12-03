@@ -10,7 +10,7 @@ export const MembershipInfo = () => {
   return (
     <div className="">
       <a id="membership-info" />
-      <h2>Membership Info</h2>
+      <h1>Membership Info</h1>
       <div className="">
         <div>User ID</div>
         <div>{user?.id}</div>
