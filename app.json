@@ -7,7 +7,7 @@
   ],
   "website": "https://labelstud.io",
   "repository": "https://github.com/HumanSignal/label-studio",
-  "logo": "https://raw.githubusercontent.com/HumanSignal/label-studio/develop/images/heartex_icon_opossum_orang.svg",
+  "logo": "https://raw.githubusercontent.com/HumanSignal/label-studio/refs/heads/develop/images/heartex_icon_opossum_orang.svg",
   "stack": "container",
   "addons": [
     {
@@ -26,12 +26,12 @@
     "USERNAME": {
       "description": "Username(email) for default user",
       "value": "",
-      "required": false
+      "required": true
     },
     "PASSWORD": {
       "description": "Password for default user",
       "value": "",
-      "required": false
+      "required": true
     }
   }
 }
