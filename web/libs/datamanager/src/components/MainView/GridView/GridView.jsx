@@ -91,7 +91,7 @@ export const GridView = observer(({ data, view, loadMore, fields, onChange, hidd
     ({ style, rowIndex, columnIndex }) => {
       const index = getCellIndex(rowIndex, columnIndex);
       const row = data?.[index];
-      if(!row) return null;
+      if (!row) return null;
 
       const props = {
         style: {
