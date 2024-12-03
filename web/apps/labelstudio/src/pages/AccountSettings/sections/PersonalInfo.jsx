@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { InputFile } from "@humansignal/ui";
 import { Button } from "apps/labelstudio/src/components";
 import { Input } from "apps/labelstudio/src/components/Form/Elements";
@@ -12,10 +12,10 @@ export const PersonalInfo = () => {
   const api = useAPI();
   const toast = useToast();
   const { user, fetch, isInProgress } = useCurrentUser();
-  const [fname, setFName] = useState(user?.first_name);
-  const [lname, setLName] = useState(user?.last_name);
-  const [email, setEmail] = useState(user?.email);
-  const [phone, setPhone] = useState(user?.phone);
+  const [fname, setFName] = useState();
+  const [lname, setLName] = useState();
+  const [email, setEmail] = useState();
+  const [phone, setPhone] = useState();
   const userInfoForm = useRef();
   const userAvatarForm = useRef();
   const avatarRef = useRef();
@@ -40,13 +40,36 @@ export const PersonalInfo = () => {
       } else {
         fetch();
       }
+      userAvatarForm.current.reset();
     },
     [user?.id, fetch],
   );
-  const userFormSubmitHandler = (e) => {
+  const userFormSubmitHandler = useCallback(async (e) => {
     e.preventDefault();
-    console.log("userFormSubmitHandler", e);
-  };
+    const response = await api.callApi("updateUser", {
+      params: {
+        pk: user?.id,
+      },
+      body: {
+        first_name: fname,
+        last_name: lname,
+        phone,
+      },
+      errorFilter: () => true,
+    });
+    if (response?.status) {
+      toast.show({ message: response?.response?.detail ?? "Error updating user", type: "error" });
+    } else {
+      fetch();
+    }
+  }, [fname, lname, phone, user?.id]);
+
+  useEffect(() => {
+    setFName(user?.first_name);
+    setLName(user?.last_name);
+    setEmail(user?.email);
+    setPhone(user?.phone);
+  }, [user])
 
   return (
     <div className="">
@@ -79,7 +102,7 @@ export const PersonalInfo = () => {
         </div>
         <div className={styles.flexRow}>
           <div className={styles.flex1}>
-            <Input label="E-mail" name="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <Input label="E-mail"  type="email" readonly={true} value={email} onChange={(e) => setEmail(e.target.value)} />
           </div>
           <div className={styles.flex1}>
             <Input label="Phone" name="phone" type="phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
