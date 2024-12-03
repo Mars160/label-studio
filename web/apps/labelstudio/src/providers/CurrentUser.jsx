@@ -6,10 +6,13 @@ const CurrentUserContext = createContext();
 export const CurrentUserProvider = ({ children }) => {
   const api = useAPI();
   const [user, setUser] = useState();
+  const [isInProgress, setIsInProgress] = useState(false);
 
   const fetch = useCallback(() => {
+    setIsInProgress(true);
     api.callApi("me").then((user) => {
       setUser(user);
+      setIsInProgress(false);
     });
   }, []);
 
@@ -17,7 +20,7 @@ export const CurrentUserProvider = ({ children }) => {
     fetch();
   }, [fetch]);
 
-  return <CurrentUserContext.Provider value={{ user, fetch }}>{children}</CurrentUserContext.Provider>;
+  return <CurrentUserContext.Provider value={{ user, fetch, isInProgress }}>{children}</CurrentUserContext.Provider>;
 };
 
 export const useCurrentUser = () => useContext(CurrentUserContext) ?? {};

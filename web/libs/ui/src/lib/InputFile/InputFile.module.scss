@@ -6,6 +6,7 @@
   cursor: pointer;
   outline: none;
 }
+
 .labelContent {
   position: absolute;
   left: 0;
@@ -19,6 +20,7 @@
   padding: var(--spacing-small);
   background-color: var(--white);
 }
+
 .inputWrapper {
   position: relative;
   display: flex;
@@ -28,6 +30,7 @@
   cursor: pointer;
   align-items: center;
   outline: none;
+
   &:focus-within .labelContent {
     outline: 2px solid var(--primary_link);
   }

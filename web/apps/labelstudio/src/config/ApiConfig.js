@@ -4,6 +4,8 @@ export const API_CONFIG = {
     // Users
     users: "/users",
     updateUser: "PATCH:/users/:pk",
+    updateUserAvatar: "POST:/users/:pk/avatar",
+    deleteUserAvatar: "DELETE:/users/:pk/avatar",
     me: "/current-user/whoami",
 
     // Organization

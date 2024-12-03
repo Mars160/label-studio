@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import { Divider } from "../../../components/Divider/Divider";
 import { useCurrentUser } from "../../../providers/CurrentUser";
 import { useAPI } from "../../../providers/ApiProvider";
@@ -31,10 +30,12 @@ export const MembershipInfo = () => {
         <div></div>
       </div>
 
-      <Divider height="1px"/>
+      <Divider height="1px" />
       <div className="">
         <div>Organization</div>
-        <div><a href={OrganizationPage.path}>{user?.email}</a></div>
+        <div>
+          <a href={OrganizationPage.path}>{user?.email}</a>
+        </div>
       </div>
 
       <div className="">
@@ -57,5 +58,5 @@ export const MembershipInfo = () => {
         <div></div>
       </div>
     </div>
-  )
+  );
 };
