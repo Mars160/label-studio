@@ -146,7 +146,7 @@ export const GridView = observer(({ data, view, loadMore, fields, onChange, hidd
   );
 
   return (
-    <GridViewProvider data={data}>
+    <GridViewProvider data={data} view={view}>
       <Block name="grid-view" mod={{ columnCount }}>
         <Elem tag={AutoSizer} name="resize">
           {({ width, height }) => (

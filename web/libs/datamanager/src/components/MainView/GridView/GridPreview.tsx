@@ -1,7 +1,11 @@
+import { CloseOutlined, LeftCircleOutlined, QuestionCircleOutlined, RightCircleOutlined } from "@ant-design/icons";
+import { Checkbox } from "@humansignal/ui";
 import { observer } from "mobx-react";
 import type { PropsWithChildren } from "react";
 import { createContext, useCallback, useEffect, useRef, useState } from "react";
 import { modal } from "../../Common/Modal/Modal";
+import { Icon } from "../../Common/Icon/Icon";
+import { Tooltip } from "../../Common/Tooltip/Tooltip";
 import styles from "./GridPreview.module.scss";
 
 type Task = {
@@ -15,7 +19,7 @@ type GridViewContextType = {
   setCurrentTaskId: (id: number | null) => void,
 };
 
-type TaskModalProps = GridViewContextType;
+type TaskModalProps = GridViewContextType & { view: any };
 
 export const GridViewContext = createContext<GridViewContextType>({
   tasks: [],
@@ -23,7 +27,7 @@ export const GridViewContext = createContext<GridViewContextType>({
   setCurrentTaskId: () => {},
 });
 
-const TaskModal = observer(({ tasks, currentTaskId, setCurrentTaskId }: TaskModalProps) => {
+const TaskModal = observer(({ view, tasks, currentTaskId, setCurrentTaskId }: TaskModalProps) => {
   const index = tasks.findIndex(task => task.id === currentTaskId);
   const task = tasks[index];
   const src = task?.data?.image;
@@ -40,6 +44,10 @@ const TaskModal = observer(({ tasks, currentTaskId, setCurrentTaskId }: TaskModa
     }
   };
 
+  const onSelect = () => view.toggleSelected(task.id);
+
+  const onClose = () => setCurrentTaskId(null);
+
   // assign hotkeys
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -47,7 +55,17 @@ const TaskModal = observer(({ tasks, currentTaskId, setCurrentTaskId }: TaskModa
         goToPrev();
       } else if (event.key === "ArrowRight") {
         goToNext();
+      } else if (event.key === " ") {
+        onSelect();
+        event.preventDefault();
+      } else if (event.key === "Escape") {
+        onClose();
+      } else {
+        // pass this event through for other keys
+        return;
       }
+
+      event.stopPropagation();
     };
 
     document.addEventListener("keydown", onKeyDown);
@@ -58,22 +76,43 @@ const TaskModal = observer(({ tasks, currentTaskId, setCurrentTaskId }: TaskModa
     return null;
   }
 
+  const tooltip = (
+    <div className={styles.tooltip}>
+      <p>Preview of the task image to quickly navigate through the tasks and select the ones you want to work on.</p>
+      <p>Use [arrow keys] to navigate.</p>
+      <p>[Escape] to close the modal.</p>
+      <p>[Space] to select/unselect the task.</p>
+    </div>
+  )
+
   return (
-    <div>
-      <div className={styles.controls}>
-        <button type="button" onClick={goToPrev} disabled={index === 0}>Previous</button>
-        {/* @todo other controls */}
-        <button type="button" onClick={goToNext} disabled={index === tasks.length - 1}>Next</button>
+    <div className={styles.modal}>
+      <div className={styles.header}>
+        <Checkbox checked={view.selected.isSelected(task.id)} onChange={onSelect}>
+          Task {task.id}
+        </Checkbox>
+        <div className={styles.actions}>
+          <Tooltip title={tooltip}>
+            <Icon icon={QuestionCircleOutlined} />
+          </Tooltip>
+          <Icon icon={CloseOutlined} onClick={onClose} />
+        </div>
       </div>
       <div className={styles.container}>
+        <button type="button" onClick={goToPrev} disabled={index === 0}>
+          <Icon icon={LeftCircleOutlined} />
+        </button>
         <img
           // don't display previous image when loading the next one
           // but then it's jumping a lot because initially image is empty
-          // key={src}
+          key={src}
           className={styles.image}
           src={src}
           alt="Task Preview"
         />
+        <button type="button" onClick={goToNext} disabled={index === tasks.length - 1}>
+          <Icon icon={RightCircleOutlined} />
+        </button>
       </div>
     </div>
   );
@@ -81,9 +120,10 @@ const TaskModal = observer(({ tasks, currentTaskId, setCurrentTaskId }: TaskModa
 
 type GridViewProviderProps = PropsWithChildren<{
   data: Task[];
+  view: any;
 }>;
 
-export const GridViewProvider: React.FC<GridViewProviderProps> = ({ children, data }) => {
+export const GridViewProvider: React.FC<GridViewProviderProps> = ({ children, data, view }) => {
   const [currentTaskId, setCurrentTaskId] = useState<number | null>(null);
   const modalRef = useRef<{ update: (props: object) => void, close: () => void } | null>();
 
@@ -98,17 +138,18 @@ export const GridViewProvider: React.FC<GridViewProviderProps> = ({ children, da
       return;
     }
 
+    const children = <TaskModal view={view} tasks={data} currentTaskId={currentTaskId} setCurrentTaskId={setCurrentTaskId} />;
+
     if (!modalRef.current) {
       modalRef.current = modal({
+        bare: true,
         title: "Task Preview",
         style: { width: 800 },
-        children: <TaskModal tasks={data} currentTaskId={currentTaskId} setCurrentTaskId={setCurrentTaskId} />,
+        children,
         onHidden: onClose,
       });
     } else {
-      modalRef.current.update({
-        children: <TaskModal tasks={data} currentTaskId={currentTaskId} setCurrentTaskId={setCurrentTaskId} />,
-      });
+      modalRef.current.update({ children });
     }
   }, [currentTaskId, data, onClose]);
 
