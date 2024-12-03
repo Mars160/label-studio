@@ -67,6 +67,9 @@ const TaskModal = observer(({ tasks, currentTaskId, setCurrentTaskId }: TaskModa
       </div>
       <div className={styles.container}>
         <img
+          // don't display previous image when loading the next one
+          // but then it's jumping a lot because initially image is empty
+          // key={src}
           className={styles.image}
           src={src}
           alt="Task Preview"
