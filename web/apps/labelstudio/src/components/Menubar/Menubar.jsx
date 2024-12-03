@@ -14,6 +14,7 @@ import {
 } from "../../assets/icons";
 import { useConfig } from "../../providers/ConfigProvider";
 import { useContextComponent, useFixedLocation } from "../../providers/RoutesProvider";
+import { useCurrentUser } from "../../providers/CurrentUser";
 import { cn } from "../../utils/bem";
 import { absoluteURL, isDefined } from "../../utils/helpers";
 import { Breadcrumbs } from "../Breadcrumbs/Breadcrumbs";
@@ -52,6 +53,7 @@ const RightContextMenu = ({ className, ...props }) => {
 export const Menubar = ({ enabled, defaultOpened, defaultPinned, children, onSidebarToggle, onSidebarPin }) => {
   const menuDropdownRef = useRef();
   const useMenuRef = useRef();
+  const { user, fetch, isInProgress } = useCurrentUser();
   const location = useFixedLocation();
 
   const config = useConfig();
@@ -67,7 +69,7 @@ export const Menubar = ({ enabled, defaultOpened, defaultPinned, children, onSid
   const sidebarClass = cn("sidebar");
   const contentClass = cn("content-wrapper");
   const contextItem = menubarClass.elem("context-item");
-  const showNewsletterDot = !isDefined(config.user.allow_newsletters);
+  const showNewsletterDot = !isDefined(user?.allow_newsletters);
 
   const sidebarPin = useCallback(
     (e) => {
@@ -164,8 +166,8 @@ export const Menubar = ({ enabled, defaultOpened, defaultPinned, children, onSid
               </Menu>
             }
           >
-            <div title={config.user.email} className={menubarClass.elem("user")}>
-              <Userpic user={config.user} />
+            <div title={user?.email} className={menubarClass.elem("user")}>
+              <Userpic user={user} isInProgress={isInProgress} />
               {showNewsletterDot && <div className={menubarClass.elem("userpic-badge")} />}
             </div>
           </Dropdown.Trigger>
