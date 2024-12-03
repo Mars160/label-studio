@@ -18,9 +18,11 @@ export const PersonalInfo = () => {
     userAvatarForm.current.submit();
   };
   const avatarFormSubmitHandler = (e) => {
+    e.preventDefault();
     console.log("avatarFormSubmitHandler", e);
   };
   const userFormSubmitHandler = (e) => {
+    e.preventDefault();
     console.log("userFormSubmitHandler", e);
   };
   return (
