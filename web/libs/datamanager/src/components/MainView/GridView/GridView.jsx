@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import { useContext, useState } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeGrid } from "react-window";
 import InfiniteLoader from "react-window-infinite-loader";
@@ -82,7 +82,7 @@ export const GridView = observer(({ data, view, loadMore, fields, onChange, hidd
 
   const getCellIndex = (row, column) => columnCount * row + column;
 
-  const fieldsData = React.useMemo(() => {
+  const fieldsData = useMemo(() => {
     return prepareColumns(fields, hiddenFields);
   }, [fields, hiddenFields]);
 
@@ -94,7 +94,7 @@ export const GridView = observer(({ data, view, loadMore, fields, onChange, hidd
       return res + height;
     }, 16);
 
-  const renderItem = React.useCallback(
+  const renderItem = useCallback(
     ({ style, rowIndex, columnIndex }) => {
       const index = getCellIndex(rowIndex, columnIndex);
       const row = data[index];
@@ -135,7 +135,7 @@ export const GridView = observer(({ data, view, loadMore, fields, onChange, hidd
 
   const itemCount = Math.ceil(data.length / columnCount);
 
-  const isItemLoaded = React.useCallback(
+  const isItemLoaded = useCallback(
     (index) => {
       const rowIndex = index * columnCount;
       const rowFullfilled = data.slice(rowIndex, columnCount).length === columnCount;
