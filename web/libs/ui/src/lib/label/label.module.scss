@@ -53,7 +53,9 @@
 
   &[data-required] &__text::after {
     content: "Required";
+    font-size: 0.825rem;
     color: var(--sand_500);
+    margin-left: 0.325rem;
   }
 
   &_placement_right {
