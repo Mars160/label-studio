@@ -7,16 +7,25 @@
 
     h1 {
       font-size: var(--font-size-header, 28px);
-      margin: 0 0 var(--spacing-medium);
+      margin: 0;
     }
   }
+}
+
+.sectionContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--spacing-large);
 }
 
 .flexRow {
   display: flex;
   align-items: center;
   gap: var(--spacing-large);
-  margin-bottom: var(--spacing-large);
+  &.flexEnd {
+    justify-content: flex-end;
+  }
 }
 
 .flex1 {
@@ -25,4 +34,8 @@
 
 .userPic {
   flex: none;
+}
+
+.saveButton {
+  width: 125px;
 }

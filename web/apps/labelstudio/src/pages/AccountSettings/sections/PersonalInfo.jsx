@@ -1,21 +1,22 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { InputFile } from "@humansignal/ui";
+import clsx from "clsx";
+import { InputFile, useToast } from "@humansignal/ui";
 import { Button } from "apps/labelstudio/src/components";
 import { Input } from "apps/labelstudio/src/components/Form/Elements";
 import { Userpic } from "apps/labelstudio/src/components/Userpic/Userpic";
 import { useCurrentUser } from "../../../providers/CurrentUser";
 import { useAPI } from "apps/labelstudio/src/providers/ApiProvider";
-import { useToast } from "@humansignal/ui";
 import styles from "../AccountSettings.module.scss";
 
 export const PersonalInfo = () => {
   const api = useAPI();
   const toast = useToast();
-  const { user, fetch, isInProgress } = useCurrentUser();
-  const [fname, setFName] = useState();
-  const [lname, setLName] = useState();
-  const [email, setEmail] = useState();
-  const [phone, setPhone] = useState();
+  const { user, fetch, isInProgress: userInProgress } = useCurrentUser();
+  const [fname, setFName] = useState("");
+  const [lname, setLName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [isInProgress, setIsInProgress] = useState(false);
   const userInfoForm = useRef();
   const userAvatarForm = useRef();
   const avatarRef = useRef();
@@ -65,55 +66,61 @@ export const PersonalInfo = () => {
   }, [fname, lname, phone, user?.id]);
 
   useEffect(() => {
+    if (userInProgress) return;
     setFName(user?.first_name);
     setLName(user?.last_name);
     setEmail(user?.email);
     setPhone(user?.phone);
-  }, [user])
+    setIsInProgress(userInProgress);
+  }, [user, userInProgress]);
+
+  useEffect(() => setIsInProgress(userInProgress), [userInProgress]);
 
   return (
-    <div className="">
+    <div className={styles.section}>
       <a id="personal-info" />
-      <h1>Personal Info</h1>
-      <div className={styles.flexRow}>
-        <Userpic user={user} isInProgress={isInProgress} size={92} style={{ flex: "none" }} />
-        <form ref={userAvatarForm} className={styles.flex1} onSubmit={(e) => avatarFormSubmitHandler(e)}>
-          <InputFile
-            name="avatar"
-            onChange={fileChangeHandler}
-            accept="image/png, image/jpeg, image/jpg"
-            ref={avatarRef}
-          />
-        </form>
-        {user?.avatar && (
-          <form onSubmit={(e) => avatarFormSubmitHandler(e, true)}>
-            <Button look="danger">Delete</Button>
+      <div className={styles.sectionContent}>
+        <h1>Personal Info</h1>
+        <div className={styles.flexRow}>
+          <Userpic user={user} isInProgress={userInProgress} size={92} style={{ flex: "none" }} />
+          <form ref={userAvatarForm} className={styles.flex1} onSubmit={(e) => avatarFormSubmitHandler(e)}>
+            <InputFile
+              name="avatar"
+              onChange={fileChangeHandler}
+              accept="image/png, image/jpeg, image/jpg"
+              ref={avatarRef}
+            />
           </form>
-        )}
+          {user?.avatar && (
+            <form onSubmit={(e) => avatarFormSubmitHandler(e, true)}>
+              <Button look="danger">Delete</Button>
+            </form>
+          )}
+        </div>
+        <form ref={userInfoForm} className={styles.sectionContent} onSubmit={userFormSubmitHandler}>
+          <div className={styles.flexRow}>
+            <div className={styles.flex1}>
+              <Input label="First Name" value={fname} onChange={(e) => setFName(e.target.value)} />
+            </div>
+            <div className={styles.flex1}>
+              <Input label="Last Name" value={lname} onChange={(e) => setLName(e.target.value)} />
+            </div>
+          </div>
+          <div className={styles.flexRow}>
+            <div className={styles.flex1}>
+              <Input label="E-mail" type="email" readOnly={true} value={email} onChange={(e) => setEmail(e.target.value)} />
+            </div>
+            <div className={styles.flex1}>
+              <Input label="Phone" type="phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
+            </div>
+          </div>
+          <div className={clsx(styles.flexRow, styles.flexEnd)}>
+            <Button look="primary" style={{width: 125}} waiting={isInProgress}>
+              Save
+            </Button>
+          </div>
+        </form>
       </div>
-      <form ref={userInfoForm} onSubmit={userFormSubmitHandler}>
-        <div className={styles.flexRow}>
-          <div className={styles.flex1}>
-            <Input label="First Name" name="fname" value={fname} onChange={(e) => setFName(e.target.value)} />
-          </div>
-          <div className={styles.flex1}>
-            <Input label="Last Name" name="lname" value={lname} onChange={(e) => setLName(e.target.value)} />
-          </div>
-        </div>
-        <div className={styles.flexRow}>
-          <div className={styles.flex1}>
-            <Input label="E-mail"  type="email" readonly={true} value={email} onChange={(e) => setEmail(e.target.value)} />
-          </div>
-          <div className={styles.flex1}>
-            <Input label="Phone" name="phone" type="phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
-          </div>
-        </div>
-        <div className={styles.flexRow}>
-          <Button look="primary" size="compact">
-            Save
-          </Button>
-        </div>
-      </form>
     </div>
   );
 };

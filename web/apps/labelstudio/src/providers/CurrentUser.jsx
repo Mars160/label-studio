@@ -10,10 +10,9 @@ export const CurrentUserProvider = ({ children }) => {
 
   const fetch = useCallback(() => {
     setIsInProgress(true);
-    api.callApi("me").then((user) => {
-      setUser(user);
-      setIsInProgress(false);
-    });
+    api.callApi("me")
+      .then((user) => setUser(user))
+      .finally(() => setIsInProgress(false));
   }, []);
 
   useEffect(() => {
