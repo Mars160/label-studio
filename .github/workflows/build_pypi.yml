@@ -158,7 +158,11 @@ jobs:
                });
             }
 
+      - name: Check SDK version is not git sha
+        run: grep 'label-studio-sdk\s*=\s*"\d\d*.\d\d*.\d\d*"' pyproject.toml
+
       - name: Upload to PYPI
+        if: inputs.upload_to_pypi
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ inputs.upload_to_pypi && secrets.PYPI_APIKEY || secrets.PYPI_APIKEY_TEST }}
