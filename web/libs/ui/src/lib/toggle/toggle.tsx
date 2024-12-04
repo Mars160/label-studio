@@ -27,9 +27,9 @@ export const Toggle = forwardRef(
       checked,
       defaultChecked,
       onChange,
-      required = false,
+      required,
       style,
-      alwaysBlue = false,
+      alwaysBlue,
       ...props
     }: ToggleProps,
     ref,
