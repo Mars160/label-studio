@@ -1,11 +1,11 @@
-import { Divider } from "../../../components/Divider/Divider";
-import { useCurrentUser } from "../../../providers/CurrentUser";
-import { useAPI } from "../../../providers/ApiProvider";
-import { OrganizationPage } from "../../../pages/Organization";
+// import { Divider } from "../../../../../../apps/labelstudio/src/components/Divider/Divider";
+// import { useCurrentUser } from "../../../../../../apps/labelstudio/src/providers/CurrentUser";
+// import { useAPI } from "../../../../../../apps/labelstudio/src/providers/ApiProvider";
+// import { OrganizationPage } from "../../../../../../apps/labelstudio/src/pages/Organization";
 export const MembershipInfo = () => {
-  const api = useAPI();
-  const { user } = useCurrentUser();
-
+  // const api = useAPI();
+  // const { user } = useCurrentUser();
+  const user = {};
   return (
     <div className="">
       <a id="membership-info" />
@@ -30,11 +30,11 @@ export const MembershipInfo = () => {
         <div></div>
       </div>
 
-      <Divider height="1px" />
+      {/* <Divider height="1px" /> */}
       <div className="">
         <div>Organization</div>
         <div>
-          <a href={OrganizationPage.path}>{user?.email}</a>
+          <a href="/organization">{user?.email}</a>
         </div>
       </div>
 

@@ -1,13 +1,13 @@
 import { useMemo } from "react";
 import { Redirect } from "react-router-dom";
-import { useAPI } from "../../providers/ApiProvider";
-import { SidebarMenu } from "../../components/SidebarMenu/SidebarMenu";
+// import { useAPI } from "../../../../../apps/labelstudio/src/providers/ApiProvider";
+// import { SidebarMenu } from "../../../../../apps/labelstudio/src/components/SidebarMenu/SidebarMenu";
 import styles from "./AccountSettings.module.scss";
 import { accountSettingsSections } from "./sections";
-import { Card } from "../../components/Card/Card";
+import { Card } from "@humansignal/ui";
 
 export const AccountSettingsPage = () => {
-  const api = useAPI();
+  // const api = useAPI();
   const menuItems = useMemo(
     () => accountSettingsSections.map(({ title, id }) => ({ title, path: `#${id}` })),
     [accountSettingsSections],
@@ -15,7 +15,7 @@ export const AccountSettingsPage = () => {
 
   return (
     <div className={styles.accountSettings}>
-      <SidebarMenu menuItems={menuItems} path={AccountSettingsPage.path}>
+      {/* <SidebarMenu menuItems={menuItems} path={AccountSettingsPage.path}> */}
         <div className={styles.accountSettings__content}>
           {accountSettingsSections?.map(({ component: Section, id }: any) => (
             <Card key={id}>
@@ -23,7 +23,7 @@ export const AccountSettingsPage = () => {
             </Card>
           ))}
         </div>
-      </SidebarMenu>
+      {/* </SidebarMenu> */}
     </div>
   );
 };

@@ -148,6 +148,5 @@ def user_account(request):
 
     return render(
         request,
-        'users/user_account.html',
-        {'settings': settings, 'user': user, 'user_profile_form': form, 'token': token},
+        'base.html',
     )

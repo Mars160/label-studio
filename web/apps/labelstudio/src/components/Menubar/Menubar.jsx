@@ -28,7 +28,7 @@ import "./MenuContent.scss";
 import "./MenuSidebar.scss";
 import { ModelsPage } from "../../pages/Organization/Models/ModelsPage";
 import { FF_DIA_835, isFF } from "../../utils/feature-flags";
-import { AccountSettingsPage } from "../../pages/AccountSettings/AccountSettings";
+import { AccountSettingsPage } from "@humansignal/core";
 
 export const MenubarContext = createContext();
 
