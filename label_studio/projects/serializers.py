@@ -3,6 +3,19 @@
 import bleach
 from constants import SAFE_HTML_ATTRIBUTES, SAFE_HTML_TAGS
 from django.db.models import Q
+from label_studio_sdk.label_interface import LabelInterface
+from label_studio_sdk.label_interface.control_tags import (
+    ChoicesTag,
+    EllipseLabelsTag,
+    HyperTextLabelsTag,
+    KeyPointLabelsTag,
+    LabelsTag,
+    ParagraphLabelsTag,
+    PolygonLabelsTag,
+    RectangleLabelsTag,
+    TaxonomyTag,
+    TimeSeriesLabelsTag,
+)
 from projects.models import Project, ProjectImport, ProjectOnboarding, ProjectReimport, ProjectSummary
 from rest_flex_fields import FlexFieldsModelSerializer
 from rest_framework import serializers
@@ -66,6 +79,9 @@ class ProjectSerializer(FlexFieldsModelSerializer):
     config_has_control_tags = SerializerMethodField(
         default=None, read_only=True, help_text='Flag to detect is project ready for labeling'
     )
+    config_suitable_for_bulk_annotation = serializers.SerializerMethodField(
+        default=None, read_only=True, help_text='Flag to detect is project ready for bulk annotation'
+    )
     finished_task_number = serializers.IntegerField(default=None, read_only=True, help_text='Finished tasks')
 
     queue_total = serializers.SerializerMethodField()
@@ -81,6 +97,46 @@ class ProjectSerializer(FlexFieldsModelSerializer):
     @staticmethod
     def get_config_has_control_tags(project):
         return len(project.get_parsed_config()) > 0
+
+    @staticmethod
+    def get_config_suitable_for_bulk_annotation(project):
+        li = LabelInterface(project.label_config)
+
+        # List of tags that should not be present
+        disallowed_tags = [
+            LabelsTag,
+            EllipseLabelsTag,
+            KeyPointLabelsTag,
+            PolygonLabelsTag,
+            RectangleLabelsTag,
+            HyperTextLabelsTag,
+            ParagraphLabelsTag,
+            TimeSeriesLabelsTag,
+        ]
+
+        # Return False if any disallowed tag is present
+        for tag_class in disallowed_tags:
+            if li.find_tags_by_class(tag_class):
+                return False
+
+        # For all ChoicesTag and TaxonomyTag, check that perRegion and perItem are not enabled
+        for tag_class in [ChoicesTag, TaxonomyTag]:
+            tags = li.find_tags_by_class(tag_class)
+            for tag in tags:
+                per_region = tag.attr.get('perRegion', 'false').lower() == 'true'
+                per_item = tag.attr.get('perItem', 'false').lower() == 'true'
+                if per_region or per_item:
+                    return False
+
+        # For TaxonomyTag, check that labeling attribute is not equal to 'true'
+        taxonomy_tags = li.find_tags_by_class(TaxonomyTag)
+        for tag in taxonomy_tags:
+            labeling = tag.attr.get('labeling', 'false').lower() == 'true'
+            if labeling:
+                return False
+
+        # If all checks pass, return True
+        return True
 
     @staticmethod
     def get_parsed_label_config(project):
@@ -156,6 +212,7 @@ class ProjectSerializer(FlexFieldsModelSerializer):
             'finished_task_number',
             'queue_total',
             'queue_done',
+            'config_suitable_for_bulk_annotation',
         ]
 
     def validate_label_config(self, value):
