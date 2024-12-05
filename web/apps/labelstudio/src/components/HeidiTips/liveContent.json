@@ -189,11 +189,11 @@
   ],
   "authPage": [
     {
-      "title": "Placeholder: Prompts for auto labeling",
-      "description": "TODO",
+      "title": "Auto-labeling with Prompts",
+      "description": "Prompts allows you to leverage LLMs to swiftly generate accurate predictions, enabling instant labeling of thousands of tasks.",
       "link": {
         "label": "Learn more",
-        "url": "https://humansignal.com/",
+        "url": "https://docs.humansignal.com/guide/prompts_overview",
         "params": {
           "experiment": "login_revamp",
           "treatment": "prompts_auto_labeling"
@@ -201,11 +201,11 @@
       }
     },
     {
-      "title": "Placeholder: Prompts something else",
-      "description": "TODO",
+      "title": "Todo: Iterate on your prompts",
+      "description": "Iterate on your prompts ",
       "link": {
         "label": "Learn more",
-        "url": "https://humansignal.com/",
+        "url": "https://docs.humansignal.com/guide/prompts_overview#Prompt-evaluation-and-fine-tuning",
         "params": {
           "experiment": "login_revamp",
           "treatment": "prompts_something_else"
