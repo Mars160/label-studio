@@ -194,6 +194,27 @@ module.exports = composePlugins(
           }
         });
       }
+
+      if (testString.includes(".css")) {
+        console.log("!!!!! EXCLUDE RULE", rule.exlude);
+        rule.exclude = /hs-app\.css/;
+      }
+    });
+
+    // tailwindcss
+    config.module.rules.push({
+      test: /hs-app\.css/,
+      exclude: /node_modules/,
+      use: [
+        "style-loader",
+        {
+          loader: "css-loader",
+          options: {
+            importLoaders: 1,
+          },
+        },
+        "postcss-loader",
+      ],
     });
 
     config.module.rules.push(
