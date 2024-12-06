@@ -1,6 +1,6 @@
 {
-  "message": "fix: LEAP-1651: Properly update meta text for regions (#6726)",
-  "commit": "07f91015ebeb68e15ff2339d7546212500dbc276",
-  "date": "2024-12-06T11:10:29.000Z",
+  "message": "ci: LEAP-1565: LEAP-1566: LEAP-1567: Upgrade cookie version (#6762)",
+  "commit": "545fbad38c59f810f00dcfec73b2e3702ef5a729",
+  "date": "2024-12-06T19:33:21.000Z",
   "branch": "develop"
 }
