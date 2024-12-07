@@ -71,6 +71,9 @@ export const FF_LOPS_86 = "fflag_feat_front_lops_86_datasets_storage_edit_short"
  */
 export const FF_SELF_SERVE = "fflag_feat_front_leap_482_self_serve_short";
 
+/** Add ability to preview image tasks in Data Manager Grid View */
+export const FF_GRID_PREVIEW = "fflag_feat_front_leap_1424_grid_preview_short";
+
 // Customize flags
 const flags = {};
 

@@ -8,7 +8,7 @@ import { Checkbox } from "@humansignal/ui";
 import { Space } from "../../Common/Space/Space";
 import { getProperty, prepareColumns } from "../../Common/Table/utils";
 import * as DataGroups from "../../DataGroups";
-import { FF_LOPS_E_3, isFF } from "../../../utils/feature-flags";
+import { FF_GRID_PREVIEW, FF_LOPS_E_3, isFF } from "../../../utils/feature-flags";
 import { SkeletonLoader } from "../../Common/SkeletonLoader";
 import { GridViewContext, GridViewProvider } from "./GridPreview";
 import "./GridView.scss";
@@ -60,6 +60,7 @@ const GridCell = observer(({ view, selected, row, fields, onClick, ...props }) =
   const { setCurrentTaskId } = useContext(GridViewContext);
 
   const handleBodyClick = (e) => {
+    if (!isFF(FF_GRID_PREVIEW)) return;
     // @todo skip this interaction if there are no images in the task
     e.stopPropagation();
     setCurrentTaskId(row.id);
