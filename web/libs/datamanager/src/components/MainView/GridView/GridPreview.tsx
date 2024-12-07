@@ -15,6 +15,7 @@ type Task = {
 
 type GridViewContextType = {
   tasks: Task[],
+  imageField: string | undefined,
   currentTaskId: number | null,
   setCurrentTaskId: (id: number | null) => void,
 };
@@ -23,14 +24,15 @@ type TaskModalProps = GridViewContextType & { view: any };
 
 export const GridViewContext = createContext<GridViewContextType>({
   tasks: [],
+  imageField: undefined,
   currentTaskId: null,
   setCurrentTaskId: () => {},
 });
 
-const TaskModal = observer(({ view, tasks, currentTaskId, setCurrentTaskId }: TaskModalProps) => {
+const TaskModal = observer(({ view, tasks, imageField, currentTaskId, setCurrentTaskId }: TaskModalProps) => {
   const index = tasks.findIndex(task => task.id === currentTaskId);
   const task = tasks[index];
-  const src = task?.data?.image;
+  const src = imageField ? (task?.data?.[imageField] || "") : "";
 
   const goToNext = () => {
     if (index < tasks.length - 1) {
@@ -121,11 +123,13 @@ const TaskModal = observer(({ view, tasks, currentTaskId, setCurrentTaskId }: Ta
 type GridViewProviderProps = PropsWithChildren<{
   data: Task[];
   view: any;
+  fields: { alias: string, currentType: string }[];
 }>;
 
-export const GridViewProvider: React.FC<GridViewProviderProps> = ({ children, data, view }) => {
+export const GridViewProvider: React.FC<GridViewProviderProps> = ({ children, data, view, fields }) => {
   const [currentTaskId, setCurrentTaskId] = useState<number | null>(null);
   const modalRef = useRef<{ update: (props: object) => void, close: () => void } | null>();
+  const imageField = fields.find(f => f.currentType === "Image")?.alias;
 
   const onClose = useCallback(() => {
     modalRef.current = null;
@@ -138,7 +142,9 @@ export const GridViewProvider: React.FC<GridViewProviderProps> = ({ children, da
       return;
     }
 
-    const children = <TaskModal view={view} tasks={data} currentTaskId={currentTaskId} setCurrentTaskId={setCurrentTaskId} />;
+    if (!imageField) return;
+
+    const children = <TaskModal view={view} tasks={data} imageField={imageField} currentTaskId={currentTaskId} setCurrentTaskId={setCurrentTaskId} />;
 
     if (!modalRef.current) {
       modalRef.current = modal({
@@ -154,7 +160,7 @@ export const GridViewProvider: React.FC<GridViewProviderProps> = ({ children, da
   }, [currentTaskId, data, onClose]);
 
   return (
-    <GridViewContext.Provider value={{ tasks: data, currentTaskId, setCurrentTaskId }}>
+    <GridViewContext.Provider value={{ tasks: data, imageField, currentTaskId, setCurrentTaskId }}>
       {children}
     </GridViewContext.Provider>
   );

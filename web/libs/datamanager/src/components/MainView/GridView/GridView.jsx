@@ -57,10 +57,10 @@ const GridDataGroup = observer(({ type, value, field, row }) => {
 });
 
 const GridCell = observer(({ view, selected, row, fields, onClick, ...props }) => {
-  const { setCurrentTaskId } = useContext(GridViewContext);
+  const { setCurrentTaskId, imageField } = useContext(GridViewContext);
 
   const handleBodyClick = (e) => {
-    if (!isFF(FF_GRID_PREVIEW)) return;
+    if (!isFF(FF_GRID_PREVIEW) || !imageField) return;
     // @todo skip this interaction if there are no images in the task
     e.stopPropagation();
     setCurrentTaskId(row.id);
@@ -147,7 +147,7 @@ export const GridView = observer(({ data, view, loadMore, fields, onChange, hidd
   );
 
   return (
-    <GridViewProvider data={data} view={view}>
+    <GridViewProvider data={data} view={view} fields={fieldsData}>
       <Block name="grid-view" mod={{ columnCount }}>
         <Elem tag={AutoSizer} name="resize">
           {({ width, height }) => (
