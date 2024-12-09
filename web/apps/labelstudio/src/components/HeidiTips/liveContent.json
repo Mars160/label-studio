@@ -213,14 +213,14 @@
       }
     },
     {
-      "title": "Placeholder: New feature",
-      "description": "TODO.",
+      "title": "New Feature!",
+      "description": "You can now label multi-page documents like PDFs.",
       "link": {
         "label": "Learn more",
-        "url": "https://humansignal.com/",
+        "url": "https://labelstud.io/templates/multi-page-document-annotation",
         "params": {
           "experiment": "login_revamp",
-          "treatment": "leap_new_feature"
+          "treatment": "multi_image"
         }
       }
     },
