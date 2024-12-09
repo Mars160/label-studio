@@ -288,6 +288,7 @@ class ProjectCountsListAPI(generics.ListAPIView):
     permission_required = ViewClassPermission(
         GET=all_permissions.projects_view,
     )
+    pagination_class = ProjectListPagination
 
     def get_queryset(self):
         serializer = GetFieldsSerializer(data=self.request.query_params)
