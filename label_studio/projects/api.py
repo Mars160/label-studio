@@ -282,6 +282,21 @@ class ProjectListAPI(generics.ListCreateAPIView):
         return super(ProjectListAPI, self).post(request, *args, **kwargs)
 
 
+@method_decorator(
+    name='get',
+    decorator=swagger_auto_schema(
+        tags=['Projects'],
+        x_fern_sdk_group_name='projects',
+        x_fern_sdk_method_name='counts',
+        x_fern_audiences=['public'],
+        x_fern_pagination={
+            'offset': '$request.page',
+            'results': '$response.results',
+        },
+        operation_summary="List project's counts",
+        operation_description='Returns a list of projects with their counts. For example, task_number which is the total task number in project',
+    ),
+)
 class ProjectCountsListAPI(generics.ListAPIView):
     serializer_class = ProjectCountsSerializer
     filterset_class = ProjectFilterSet
