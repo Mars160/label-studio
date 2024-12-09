@@ -201,14 +201,14 @@
       }
     },
     {
-      "title": "Todo: Iterate on your prompts",
-      "description": "Iterate on your prompts ",
+      "title": "Prompt Engineering",
+      "description": "Manage, evaluate, and iterate on LLM prompts against human-labelled golden datasets.",
       "link": {
         "label": "Learn more",
         "url": "https://docs.humansignal.com/guide/prompts_overview#Prompt-evaluation-and-fine-tuning",
         "params": {
           "experiment": "login_revamp",
-          "treatment": "prompts_something_else"
+          "treatment": "prompt_engineering"
         }
       }
     },
