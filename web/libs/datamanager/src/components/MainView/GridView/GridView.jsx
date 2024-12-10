@@ -59,12 +59,12 @@ const GridDataGroup = observer(({ type, value, field, row }) => {
 const GridCell = observer(({ view, selected, row, fields, onClick, ...props }) => {
   const { setCurrentTaskId, imageField } = useContext(GridViewContext);
 
-  const handleBodyClick = (e) => {
+  const handleBodyClick = useCallback((e) => {
     if (!isFF(FF_GRID_PREVIEW) || !imageField) return;
     // @todo skip this interaction if there are no images in the task
     e.stopPropagation();
     setCurrentTaskId(row.id);
-  };
+  }, [imageField, row.id]);
 
   return (
     <Elem {...props} name="cell" onClick={onClick} mod={{ selected: selected.isSelected(row.id) }}>
