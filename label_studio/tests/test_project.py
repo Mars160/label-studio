@@ -2,16 +2,17 @@ import json
 
 import pytest
 from django.db.models.query import QuerySet
-from tests.utils import make_project
-from users.models import User
-from organizations.models import Organization
-from projects.models import Project
-
+from django.test import TestCase
 from django.urls import reverse
 from django.utils.http import urlencode
-from django.test import TestCase
+from organizations.models import Organization
+from projects.models import Project
 from rest_framework.test import APIClient
 from tasks.models import Task
+from tests.utils import make_project
+from users.models import User
+
+
 @pytest.mark.django_db
 def test_update_tasks_counters_and_task_states(business_client):
     project = make_project({}, business_client.user, use_ml_backend=False)
@@ -61,27 +62,30 @@ class TestProjectCountsListAPI(TestCase):
         Task.objects.create(project=cls.project_1, data={'text': 'Task 2'})
         Task.objects.create(project=cls.project_2, data={'text': 'Task 3'})
 
-    
     def get_url(self, **params):
         return f'{reverse("projects:api:project-counts-list")}?{urlencode(params)}'
-    
+
     def test_get_counts(self):
+
         client = APIClient()
         client.force_authenticate(user=self.user)
         response = client.get(self.get_url(include='id,task_number,finished_task_number,total_predictions_number'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['count'], 2)
-        self.assertEqual(response.json()['results'], [
-            {
-                'id': self.project_1.id,
-                'task_number': 2,
-                'finished_task_number': 0,
-                'total_predictions_number': 0,
-            },
-            {
-                'id': self.project_2.id,
-                'task_number': 1,
-                'finished_task_number': 0,
-                'total_predictions_number': 0,
-            }
-        ])
+        self.assertEqual(
+            response.json()['results'],
+            [
+                {
+                    'id': self.project_1.id,
+                    'task_number': 2,
+                    'finished_task_number': 0,
+                    'total_predictions_number': 0,
+                },
+                {
+                    'id': self.project_2.id,
+                    'task_number': 1,
+                    'finished_task_number': 0,
+                    'total_predictions_number': 0,
+                },
+            ],
+        )
