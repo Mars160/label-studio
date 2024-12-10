@@ -1,6 +1,6 @@
 {
-  "message": "ci: LEAP-1565: LEAP-1566: LEAP-1567: Upgrade cookie version (#6762)",
-  "commit": "545fbad38c59f810f00dcfec73b2e3702ef5a729",
-  "date": "2024-12-06T19:33:21.000Z",
+  "message": "ci: LEAP-1567: Upgrade cookie version (#6770)",
+  "commit": "e5cc4aab337503a7f3f81066bb67f5724ea68b17",
+  "date": "2024-12-10T14:33:37.000Z",
   "branch": "develop"
 }
