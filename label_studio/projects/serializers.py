@@ -5,16 +5,27 @@ from constants import SAFE_HTML_ATTRIBUTES, SAFE_HTML_TAGS
 from django.db.models import Q
 from label_studio_sdk.label_interface import LabelInterface
 from label_studio_sdk.label_interface.control_tags import (
+    BrushLabelsTag,
+    BrushTag,
     ChoicesTag,
+    DateTimeTag,
     EllipseLabelsTag,
+    EllipseTag,
     HyperTextLabelsTag,
     KeyPointLabelsTag,
+    KeyPointTag,
     LabelsTag,
+    NumberTag,
     ParagraphLabelsTag,
     PolygonLabelsTag,
+    PolygonTag,
+    RatingTag,
     RectangleLabelsTag,
+    RectangleTag,
     TaxonomyTag,
+    TextAreaTag,
     TimeSeriesLabelsTag,
+    VideoRectangleTag,
 )
 from projects.models import Project, ProjectImport, ProjectOnboarding, ProjectReimport, ProjectSummary
 from rest_flex_fields import FlexFieldsModelSerializer
@@ -118,6 +129,7 @@ class ProjectSerializer(FlexFieldsModelSerializer):
             HyperTextLabelsTag,
             ParagraphLabelsTag,
             TimeSeriesLabelsTag,
+            VideoRectangleTag,
         ]
 
         # Return False if any disallowed tag is present
@@ -125,20 +137,29 @@ class ProjectSerializer(FlexFieldsModelSerializer):
             if li.find_tags_by_class(tag_class):
                 return False
 
-        # For all ChoicesTag and TaxonomyTag, check that perRegion and perItem are not enabled
-        for tag_class in [ChoicesTag, TaxonomyTag]:
+        # Check perRegion/perItem for expanded list of tags, plus value="no" for Choices/Taxonomy
+        allowed_tags_for_checks = [ChoicesTag, TaxonomyTag, DateTimeTag, NumberTag, RatingTag, TextAreaTag]
+        for tag_class in allowed_tags_for_checks:
             tags = li.find_tags_by_class(tag_class)
             for tag in tags:
                 per_region = tag.attr.get('perRegion', 'false').lower() == 'true'
                 per_item = tag.attr.get('perItem', 'false').lower() == 'true'
                 if per_region or per_item:
                     return False
+                # For ChoicesTag and TaxonomyTag, value must be "no"
+                if tag_class in [ChoicesTag, TaxonomyTag]:
+                    value = tag.attr.get('value', '').lower()
+                    if value != 'no':
+                        return False
 
-        # For TaxonomyTag, check that labeling attribute is not equal to 'true'
+        # For TaxonomyTag, check labeling and apiUrl
         taxonomy_tags = li.find_tags_by_class(TaxonomyTag)
         for tag in taxonomy_tags:
             labeling = tag.attr.get('labeling', 'false').lower() == 'true'
             if labeling:
+                return False
+            api_url = tag.attr.get('apiUrl', None)
+            if api_url is not None:
                 return False
 
         # If all checks pass, return True
