@@ -105,9 +105,15 @@ class ProjectSerializer(FlexFieldsModelSerializer):
         # List of tags that should not be present
         disallowed_tags = [
             LabelsTag,
+            BrushTag,
+            BrushLabelsTag,
+            EllipseTag,
             EllipseLabelsTag,
+            KeyPointTag,
             KeyPointLabelsTag,
+            PolygonTag,
             PolygonLabelsTag,
+            RectangleTag,
             RectangleLabelsTag,
             HyperTextLabelsTag,
             ParagraphLabelsTag,
