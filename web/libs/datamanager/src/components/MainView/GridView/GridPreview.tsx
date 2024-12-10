@@ -34,21 +34,27 @@ const TaskModal = observer(({ view, tasks, imageField, currentTaskId, setCurrent
   const task = tasks[index];
   const src = imageField ? (task?.data?.[imageField] || "") : "";
 
-  const goToNext = () => {
+  const goToNext = useCallback(() => {
     if (index < tasks.length - 1) {
       setCurrentTaskId(tasks[index + 1].id);
     }
-  };
+  }, [index, tasks]);
 
-  const goToPrev = () => {
+  const goToPrev = useCallback(() => {
     if (index > 0) {
       setCurrentTaskId(tasks[index - 1].id);
     }
-  };
+  }, [index, tasks]);
 
-  const onSelect = () => view.toggleSelected(task.id);
+  const onSelect = useCallback(() => {
+    if (task) {
+      view.toggleSelected(task.id);
+    }
+  }, [task, view]);
 
-  const onClose = () => setCurrentTaskId(null);
+  const onClose = useCallback(() => {
+    setCurrentTaskId(null);
+  }, []);
 
   // assign hotkeys
   useEffect(() => {
@@ -72,7 +78,7 @@ const TaskModal = observer(({ view, tasks, imageField, currentTaskId, setCurrent
 
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [goToNext, goToPrev]);
+  }, [goToNext, goToPrev, onSelect, onClose]);
 
   if (!task) {
     return null;
@@ -85,7 +91,7 @@ const TaskModal = observer(({ view, tasks, imageField, currentTaskId, setCurrent
       <p>[Escape] to close the modal.</p>
       <p>[Space] to select/unselect the task.</p>
     </div>
-  )
+  );
 
   return (
     <div className={styles.modal}>
