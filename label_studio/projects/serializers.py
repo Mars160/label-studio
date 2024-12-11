@@ -146,10 +146,9 @@ class ProjectSerializer(FlexFieldsModelSerializer):
                 per_item = tag.attr.get('perItem', 'false').lower() == 'true'
                 if per_region or per_item:
                     return False
-                # For ChoicesTag and TaxonomyTag, value must be "no"
+                # For ChoicesTag and TaxonomyTag, the value attribute must not be set at all
                 if tag_class in [ChoicesTag, TaxonomyTag]:
-                    value = tag.attr.get('value', '').lower()
-                    if value != 'no':
+                    if 'value' in tag.attr:
                         return False
 
         # For TaxonomyTag, check labeling and apiUrl
