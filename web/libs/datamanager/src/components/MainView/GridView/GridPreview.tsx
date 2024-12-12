@@ -68,6 +68,8 @@ const TaskModal = observer(({ view, tasks, imageField, currentTaskId, setCurrent
         event.preventDefault();
       } else if (event.key === "Escape") {
         onClose();
+      } else if (event.key === "ArrowUp") {
+        // prevent Quick View from opening in a background by hotkey
       } else {
         // pass this event through for other keys
         return;
