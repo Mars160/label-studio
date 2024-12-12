@@ -68,7 +68,7 @@ const TaskModal = observer(({ view, tasks, imageField, currentTaskId, setCurrent
         event.preventDefault();
       } else if (event.key === "Escape") {
         onClose();
-      } else if (event.key === "ArrowUp") {
+      } else if (event.key === "ArrowUp" || event.key === "ArrowDown") {
         // prevent Quick View from opening in a background by hotkey
       } else {
         // pass this event through for other keys
@@ -78,7 +78,7 @@ const TaskModal = observer(({ view, tasks, imageField, currentTaskId, setCurrent
       event.stopPropagation();
     };
 
-    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("keydown", onKeyDown, { capture: true });
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [goToNext, goToPrev, onSelect, onClose]);
 
