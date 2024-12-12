@@ -61,7 +61,6 @@ const GridCell = observer(({ view, selected, row, fields, onClick, ...props }) =
 
   const handleBodyClick = useCallback((e) => {
     if (!isFF(FF_GRID_PREVIEW) || !imageField) return;
-    // @todo skip this interaction if there are no images in the task
     e.stopPropagation();
     setCurrentTaskId(row.id);
   }, [imageField, row.id]);

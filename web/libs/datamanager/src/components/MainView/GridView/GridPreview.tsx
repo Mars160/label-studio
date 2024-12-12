@@ -6,6 +6,8 @@ import { createContext, useCallback, useEffect, useRef, useState } from "react";
 import { modal } from "../../Common/Modal/Modal";
 import { Icon } from "../../Common/Icon/Icon";
 import { Tooltip } from "../../Common/Tooltip/Tooltip";
+import { ImagePreview } from "./ImagePreview";
+
 import styles from "./GridPreview.module.scss";
 
 type Task = {
@@ -20,7 +22,7 @@ type GridViewContextType = {
   setCurrentTaskId: (id: number | null) => void,
 };
 
-type TaskModalProps = GridViewContextType & { view: any };
+type TaskModalProps = GridViewContextType & { view: any, imageField: string };
 
 export const GridViewContext = createContext<GridViewContextType>({
   tasks: [],
@@ -32,7 +34,6 @@ export const GridViewContext = createContext<GridViewContextType>({
 const TaskModal = observer(({ view, tasks, imageField, currentTaskId, setCurrentTaskId }: TaskModalProps) => {
   const index = tasks.findIndex(task => task.id === currentTaskId);
   const task = tasks[index];
-  const src = imageField ? (task?.data?.[imageField] || "") : "";
 
   const goToNext = useCallback(() => {
     if (index < tasks.length - 1) {
@@ -110,14 +111,7 @@ const TaskModal = observer(({ view, tasks, imageField, currentTaskId, setCurrent
         <button type="button" onClick={goToPrev} disabled={index === 0}>
           <Icon icon={LeftCircleOutlined} />
         </button>
-        <img
-          // don't display previous image when loading the next one
-          // but then it's jumping a lot because initially image is empty
-          key={src}
-          className={styles.image}
-          src={src}
-          alt="Task Preview"
-        />
+        <ImagePreview task={task} field={imageField} />
         <button type="button" onClick={goToNext} disabled={index === tasks.length - 1}>
           <Icon icon={RightCircleOutlined} />
         </button>
