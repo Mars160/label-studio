@@ -2,6 +2,9 @@ import { useState, useRef, useEffect, type CSSProperties } from 'react'
 import { observer } from "mobx-react";
 import styles from "./GridPreview.module.scss";
 
+const MAX_ZOOM = 20;
+const ZOOM_FACTOR = 0.01;
+
 type Task = {
   id: number,
   data: Record<string, string>,
@@ -91,10 +94,9 @@ const ImagePreview = observer(({ task, field }: ImagePreviewProps) => {
     const cursorY = e.clientY - rect.top;
 
     // Zoom calculation
-    const zoomFactor = 0.01;
     const newScale = e.deltaY < 0
-      ? Math.min(scale * (1 + zoomFactor), 10)  // Max zoom
-      : Math.max(scale * (1 - zoomFactor), 1);  // Min zoom
+      ? Math.min(scale * (1 + ZOOM_FACTOR), MAX_ZOOM)  // Max zoom
+      : Math.max(scale * (1 - ZOOM_FACTOR), 1);  // Min zoom
 
     // Calculate zoom translation
     const scaleDelta = newScale / scale;
