@@ -22,9 +22,10 @@ const ImagePreview = observer(({ task, field }: ImagePreviewProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
-  // Image state
   const [imageLoaded, setImageLoaded] = useState(false);
+  // visible container size
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+  // scaled image size
   const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
 
   // Zoom and position state
@@ -42,6 +43,24 @@ const ImagePreview = observer(({ task, field }: ImagePreviewProps) => {
     setScale(1);
     setIsDragging(false);
   }, [task, src]);
+
+  const constrainOffset = (newOffset: { x: number, y: number }) => {
+    const { x, y } = newOffset;
+    const { width, height } = imageSize;
+    const { width: containerWidth, height: containerHeight } = containerSize;
+
+    // to preserve paddings and make it less weird
+    const minX = (containerWidth - width) / 2;
+    const minY = (containerHeight - height) / 2;
+    // the far edges should be behind container edges
+    const maxX = Math.max(width * scale - containerWidth, 0);
+    const maxY = Math.max(height * scale - containerHeight, 0);
+
+    return {
+      x: Math.min(Math.max(x, -maxX), minX),
+      y: Math.min(Math.max(y, -maxY), minY),
+    };
+  }
 
   const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
     if (containerRef.current) {
@@ -107,7 +126,7 @@ const ImagePreview = observer(({ task, field }: ImagePreviewProps) => {
     const newY = cursorY - (cursorY - offset.y) * scaleDelta;
 
     setScale(newScale);
-    setOffset({ x: newX, y: newY });
+    setOffset(constrainOffset({ x: newX, y: newY }));
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -124,7 +143,7 @@ const ImagePreview = observer(({ task, field }: ImagePreviewProps) => {
     const newX = e.clientX - dragAnchor.x;
     const newY = e.clientY - dragAnchor.y;
 
-    setOffset({ x: startOffset.x + newX, y: startOffset.y + newY });
+    setOffset(constrainOffset({ x: startOffset.x + newX, y: startOffset.y + newY }));
   };
 
   const handleMouseUp = () => {
