@@ -27,7 +27,10 @@ const dataCleanup = (tab, columnIds) => {
   if (!data) return { ...tab };
 
   if (data.filters) {
-    data.filters.items = data.filters.items.filter(({ filter }) => {
+    data._originalFilters = [];
+    data.filters.items = data.filters.items.filter((item) => {
+      const { filter } = item;
+      data._originalFilters.push(item);
       return columnIds.includes(filter.replace(/^filter:/, ""));
     });
   }
@@ -305,11 +308,16 @@ export const TabStore = types
         return view;
       }
       const viewSnapshot = getSnapshot(view);
+      let originalFilters = [];
+      if (result.filters) {
+        originalFilters = result.filters.items;
+      }
       const newViewSnapshot = {
         ...viewSnapshot,
         ...result,
         saved: true,
         filters: viewSnapshot.filters,
+        _originalFilters: originalFilters,
         conjunction: viewSnapshot.conjunction,
       };
 

@@ -26,6 +26,9 @@ export const Tab = types
     target: types.optional(types.enumeration(["tasks", "annotations"]), "tasks"),
 
     filters: types.array(types.late(() => TabFilter)),
+    // this field keeps information about hidden filters that we can't change so we do not have them in filters
+    // but these filters should appears on the next request affects selected filters as we do not want to loose them
+    _originalFilters: types.optional(types.frozen()),
     conjunction: types.optional(types.enumeration(["and", "or"]), "and"),
     hiddenColumns: types.maybeNull(types.optional(TabHiddenColumns, {})),
     ordering: types.optional(types.array(types.string), []),
@@ -135,7 +138,8 @@ export const Tab = types
     },
 
     get serializedFilters() {
-      return self.validFilters.map((el) => {
+      const originalFilters = self._originalFilters ? [...self._originalFilters] : [];
+      return self.validFilters.reduce((acc, el) => {
         const filterItem = {
           ...getSnapshot(el),
           type: el.filter.currentType,
@@ -143,8 +147,18 @@ export const Tab = types
 
         filterItem.value = normalizeFilterValue(filterItem.type, filterItem.operator, filterItem.value);
 
-        return filterItem;
-      });
+        // restoring unavailable to edit original (hidden) filters
+        while (originalFilters[0] && originalFilters[0].filter !== filterItem.filter) {
+          acc.push(originalFilters.shift());
+        }
+        // skipping duplicates
+        if (originalFilters[0] && originalFilters[0].filter === filterItem.filter) {
+          originalFilters.shift();
+        }
+
+        acc.push(filterItem);
+        return acc;
+      }, []);
     },
 
     get selectedCount() {
@@ -387,6 +401,11 @@ export const Tab = types
     }),
 
     deleteFilter(filter) {
+      const originalIndex = self._originalFilters.findIndex((f) => f.filter === filter.filter.id);
+      if (originalIndex > -1) {
+        self._originalFilters = self._originalFilters.filter((_item, index) => originalIndex !== index);
+      }
+
       const index = self.filters.findIndex((f) => f === filter);
 
       self.filters.splice(index, 1);
@@ -460,4 +479,7 @@ export const Tab = types
     delete sn.selectedItems;
 
     return sn;
+  })
+  .postProcessSnapshot(({ _originalFilters, ...snapshot }) => {
+    return snapshot;
   });
