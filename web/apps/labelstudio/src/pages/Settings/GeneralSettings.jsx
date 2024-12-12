@@ -10,6 +10,17 @@ import { HeidiTips } from "../../components/HeidiTips/HeidiTips";
 import { FF_LSDV_E_297, isFF } from "../../utils/feature-flags";
 import { createURL } from "../../components/HeidiTips/utils";
 import { Caption } from "../../components/Caption/Caption";
+// import { Button as CNButton } from "@humansignal/shad/ui/button";
+import { Button as CNButton } from "@humansignal/ui/src/shad/components/ui/button";
+import {
+  Select as CNSelect,
+  SelectContent as CNSelectContent,
+  SelectItem as CNSelectItem,
+  SelectTrigger as CNSelectTrigger,
+  SelectValue as CNSelectValue,
+  SelectGroup as CNSelectGroup,
+  SelectLabel as CNSelectLabel,
+} from "@humansignal/ui/src/shad/components/ui/select";
 
 export const GeneralSettings = () => {
   const { project, fetchProject } = useContext(ProjectContext);
@@ -29,7 +40,24 @@ export const GeneralSettings = () => {
     <Block name="general-settings">
       <Elem name={"wrapper"}>
         <h1>General Settings!</h1>
-        <div className="flex p-10 bg-slate-600 text-slate-300">testing tailwindcss</div>
+        <div className="flex p-10 bg-slate-100 gap-4">
+          <CNButton>test</CNButton>
+          <CNSelect>
+            <CNSelectTrigger className="w-[180px]">
+              <CNSelectValue placeholder="CNSelect a fruit" />
+            </CNSelectTrigger>
+            <CNSelectContent>
+              <CNSelectGroup>
+                <CNSelectLabel>Fruits</CNSelectLabel>
+                <CNSelectItem value="apple">Apple</CNSelectItem>
+                <CNSelectItem value="banana">Banana</CNSelectItem>
+                <CNSelectItem value="blueberry">Blueberry</CNSelectItem>
+                <CNSelectItem value="grapes">Grapes</CNSelectItem>
+                <CNSelectItem value="pineapple">Pineapple</CNSelectItem>
+              </CNSelectGroup>
+            </CNSelectContent>
+          </CNSelect>
+        </div>
         <Block name="settings-wrapper">
           <Form action="updateProject" formData={{ ...project }} params={{ pk: project.id }} onSubmit={updateProject}>
             <Form.Row columnCount={1} rowGap="16px">
