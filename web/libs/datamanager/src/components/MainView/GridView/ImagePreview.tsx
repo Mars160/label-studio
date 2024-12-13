@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, type CSSProperties } from 'react'
+import { useState, useRef, useEffect, type CSSProperties } from "react";
 import { observer } from "mobx-react";
 import styles from "./GridPreview.module.scss";
 
@@ -6,19 +6,19 @@ const MAX_ZOOM = 20;
 const ZOOM_FACTOR = 0.01;
 
 type Task = {
-  id: number,
-  data: Record<string, string>,
+  id: number;
+  data: Record<string, string>;
 };
 
 type ImagePreviewProps = {
-  task: Task,
-  field: string,
+  task: Task;
+  field: string;
 };
 
 // @todo constrain the position of the image to the container
 const ImagePreview = observer(({ task, field }: ImagePreviewProps) => {
   const src = task?.data?.[field ?? ""] ?? "";
-  
+
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
@@ -44,7 +44,7 @@ const ImagePreview = observer(({ task, field }: ImagePreviewProps) => {
     setIsDragging(false);
   }, [task, src]);
 
-  const constrainOffset = (newOffset: { x: number, y: number }) => {
+  const constrainOffset = (newOffset: { x: number; y: number }) => {
     const { x, y } = newOffset;
     const { width, height } = imageSize;
     const { width: containerWidth, height: containerHeight } = containerSize;
@@ -60,16 +60,16 @@ const ImagePreview = observer(({ task, field }: ImagePreviewProps) => {
       x: Math.min(Math.max(x, -maxX), minX),
       y: Math.min(Math.max(y, -maxY), minY),
     };
-  }
+  };
 
   const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
     if (containerRef.current) {
       const img = e.currentTarget;
       const containerRect = containerRef.current.getBoundingClientRect();
 
-      setContainerSize({ 
-        width: containerRect.width, 
-        height: containerRect.height 
+      setContainerSize({
+        width: containerRect.width,
+        height: containerRect.height,
       });
 
       const coverScaleX = containerRect.width / img.naturalWidth;
@@ -113,9 +113,10 @@ const ImagePreview = observer(({ task, field }: ImagePreviewProps) => {
     const cursorY = e.clientY - rect.top;
 
     // Zoom calculation
-    const newScale = e.deltaY < 0
-      ? Math.min(scale * (1 + ZOOM_FACTOR), MAX_ZOOM)  // Max zoom
-      : Math.max(scale * (1 - ZOOM_FACTOR), 1);  // Min zoom
+    const newScale =
+      e.deltaY < 0
+        ? Math.min(scale * (1 + ZOOM_FACTOR), MAX_ZOOM) // Max zoom
+        : Math.max(scale * (1 - ZOOM_FACTOR), 1); // Min zoom
 
     // Calculate zoom translation
     const scaleDelta = newScale / scale;
@@ -154,27 +155,27 @@ const ImagePreview = observer(({ task, field }: ImagePreviewProps) => {
 
   // Container styles
   const containerStyle: CSSProperties = {
-    minHeight: '200px',
-    maxHeight: 'calc(90vh - 120px)',
-    width: '100%',
-    position: 'relative',
-    overflow: 'hidden',
-    cursor: scale > 1 
-      ? (isDragging ? 'grabbing' : 'grab') 
-      : 'default'
+    minHeight: "200px",
+    maxHeight: "calc(90vh - 120px)",
+    width: "100%",
+    position: "relative",
+    overflow: "hidden",
+    cursor: scale > 1 ? (isDragging ? "grabbing" : "grab") : "default",
   };
 
   // Image styles
-  const imageStyle: CSSProperties = imageLoaded ? {
-    maxWidth: '100%',
-    maxHeight: '100%',
-    transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,
-    transformOrigin: '0 0',
-  } : {
-    width: '100%',
-    height: '100%',
-    objectFit: 'contain',
-  };
+  const imageStyle: CSSProperties = imageLoaded
+    ? {
+        maxWidth: "100%",
+        maxHeight: "100%",
+        transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,
+        transformOrigin: "0 0",
+      }
+    : {
+        width: "100%",
+        height: "100%",
+        objectFit: "contain",
+      };
 
   return (
     <div

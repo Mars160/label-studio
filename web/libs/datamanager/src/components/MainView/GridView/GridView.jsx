@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import { useCallback, useContext, useMemo, useState } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeGrid } from "react-window";
 import InfiniteLoader from "react-window-infinite-loader";
@@ -59,11 +59,14 @@ const GridDataGroup = observer(({ type, value, field, row }) => {
 const GridCell = observer(({ view, selected, row, fields, onClick, ...props }) => {
   const { setCurrentTaskId, imageField } = useContext(GridViewContext);
 
-  const handleBodyClick = useCallback((e) => {
-    if (!isFF(FF_GRID_PREVIEW) || !imageField) return;
-    e.stopPropagation();
-    setCurrentTaskId(row.id);
-  }, [imageField, row.id]);
+  const handleBodyClick = useCallback(
+    (e) => {
+      if (!isFF(FF_GRID_PREVIEW) || !imageField) return;
+      e.stopPropagation();
+      setCurrentTaskId(row.id);
+    },
+    [imageField, row.id],
+  );
 
   return (
     <Elem {...props} name="cell" onClick={onClick} mod={{ selected: selected.isSelected(row.id) }}>
