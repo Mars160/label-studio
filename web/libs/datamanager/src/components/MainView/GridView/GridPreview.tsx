@@ -69,8 +69,6 @@ const TaskModal = observer(({ view, tasks, imageField, currentTaskId, setCurrent
         event.preventDefault();
       } else if (event.key === "Escape") {
         onClose();
-      } else if (event.key === "ArrowUp" || event.key === "ArrowDown") {
-        // prevent Quick View from opening in a background by hotkey
       } else {
         // pass this event through for other keys
         return;
@@ -79,7 +77,7 @@ const TaskModal = observer(({ view, tasks, imageField, currentTaskId, setCurrent
       event.stopPropagation();
     };
 
-    document.addEventListener("keydown", onKeyDown, { capture: true });
+    document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [goToNext, goToPrev, onSelect, onClose]);
 
@@ -130,7 +128,7 @@ type GridViewProviderProps = PropsWithChildren<{
 
 export const GridViewProvider: React.FC<GridViewProviderProps> = ({ children, data, view, fields }) => {
   const [currentTaskId, setCurrentTaskId] = useState<number | null>(null);
-  const modalRef = useRef<{ update: (props: object) => void, close: () => void } | null>();
+  const modalRef = useRef<{ update: (props: object) => void, close: () => void } | null>(null);
   const imageField = fields.find(f => f.currentType === "Image")?.alias;
 
   const onClose = useCallback(() => {
@@ -160,6 +158,9 @@ export const GridViewProvider: React.FC<GridViewProviderProps> = ({ children, da
       modalRef.current.update({ children });
     }
   }, [currentTaskId, data, onClose]);
+
+  // close the modal when we leave the view (by browser controls or by hotkeys)
+  useEffect(() => () => modalRef.current?.close());
 
   return (
     <GridViewContext.Provider value={{ tasks: data, imageField, currentTaskId, setCurrentTaskId }}>
