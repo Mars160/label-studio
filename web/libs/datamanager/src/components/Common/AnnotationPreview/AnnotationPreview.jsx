@@ -2,7 +2,7 @@ import { inject, observer } from "mobx-react";
 import React from "react";
 import { taskToLSFormat } from "../../../sdk/lsf-utils";
 import { cn } from "../../../utils/bem";
-import { FF_LSDV_4711, FF_MEMORY_LEAK_FIX, isFF } from "../../../utils/feature-flags";
+import { FF_LSDV_4711, isFF } from "../../../utils/feature-flags";
 import { Spinner } from "../Spinner";
 import "./AnnotationPreview.scss";
 
@@ -104,7 +104,6 @@ const injector = inject(({ store }) => {
 
 export const AnnotationPreview = injector(
   observer(({ labelingConfig, name, task, annotation, style, ...props }) => {
-    const isMemoryLeakFixEnabled = isFF(FF_MEMORY_LEAK_FIX);
     const generator = React.useMemo(() => {
       if (labelingConfig) return PreviewGenerator.getInstance(labelingConfig);
     }, [labelingConfig]);
@@ -127,29 +126,14 @@ export const AnnotationPreview = injector(
     }, [task, annotation, generator, preview]);
 
     return preview ? (
-      isMemoryLeakFixEnabled ? (
-        <div
-          {...imgDefaultProps}
-          style={{
-            backgroundImage: `url(${preview[`$${name}`][variant]})`,
-            width: props.width,
-            height: props.height,
-            backgroundSize: "contain",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-            ...style,
-          }}
-        />
-      ) : (
-        <img
-          {...imgDefaultProps}
-          src={preview[`$${name}`][variant]}
-          alt=""
-          style={style}
-          width={props.width}
-          height={props.height}
-        />
-      )
+      <img
+        {...imgDefaultProps}
+        src={preview[`$${name}`][variant]}
+        alt=""
+        style={style}
+        width={props.width}
+        height={props.height}
+      />
     ) : (
       <div className={cn("annotation-preview").toString()} width={props.width} height={props.height}>
         <Spinner
@@ -162,30 +146,13 @@ export const AnnotationPreview = injector(
             zIndex: 100,
           }}
         />
-        {isMemoryLeakFixEnabled ? (
-          <div
-            data-testid="annotation-preview-image"
-            {...imgDefaultProps}
-            style={{
-              backgroundImage: `url(${props.fallbackImage})`,
-              width: props.width,
-              height: props.height,
-              backgroundSize: "contain",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
-              opacity: 0.5,
-              ...style,
-            }}
-          />
-        ) : (
-          <img
-            src={props.fallbackImage}
-            style={{ ...(style ?? {}), opacity: 0.5 }}
-            alt=""
-            width={props.width}
-            height={props.height}
-          />
-        )}
+        <img
+          src={props.fallbackImage}
+          style={{ ...(style ?? {}), opacity: 0.5 }}
+          alt=""
+          width={props.width}
+          height={props.height}
+        />
       </div>
     );
   }),
