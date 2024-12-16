@@ -1,6 +1,6 @@
 {
-  "message": "docs: rename github org",
-  "commit": "ca8611b063fbb1015cb79d9f3b754ae251297e14",
-  "date": "2024-12-03T11:44:20.000Z",
+  "message": "fix: OPTIC-1418: Improve Organization Membership API usage to reduce latency (#6780)",
+  "commit": "ca1da7a2dc34dfd512d3d1dd71bf722ef4019f66",
+  "date": "2024-12-16T15:03:14.000Z",
   "branch": "develop"
 }
