@@ -168,7 +168,7 @@ export const GridViewProvider: React.FC<GridViewProviderProps> = ({ children, da
   }, [currentTaskId, data, onClose]);
 
   // close the modal when we leave the view (by browser controls or by hotkeys)
-  useEffect(() => () => modalRef.current?.close());
+  useEffect(() => () => modalRef.current?.close(), []);
 
   return (
     <GridViewContext.Provider value={{ tasks: data, imageField, currentTaskId, setCurrentTaskId }}>
