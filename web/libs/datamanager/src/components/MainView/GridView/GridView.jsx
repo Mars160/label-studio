@@ -18,7 +18,11 @@ const GridHeader = observer(({ row, selected }) => {
   return (
     <Elem name="cell-header">
       <Space>
-        <Checkbox checked={isSelected} ariaLabel={`${isSelected ? "Unselect" : "Select"} Task ${row.id}`} />
+        <Checkbox
+          checked={isSelected}
+          ariaLabel={`${isSelected ? "Unselect" : "Select"} Task ${row.id}`}
+          onChange={() => {}}
+        />
         <span>{row.id}</span>
       </Space>
     </Elem>
@@ -100,8 +104,7 @@ export const GridView = observer(({ data, view, loadMore, fields, onChange, hidd
   const renderItem = useCallback(
     ({ style, rowIndex, columnIndex }) => {
       const index = getCellIndex(rowIndex, columnIndex);
-      const row = data[index];
-
+      const row = data?.[index];
       if (!row) return null;
 
       const props = {
