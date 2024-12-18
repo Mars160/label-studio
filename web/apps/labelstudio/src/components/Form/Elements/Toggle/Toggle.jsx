@@ -2,7 +2,7 @@ import { forwardRef, useEffect, useMemo } from "react";
 import { Toggle as UiToggle } from "@humansignal/ui";
 import { FormField } from "../../FormField";
 import { useValueTracker } from "../../Utils";
-import { Label } from "@humansignal/ui";
+import { default as Label } from "../Label/Label";
 
 const Toggle = forwardRef(
   (
