@@ -1,6 +1,6 @@
 {
-  "message": "fix: OPTIC-1418: Improve Organization Membership API usage to reduce latency (#6780)",
-  "commit": "ca1da7a2dc34dfd512d3d1dd71bf722ef4019f66",
-  "date": "2024-12-16T15:03:14.000Z",
+  "message": "chore: OPTIC-1121: Removing Vite dependencies as they are unused (#6814)",
+  "commit": "c2de35e89944400e6897bb5046d7938e884e80e9",
+  "date": "2024-12-20T15:53:26.000Z",
   "branch": "develop"
 }
