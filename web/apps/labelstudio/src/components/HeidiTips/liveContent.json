@@ -15,14 +15,13 @@
     },
     {
       "title": "Did you know?",
-      "content": "In the Enterprise platform, admins can view annotator performance dashboards to optimize resource allocation, improve team management, and inform compensation.",
-      "closable": true,
+      "description": "Label Studio now has a Starter Cloud offering optimized for small teams and projects.",
       "link": {
         "label": "Learn more",
-        "url": "https://docs.humansignal.com/guide/dashboard_annotator",
+        "url": "https://humansignal.com/pricing/",
         "params": {
           "experiment": "project_creation_tip",
-          "treatment": "annotator_dashboard"
+          "treatment": "starter_cloud"
         }
       }
     },
@@ -81,15 +80,14 @@
       }
     },
     {
-      "title": "Want to automate task distribution?",
-      "content": "Create rules, automate how tasks are distributed to annotators, and only show tasks assigned to each annotator in their view.and control task visibility for each annotator.",
-      "closable": true,
+      "title": "Did you know?",
+      "description": "Label Studio now has a Starter Cloud offering optimized for small teams and projects.",
       "link": {
         "label": "Learn more",
-        "url": "https://docs.humansignal.com/guide/setup_project#Set-up-annotation-settings-for-your-project",
+        "url": "https://humansignal.com/pricing/",
         "params": {
           "experiment": "organization_page_tip",
-          "treatment": "automate_distribution"
+          "treatment": "starter_cloud"
         }
       }
     },
@@ -136,14 +134,13 @@
     },
     {
       "title": "Did you know?",
-      "content": "You can increase the quality of your labeled data with reviewer workflows and task agreement scores using Label Studio Enterprise.",
-      "closable": true,
+      "description": "Label Studio now has a Starter Cloud offering optimized for small teams and projects.",
       "link": {
         "label": "Learn more",
-        "url": "https://docs.humansignal.com/guide/quality",
+        "url": "https://humansignal.com/pricing/",
         "params": {
           "experiment": "project_settings_tip",
-          "treatment": "quality_and_agreement"
+          "treatment": "starter_cloud"
         }
       }
     },
