@@ -57,6 +57,7 @@ _INSTALL_EVENT_SENT = False
 
 def should_send_install_event():
     # Only fire install event once per instance
+    # Using global variable to avoid checking file on each request
     global _INSTALL_EVENT_SENT
     if django_settings.VERSION_EDITION == 'Community' and not _INSTALL_EVENT_SENT:
         install_file = os.path.join(get_config_dir(), 'install.txt')
