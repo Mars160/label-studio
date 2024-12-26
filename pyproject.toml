@@ -174,7 +174,7 @@ drf-generators = "0.3.0"
 lockfile = ">=0.12.0"
 lxml = {extras = ["html_clean"], version = ">=4.9.4"}
 defusedxml = ">=0.7.1"
-numpy = "^1.26.4"
+numpy = ">=1.26.4"
 ordered-set = "4.0.2"
 pandas = ">=2.2.3"
 psycopg2-binary = "2.9.10"
