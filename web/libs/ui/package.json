@@ -14,7 +14,7 @@
   },
   "main": "src/index.ts",
   "files": [
-    "src/hs-app.css",
+    "src/tailwind.css",
     "src/shad/components"
   ]
 }

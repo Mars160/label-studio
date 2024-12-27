@@ -197,13 +197,13 @@ module.exports = composePlugins(
 
       if (testString.includes(".css")) {
         console.log("!!!!! EXCLUDE RULE", rule.exlude);
-        rule.exclude = /hs-app\.css/;
+        rule.exclude = /tailwind\.css/;
       }
     });
 
     // tailwindcss
     config.module.rules.push({
-      test: /hs-app\.css/,
+      test: /tailwind\.css/,
       exclude: /node_modules/,
       use: [
         "style-loader",
