@@ -187,7 +187,7 @@
   "authPage": [
     {
       "title": "Auto-labeling with Prompts",
-      "description": "Prompts allows you to leverage LLMs to swiftly generate accurate predictions, enabling instant labeling of thousands of tasks.",
+      "description": "Use LLMs to instantly pre-label thousands of tasks with accurate predictions.",
       "link": {
         "label": "Learn more",
         "url": "https://docs.humansignal.com/guide/prompts_overview",
