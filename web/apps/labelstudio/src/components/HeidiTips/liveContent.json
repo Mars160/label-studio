@@ -14,19 +14,6 @@
       }
     },
     {
-      "title": "Unlock faster access provisioning",
-      "content": "Streamline assigning staff to multiple projects by assigning them to workspaces in Label Studio Enterprise.",
-      "closable": true,
-      "link": {
-        "label": "Learn more",
-        "url": "https://docs.humansignal.com/guide/manage_projects#Add-or-remove-members-to-a-workspace",
-        "params": {
-          "experiment": "project_creation_tip",
-          "treatment": "faster_provisioning"
-        }
-      }
-    },
-    {
       "title": "Did you know?",
       "content": "In the Enterprise platform, admins can view annotator performance dashboards to optimize resource allocation, improve team management, and inform compensation.",
       "closable": true,
@@ -49,19 +36,6 @@
         "params": {
           "experiment": "project_creation_tip",
           "treatment": "access_to_projects"
-        }
-      }
-    },
-    {
-      "title": "Did you know?",
-      "content": "You can use or modify dozens or templates to configure your labeling UI, or create a custom configuration from scratch using simple XML-like tag.",
-      "closable": true,
-      "link": {
-        "label": "Learn more",
-        "url": "https://labelstud.io/guide/setup",
-        "params": {
-          "experiment": "project_creation_tip",
-          "treatment": "templates"
         }
       }
     },
@@ -103,19 +77,6 @@
         "params": {
           "experiment": "organization_page_tip",
           "treatment": "enable_sso"
-        }
-      }
-    },
-    {
-      "title": "Source data faster",
-      "content": "Use semantic search, similarity search, and filters to curate optimal datasets and automatically assign labeling tasks in the Enterprise platform.",
-      "closable": true,
-      "link": {
-        "label": "Learn more",
-        "url": "https://docs.humansignal.com/guide/dataset_overview",
-        "params": {
-          "experiment": "organization_page_tip",
-          "treatment": "data_discovery"
         }
       }
     },
@@ -201,19 +162,6 @@
     },
     {
       "title": "Did you know?",
-      "content": "You can save time managing infrastructure and upgrades, plus access more features for automation, quality, and team management, by using the Enterprise cloud service.",
-      "closable": true,
-      "link": {
-        "label": "Learn more",
-        "url": "https://humansignal.com/platform/",
-        "params": {
-          "experiment": "project_settings_tip",
-          "treatment": "infrastructure_and_upgrades"
-        }
-      }
-    },
-    {
-      "title": "Did you know?",
       "content": "You can connect ML models using the backend SDK to save time with pre-labeling or active learning.",
       "closable": true,
       "link": {
@@ -241,26 +189,50 @@
   ],
   "authPage": [
     {
-      "title": "Did you know?",
-      "description": "You can sync data from all popular cloud storage providers to collect new items for labeling as they are uploaded, and return the annotation results to train and continuously improve models.",
+      "title": "Auto-labeling with Prompts",
+      "description": "Prompts allows you to leverage LLMs to swiftly generate accurate predictions, enabling instant labeling of thousands of tasks.",
       "link": {
         "label": "Learn more",
-        "url": "https://labelstud.io/guide/storage",
+        "url": "https://docs.humansignal.com/guide/prompts_overview",
         "params": {
           "experiment": "login_revamp",
-          "treatment": "sync_cloud_data"
+          "treatment": "prompts_auto_labeling"
+        }
+      }
+    },
+    {
+      "title": "Prompt Engineering",
+      "description": "Manage, evaluate, and iterate on LLM prompts against human-labelled golden datasets.",
+      "link": {
+        "label": "Learn more",
+        "url": "https://docs.humansignal.com/guide/prompts_overview#Prompt-evaluation-and-fine-tuning",
+        "params": {
+          "experiment": "login_revamp",
+          "treatment": "prompt_engineering"
+        }
+      }
+    },
+    {
+      "title": "New Feature!",
+      "description": "You can now label multi-page documents like PDFs.",
+      "link": {
+        "label": "Learn more",
+        "url": "https://labelstud.io/templates/multi-page-document-annotation",
+        "params": {
+          "experiment": "login_revamp",
+          "treatment": "multi_image"
         }
       }
     },
     {
       "title": "Did you know?",
-      "description": "You can enable webhooks to trigger machine learning model training or perform active learning after a certain number of tasks have been annotated.",
+      "description": "Label Studio now has a Starter Cloud offering optimized for small teams and projects.",
       "link": {
-        "label": "See use cases",
-        "url": "https://labelstud.io/guide/webhooks#What-to-use-Label-Studio-webhooks-for",
+        "label": "Learn more",
+        "url": "https://humansignal.com/pricing/",
         "params": {
           "experiment": "login_revamp",
-          "treatment": "enable_webhooks"
+          "treatment": "starter_cloud"
         }
       }
     },
@@ -273,18 +245,6 @@
         "params": {
           "experiment": "login_revamp",
           "treatment": "enterprise_platform"
-        }
-      }
-    },
-    {
-      "title": "Did you know?",
-      "description": "Label Studio has dozens of pre-built templates for all data types you can use to configure your labeling UI, from image classification to sentiment analysis to supervised LLM fine-tuning. ",
-      "link": {
-        "label": "See all templates",
-        "url": "https://labelstud.io/templates",
-        "params": {
-          "experiment": "login_revamp",
-          "treatment": "templates"
         }
       }
     }

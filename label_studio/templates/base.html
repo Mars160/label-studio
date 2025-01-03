@@ -23,7 +23,9 @@
   <!-- CSS -->
   <link href="{{settings.HOSTNAME}}{% static 'css/uikit.css' %}" rel="stylesheet">
   <link href="{{settings.HOSTNAME}}{% static 'css/main.css' %}" rel="stylesheet">
-  <link href="{{settings.FRONTEND_HOSTNAME}}/react-app/main.css?v={{ versions.backend.commit }}" rel="stylesheet">
+  {% block app-css %}
+    <link href="{{settings.FRONTEND_HOSTNAME}}/react-app/main.css?v={{ versions.backend.commit }}" rel="stylesheet">
+  {% endblock %}
 
   {% block app-scripts %}
   {% endblock %}
@@ -100,6 +102,7 @@
     feature_flags: {{ feature_flags|json_dumps_ensure_ascii|safe }},
     feature_flags_default_value: {{ settings.FEATURE_FLAGS_DEFAULT_VALUE|json_dumps_ensure_ascii|safe }},
     server_id: {{ request.server_id|json_dumps_ensure_ascii|safe }},
+    collect_analytics: {{ settings.COLLECT_ANALYTICS|yesno:"true,false" }},
 
     {% block app_more_settings %}
       flags: {
