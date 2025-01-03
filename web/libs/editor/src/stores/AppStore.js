@@ -613,6 +613,9 @@ export default types
       if (!isFF(FF_CUSTOM_SCRIPT)) {
         entity.dropDraft();
       }
+      if(!entity.exists) {
+        localStorage.setItem('annotationAdded', true);
+      }
     }
 
     function updateAnnotation(extraData) {
