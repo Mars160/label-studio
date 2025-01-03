@@ -1,6 +1,6 @@
 {
-  "message": "feat: OPTIC-1337: Collect usage metrics internally (#6719)",
-  "commit": "cf2193f2b9d954a7f64793e495d3fda626c9353a",
-  "date": "2024-11-28T17:08:56.000Z",
+  "message": "feat: OPTIC-1332: componetize Toggle and Label components (#6723)",
+  "commit": "281ef778e277bdf3d6cd06b1a75985acc51f2c8c",
+  "date": "2025-01-03T13:35:43.000Z",
   "branch": "develop"
 }
