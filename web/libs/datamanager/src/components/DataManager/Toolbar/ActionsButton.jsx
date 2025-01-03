@@ -49,6 +49,7 @@ export const ActionsButton = injector(
           onOk() {
             const body = formRef.current?.assembleFormData({ asJSON: true });
 
+            localStorage.setItem("requestProjectCountUpdate", true);
             store.invokeAction(action.id, { body });
           },
         });
