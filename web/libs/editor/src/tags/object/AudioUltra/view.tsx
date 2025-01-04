@@ -28,7 +28,7 @@ const AudioUltraView: FC<AudioUltraProps> = ({ item }) => {
     waveColor: isDarkMode ? "rgba(150,150,150,0.8)" : "rgba(150,150,150,0.8)",
     gridColor: isDarkMode ? "rgba(150,150,150,0.8)" : "rgba(150,150,150,0.9)",
     gridWidth: 1,
-    backgroundColor: isDarkMode ? "rgba(150,150,150,0.8)" : "transparent",
+    backgroundColor: isDarkMode ? "rgba(150,150,150,0.8)" : "rgba(255,255,255,0.8)",
     autoCenter: true,
     zoomToCursor: true,
     height: item.height && !isNaN(Number(item.height)) ? Number(item.height) : 96,
@@ -53,7 +53,7 @@ const AudioUltraView: FC<AudioUltraProps> = ({ item }) => {
       deleteable: !item.readonly,
     },
     timeline: {
-      backgroundColor: isDarkMode ? "rgba(150,150,150,0.8)" : "transparent",
+      backgroundColor: isDarkMode ? "rgb(38, 37, 34)" : "rgba(255,255,255,0.8)",
     },
     experimental: {
       backgroundCompute: true,

@@ -10,7 +10,7 @@
   position: fixed;
   align-items: center;
   justify-content: center;
-  background-color: rgba(var(--color-neutral-shadow-raw) / 30%);
+  background-color: rgba(var(--color-neutral-shadow-raw) / 70%);
   will-change: opacity;
   backdrop-filter: blur(30px);
 
@@ -35,7 +35,7 @@
     flex-direction: column;
     background-color: var(--color-neutral-background);
     border-radius: 0.5rem;
-    box-shadow: 0 10px 30px rgb(18 17 13 / 30%);
+    box-shadow: 0 10px 30px rgb(18 17 13 / 30%), inset 0px 1px rgb(255 255 255 / 10%), inset 0px -2px rgba(var(--color-neutral-shadow-raw) / 24%);
     overflow: auto;
   }
 

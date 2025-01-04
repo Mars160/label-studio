@@ -329,6 +329,17 @@ $scroll-width: 5px;
     border-top: 1px solid var(--color-neutral-border);
     padding-top: 16px;
     margin-bottom: 16px;
+    color: var(--color-neutral-content);
+  }
+
+  a {
+    color: var(--color-primary-content);
+
+    &:hover {
+      text-decoration: underline;
+      color: var(--color-primary-content-hover);
+
+    }
   }
 }
 
@@ -623,4 +634,16 @@ $scroll-width: 5px;
 
 div[class^="App_menu"]>div {
   width: 100%;
+}
+
+:global(input.lsf-configure__add) {
+  border: 1px solid var(--color-primary-border);
+  color: var(--color-primary-content);
+  background: var(--color-neutral-background);
+  transition: all 150ms ease-out;
+}
+
+:global(input.lsf-configure__add:hover) {
+  color: var(--color-neutral-content);
+  background: var(--color-primary-emphasis-subtle);
 }

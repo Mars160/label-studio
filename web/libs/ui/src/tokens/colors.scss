@@ -390,7 +390,7 @@
   --color-negative-content-hover: var(--color-persimmon-500); // Content color for negative elements on hover
   --color-negative-content-subtle: var(--color-persimmon-500); // Subtle content color for negative elements
   --color-negative-focus-outline: var(--color-persimmon-200); // Focus outline color for negative elements
-  --color-negative-icon: var(--color-persimmon-500); // Icon color for negative elements
+  --color-negative-icon: var(--color-persimmon-700); // Icon color for negative elements
   --color-negative-surface: var(--color-persimmon-600); // Surface color for negative elements
   --color-negative-surface-content: var(--color-persimmon-000); // Content color on negative surfaces
   --color-negative-surface-content-subtle: var(--color-persimmon-100); // Subtle content color on negative surfaces
@@ -439,12 +439,12 @@
   --color-positive-content-hover: var(--color-kale-500); // Content color for positive elements on hover
   --color-positive-content-subtle: var(--color-kale-500); // Subtle content color for positive elements
   --color-positive-focus-outline: var(--color-kale-200); // Focus outline color for positive elements
-  --color-positive-icon: var(--color-kale-500); // Icon color for positive elements
+  --color-positive-icon: var(--color-kale-700); // Icon color for positive elements
   --color-positive-surface: var(--color-kale-600); // Surface color for positive elements
   --color-positive-surface-content: var(--color-kale-000); // Content color on positive surfaces
   --color-positive-surface-content-subtle: var(--color-kale-100); // Subtle content color on positive surfaces
   --color-positive-surface-active: var(--color-kale-800); // Active state color for positive surfaces
-  --color-positive-surface-icon: var(--color-kale-100); // Icon color on positive surfaces
+  --color-positive-surface-icon: var(--color-kale-700); // Icon color on positive surfaces
   --color-positive-surface-hover: var(--color-kale-500); // Hover color for positive surfaces
   --color-primary-background: var(--color-grape-000); // Background color for primary elements
   --color-primary-emphasis: var(--color-grape-200); // Emphasis color for primary elements
@@ -458,7 +458,7 @@
   --color-primary-content-hover: var(--color-grape-500); // Content color for primary elements on hover
   --color-primary-content-subtle: var(--color-grape-500); // Subtle content color for primary elements
   --color-primary-focus-outline: var(--color-grape-200); // Focus outline color for primary elements
-  --color-primary-icon: var(--color-grape-500); // Icon color for primary elements
+  --color-primary-icon: var(--color-grape-700); // Icon color for primary elements
   --color-primary-shadow: var(--color-grape-900); // Shadow color for primary elements
   --color-primary-surface: var(--color-grape-700); // Surface color for primary elements
   --color-primary-surface-content: var(--color-grape-000); // Content color on primary surfaces
@@ -478,7 +478,7 @@
   --color-warning-content-hover: var(--color-canteloupe-500); // Content color for warning elements on hover
   --color-warning-content-subtle: var(--color-canteloupe-500); // Subtle content color for warning elements
   --color-warning-focus-outline: var(--color-canteloupe-200); // Focus outline color for warning elements
-  --color-warning-icon: var(--color-canteloupe-500); // Icon color for warning elements
+  --color-warning-icon: var(--color-canteloupe-700); // Icon color for warning elements
   --color-warning-surface: var(--color-canteloupe-600); // Surface color for warning elements
   --color-warning-surface-content: var(--color-canteloupe-000); // Content color on warning surfaces
   --color-warning-surface-content-subtle: var(--color-canteloupe-100); // Subtle content color on warning surfaces
@@ -665,7 +665,7 @@
     --color-primary-content-hover: var(--color-grape-300);
     --color-primary-content-subtle: var(--color-grape-600);
     --color-primary-focus-outline: var(--color-grape-700);
-    --color-primary-icon: var(--color-grape-600);
+    --color-primary-icon: var(--color-grape-500);
     --color-primary-shadow: var(--color-grape-950);
     --color-primary-surface: var(--color-grape-600);
     --color-primary-surface-content: var(--color-grape-000);

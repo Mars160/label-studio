@@ -36,3 +36,11 @@
     resize: none !important;
   }
 }
+
+:global(.ant-form-item .ant-form-item-control-input-content input) {
+  background: var(--color-neutral-surface);
+  color: var(--color-neutral-content);
+  border-color: var(--color-neutral-border);
+  border-radius: var(--radius-xs);
+}
+

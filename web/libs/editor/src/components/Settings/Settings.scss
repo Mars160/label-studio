@@ -53,16 +53,16 @@
 
 .keys {
   &__key {
-    padding: 0 4px;
-    height: 16px;
+    padding: 2px 4px 1px;
     display: inline-flex;
     align-items: center;
     background: var(--color-neutral-background);
-    border-radius: 2px;
+    border: 1px solid var(--color-neutral-border);
+    border-radius: var(--radius-xs);
     font-weight: bold;
     font-size: 12px;
     text-transform: uppercase;
-    box-shadow: 0 0 0 1px rgb(0 0 0 / 10%), 0 1px 0 rgb(0 0 0 / 8%);
+    box-shadow: inset 0 -2px 0 0 rgba(var(--color-neutral-shadow-raw) / 8%), 0 1px 4px rgba(var(--color-neutral-shadow-raw) / 6%);
   }
 
   &__key + &__key {
@@ -132,6 +132,10 @@
     }
   }
 
+  :global(.ant-tabs .ant-tabs-nav)::before {
+    border-color: var(--color-neutral-border);
+  }
+
   :global(.ant-tabs-tab + .ant-tabs-tab) {
     margin-left: 0 !important;
   }
@@ -180,5 +184,62 @@
     line-height: 16px;
     letter-spacing: 0.5px;
     text-align: center;
+  }
+
+  :global(.ant-table) {
+    background-color: var(--color-neutral-background);
+    color: var(--color-neutral-content-subtle);
+  }
+
+  :global(.ant-table .ant-table-thead .ant-table-cell) {
+    background-color: var(--color-neutral-surface);
+    color: var(--color-neutral-content);
+    border-color: var(--color-neutral-border);
+  }
+
+  :global(.ant-table .ant-table-tbody .ant-table-cell) {
+    border-color: var(--color-neutral-border);
+  }
+
+  :global(.ant-table .ant-table-tbody .ant-table-row:hover .ant-table-cell) {
+    background-color: transparent;
+  }
+
+  :global(.ant-pagination.ant-table-pagination.ant-pagination-mini) {
+    gap: 4px;
+  }
+
+  :global(.ant-pagination .ant-pagination-item-active .ant-pagination-item-link) {
+    background-color: var(--color-primary-emphasis-subtle);
+    color: var(--color-neutral-content);
+    border-radius: var(--radius-medium);
+  }
+
+  :global(.ant-pagination.ant-pagination-mini .ant-pagination-prev .ant-pagination-item-link) {
+    color: var(--color-neutral-content-subtlest);
+  }
+
+  :global(.ant-pagination.ant-pagination-mini .ant-pagination-prev .ant-pagination-item-link:not[disabled]) {
+    color: var(--color-neutral-content);
+  }
+
+  :global(.ant-pagination-item a) {
+    color: var(--color-neutral-content);
+  }
+
+
+  :global(.ant-pagination-item:hover a) {
+    color: var(--color-primary-content);
+    border-color: var(--color-primary-border);
+  }
+
+  :global(.ant-pagination.ant-pagination-mini .ant-pagination-next .ant-pagination-item-link) {
+    color: var(--color-neutral-content);
+  }
+
+  :global(.ant-pagination-item-active) {
+    border-color: var(--color-primary-emphasis);
+    background: var(--color-primary-emphasis);
+    color: var(--color-neutral-content);
   }
 }
