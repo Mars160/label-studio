@@ -48,7 +48,7 @@ export const ActionsButton = injector(
           buttonLook: destructive ? "destructive" : "primary",
           onOk() {
             const body = formRef.current?.assembleFormData({ asJSON: true });
-            
+
             store.SDK.invoke("actionDialogOk", action.id, { body });
             store.invokeAction(action.id, { body });
           },

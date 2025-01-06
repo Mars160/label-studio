@@ -150,7 +150,13 @@ export const Menubar = ({ enabled, defaultOpened, defaultPinned, children, onSid
               <Menu>
                 <Menu.Item icon={<LsSettings />} label="Account &amp; Settings" href="/user/account" data-external />
                 {/* <Menu.Item label="Dark Mode"/> */}
-                <Menu.Item icon={<LsDoor />} label="Log Out" href={absoluteURL("/logout")} data-external onClick={() => localStorage.removeItem("workspace")} />
+                <Menu.Item
+                  icon={<LsDoor />}
+                  label="Log Out"
+                  href={absoluteURL("/logout")}
+                  data-external
+                  onClick={() => localStorage.removeItem("workspace")}
+                />
                 {showNewsletterDot && (
                   <>
                     <Menu.Divider />
