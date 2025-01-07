@@ -196,7 +196,6 @@ module.exports = composePlugins(
       }
 
       if (testString.includes(".css")) {
-        console.log("!!!!! EXCLUDE RULE", rule.exlude);
         rule.exclude = /tailwind\.css/;
       }
     });

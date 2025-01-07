@@ -20,7 +20,7 @@
       "@humansignal/datamanager": ["libs/datamanager/src/index.js"],
       "@humansignal/editor": ["libs/editor/src/index.js"],
       "@humansignal/frontend-test/*": ["libs/frontend-test/src/*"],
-      "@humansignal/ui": ["libs/ui/src/index.ts"],
+      "@humansignal/ui/*": ["libs/ui/src/*"],
       "@humansignal/shad/*": ["./libs/ui/src/shad/*"]
     },
     "types": ["vite-plugin-svgr/client"]
