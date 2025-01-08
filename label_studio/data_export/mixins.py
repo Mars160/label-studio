@@ -306,7 +306,7 @@ class ExportMixin:
                 serialization_options=serialization_options,
             )
 
-    def convert_file(self, to_format, download_resources=False):
+    def convert_file(self, to_format, download_resources=False, hostname=None):
         with get_temp_dir() as tmp_dir:
             OUT = 'out'
             out_dir = pathlib.Path(tmp_dir) / OUT
@@ -317,6 +317,9 @@ class ExportMixin:
                 project_dir=None,
                 upload_dir=out_dir,
                 download_resources=download_resources,
+                # for downloading resource we need access to the API
+                access_token=self.project.organization.created_by.auth_token.key,
+                hostname=hostname,
             )
             input_name = pathlib.Path(self.file.name).name
             input_file_path = pathlib.Path(tmp_dir) / input_name

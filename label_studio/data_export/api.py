@@ -569,7 +569,7 @@ class ExportDownloadAPI(generics.RetrieveAPIView):
             return response
 
 
-def async_convert(converted_format_id, export_type, project, download_resources=False, **kwargs):
+def async_convert(converted_format_id, export_type, project, hostname, download_resources=False, **kwargs):
     with transaction.atomic():
         try:
             converted_format = ConvertedFormat.objects.get(id=converted_format_id)
@@ -583,7 +583,7 @@ def async_convert(converted_format_id, export_type, project, download_resources=
         converted_format.save(update_fields=['status'])
 
     snapshot = converted_format.export
-    converted_file = snapshot.convert_file(export_type, download_resources=download_resources)
+    converted_file = snapshot.convert_file(export_type, download_resources=download_resources, hostname=hostname)
     if converted_file is None:
         raise ValidationError('No converted file found, probably there are no annotations in the export snapshot')
     md5 = Export.eval_md5(converted_file)
@@ -658,6 +658,7 @@ class ExportConvertAPI(generics.RetrieveAPIView):
             converted_format.id,
             export_type,
             snapshot.project,
+            request.build_absolute_uri('/'),
             download_resources=download_resources,
             on_failure=set_convert_background_failure,
         )
