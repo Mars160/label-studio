@@ -9,9 +9,9 @@ import { isFF } from "../../../utils/feature-flags";
 const SettingsRendererPure: FC<{ store: any; settings: SettingsProperties }> = ({ store, settings }) => {
   return (
     <Block name="settings">
-      {Object.entries(settings).map(([key, value]) => {
-        return value.ff && !isFF(value.ff) ? null : <SettingsField key={key} name={key} store={store} value={value} />;
-      })}
+      {Object.entries(settings).map(([key, value]) => (
+        <SettingsField key={key} name={key} store={store} value={value} />
+      ))}
     </Block>
   );
 };
