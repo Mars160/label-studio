@@ -32,7 +32,6 @@ STALE_FEATURE_FLAGS = {
     'fflag_fix_front_dev_3666_max_usages_on_region_creation_171122_short': True,
     'fflag_fix_front_dev_3617_taxonomy_memory_leaks_fix': True,
     'fflag_fix_front_dev_3350_restrict_drawing_area_short': True,
-    'fflag_feat_front_dev_2461_audio_paragraphs_seek_chunk_position_short': True,
     'ff_front_dev_2432_auto_save_polygon_draft_210622_short': True,
     'ff_front_dev_2290_draft_in_annotation_history_short': True,
     'ff_front_dev_1495_avatar_mess_210122_short': True,
