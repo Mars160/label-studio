@@ -72,12 +72,6 @@ export const FF_DEV_3617 = "fflag_fix_front_dev_3617_taxonomy_memory_leaks_fix";
  */
 export const FF_DEV_3666 = "fflag_fix_front_dev_3666_max_usages_on_region_creation_171122_short";
 
-/**
- * Allow shourtcuts button to work with visible main textarea when there is no focus
- * @link https://app.launchdarkly.com/default/production/features/fflag_fix_front_dev_3730_shortcuts_initial_input_22122022_short
- */
-export const FF_DEV_3730 = "fflag_fix_front_dev_3730_shortcuts_initial_input_22122022_short";
-
 // Use only relative coords internally to improve performance and reduce bugs
 export const FF_DEV_3793 = "fflag_fix_front_dev_3793_relative_coords_short";
 
