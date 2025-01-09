@@ -90,12 +90,6 @@ export const FF_LSDV_E_278 = "fflag_feat_front_lsdv_e_278_contextual_scrolling_s
 export const FF_LLM_EPIC = "fflag_feat_all_lsdv_e_294_llm_annotations_180723_long";
 
 /**
- * Fix logic of namespaces inside Hotkeys
- * @link https://app.launchdarkly.com/default/production/features/fflag_fix_font_lsdv_1148_hotkeys_namespaces_01022023_short
- */
-export const FF_LSDV_1148 = "fflag_fix_font_lsdv_1148_hotkeys_namespaces_01022023_short";
-
-/**
  * Multi-image segmentation support via `valueList`
  */
 export const FF_LSDV_4583 = "fflag_feat_front_lsdv_4583_multi_image_segmentation_short";
@@ -109,7 +103,7 @@ export const FF_LSDV_4583_6 = "fflag_feat_front_lsdv_4583_6_images_preloading_sh
  * Removing interrupting from the draft saving
  *
  * Without this flag we have a situation when changes in history leading to the empty results break functionality of adding comments and make the draft saving process indicator stay forever.
- * @link https://app.launchdarkly.com/default/production/features/fflag_fix_font_lsdv_1148_hotkeys_namespaces_01022023_short
+ * @link https://app.launchdarkly.com/default/production/features/fflag_fix_font_lsdv_3009_draft_saving_stuck_130223_short
  */
 export const FF_LSDV_3009 = "fflag_fix_font_lsdv_3009_draft_saving_stuck_130223_short";
 

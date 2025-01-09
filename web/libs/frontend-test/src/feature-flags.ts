@@ -72,12 +72,6 @@ export const FF_DEV_3793 = "fflag_fix_front_dev_3793_relative_coords_short";
 export const FF_DEV_4174 = "fflag_fix_back_dev_4174_overlap_issue_experiments_10012023_short";
 
 /**
- * Fix logic of namespaces inside Hotkeys
- * @link https://app.launchdarkly.com/default/production/features/fflag_fix_font_lsdv_1148_hotkeys_namespaces_01022023_short
- */
-export const FF_LSDV_1148 = "fflag_fix_font_lsdv_1148_hotkeys_namespaces_01022023_short";
-
-/**
  * Default Audio v3 to use multichannel mode if the track has 2 or more channels.
  * @link https://app.launchdarkly.com/default/production/features/fflag_feat_front_lsdv_3028_audio_v3_multichannel_default_17022023_short
  *
@@ -98,7 +92,7 @@ export const FF_LSDV_4583_6 = "fflag_feat_front_lsdv_4583_6_images_preloading_sh
  * Removing interrupting from the draft saving
  *
  * Without this flag we have a situation when changes in history leading to the empty results break functionality of adding comments and make the draft saving process indicator stay forever.
- * @link https://app.launchdarkly.com/default/production/features/fflag_fix_font_lsdv_1148_hotkeys_namespaces_01022023_short
+ * @link https://app.launchdarkly.com/default/production/features/fflag_fix_font_lsdv_3009_draft_saving_stuck_130223_short
  */
 export const FF_LSDV_3009 = "fflag_fix_font_lsdv_3009_draft_saving_stuck_130223_short";
 
