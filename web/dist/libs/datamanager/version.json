@@ -1,6 +1,6 @@
 {
-  "message": "chore: Update liveContent.json (#6874)",
-  "commit": "40f095ad8fefbdd93cc334c7c8c8d9593a5bf764",
-  "date": "2025-01-08T14:42:22.000Z",
+  "message": "refactor: OPTIC-1501: remove a collection of ff (#6879)",
+  "commit": "c68421b75521820df55abf508f26894d402e3f1c",
+  "date": "2025-01-09T15:20:23.000Z",
   "branch": "develop"
 }
