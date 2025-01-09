@@ -97,13 +97,6 @@ export const FF_LSDV_4583_6 = "fflag_feat_front_lsdv_4583_6_images_preloading_sh
 export const FF_LSDV_3009 = "fflag_fix_font_lsdv_3009_draft_saving_stuck_130223_short";
 
 /**
- * Adding "skipDuplicates" parameter for <TextArea /> to preventing adding duplicate entries
- *
- * @link https://app.launchdarkly.com/default/production/features/fflag_feat_front_lsdv_4659_skipduplicates_060323_short
- */
-export const FF_LSDV_4659 = "fflag_feat_front_lsdv_4659_skipduplicates_060323_short";
-
-/**
  * Fixing issues related to selection tool functional (selecting hidden regions, onClick in Konva, interaction with regions inside selection area)
  *
  * @link https://app.launchdarkly.com/default/production/features/fflag_fix_front_lsdv_4930_selection_tool_fixes_240423_short

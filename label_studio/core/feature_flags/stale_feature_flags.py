@@ -21,7 +21,6 @@ STALE_FEATURE_FLAGS = {
     'fflag_fix_back_lsdv_4929_limit_exports_10042023_short': True,
     'fflag_feat_front_lsdv_4620_richtext_opimization_060423_short': True,
     'fflag_feat_front_lsdv_4661_full_uri_resolve_15032023_short': True,
-    'fflag_feat_front_lsdv_4659_skipduplicates_060323_short': True,
     'ff_back_dev_3865_filters_anno_171222_short': True,
     'fflag_feat_front_dev_3873_labeling_ui_improvements_short': True,
     'fflag_feat_back_dev_3756_queue_enrollment_min_short': False,
