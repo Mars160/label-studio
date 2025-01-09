@@ -23,7 +23,6 @@ STALE_FEATURE_FLAGS = {
     'fflag_feat_front_lsdv_4661_full_uri_resolve_15032023_short': True,
     'fflag_feat_front_lsdv_4659_skipduplicates_060323_short': True,
     'fflag_fix_font_lsdv_1148_hotkeys_namespaces_01022023_short': True,
-    'fflag_fix_back_lsdv_1044_check_annotations_24012023_short': False,
     'ff_back_dev_3865_filters_anno_171222_short': True,
     'fflag_feat_front_dev_3873_labeling_ui_improvements_short': True,
     'fflag_feat_back_dev_3756_queue_enrollment_min_short': False,
