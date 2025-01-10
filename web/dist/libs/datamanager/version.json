@@ -1,6 +1,6 @@
 {
-  "message": "chore: Update liveContent.json (#6874)",
-  "commit": "40f095ad8fefbdd93cc334c7c8c8d9593a5bf764",
-  "date": "2025-01-08T14:42:22.000Z",
+  "message": "refactor: OPTIC-1506: Remove Stale Feature Flag - fflag_fix_front_dev_3350_restrict_drawing_area_short (#6878)",
+  "commit": "a38cd76ecf6df705f452615fe9a22e77ba0ceb86",
+  "date": "2025-01-09T19:28:27.000Z",
   "branch": "develop"
 }
