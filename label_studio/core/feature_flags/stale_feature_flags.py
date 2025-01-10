@@ -1,5 +1,4 @@
 STALE_FEATURE_FLAGS = {
-    'fflag_fix_front_leap_149_taxonomy_selected_true_short': True,
     'fflag_feat_all_dia_13_structured_data_support_short': False,
     'fflag_feat_front_optic_66_lazy_chart_evaluation_19092023_short': False,
     'fflag_fix_back_leap_24_tasks_api_optimization_05092023_short': False,
