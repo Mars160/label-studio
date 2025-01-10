@@ -16,7 +16,6 @@ STALE_FEATURE_FLAGS = {
     'fflag_fix_front_lsdv_4992_hide_all_regions_04052023_short': True,
     'ff_back_dev_4664_remove_storage_file_on_export_delete_29032023_short': False,
     'fflag_feat_front_lops_86_datasets_storage_edit_short': False,
-    'fflag_fix_front_lsdv_4881_timeseries_points_missing_140423_short': True,
     'fflag_feat_front_lsdv_4712_skipduplicates_editing_110423_short': True,
     'fflag_fix_back_lsdv_4929_limit_exports_10042023_short': True,
     'fflag_feat_front_lsdv_4620_richtext_opimization_060423_short': True,
