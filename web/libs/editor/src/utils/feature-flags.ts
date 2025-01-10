@@ -215,9 +215,6 @@ export const FF_TASK_COUNT_FIX = "fflag_fix_all_optic_79_task_count_is_wrong_sho
 /** Fix taxonomy items init with DEV-3617 FF on; this allows to correctly preselect items on init */
 export const FF_TAXONOMY_SELECTED = "fflag_fix_front_leap_149_taxonomy_selected_true_short";
 
-/** Skip video to region start when it's selected in the outliner */
-export const FF_LEAP_187 = "fflag_feat_front_leap_187_video_seek_on_select_short";
-
 /** Select annotation only once during store init and trigger the rest from this select */
 export const FF_SIMPLE_INIT = "fflag_fix_front_leap_443_select_annotation_once";
 
