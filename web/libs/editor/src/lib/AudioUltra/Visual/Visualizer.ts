@@ -113,8 +113,8 @@ export class Visualizer extends Events<VisualizerEvents> {
       {
         ...options.playhead,
         x: 0,
-        color: isDarkMode ? rgba("#fff"): rgba("#000"),
-        fillColor: isDarkMode ? rgba("#fff"): rgba("#BAE7FF"),
+        color: isDarkMode ? rgba("#fff") : rgba("#000"),
+        fillColor: isDarkMode ? rgba("#fff") : rgba("#BAE7FF"),
         width: options.cursorWidth ?? 2,
       },
       this,

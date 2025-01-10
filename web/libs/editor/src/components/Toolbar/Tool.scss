@@ -43,7 +43,6 @@
   }
 
   &:not(&_active):hover {
-
     & .tool__icon {
       opacity: 1;
       box-shadow: inset 0 0 2px var(--color-primary-border-subtle);
@@ -61,7 +60,6 @@
   }
 
   &_active {
-
     & .tool__icon {
       opacity: 1;
       box-shadow: 0 0 0 var(--color-primary-border-subtle);

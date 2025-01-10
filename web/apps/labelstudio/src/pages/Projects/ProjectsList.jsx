@@ -54,7 +54,10 @@ const ProjectCard = ({ project }) => {
   }, [project]);
 
   const projectColors = useMemo(() => {
-    const textColor = color && chr(color).luminance() > 0.3 ? 'var(--color-neutral-inverted-content)' : 'var(--color-neutral-inverted-content)'; // Determine text color based on luminance
+    const textColor =
+      color && chr(color).luminance() > 0.3
+        ? "var(--color-neutral-inverted-content)"
+        : "var(--color-neutral-inverted-content)"; // Determine text color based on luminance
     return color
       ? {
           "--header-color": color,

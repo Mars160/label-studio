@@ -8,7 +8,11 @@ const THEME_OPTIONS = ["Auto", "Light", "Dark"];
 const PREFERRED_COLOR_SCHEME_KEY = "preferred-color-scheme";
 export const getCurrentTheme = () => {
   const themeSelection = window.localStorage.getItem(PREFERRED_COLOR_SCHEME_KEY) ?? THEME_OPTIONS[0];
-  return themeSelection === THEME_OPTIONS[0] ? window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "Dark" : "Light" : themeSelection;
+  return themeSelection === THEME_OPTIONS[0]
+    ? window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "Dark"
+      : "Light"
+    : themeSelection;
 };
 export const ThemeToggle = () => {
   const presetTheme = window.localStorage.getItem(PREFERRED_COLOR_SCHEME_KEY) ?? THEME_OPTIONS[0];
@@ -34,11 +38,17 @@ export const ThemeToggle = () => {
     setAppliedTheme(nextTheme === "Auto" ? systemMode : nextTheme);
   }, [theme]);
 
-  const themeLabel = useMemo(()=> THEME_OPTIONS.find((option) => option.toLowerCase() === theme.toLowerCase()), [theme]);
+  const themeLabel = useMemo(
+    () => THEME_OPTIONS.find((option) => option.toLowerCase() === theme.toLowerCase()),
+    [theme],
+  );
 
   return (
-    <button 
-      className={clsx(styles.themeToggle, { [styles.dark]: appliedTheme === "Dark", [styles.light]: appliedTheme === "Light" })} 
+    <button
+      className={clsx(styles.themeToggle, {
+        [styles.dark]: appliedTheme === "Dark",
+        [styles.light]: appliedTheme === "Light",
+      })}
       onClick={themeChanged}
     >
       <div className={clsx(styles.themeToggle__icon)}>

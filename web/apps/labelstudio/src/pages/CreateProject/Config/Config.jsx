@@ -204,7 +204,8 @@ const ConfigureSettings = ({ template }) => {
         return (
           <li key={key}>
             <label>
-              {options.title} <input className="lsf-input-ls" type="text" onInput={onChange} value={value} size={size} />
+              {options.title}{" "}
+              <input className="lsf-input-ls" type="text" onInput={onChange} value={value} size={size} />
             </label>
           </li>
         );
@@ -291,7 +292,15 @@ const ConfigureColumn = ({ template, obj, columns }) => {
         {!columns?.length && <option value={value}>{"<imported file>"}</option>}
         <option value="-">{"<set manually>"}</option>
       </select>
-      {isManual && <input className="lsf-input-ls" value={newValue} onChange={handleChange} onBlur={handleBlur} onKeyDown={handleKeyDown} />}
+      {isManual && (
+        <input
+          className="lsf-input-ls"
+          value={newValue}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          onKeyDown={handleKeyDown}
+        />
+      )}
     </p>
   );
 };
@@ -468,7 +477,7 @@ const Configurator = ({
       <div className={configClass.elem("container")}>
         <h1>Labeling Interface{hasChanges ? " *" : ""}</h1>
         <header>
-          <Button look="secondary" size="compact" style={{ width: 160 }}  data-leave={true} onClick={onBrowse}>
+          <Button look="secondary" size="compact" style={{ width: 160 }} data-leave={true} onClick={onBrowse}>
             Browse Templates
           </Button>
           <ToggleItems items={{ code: "Code", visual: "Visual" }} active={configure} onSelect={onSelect} />

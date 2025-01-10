@@ -224,6 +224,7 @@
   &_colored {
     --color-project-header-content: var(--color-sand-000);
     --color-project-header-icon: var(--color-neutral-icon);
+
     background-color: var(--background-color);
     border-color: var(--border-color);
 
@@ -239,6 +240,7 @@
 
     & .project-card__detail {
       color: var(--content-color);
+
       &-item {
         --icon-color: var(--icon-color);
       }

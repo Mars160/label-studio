@@ -24,7 +24,6 @@
   outline: none;
   display: inline-flex;
   text-align: center;
-  transition: all 100ms ease;
   position: relative;
   box-sizing: border-box;
   box-shadow: var(--button-shadow);
@@ -53,6 +52,7 @@
     --button-color: var(--color-neutral-content);
     --button-background-color: var(--color-neutral-surface-hover);
     --button-border-color: var(--color-neutral-border-bold);
+
     background-color: var(--button-background-color);
     border-color: var(--button-border-color);
   }
@@ -170,6 +170,7 @@
 
     &_danger {
       --button-color: var(--color-negative-content);
+
       border-color: var(--color-negative-border);
 
       &:hover:not(:disabled, &_waiting) {
@@ -187,13 +188,13 @@
       &:hover:not(:disabled, .button-ls_waiting) {
         --button-color: var(--color-negative-surface-content);
 
-        border-color: var(--color-negative-border-bold);
         background: var(--color-negative-surface-hover);
         border-color: var(--color-negative-border-bold);
       }
 
       &:active {
         --button-background--color: var(--color-negative-surface-active);
+
         border-color: var(--color-negative-border-bold);
       }
     }

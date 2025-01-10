@@ -1,8 +1,6 @@
 .themeToggle {
   display: flex;
   justify-content: center;
-  align-self: stretch;
-  transition: outline 0.1s ease;
   overflow: hidden;
   height: 32px;
   align-self: center;
@@ -32,12 +30,10 @@
 
   &__icon {
     display: flex;
-    height: 100%;
     align-items: center;
-    position: relative;
     width: 36px;
     height: 28px;
-    margin-right: 0px;
+    margin-right: 0;
     position: relative;
     align-self: center;
   }

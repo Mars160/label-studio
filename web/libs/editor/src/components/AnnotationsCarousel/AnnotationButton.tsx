@@ -7,7 +7,6 @@ import {
   IconDuplicate,
   IconEllipsis,
   IconTrashRect,
-  IconTrashAlt,
   LsCommentResolved,
   LsCommentUnresolved,
   LsSparks,
