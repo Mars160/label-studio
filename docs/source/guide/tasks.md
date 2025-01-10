@@ -18,24 +18,6 @@ Get data into Label Studio by importing files, referencing URLs, or syncing with
 - If your data is stored locally, [import it into Label Studio](#Import-data-from-a-local-directory).
 - If your data contains predictions or pre-annotations, see [Import pre-annotated data into Label Studio](predictions.html).
 
-<div class="enterprise-only">
-
-!!! info Tip
-    If your data is stored in Google Cloud, AWS, or Azure, you can [import your unstructured data as a dataset in Label Studio Enterprise](dataset_create). 
-    
-    From here, you can use semantic search and similarity search to curate data for labeling, which can then be added to different projects as tasks. For more information, see [Data Discovery overview](dataset_overview).
-
-</div>
-
-<div class="opensource-only">
-
-!!! error Enterprise
-    If your data is stored in Google Cloud, AWS, or Azure, you can [import your unstructured data as a dataset in Label Studio Enterprise](https://docs.humansignal.com/guide/dataset_create). 
-    
-    From here, you can use semantic search and similarity search to curate data for labeling, which can then be added to different projects as tasks. For more information, see [Data Discovery overview](https://docs.humansignal.com/guide/dataset_overview).
-
-</div>
-
 ## General guidelines for importing data
 
 * It’s best to keep about 100k tasks / 100k annotations per project for optimal performance.
@@ -487,7 +469,7 @@ To import data from a local directory, you have two options:
 
 ### Run a web server to generate URLs to local files
 
-To run a web server to generate URLs for the files, you can refer to this provided [helper shell script in the Label Studio repository](https://github.com/heartexlabs/label-studio/blob/master/scripts/serve_local_files.sh) or write your own script. 
+To run a web server to generate URLs for the files, you can refer to this provided [helper shell script in the Label Studio repository](https://github.com/HumanSignal/label-studio/blob/develop/scripts/serve_local_files.sh) or write your own script. 
 Use that script to do the following:
 1. On the machine with the file directory that you want Label Studio to import, call the helper script and specify a regex pattern to match the files that you want to import. In this example, the script identifies files with the JPG file extension:
    ```bash

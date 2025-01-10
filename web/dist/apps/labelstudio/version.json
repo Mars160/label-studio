@@ -1,6 +1,6 @@
 {
-  "message": "chore(deps): bump cross-spawn from 7.0.3 to 7.0.6 in /web/libs/editor/tests/e2e (#6712)",
-  "commit": "cffdabb0e61b649a2ede14f9f9dd6dba6a86b086",
-  "date": "2024-11-25T11:57:16.000Z",
+  "message": "feat: LEAP-1753: Add shortcut for toggling bulk sidebar minimization (#6857)",
+  "commit": "3fef4105ab3a30bdbd9e2328d835e524a9b3612d",
+  "date": "2025-01-10T14:25:19.000Z",
   "branch": "develop"
 }
