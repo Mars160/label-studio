@@ -18,35 +18,25 @@ Get data into Label Studio by importing files, referencing URLs, or syncing with
 - If your data is stored locally, [import it into Label Studio](#Import-data-from-a-local-directory).
 - If your data contains predictions or pre-annotations, see [Import pre-annotated data into Label Studio](predictions.html).
 
-<div class="enterprise-only">
-
-!!! info Tip
-    If your data is stored in Google Cloud, AWS, or Azure, you can [import your unstructured data as a dataset in Label Studio Enterprise](dataset_create). 
-    
-    From here, you can use semantic search and similarity search to curate data for labeling, which can then be added to different projects as tasks. For more information, see [Data Discovery overview](dataset_overview).
-
-</div>
-
-<div class="opensource-only">
-
-!!! error Enterprise
-    If your data is stored in Google Cloud, AWS, or Azure, you can [import your unstructured data as a dataset in Label Studio Enterprise](https://docs.humansignal.com/guide/dataset_create). 
-    
-    From here, you can use semantic search and similarity search to curate data for labeling, which can then be added to different projects as tasks. For more information, see [Data Discovery overview](https://docs.humansignal.com/guide/dataset_overview).
-
-</div>
-
 ## General guidelines for importing data
 
 * It’s best to keep about 100k tasks / 100k annotations per project for optimal performance.
 * Avoid frequent imports because each new import requires lengthy background operations. One import per 30 seconds will work without overloads.
 
-!!! warning
-    For large projects or business critical projects, do not [upload media files through the Label Studio interface](#Import-data-from-the-Label-Studio-UI). This is especially true for files such as images, audio, video, timeseries, etc.  
+!!! attention 
+    For large projects or business critical projects, do not [upload media files through the Label Studio interface](#Import-data-from-the-Label-Studio-UI). This is especially true for files such as images, audio, video, timeseries, etc.
+
+    Uploading data through the Label Studio UI works fine for proof of concept projects, but it is not recommended for larger projects. Label Studio is not designed as a hosting service at scale and does not have backups for imported media resources. 
     
-    Uploading data through the Label Studio UI works fine for proof of concept projects, but it is not recommended for larger projects. You will also face challenges when you want export your data or move it to another Label Studio instance or even just redeploy Label Studio. Finally, Label Studio is not designed as a hosting service at scale and does not have backups for imported media resources. 
-    
-    We strongly recommend that you configure [source storage](storage) instead.
+    **Risks when uploading through the UI**:<br />
+    You will face challenges when attempting to do the following: 
+
+        * Importing tasks with predictions
+        * Exporting your data
+        * Moving your data to another Label Studio instance 
+        * Redeploying Label Studio
+
+    We ***strongly*** recommend that you configure [source storage](storage) instead.
 
 
 ## Types of data you can import into Label Studio
@@ -479,7 +469,7 @@ To import data from a local directory, you have two options:
 
 ### Run a web server to generate URLs to local files
 
-To run a web server to generate URLs for the files, you can refer to this provided [helper shell script in the Label Studio repository](https://github.com/heartexlabs/label-studio/blob/master/scripts/serve_local_files.sh) or write your own script. 
+To run a web server to generate URLs for the files, you can refer to this provided [helper shell script in the Label Studio repository](https://github.com/HumanSignal/label-studio/blob/develop/scripts/serve_local_files.sh) or write your own script. 
 Use that script to do the following:
 1. On the machine with the file directory that you want Label Studio to import, call the helper script and specify a regex pattern to match the files that you want to import. In this example, the script identifies files with the JPG file extension:
    ```bash
@@ -506,12 +496,20 @@ If you're running Label Studio on Docker and want to add local file storage, you
 
 ## Import data from the Label Studio UI
 
-!!! warning
-    For large projects or business critical projects, do not upload media files through the Label Studio interface. This is especially true for files such as images, audio, video, timeseries, etc.  
+!!! attention 
+    For large projects or business critical projects, do not [upload media files through the Label Studio interface](#Import-data-from-the-Label-Studio-UI). This is especially true for files such as images, audio, video, timeseries, etc.
+
+    Uploading data through the Label Studio UI works fine for proof of concept projects, but it is not recommended for larger projects. Label Studio is not designed as a hosting service at scale and does not have backups for imported media resources. 
     
-    Uploading data through the Label Studio UI works fine for proof of concept projects, but it is not recommended for larger projects. You will also face challenges when you want export your data or move it to another Label Studio instance or even just redeploy Label Studio. Finally, Label Studio is not designed as a hosting service at scale and does not have backups for imported media resources. 
-    
-    We strongly recommend that you configure [source storage](storage) instead.
+    **Risks when uploading through the UI**:<br />
+    You will face challenges when attempting to do the following: 
+
+        * Importing tasks with predictions
+        * Exporting your data
+        * Moving your data to another Label Studio instance 
+        * Redeploying Label Studio
+
+    We ***strongly*** recommend that you configure [source storage](storage) instead.
 
 To import data from the Label Studio UI, do the following:
 1. On the Label Studio UI, open the Data Manager page for a specific project.

@@ -29,6 +29,7 @@ from projects.functions.utils import recalculate_created_annotations_and_labels_
 from projects.models import Project, ProjectImport, ProjectManager, ProjectReimport, ProjectSummary
 from projects.serializers import (
     GetFieldsSerializer,
+    ProjectCountsSerializer,
     ProjectImportSerializer,
     ProjectLabelConfigSerializer,
     ProjectModelVersionExtendedSerializer,
@@ -279,6 +280,36 @@ class ProjectListAPI(generics.ListCreateAPIView):
     @api_webhook(WebhookAction.PROJECT_CREATED)
     def post(self, request, *args, **kwargs):
         return super(ProjectListAPI, self).post(request, *args, **kwargs)
+
+
+@method_decorator(
+    name='get',
+    decorator=swagger_auto_schema(
+        tags=['Projects'],
+        x_fern_sdk_group_name='projects',
+        x_fern_sdk_method_name='counts',
+        x_fern_audiences=['public'],
+        x_fern_pagination={
+            'offset': '$request.page',
+            'results': '$response.results',
+        },
+        operation_summary="List project's counts",
+        operation_description='Returns a list of projects with their counts. For example, task_number which is the total task number in project',
+    ),
+)
+class ProjectCountsListAPI(generics.ListAPIView):
+    serializer_class = ProjectCountsSerializer
+    filterset_class = ProjectFilterSet
+    permission_required = ViewClassPermission(
+        GET=all_permissions.projects_view,
+    )
+    pagination_class = ProjectListPagination
+
+    def get_queryset(self):
+        serializer = GetFieldsSerializer(data=self.request.query_params)
+        serializer.is_valid(raise_exception=True)
+        fields = serializer.validated_data.get('include')
+        return Project.objects.with_counts(fields=fields).filter(organization=self.request.user.active_organization)
 
 
 @method_decorator(
@@ -589,7 +620,7 @@ class ProjectSummaryResetAPI(GetParentObjectMixin, generics.CreateAPIView):
 
     @swagger_auto_schema(auto_schema=None)
     def post(self, *args, **kwargs):
-        project = self.get_parent_object()
+        project = self.parent_object
         summary = project.summary
         start_job_async_or_sync(
             recalculate_created_annotations_and_labels_from_scratch,
@@ -745,11 +776,11 @@ class ProjectTaskListAPI(GetParentObjectMixin, generics.ListCreateAPIView, gener
 
     def get_serializer_context(self):
         context = super(ProjectTaskListAPI, self).get_serializer_context()
-        context['project'] = self.get_parent_object()
+        context['project'] = self.parent_object
         return context
 
     def perform_create(self, serializer):
-        project = self.get_parent_object()
+        project = self.parent_object
         instance = serializer.save(project=project)
         emit_webhooks_for_instance(
             self.request.user.active_organization, project, WebhookAction.TASKS_CREATED, [instance]

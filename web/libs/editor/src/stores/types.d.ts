@@ -49,6 +49,8 @@ type MixinMSTRegion = {
   dynamic: boolean;
   origin: "prediction" | "prediction-changed" | "manual";
   item_index: number | null;
+  type: string;
+  isReadOnly: () => boolean;
 };
 
 type MixinMSTRegionVolatile = {
@@ -59,7 +61,22 @@ type MixinMSTRegionVolatile = {
   drawingTimeout: null;
 };
 
-type MSTRegion = MixinMSTArea & MixinMSTRegion & MixinMSTRegionVolatile;
+type MSTEditableRegionPropertyDefinition = {
+  property: string;
+  label: string;
+};
+
+type MSTEditableRegion = {
+  editorEnabled: boolean;
+  editableFields: MSTEditableRegionPropertyDefinition[];
+  hasEditableFields: boolean;
+  getProperty: (string) => any;
+  getPropertyType: (string) => any;
+  isPropertyEditable: (string) => boolean;
+  setProperty: (string, any) => void;
+};
+
+type MSTRegion = MixinMSTArea & MixinMSTRegion & MixinMSTRegionVolatile & MSTEditableRegion;
 
 type MSTAnnotation = {
   id: string;
@@ -136,7 +153,7 @@ type MSTCommentStore = {
 };
 
 type MSTStore = {
-  customButtons: CustomControlProps.button[];
+  customButtons: CustomButtonsField;
   settings: Record<string, boolean>;
   isSubmitting: boolean;
   // @todo WHAT IS THIS?
@@ -149,7 +166,7 @@ type MSTStore = {
   commentStore: MSTCommentStore;
 
   hasInterface: (name: string) => boolean;
-  handleCustomButton?: (name: string) => void;
+  handleCustomButton?: (button: CustomButtonType) => void;
   submitAnnotation: (options?: any) => void;
   updateAnnotation: (options?: any) => void;
   rejectAnnotation: (options?: any) => void;

@@ -17,7 +17,7 @@ import ProcessAttrsMixin from "../../../mixins/ProcessAttrs";
 import { ReadOnlyControlMixin } from "../../../mixins/ReadOnlyMixin";
 import RequiredMixin from "../../../mixins/Required";
 import { HtxTextAreaRegion, TextAreaRegionModel } from "../../../regions/TextAreaRegion";
-import { FF_DEV_3730, FF_LEAD_TIME, FF_LSDV_4583, FF_LSDV_4659, isFF } from "../../../utils/feature-flags";
+import { FF_LEAD_TIME, FF_LSDV_4583, FF_LSDV_4659, isFF } from "../../../utils/feature-flags";
 import ControlBase from "../Base";
 import ClassificationBase from "../ClassificationBase";
 import "./TextAreaRegionView";
@@ -138,11 +138,13 @@ const Model = types
       return true;
     },
 
+    // @todo not used?
     get serializableValue() {
       if (!self.regions.length) return null;
       return { text: self.selectedValues() };
     },
 
+    // Main and only method to update value in actual result produced by TextArea
     selectedValues() {
       return self.regions.map((r) => r._value);
     },
@@ -170,6 +172,7 @@ const Model = types
     };
 
     return {
+      // @todo not used?
       getSerializableValue() {
         const texts = self.regions.map((s) => s._value);
 
@@ -299,17 +302,13 @@ const Model = types
 
       onShortcut(value) {
         if (!isAvailableElement(lastActiveElement, lastActiveElementModel)) {
-          if (isFF(FF_DEV_3730)) {
-            // Try to use main textarea element
-            const textareaElement =
-              self.textareaRef.current?.input || self.textareaRef.current?.resizableTextArea?.textArea;
+          // Try to use main textarea element
+          const textareaElement =
+            self.textareaRef.current?.input || self.textareaRef.current?.resizableTextArea?.textArea;
 
-            if (isAvailableElement(textareaElement, self)) {
-              lastActiveElement = textareaElement;
-              lastActiveElementModel = self;
-            } else {
-              return;
-            }
+          if (isAvailableElement(textareaElement, self)) {
+            lastActiveElement = textareaElement;
+            lastActiveElementModel = self;
           } else {
             return;
           }

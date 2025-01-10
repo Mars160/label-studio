@@ -61,6 +61,7 @@
     &_selected:hover,
     &_selected.select-dm__option_focused {
       background-color: hsl(var(--color-primary-emphasis), 10%);
+      color: var(--accent_color);
     }
   }
 
