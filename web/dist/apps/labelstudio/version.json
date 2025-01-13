@@ -1,6 +1,6 @@
 {
-  "message": "feat: OPTIC-1332: componetize Toggle and Label components (#6723)",
-  "commit": "281ef778e277bdf3d6cd06b1a75985acc51f2c8c",
-  "date": "2025-01-03T13:35:43.000Z",
+  "message": "feat: LEAP-1753: Add shortcut for toggling bulk sidebar minimization (#6857)",
+  "commit": "3fef4105ab3a30bdbd9e2328d835e524a9b3612d",
+  "date": "2025-01-10T14:25:19.000Z",
   "branch": "develop"
 }
