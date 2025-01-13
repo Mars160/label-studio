@@ -1,6 +1,6 @@
 {
-  "message": "chore: OPTIC-1337: Update Tooltips #2 (#6824)",
-  "commit": "17457555a537bd9e2ed27cf7ed2bfba87af361c2",
-  "date": "2025-01-06T15:52:51.000Z",
+  "message": "refactor: OPTIC-1518: remove a batch of ff (#6892)",
+  "commit": "3c03818a813dfcd19fd5a0600a8933c84405507a",
+  "date": "2025-01-13T17:05:01.000Z",
   "branch": "develop"
 }

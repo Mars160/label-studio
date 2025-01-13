@@ -25,7 +25,6 @@ import {
   FF_LSDV_4583,
   FF_TAXONOMY_ASYNC,
   FF_TAXONOMY_LABELING,
-  FF_TAXONOMY_SELECTED,
   isFF,
 } from "../../../utils/feature-flags";
 import ControlBase from "../Base";
@@ -86,6 +85,7 @@ import { errorBuilder } from "../../../core/DataValidator/ConfigValidator";
  * @param {string} [placeholder=]         - What to display as prompt on the input
  * @param {boolean} [perRegion]           - Use this tag to classify specific regions instead of the whole object
  * @param {boolean} [perItem]             - Use this tag to classify specific items inside the object instead of the whole object
+ * @param {boolean} [labeling]            - Use taxonomy to label regions in text. Only supported with <Text> and <HyperText> object tags.
  * @param {boolean} [legacy]              - Use this tag to enable the legacy version of the Taxonomy tag. The legacy version supports the ability for annotators to add labels as needed. However, when true, the `apiUrl` parameter is not usable.
  */
 const TagAttrs = types.model({
@@ -363,14 +363,10 @@ const Model = types
       const children = ChildrenSnapshots.get(self.name) ?? [];
 
       if (isFF(FF_DEV_3617) && self.store && children.length !== self.children.length) {
-        if (isFF(FF_TAXONOMY_SELECTED)) {
-          // we have to update it during config parsing to let other code work
-          // with correctly added children.
-          // looks like there are no obstacles to do it in the same tick
-          self.updateChildren();
-        } else {
-          setTimeout(() => self.updateChildren());
-        }
+        // we have to update it during config parsing to let other code work
+        // with correctly added children.
+        // looks like there are no obstacles to do it in the same tick
+        self.updateChildren();
       } else {
         self.loading = false;
       }
