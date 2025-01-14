@@ -9,7 +9,9 @@ body {
   display: flex;
   flex-flow: row wrap;
   gap: 24px;
+  max-width: 990px;
 }
+
 .account-page .forms {
   display: flex;
   flex-flow: column nowrap;
