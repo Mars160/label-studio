@@ -40,9 +40,13 @@ class ModelProviderConnection(models.Model):
         help_text='The content of GOOGLE_APPLICATION_CREDENTIALS json file',
     )
 
-    google_project_id = models.CharField(_('google project id'), max_length=255, null=True, blank=True, help_text='Google project ID')
+    google_project_id = models.CharField(
+        _('google project id'), max_length=255, null=True, blank=True, help_text='Google project ID'
+    )
 
-    google_location = models.CharField(_('google location'), max_length=255, null=True, blank=True, help_text='Google project location')
+    google_location = models.CharField(
+        _('google location'), max_length=255, null=True, blank=True, help_text='Google project location'
+    )
 
     cached_available_models = models.CharField(
         max_length=4096, null=True, blank=True, help_text='List of available models from the provider'
