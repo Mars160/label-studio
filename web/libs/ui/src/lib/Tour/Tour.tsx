@@ -1,8 +1,7 @@
 import type React from "react";
 import { useEffect, useContext, useCallback } from "react";
 import JoyRide, { ACTIONS, EVENTS, STATUS, type BaseProps } from "react-joyride";
-import { TourContext, userTourStateReducer } from "./TourProvider";
-import { Button } from "apps/labelstudio/src/components/Button/Button";
+import { TourContext, userTourStateReducer } from "../../../../../apps/labelstudio/src/providers/TourProvider";
 
 interface TourProps extends BaseProps {
   /** Unique identifier for the tour. Should match the name of the tour in the product tour YAML file (note that my-tour-name can match my_tour_name.yml) */
@@ -126,28 +125,4 @@ export const Tour: React.FC<TourProps> = ({ name, autoStart = false, ...props })
       hideCloseButton={true}
     />
   ) : null;
-};
-
-interface StartTourButtonProps {
-  name: string;
-  className?: string;
-}
-
-export const StartTourButton: React.FC<StartTourButtonProps> = ({ name, className }) => {
-  const tourContext = useContext(TourContext);
-
-  if (!tourContext) {
-    console.error("Tour context not found");
-    return null;
-  }
-
-  const handleClick = () => {
-    tourContext.restartTour(name);
-  };
-
-  return (
-    <Button className={className} onClick={handleClick} size="small" icon={<i className="fas fa-fingerprint" />}>
-      Start tour
-    </Button>
-  );
 };
