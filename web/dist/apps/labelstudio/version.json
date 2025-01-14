@@ -1,6 +1,6 @@
 {
-  "message": "feat: LEAP-1753: Add shortcut for toggling bulk sidebar minimization (#6857)",
-  "commit": "3fef4105ab3a30bdbd9e2328d835e524a9b3612d",
-  "date": "2025-01-10T14:25:19.000Z",
+  "message": "refactor: OPTIC-1518: remove a batch of ff (#6892)",
+  "commit": "3c03818a813dfcd19fd5a0600a8933c84405507a",
+  "date": "2025-01-13T17:05:01.000Z",
   "branch": "develop"
 }
