@@ -52,12 +52,6 @@
       grid-template-columns: repeat(4, 1fr);
     }
   }
-
-  @media (width >= 1460px) {
-    &__list {
-      grid-template-columns: repeat(5, 1fr);
-    }
-  }
 }
 
 .empty-projects-page {

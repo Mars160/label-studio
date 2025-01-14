@@ -9,18 +9,19 @@
   }
 
   &__footer {
-    margin: 0 -32px -32px;
-    padding: 32px 40px;
+    margin: 0 -40px -32px;
+    padding: 24px 32px;
     position: sticky;
     bottom: -40px;
     background-color: var(--color-neutral-surface-active);
-    border-radius: 5px;
+    border-top: 1px solid var(--color-neutral-border);
   }
 }
 
 .formats {
   color: var(--color-neutral-content-subtler);
   font-size: 16px;
+  padding-bottom: var(--spacing-medium);
 
   &__list {
     margin: 10px -7px;
@@ -54,7 +55,7 @@
     &_selected {
       pointer-events: none;
       background-color: var(--color-primary-emphasis);
-      border: 1px solid var(--color-primary-border);
+      border: 1px solid var(--color-primary-border-subtler);
     }
 
     &:not(&_active) {

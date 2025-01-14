@@ -43,6 +43,7 @@
     max-height: 200px;
     white-space: pre;
     border-radius: 5px;
+    content: var(--color-neutral-content);
     background-color: var(--color-neutral-surface);
     font-family: var(--font-mono);
   }
