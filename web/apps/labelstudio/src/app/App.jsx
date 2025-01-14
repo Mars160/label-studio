@@ -61,6 +61,7 @@ const App = ({ content }) => {
             <RoutesProvider key="rotes" />,
             <ProjectProvider key="project" />,
             <ToastProvider key="toast" />,
+            isFF(FF_PRODUCT_TOUR) && <TourProvider />,
           ]}
         >
           <AsyncPage>

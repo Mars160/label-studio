@@ -2,7 +2,7 @@ import type React from "react";
 import { useEffect, useContext, useCallback } from "react";
 import JoyRide, { ACTIONS, EVENTS, STATUS, type BaseProps } from "react-joyride";
 import { TourContext, userTourStateReducer } from "./TourProvider";
-import { Button } from "../Button/Button";
+import { Button } from "apps/labelstudio/src/components/Button/Button";
 
 interface TourProps extends BaseProps {
   /** Unique identifier for the tour. Should match the name of the tour in the product tour YAML file (note that my-tour-name can match my_tour_name.yml) */
