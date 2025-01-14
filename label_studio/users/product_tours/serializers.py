@@ -45,4 +45,4 @@ class UserProductTourSerializer(serializers.ModelSerializer):
             ProductTourInteractionData(**value)
             return value
         except Exception as e:
-            raise serializers.ValidationError(f'Invalid interaction data format: {str(e)}')
+            raise serializers.ValidationError('Invalid product tour interaction data format.')
