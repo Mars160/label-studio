@@ -9,7 +9,7 @@
   border-radius: 5px;
   padding: 0 16px;
   transition: box-shadow 150ms ease-out;
-  box-shadow: inset 0px 1px 4px rgba(var(--color-neutral-shadow-raw) / 12%);
+  box-shadow: inset 0 1px 4px rgba(var(--color-neutral-shadow-raw) / 12%);
 }
 
 .input_size_compact:not([type='checkbox'], [type='radio']) {

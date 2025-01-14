@@ -3,7 +3,7 @@
   --padding: 4px;
   --font-size: 16px;
   --button-padding: 0 10px;
-  --button-checked-shadow: 0px 1px 0px rgb(0 0 0 / 10%), 0px 0px 0px 1px rgb(0 0 0 / 2%), 0px 5px 10px rgb(0 0 0 / 15%);
+  --button-checked-shadow: 0 1px 0 rgb(0 0 0 / 10%), 0 0 0 1px rgb(0 0 0 / 2%), 0 5px 10px rgb(0 0 0 / 15%);
 
   border-radius: var(--radius);
   padding: var(--padding);
@@ -146,7 +146,7 @@
       --padding: 2px;
       --font-size: 12px;
       --button-padding: 0 5px;
-      --button-checked-shadow: 0px 1px 0px rgb(0 0 0 / 10%), 0px 0px 0px 1px rgb(0 0 0 / 2%), 0px 2px 4px rgb(0 0 0 / 15%);
+      --button-checked-shadow: 0 1px 0 rgb(0 0 0 / 10%), 0 0 0 1px rgb(0 0 0 / 2%), 0 2px 4px rgb(0 0 0 / 15%);
     }
   }
 
