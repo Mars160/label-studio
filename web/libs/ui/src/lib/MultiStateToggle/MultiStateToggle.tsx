@@ -26,6 +26,7 @@ export const MultiStateToggle = ({ options = [], selectedOption, onChange }: Mul
             [styles.multiStateToggle__option_selected]: selectedIndex === index,
           })}
           onClick={() => onChange?.(option.value)}
+          type="button"
         >
           {option?.label ?? option.value}
         </button>
