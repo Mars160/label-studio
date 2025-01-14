@@ -50,6 +50,7 @@ export const ThemeToggle = () => {
         [styles.light]: appliedTheme === "Light",
       })}
       onClick={themeChanged}
+      type="button"
     >
       <div className={clsx(styles.themeToggle__icon)}>
         <div className={clsx(styles.animationWrapper)}>
