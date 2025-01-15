@@ -1,6 +1,6 @@
 {
-  "message": "refactor: OPTIC-1518: remove a batch of ff (#6892)",
-  "commit": "3c03818a813dfcd19fd5a0600a8933c84405507a",
-  "date": "2025-01-13T17:05:01.000Z",
+  "message": "feat: LEAP-1737: Add keyboard shortcut for audio play/pause action (#6863)",
+  "commit": "ef86b7c24f6620a01fecd15eac0d0fd506a291d9",
+  "date": "2025-01-15T15:01:16.000Z",
   "branch": "develop"
 }
