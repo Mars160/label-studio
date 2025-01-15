@@ -18,7 +18,7 @@ This example demonstrates how to set up Prompts to predict image captions.
 
 1. [Create a new label studio project](setup_project) by importing image data via [cloud storage](storage). 
 
-    * If you’d like to, you can generate a dataset to test the process using [https://data.heartex.net](https://data.heartex.net).
+    If you’d like to, you can generate a dataset to test the process using [https://data.heartex.net](https://data.heartex.net).
 
 !!! note
     Prompts does not currently support image data uploaded as raw images. Only image references (HTTP URIs to images) or images imported via cloud storage are supported. 
@@ -35,7 +35,7 @@ This example demonstrates how to set up Prompts to predict image captions.
 ```
 3. Navigate to **Prompts** from the sidebar, and [create a prompt](prompts_create) for the project
 
-    * If you have not yet set up API the keys you want to use, do that now: [API keys](prompts_create#Model-provider-API-keys). 
+    If you have not yet set up API the keys you want to use, do that now: [API keys](prompts_create#Model-provider-API-keys). 
 
 4. Add the instruction you’d like to provide the LLM to caption your images. For example:
 
@@ -69,7 +69,8 @@ This example demonstrates how to set up Prompts to evaluate if the LLM-generated
 
 1. [Create a new label studio project](setup_project) by importing text data of LLM-generated outputs. 
 
-    You can use this preprocessed sample of the [jigsaw_toxicity](https://huggingface.co/datasets/tasksource/jigsaw_toxicity) dataset as an example. See [the appendix](#Appendix-Generate-dataset) for how this was generated. 
+    For example: you can use the [jigsaw_toxicity](https://huggingface.co/datasets/tasksource/jigsaw_toxicity) dataset as an example. See [the appendix](#Appendix-Generate-dataset) for how you can pre-process and (optionally) downsample this dataset to use with this guide.
+
 2. Create a [label config](setup) for toxicity detection, for example:
 
 ```xml
@@ -115,7 +116,6 @@ This example demonstrates how to set up Prompts to evaluate if the LLM-generated
 
 3. Navigate to **Prompts** from the sidebar, and [create a prompt](prompts_create) for the project
 
-!!! note
     If you have not yet set up API the keys you want to use, do that now: [API keys](prompts_create#Model-provider-API-keys). 
 
 4. Add the instruction you’d like to provide the LLM to best evaluate the text. For example:
@@ -132,12 +132,12 @@ This example demonstrates how to set up Prompts to evaluate if the LLM-generated
 !!! note
     Ensure you include `{comment_text}` in your instructions. Click `comment_text` above the instruction field to insert it. 
 
-![Screenshot pointing to how to insert comment text into your instructions](/images/prompts/example_insert_comment_text.png)
+    ![Screenshot pointing to how to insert comment text into your instructions](/images/prompts/example_insert_comment_text.png)
 
 !!! info Tip
     You can also automatically generate the instructions using the [**Enhance Prompt** action](prompts_draft#Enhance-prompt). Before you can use this action, you must at least add the variable name `{comment_text}` and then click **Save**. 
 
-![Screenshot pointing to Enhance Prompt action](/images/prompts/example_enhance_prompt2.png)
+    ![Screenshot pointing to Enhance Prompt action](/images/prompts/example_enhance_prompt2.png)
 
 5. Run the prompt. View predictions to accept or correct.
 
@@ -146,11 +146,11 @@ This example demonstrates how to set up Prompts to evaluate if the LLM-generated
 !!! info Tip
     Use the drop-down menu above the results field to change the subset of data being used (e.g. only data with Ground Truth annotations, or a small sample of records). 
 
-![Screenshot pointing to subset dropdown](/images/prompts/example_subset2.png)
+    ![Screenshot pointing to subset dropdown](/images/prompts/example_subset2.png)
 
 6. Accept the [predictions as annotations](prompts_predictions#Create-annotations-from-predictions). 
 
-### Appendix: Generate dataset
+### Appendix: Preprocess jigsaw toxicity dataset
 
 Download the jigsaw_toxicity dataset, then downsample/format using the following script (modify the `INPUT_PATH` and `OUTPUT_PATH` to suit your needs):
 
