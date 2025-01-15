@@ -13,6 +13,11 @@ import { DataManagerPage } from "../DataManager/DataManager";
 import { SettingsPage } from "../Settings";
 import "./Projects.scss";
 import { EmptyProjectsList, ProjectsList } from "./ProjectsList";
+import {
+  FF_PRODUCT_TOUR,
+  isFF,
+} from "../../utils/feature-flags";
+import { Tour } from "@humansignal/core"
 
 const getCurrentPage = () => {
   const pageNumberFromURL = new URLSearchParams(location.search).get("page");
@@ -129,6 +134,13 @@ export const ProjectsPage = () => {
           ) : (
             <EmptyProjectsList openModal={openModal} />
           )}
+          {isFF(FF_PRODUCT_TOUR) && (
+                      <Tour
+                        name="first-project"
+                        autoStart
+                        showSkipButton={true}
+                      />
+                    )}
           {modal && <CreateProject onClose={closeModal} />}
         </Elem>
       </Oneof>
