@@ -77,13 +77,13 @@ const createInitialState = (steps: Step[]): TourState => ({
 
 type ProductTourState = "ready" | "skipped" | "completed";
 
-const updateProductTourState = (
+const updateProductTourState = async (
   api: any,
   name: string,
   state: ProductTourState,
   interactionData: Record<string, any> = {},
 ) => {
-  return api.callApi("updateProductTour", {
+  return  await api.callApi("updateProductTour", {
     params: {
       name,
     },
