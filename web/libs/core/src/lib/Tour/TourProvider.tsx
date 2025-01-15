@@ -104,6 +104,7 @@ interface TourContextType {
 
 export const TourContext = createContext<TourContextType | null>(null);
 
+// TODO: once useAPI is unified and moved into core library we need to come back and clean this up as it will not be necessary to pass it in to the provider
 export const TourProvider: React.FC<{
   children: React.ReactNode;
   useAPI: () => { callApi: (apiName: string, params: Record<string, any>) => any };
