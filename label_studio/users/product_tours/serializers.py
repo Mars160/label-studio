@@ -44,5 +44,5 @@ class UserProductTourSerializer(serializers.ModelSerializer):
             # Validate interaction data using pydantic model
             ProductTourInteractionData(**value)
             return value
-        except Exception as e:
+        except Exception:
             raise serializers.ValidationError('Invalid product tour interaction data format.')

@@ -34,7 +34,7 @@ export const FF_DIA_835 = "fflag_feat_all_dia_835_prompter_workflow_long";
 /**
  * Joyride
  */
- export const FF_PRODUCT_TOUR = "fflag_feat_dia_1697_product_tour_short";
+export const FF_PRODUCT_TOUR = "fflag_feat_dia_1697_product_tour_short";
 /**
  * It adds an unsaved changes warning and fix some caching problems on a saving project
  */
