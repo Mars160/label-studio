@@ -63,7 +63,7 @@ const App = ({ content }) => {
             <ProjectProvider key="project" />,
             <ToastProvider key="toast" />,
             isFF(FF_PRODUCT_TOUR) && <TourProvider useAPI={useAPI} />,
-          ]}
+          ].filter(Boolean)}
         >
           <AsyncPage>
             <DraftGuard />
