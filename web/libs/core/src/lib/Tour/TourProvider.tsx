@@ -83,7 +83,7 @@ const updateProductTourState = async (
   state: ProductTourState,
   interactionData: Record<string, any> = {},
 ) => {
-  return  await api.callApi("updateProductTour", {
+  return await api.callApi("updateProductTour", {
     params: {
       name,
     },
