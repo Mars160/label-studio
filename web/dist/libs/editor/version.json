@@ -1,6 +1,6 @@
 {
-  "message": "feat: OPTIC-1417: Improve projects list API usage with frontend query cache. (#6844)",
-  "commit": "62e08b0f79eb7ff27712b4031e09e1c2a796b3b4",
-  "date": "2025-01-14T13:56:44.000Z",
+  "message": "ci: PLT-628: Update pyproject.toml (#6912)",
+  "commit": "574f0e5936da7a9a84271a9d04a8af66ab0d2212",
+  "date": "2025-01-16T12:30:42.000Z",
   "branch": "develop"
 }
