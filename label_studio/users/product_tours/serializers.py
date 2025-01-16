@@ -1,7 +1,7 @@
 import pathlib
-from functools import cached_property
-
 import yaml
+from functools import cached_property
+from core.utils.db import fast_first
 from rest_framework import serializers
 
 from .models import ProductTourInteractionData, UserProductTour
@@ -11,6 +11,7 @@ PRODUCT_TOURS_CONFIGS_DIR = pathlib.Path(__file__).parent / 'configs'
 
 class UserProductTourSerializer(serializers.ModelSerializer):
     steps = serializers.SerializerMethodField(read_only=True)
+    awaiting = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = UserProductTour
@@ -29,11 +30,21 @@ class UserProductTourSerializer(serializers.ModelSerializer):
 
         return value
 
+    @cached_property
     def load_tour_config(self):
         # TODO: get product tour from yaml file. Later we move it to remote storage, e.g. S3
         filepath = PRODUCT_TOURS_CONFIGS_DIR / f'{self.context["name"]}.yml'
         with open(filepath, 'r') as f:
             return yaml.safe_load(f)
+        
+    def get_awaiting(self, obj):
+        config = self.load_tour_config()
+        dependencies = config.get('dependencies', [])
+        for dependency in dependencies:
+            tour = fast_first(UserProductTour.objects.filter(user=self.context['request'].user, name=dependency))
+            if not tour or tour.status != UserProductTour.Status.COMPLETED:
+                return True
+        return False
 
     def get_steps(self, obj):
         config = self.load_tour_config()
