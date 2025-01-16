@@ -14,7 +14,9 @@ PRODUCT_TOURS_CONFIGS_DIR = pathlib.Path(__file__).parent / 'configs'
 
 
 class UserProductTourSerializer(serializers.ModelSerializer):
+    # steps is a list of steps in the tour loaded from the yaml file
     steps = serializers.SerializerMethodField(read_only=True)
+    # awaiting is a boolean that indicates if the tour is awaiting other tours in the list of "dependencies"
     awaiting = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
