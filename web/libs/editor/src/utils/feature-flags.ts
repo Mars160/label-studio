@@ -51,12 +51,6 @@ export const FF_DEV_3377 = "fflag_fix_front_dev_3377_image_regions_shift_on_resi
 export const FF_DEV_3391 = "fflag_fix_front_dev_3391_interactive_view_all";
 
 /**
- * Fixing maxUsages prop of *labels on region creation.
- * @link https://app.launchdarkly.com/default/test/features/fflag_fix_front_dev_3666_max_usages_on_region_creation_171122_short
- */
-export const FF_DEV_3666 = "fflag_fix_front_dev_3666_max_usages_on_region_creation_171122_short";
-
-/**
  * Fixing "Auto Detect" tool undo functionality and bugs with skipNextUndoState.
  * @link https://app.launchdarkly.com/default/production/features/fflag_fix_front_dev_1284_auto_detect_undo_281022_short
  */

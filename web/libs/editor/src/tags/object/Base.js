@@ -2,7 +2,7 @@ import { types } from "mobx-state-tree";
 import isMatch from "lodash.ismatch";
 import InfoModal from "../../components/Infomodal/Infomodal";
 import { AnnotationMixin } from "../../mixins/AnnotationMixin";
-import { FF_DEV_3391, FF_DEV_3666, isFF } from "../../utils/feature-flags";
+import { FF_DEV_3391, isFF } from "../../utils/feature-flags";
 import { BaseTag } from "../TagBase";
 
 const ObjectBase = types
@@ -73,12 +73,8 @@ const ObjectBase = types
       const allStates = self.states() || [];
       let exceeded;
 
-      if (isFF(FF_DEV_3666)) {
-        exceeded = allStates.reduce(checkAndCollect, []).filter((e) => e.selected);
-        exceeded.forEach((e) => e.setSelected(false));
-      } else {
-        exceeded = allStates.reduce(checkAndCollect, []);
-      }
+      exceeded = allStates.reduce(checkAndCollect, []).filter((e) => e.selected);
+      exceeded.forEach((e) => e.setSelected(false));
 
       const states = self.activeStates() || [];
 
