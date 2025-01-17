@@ -1,7 +1,7 @@
 import { types } from "mobx-state-tree";
 import { FileLoader } from "../../../utils/FileLoader";
 import { clamp } from "../../../utils/utilities";
-import { FF_IMAGE_MEMORY_USAGE, isFF } from "libs/editor/src/utils/feature-flags";
+import { FF_IMAGE_MEMORY_USAGE, isFF } from "../../../utils/feature-flags";
 
 const fileLoader = new FileLoader();
 
