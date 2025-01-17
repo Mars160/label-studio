@@ -29,7 +29,6 @@ STALE_FEATURE_FLAGS = {
     'fflag_feat_front_prod_292_archive_workspaces_short': True,
     'fflag_feat_all_lsdv_4915_async_task_import_13042023_short': True,
     'fflag_fix_all_lsdv_4971_async_reimport_09052023_short': True,
-
     # Jan 16
     'fflag_fix_front_leap_443_select_annotation_once': False,
     'fflag_feat_front_optic_767_annotator_project_multiselect_short': True,
