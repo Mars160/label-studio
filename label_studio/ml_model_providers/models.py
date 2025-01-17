@@ -30,6 +30,7 @@ class ModelProviderChoices(Enum):
     AZURE_OPENAI = ModelProviderConfig(litellm_slug='azure', display_name='AzureOpenAI')
     VERTEX_AI = ModelProviderConfig(litellm_slug='vertex_ai', display_name='VertexAI')
     CUSTOM = ModelProviderConfig(litellm_slug='openai', display_name='Custom')
+    GEMINI = ModelProviderConfig(litellm_slug='gemini', display_name='Gemini')
 
 
 class ModelProviderConnectionScopes(models.TextChoices):
