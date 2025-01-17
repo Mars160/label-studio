@@ -1,13 +1,13 @@
 """This file and its contents are licensed under the Apache License 2.0. Please see the included NOTICE for copyright information and LICENSE for a copy of the license.
 """
 import logging
-from typing import List, Optional
 from enum import Enum
-from pydantic import BaseModel
+from typing import List, Optional
 
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from pydantic import BaseModel
 from tasks.models import PredictionMeta
 
 logger = logging.getLogger(__name__)
@@ -18,7 +18,7 @@ class ModelProviders(models.TextChoices):
     AZURE_OPENAI = 'AzureOpenAI', _('AzureOpenAI')
     VERTEX_AI = 'VertexAI', _('VertexAI')
     CUSTOM = 'Custom', _('Custom')
-    
+
 
 class ModelProviderConfig(BaseModel):
     litellm_slug: str
@@ -26,10 +26,10 @@ class ModelProviderConfig(BaseModel):
 
 
 class ModelProviderChoices(Enum):
-    OPENAI = ModelProviderConfig(litellm_slug="openai", display_name="OpenAI")
-    AZURE_OPENAI = ModelProviderConfig(litellm_slug="azure", display_name="AzureOpenAI")
-    VERTEX_AI = ModelProviderConfig(litellm_slug="vertex_ai", display_name="VertexAI")
-    CUSTOM = ModelProviderConfig(litellm_slug="openai", display_name="Custom")
+    OPENAI = ModelProviderConfig(litellm_slug='openai', display_name='OpenAI')
+    AZURE_OPENAI = ModelProviderConfig(litellm_slug='azure', display_name='AzureOpenAI')
+    VERTEX_AI = ModelProviderConfig(litellm_slug='vertex_ai', display_name='VertexAI')
+    CUSTOM = ModelProviderConfig(litellm_slug='openai', display_name='Custom')
 
 
 class ModelProviderConnectionScopes(models.TextChoices):
@@ -41,10 +41,16 @@ class ModelProviderConnectionScopes(models.TextChoices):
 class ModelProviderConnection(models.Model):
 
     # DEPRECATED in favor of provider_choice
-    provider = models.CharField(max_length=255, choices=ModelProviders.choices, default=ModelProviders.OPENAI, help_text='Deprecated in favor of provider_choice', editable=False)
+    provider = models.CharField(
+        max_length=255,
+        choices=ModelProviders.choices,
+        default=ModelProviders.OPENAI,
+        help_text='Deprecated in favor of provider_choice',
+        editable=False,
+    )
 
     provider_choice = models.CharField(max_length=255, null=True, blank=True, help_text='Model provider name')
-    
+
     @property
     def get_provider_config(self) -> Optional[ModelProviderConfig]:
         try:
