@@ -1,6 +1,7 @@
 import { types } from "mobx-state-tree";
 import { FileLoader } from "../../../utils/FileLoader";
 import { clamp } from "../../../utils/utilities";
+import { FF_IMAGE_MEMORY_USAGE, isFF } from "libs/editor/src/utils/feature-flags";
 
 const fileLoader = new FileLoader();
 
@@ -67,10 +68,14 @@ export const ImageEntity = types
   }))
   .actions((self) => ({
     preload() {
+      if (isFF(FF_IMAGE_MEMORY_USAGE)) {
+        self.setCurrentSrc(self.src);
+        self.setDownloaded(true);
+        self.setProgress(1);
+        return;
+      }
       if (self.ensurePreloaded() || !self.src) return;
-
       self.setDownloading(true);
-
       fileLoader
         .download(self.src, (_t, _l, progress) => {
           self.setProgress(progress);
@@ -87,6 +92,8 @@ export const ImageEntity = types
     },
 
     ensurePreloaded() {
+      if (isFF(FF_IMAGE_MEMORY_USAGE)) return false;
+
       if (fileLoader.isError(self.src)) {
         self.setDownloading(false);
         self.setError(true);
