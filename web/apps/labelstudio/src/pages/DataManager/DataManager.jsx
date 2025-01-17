@@ -15,7 +15,8 @@ import { ImportModal } from "../CreateProject/Import/ImportModal";
 import { ExportPage } from "../ExportPage/ExportPage";
 import { APIConfig } from "./api-config";
 import { ToastContext } from "@humansignal/ui";
-import { FF_OPTIC_2, isFF } from "../../utils/feature-flags";
+import { FF_OPTIC_2, FF_PRODUCT_TOUR, isFF } from "../../utils/feature-flags";
+import { Tour } from "@humansignal/core"
 
 import "./DataManager.scss";
 
@@ -204,7 +205,10 @@ export const DataManagerPage = ({ ...props }) => {
       <Button to="/projects">Back to projects</Button>
     </Block>
   ) : (
-    <Block ref={root} name="datamanager" />
+    <Block  ref={root} name="datamanager" >
+    {isFF(FF_PRODUCT_TOUR) && <Tour name="first-project-data-manager" autoStart />}
+    </Block>
+
   );
 };
 

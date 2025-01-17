@@ -1,10 +1,11 @@
 import type React from "react";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { shallowEqualObjects } from "shallow-equal";
-import { FF_UNSAVED_CHANGES, isFF } from "../utils/feature-flags";
+import { FF_UNSAVED_CHANGES, FF_PRODUCT_TOUR, isFF } from "../utils/feature-flags";
 import { useAPI, type WrappedResponse } from "./ApiProvider";
 import { useAppStore } from "./AppStoreProvider";
 import { useParams } from "./RoutesProvider";
+import { Tour } from "@humansignal/core"
 
 type Empty = Record<string, never>;
 

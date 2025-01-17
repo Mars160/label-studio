@@ -46,7 +46,6 @@ export const EmptyProjectsList = ({ openModal }) => {
       <Elem data-testid="empty_page_button" name="action" tag={Button} onClick={openModal} look="primary">
         Create Project
       </Elem>
-      {isFF(FF_PRODUCT_TOUR) && <Tour name="first-project-welcome" autoStart />}
     </Block>
   );
 };

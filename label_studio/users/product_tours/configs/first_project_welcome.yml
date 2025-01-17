@@ -8,4 +8,4 @@ steps:
   - target: '[data-testid="empty_page_button"]'
     placement: right
     title: '<div style="font-size: 24px; color: var(--grape_500)">Click the Create Project button to get started</div>'
-
+    spotlightClicks: true
