@@ -80,8 +80,7 @@ export const Tour: React.FC<TourProps> = ({ name, autoStart = false, ...props })
       type: string;
       status: string;
     }) => {
-      const { action, index, type, status } = data;
-      // tour ends when
+      const { action, index, type, status } = data; // tour ends when
       const shouldEndTour =
         (status === STATUS.SKIPPED && state.run) || action === ACTIONS.CLOSE || status === STATUS.FINISHED;
 

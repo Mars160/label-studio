@@ -1,4 +1,5 @@
 dependencies:
+  - first_project_welcome
   - first_project_name
 
 steps:

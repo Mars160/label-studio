@@ -189,6 +189,7 @@ export const CreateProject = ({ onClose }) => {
               Delete
             </Button>
             <Button
+              data-testid="save"
               look="primary"
               size="compact"
               onClick={onCreate}

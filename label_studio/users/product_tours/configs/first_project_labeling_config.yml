@@ -1,11 +1,21 @@
 dependencies:
+  - first_project_welcome
+  - first_project_name
   - first_project_data_import
 
 steps:
-  - target: '[data-testid="import-page"]'
+  - target: '[data-testid="config-wizard"]'
     placement: center
-    title: '<div style="font-size: 24px; color: var(--grape_500)">Step 2: Upload your Data</div>'
-    content: '<div style="width: 100%">LabelStudio supports a wide variety of data types. For this example, we will upload some images.</div>'
+    title: '<div style="font-size: 24px; color: var(--grape_500)">Step 3: Set up your Labeling Config</div>'
+    content: '<div style="width: 100%">Now it is time to set up your labeling config. You can always create your own using our custom HTML, but for this example we&#x27ll use a template!</div>'
+    disableBeacon: true
+    styles:
+      options:
+        zIndex: 10000000
+
+  - target: '[data-testid="Object Detection with Bounding Boxes"]'
+    placement: right
+    content: '<div style="width: 100%">We are doing a Computer Vision task, which is already selected from the navigation list on the left. Select the template "Object Detection with Bounding Boxes".</div>'
     disableBeacon: true
     styles:
       options:
