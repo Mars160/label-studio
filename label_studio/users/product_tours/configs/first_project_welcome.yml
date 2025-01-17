@@ -1,0 +1,11 @@
+steps:
+  - target: body
+    placement: center
+    title: '<div style="font-size: 24px; color: var(--grape_500)">Welcome to Label Studio!</div>'
+    content: '<div style="width: 100%">Seems like you have no projects yet. Let&#x27s create one together to label images!</div>'
+
+
+  - target: '[data-testid="empty_page_button"]'
+    placement: right
+    title: '<div style="font-size: 24px; color: var(--grape_500)">Click the Create Project button to get started</div>'
+

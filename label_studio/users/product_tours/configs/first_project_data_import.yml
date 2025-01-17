@@ -1,0 +1,29 @@
+dependencies:
+  - first_project_name
+
+steps:
+  - target: '[data-testid="import-page"]'
+    placement: center
+    title: '<div style="font-size: 24px; color: var(--grape_500)">Step 2: Upload your Data</div>'
+    content: '<div style="width: 100%">LabelStudio supports a wide variety of data types. For this example, we will upload some images.</div>'
+    disableBeacon: true
+    styles:
+      options:
+        zIndex: 10000000
+
+  - target: '[data-testid="dataset-url-spot"]'
+    placement: right
+    content: '<div style="width: 100%">If you have a dataset hosted online, you can use this box to upload it. Copy the following link and paste it here, and then click submit!</div>'
+    disableBeacon: true
+    styles:
+      options:
+        zIndex: 10000000
+
+
+  - target: '[data-testid="labeling-config-tab"]'
+    placement: right
+    title: '<div style="font-size: 24px; color: var(--grape_500)">Click here to go to step 3!</div>'
+    disableBeacon: true
+    styles:
+      options:
+        zIndex: 100000

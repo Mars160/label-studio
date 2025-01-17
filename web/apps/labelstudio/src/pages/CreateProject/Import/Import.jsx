@@ -5,6 +5,8 @@ import { unique } from "../../../utils/helpers";
 import "./Import.scss";
 import { IconError, IconInfo, IconUpload } from "../../../assets/icons";
 import { useAPI } from "../../../providers/ApiProvider";
+import { Tour} from "@humansignal/core"
+import { FF_PRODUCT_TOUR, isFF } from "../../../utils/feature-flags";
 
 const importClass = cn("upload_page");
 const dropzoneClass = cn("dropzone");
@@ -328,12 +330,12 @@ export const ImportPage = ({
   };
 
   return (
-    <div className={importClass}>
+    <div data-testid="import-page" className={importClass}>
       {highlightCsvHandling && <div className={importClass.elem("csv-splash")} />}
       <input id="file-input" type="file" name="file" multiple onChange={onUpload} style={{ display: "none" }} />
 
       <header>
-        <form className={`${importClass.elem("url-form")} inline`} method="POST" onSubmit={onLoadURL}>
+        <form data-testid="dataset-url-spot" className={`${importClass.elem("url-form")} inline`} method="POST" onSubmit={onLoadURL}>
           <input placeholder="Dataset URL" name="url" ref={urlRef} />
           <button type="submit">Add URL</button>
         </form>
@@ -432,6 +434,9 @@ export const ImportPage = ({
       </main>
 
       <Footer />
+      {isFF(FF_PRODUCT_TOUR) && (<Tour name="first-project-data-import" autoStart />)}
+
     </div>
+
   );
 };

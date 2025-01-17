@@ -1,0 +1,29 @@
+dependencies:
+  - first_project_welcome
+
+steps:
+  - target: '[data-testid="project-name-field"]'
+    placement: right
+    title: '<div style="font-size: 24px; color: var(--grape_500)">Step 1: Give your project a name</div>'
+    content: '<div style="width: 100%">You can use any name you want, but we recommend that it is descriptive to your task and data. Try using "Segment Dogs" for this example!</div>'
+    disableBeacon: true
+    styles:
+      options:
+        zIndex: 100000
+
+  - target: '[data-testid="project-description-field"]'
+    placement: right
+    title: '<div style="font-size: 24px; color: var(--grape_500)">Project Description</div>'
+    content: '<div style="width: 100%">Providing a description is optional! We recommend using this space for any additional context for your project. For our example, we will leave it blank. </div>'
+    disableBeacon: true
+    styles:
+      options:
+        zIndex: 100000
+
+  - target: '[data-testid="import-data-tab"]'
+    placement: right
+    title: '<div style="font-size: 24px; color: var(--grape_500)">Click here to go to step 2!</div>'
+    disableBeacon: true
+    styles:
+      options:
+        zIndex: 100000

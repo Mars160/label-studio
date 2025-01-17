@@ -81,7 +81,7 @@ export const Tour: React.FC<TourProps> = ({ name, autoStart = false, ...props })
       status: string;
     }) => {
       const { action, index, type, status } = data;
-
+      console.log(status)
       // tour ends when
       const shouldEndTour =
         (status === STATUS.SKIPPED && state.run) || action === ACTIONS.CLOSE || status === STATUS.FINISHED;
@@ -89,6 +89,7 @@ export const Tour: React.FC<TourProps> = ({ name, autoStart = false, ...props })
       if (shouldEndTour) {
         // mark tour as viewed and update onboarding state if it's the final step or the tour was skipped
         if (status === STATUS.SKIPPED || status === STATUS.FINISHED) {
+          console.log("FINISHED")
           tourContext?.setTourViewed(name, status === STATUS.SKIPPED, { index, action, type, status });
         }
         dispatch({ type: "STOP" });

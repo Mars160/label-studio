@@ -1,0 +1,13 @@
+dependencies:
+  - first_project_data_import
+
+steps:
+  - target: '[data-testid="import-page"]'
+    placement: center
+    title: '<div style="font-size: 24px; color: var(--grape_500)">Step 2: Upload your Data</div>'
+    content: '<div style="width: 100%">LabelStudio supports a wide variety of data types. For this example, we will upload some images.</div>'
+    disableBeacon: true
+    styles:
+      options:
+        zIndex: 10000000
+
