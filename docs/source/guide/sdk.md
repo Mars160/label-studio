@@ -32,7 +32,7 @@ The SDK provides a set of predefined classes and methods to interact with the La
 - **Integration**: Easily integrate Label Studio actions into your existing data science workflows.
 - **Automation**: Automate repetitive tasks such as project creation, task imports, and data exports.
 - **Enhanced Data Preparation**: Use filters and custom configurations to prepare and manage data efficiently, ensuring high-quality annotations.
-- **Asynchronous Operations**: Perform asynchronous data operations for better performance and handling of large .
+- **Asynchronous Operations**: Perform asynchronous data operations for better performance and handling of large datasets.
 
 
 ## Start using the Label Studio Python SDK
