@@ -68,13 +68,29 @@ export const ImageEntity = types
   }))
   .actions((self) => ({
     preload() {
+      if (self.ensurePreloaded() || !self.src) return;
+
       if (isFF(FF_IMAGE_MEMORY_USAGE)) {
-        self.setCurrentSrc(self.src);
-        self.setDownloaded(true);
-        self.setProgress(1);
+        self.setDownloading(true);
+        new Promise((resolve) => {
+          const img = new Image();
+          img.src = self.src;
+          img.onload = () => {
+            self.setCurrentSrc(self.src);
+            self.setDownloaded(true);
+            self.setProgress(1);
+            self.setDownloading(false);
+            resolve();
+          };
+          img.onerror = () => {
+            self.setError(true);
+            self.setDownloading(false);
+            resolve();
+          };
+        });
         return;
       }
-      if (self.ensurePreloaded() || !self.src) return;
+
       self.setDownloading(true);
       fileLoader
         .download(self.src, (_t, _l, progress) => {
@@ -92,7 +108,7 @@ export const ImageEntity = types
     },
 
     ensurePreloaded() {
-      if (isFF(FF_IMAGE_MEMORY_USAGE)) return false;
+      if (isFF(FF_IMAGE_MEMORY_USAGE)) return self.currentSrc !== undefined;
 
       if (fileLoader.isError(self.src)) {
         self.setDownloading(false);
