@@ -527,9 +527,6 @@ For VPC network sources:
 gcloud alpha storage buckets update gs://BUCKET_NAME --ip-filter-file=IP_FILTER_CONFIG_FILE
 ```
 
-!!! important
-    Make sure to include your own IP address in the allowed ranges, or you'll lose access to the bucket through the UI.
-
 4. To remove IP filtering rules when no longer needed:
 ```bash
 gcloud alpha storage buckets update gs://BUCKET_NAME --clear-ip-filter
