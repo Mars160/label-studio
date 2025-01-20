@@ -280,7 +280,7 @@ After you [configure access to your S3 bucket](#Configure-access-to-your-S3-buck
     - <div class="enterprise-only">(Optional) Enable **Can delete objects from storage** if you want to delete annotations stored in the S3 bucket when they are deleted in Label Studio. The storage credentials associated with the bucket must include the ability to delete bucket objects. Leave disabled to not take any action on annotations if they are deleted in Label Studio. </div>
 8. Click **Add Storage**.
 
-After adding the storage, click **Sync** to collect tasks from the bucket, or make an API call to [sync export storage](https://api.labelstud.io/api-reference/introduction/getting-started).
+After adding the storage, click **Sync** to collect tasks from the bucket, or make an API call to [sync export storage](https://api.labelstud.io/api-reference/api-reference/export-storage/s-3/sync)
 
 <div class="enterprise-only">
 
@@ -489,12 +489,12 @@ Google Cloud Storage offers [bucket IP filtering](https://cloud.google.com/stora
    For public IP ranges:
 ```json
 {
-  "mode": "Enabled",
+  "mode": "Enabled", 
   "publicNetworkSource": {
     "allowedIpCidrRanges": [
-      "3.219.3.197",
-      "34.237.73.3",
-      "44.216.17.242"
+      "xxx.xxx.xxx.xxx", // Your first IP address
+      "xxx.xxx.xxx.xxx", // Your second IP address
+      "xxx.xxx.xxx.xxx/xx" // Your IP range in CIDR notation
     ]
   }
 }
@@ -502,7 +502,7 @@ Google Cloud Storage offers [bucket IP filtering](https://cloud.google.com/stora
 
 !!! note
     If you're using Label Studio Enterprise at app.humansignal.com and accessing it from your office network:
-    - Add Label Studio Enterprise outgoing IP addresses (3.219.3.197, 34.237.73.3, 44.216.17.242)
+    - Add Label Studio Enterprise outgoing IP addresses (see [IP ranges](saas.html#IP-range))
     - Add your office network IP range (e.g. 192.168.1.0/24)
     - If both Label Studio Enterprise and your office are on the same VPN network (e.g. 10.0.0.0/16), you only need to add that VPN subnet
 
