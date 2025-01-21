@@ -66,6 +66,15 @@ export const ImageEntity = types
     /** Is image loaded using `<img/>` tag and cached by the browser */
     imageLoaded: false,
   }))
+  .views((self) => ({
+    get parent() {
+      // Get the ImageEntityMixin
+      return getParent(self, 2);
+    },
+    get imageCrossOrigin() {
+      return self.parent?.imageCrossOrigin ?? "anonymous";
+    },
+  }))
   .actions((self) => ({
     preload() {
       if (self.ensurePreloaded() || !self.src) return;
@@ -74,6 +83,9 @@ export const ImageEntity = types
         self.setDownloading(true);
         new Promise((resolve) => {
           const img = new Image();
+          // Get from the image tag
+          const crossOrigin = self.imageCrossOrigin;
+          if (crossOrigin) img.crossOrigin = crossOrigin;
           img.src = self.src;
           img.onload = () => {
             self.setCurrentSrc(self.src);
