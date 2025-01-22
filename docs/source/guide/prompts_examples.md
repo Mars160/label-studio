@@ -104,8 +104,6 @@ This example demonstrates how to set up Prompts to predict image captions.
 !!! note
     Ensure you include `{image}` in your instructions. Click `image` above the instruction field to insert it. 
 
-    ![Screenshot pointing to how to insert image into your instructions](/images/prompts/example_insert_image.png)
-
 !!! info Tip
     You can also automatically generate the instructions using the [**Enhance Prompt** action](prompts_draft#Enhance-prompt). Before you can use this action, you must at least add the variable name `{image}` and then click **Save**. 
 
@@ -191,8 +189,6 @@ This example demonstrates how to set up Prompts to evaluate if the LLM-generated
 
 !!! note
     Ensure you include `{comment_text}` in your instructions. Click `comment_text` above the instruction field to insert it. 
-
-    ![Screenshot pointing to how to insert comment text into your instructions](/images/prompts/example_insert_comment_text.png)
 
 !!! info Tip
     You can also automatically generate the instructions using the [**Enhance Prompt** action](prompts_draft#Enhance-prompt). Before you can use this action, you must at least add the variable name `{comment_text}` and then click **Save**. 
