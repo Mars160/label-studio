@@ -311,24 +311,18 @@ Let’s expand on the Q&A use case above with an example demonstrating how to us
     *Using the "context" below as context, come up with 3 questions ("question1", "question2", and "question3") for which the appropriate answer would be the "answer" below:*
 
     *Context:*
-
     *---*
-
     *{context}*
-
     *---*
 
     *Answer:*
-
     *---*
-
     *{answer}*
-
     *---*
 
 
 !!! note
-    Ensure you include `{answer} and {context}` in your instructions. Click `answer`/`context` above the instruction field to insert them. 
+    Ensure you include `{answer}` and `{context}` in your instructions. Click `answer`/`context` above the instruction field to insert them. 
 
     ![Screenshot pointing to how to insert comment text into your instructions](/images/prompts/example_insert_comment_text.png)
 
