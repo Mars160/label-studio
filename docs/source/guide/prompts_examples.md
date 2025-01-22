@@ -273,7 +273,7 @@ Let’s expand on the Q&A use case above with an example demonstrating how to us
 
 1. [Create a new label studio project](setup_project) by importing chunks of text that would be meaningful answers from a chatbot.
 
-    You can use a preprocessed sample of the [SQuAD](https://huggingface.co/datasets/rajpurkar/squad) dataset as an example. See [the appendix](#Appendix-Generate-dataset) for how this was generated.
+    You can use a preprocessed sample of the [SQuAD](https://huggingface.co/datasets/rajpurkar/squad) dataset as an example. See [the appendix](#Appendix-Preprocess-SQuAD-Q-A-dataset) for how this was generated.
 
 2. Create a [label config](setup) for question generation (or Ask AI to create one for you), for example:
 
