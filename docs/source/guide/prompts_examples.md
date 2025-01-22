@@ -197,7 +197,7 @@ This example demonstrates how to set up Prompts to evaluate if the LLM-generated
 !!! info Tip
     You can also automatically generate the instructions using the [**Enhance Prompt** action](prompts_draft#Enhance-prompt). Before you can use this action, you must at least add the variable name `{comment_text}` and then click **Save**. 
 
-    ![Screenshot pointing to Enhance Prompt action](/images/prompts/example_enhance_prompt2.png)
+    ![Screenshot pointing to Enhance Prompt action](/images/prompts/example_enhance_prompt.png)
 
 5. Run the prompt! View predictions to accept or correct.
 
@@ -206,7 +206,7 @@ This example demonstrates how to set up Prompts to evaluate if the LLM-generated
 !!! info Tip
     You can change the subset of data being used (e.g. only data with Ground Truth annotations, or a small sample of records). 
 
-    ![Screenshot pointing to subset dropdown](/images/prompts/example_subset2.png)
+    ![Screenshot pointing to subset dropdown](/images/prompts/example_subset.png)
 
 6. Accept the [predictions as annotations](prompts_predictions#Create-annotations-from-predictions)! 
 
@@ -330,8 +330,6 @@ Let’s expand on the Q&A use case above with an example demonstrating how to us
 !!! note
     Ensure you include `{answer}` and `{context}` in your instructions. Click `answer`/`context` above the instruction field to insert them. 
 
-    ![Screenshot pointing to how to insert comment text into your instructions](/images/prompts/example_insert_comment_text.png)
-
 !!! info Tip
     You can also automatically generate the instructions using the [**Enhance Prompt** action](prompts_draft#Enhance-prompt). Before you can use this action, you must at least add a variable name (e.g. `{context}` or `{answer}`) and then click **Save**. 
 
@@ -344,7 +342,7 @@ Let’s expand on the Q&A use case above with an example demonstrating how to us
 !!! info Tip
     You can change the subset of data being used (e.g. only data with Ground Truth annotations, or a small sample of records). 
 
-    ![Screenshot pointing to subset dropdown](/images/prompts/example_subset2.png)
+    ![Screenshot pointing to subset dropdown](/images/prompts/example_subset.png)
 
 6. Accept the [predictions as annotations](prompts_predictions#Create-annotations-from-predictions)!
 
