@@ -1,4 +1,4 @@
-import { types } from "mobx-state-tree";
+import { types, getParent } from "mobx-state-tree";
 import { FileLoader } from "../../../utils/FileLoader";
 import { clamp } from "../../../utils/utilities";
 import { FF_IMAGE_MEMORY_USAGE, isFF } from "../../../utils/feature-flags";
@@ -86,12 +86,12 @@ export const ImageEntity = types
           // Get from the image tag
           const crossOrigin = self.imageCrossOrigin;
           if (crossOrigin) img.crossOrigin = crossOrigin;
-          img.src = self.src;
           img.onload = () => {
             self.setCurrentSrc(self.src);
             self.setDownloaded(true);
             self.setProgress(1);
             self.setDownloading(false);
+            self.setImageLoaded(true);
             resolve();
           };
           img.onerror = () => {
@@ -99,6 +99,7 @@ export const ImageEntity = types
             self.setDownloading(false);
             resolve();
           };
+          img.src = self.src;
         });
         return;
       }
