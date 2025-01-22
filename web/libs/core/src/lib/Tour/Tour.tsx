@@ -120,7 +120,9 @@ export const Tour: React.FC<TourProps> = ({ name, autoStart = false, ...props })
           overlayColor: "rgba(0, 0, 0, 0.5)",
         },
       }}
+      disableBeacon={true}
       hideCloseButton={true}
+      spotlightClicks={true}
     />
   ) : null;
 };
