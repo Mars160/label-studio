@@ -311,13 +311,19 @@ Let’s expand on the Q&A use case above with an example demonstrating how to us
     *Using the "context" below as context, come up with 3 questions ("question1", "question2", and "question3") for which the appropriate answer would be the "answer" below:*
 
     *Context:*
+
     *---*
+
     *{context}*
+
     *---*
 
     *Answer:*
+
     *---*
+
     *{answer}*
+
     *---*
 
 
