@@ -1,0 +1,13 @@
+dependencies:
+  - first_project_welcome
+  - first_project_name
+  - first_project_data_import
+  - first_project_labeling_config
+
+steps:
+  - target: body
+    placement: center
+    title: '<div style="font-size: 24px; color: var(--grape_500)">Congratulations!</div>'
+    content: '<div style="width: 100%">You&#x27ve created your first project. Now you&#x27re ready to label!</div>'
+
+

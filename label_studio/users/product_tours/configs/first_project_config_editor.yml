@@ -1,0 +1,42 @@
+dependencies:
+  - first_project_welcome
+  - first_project_name
+  - first_project_data_import
+  - first_project_labeling_config
+
+steps:
+  - target: '[data-testid="lsf-configure"]'
+    placement: center
+    content: '<div style="width: 100%">On this screen, we can customize the template. We&#x27ll use the visual editor to make this easy!</div>'
+    spotlightClick: true
+    disableBeacon: true
+    styles:
+      options:
+        zIndex: 10000000
+
+  - target: '[data-testid="label-editor"]'
+    placement: right
+    content: '<div style="width: 100%">All we need to do is change the labels to "dog". Click the red x next to the airplane and car labels here.</div>'
+    spotlightClick: true
+    disableBeacon: true
+    styles:
+      options:
+        zIndex: 10000000
+
+  - target: '[data-testid="add-new-labels"]'
+    placement: right
+    content: '<div style="width: 100%">Then, type Dog into this text box and click add.</div>'
+    spotlightClick: true
+    disableBeacon: true
+    styles:
+      options:
+        zIndex: 10000000
+
+  - target: '[data-testid="save"]'
+    placement: right
+    content: '<div style="width: 100%">Click save to create your project!</div>'
+    spotlightClick: true
+    disableBeacon: true
+    styles:
+      options:
+        zIndex: 10000000

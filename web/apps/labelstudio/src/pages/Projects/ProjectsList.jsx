@@ -6,6 +6,8 @@ import { LsBulb, LsCheck, LsEllipsis, LsMinus } from "../../assets/icons";
 import { Button, Dropdown, Menu, Pagination, Userpic } from "../../components";
 import { Block, Elem } from "../../utils/bem";
 import { absoluteURL } from "../../utils/helpers";
+import { isFF, FF_PRODUCT_TOUR} from "../../utils/feature-flags"
+import { Tour} from "@humansignal/core"
 
 const DEFAULT_CARD_COLORS = ["#FFFFFF", "#FDFDFC"];
 
@@ -41,7 +43,7 @@ export const EmptyProjectsList = ({ openModal }) => {
         Heidi doesn’t see any projects here!
       </Elem>
       <p>Create one and start labeling your data.</p>
-      <Elem name="action" tag={Button} onClick={openModal} look="primary">
+      <Elem data-testid="empty_page_button" name="action" tag={Button} onClick={openModal} look="primary">
         Create Project
       </Elem>
     </Block>

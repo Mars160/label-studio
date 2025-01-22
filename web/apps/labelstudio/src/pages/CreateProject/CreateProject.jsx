@@ -14,8 +14,9 @@ import { useDraftProject } from "./utils/useDraftProject";
 import { Select } from "../../components/Form";
 import { EnterpriseBadge } from "../../components/Badges/Enterprise";
 import { Caption } from "../../components/Caption/Caption";
-import { FF_LSDV_E_297, isFF } from "../../utils/feature-flags";
+import { FF_LSDV_E_297, FF_PRODUCT_TOUR, isFF } from "../../utils/feature-flags";
 import { createURL } from "../../components/HeidiTips/utils";
+import { Tour} from "@humansignal/core"
 
 const ProjectName = ({ name, setName, onSaveName, onSubmit, error, description, setDescription, show = true }) =>
   !show ? null : (
@@ -26,7 +27,7 @@ const ProjectName = ({ name, setName, onSaveName, onSubmit, error, description, 
         onSubmit();
       }}
     >
-      <div className="field field--wide">
+      <div data-testid="project-name-field" className="field field--wide">
         <label htmlFor="project_name">Project Name</label>
         <input
           name="name"
@@ -37,7 +38,7 @@ const ProjectName = ({ name, setName, onSaveName, onSubmit, error, description, 
         />
         {error && <span className="error">{error}</span>}
       </div>
-      <div className="field field--wide">
+      <div data-testid="project-description-field" className="field field--wide">
         <label htmlFor="project_description">Description</label>
         <textarea
           name="description"
@@ -109,8 +110,8 @@ export const CreateProject = ({ onClose }) => {
   const tabClass = rootClass.elem("tab");
   const steps = {
     name: <span className={tabClass.mod({ disabled: !!error })}>Project Name</span>,
-    import: <span className={tabClass.mod({ disabled: uploadDisabled })}>Data Import</span>,
-    config: "Labeling Setup",
+    import: <span data-testid="import-data-tab" className={tabClass.mod({ disabled: uploadDisabled })}>Data Import</span>,
+    config: <span data-testid="labeling-config-tab" className={tabClass.mod({ disabled: !!error })}>Labeling Setup</span>,
   };
 
   // name intentionally skipped from deps:
@@ -188,6 +189,7 @@ export const CreateProject = ({ onClose }) => {
               Delete
             </Button>
             <Button
+              data-testid="save"
               look="primary"
               size="compact"
               onClick={onCreate}
@@ -208,6 +210,8 @@ export const CreateProject = ({ onClose }) => {
           setDescription={setDescription}
           show={step === "name"}
         />
+        {isFF(FF_PRODUCT_TOUR) && (<Tour name="first-project-name" autoStart />)}
+
         <ImportPage project={project} show={step === "import"} {...pageProps} />
         <ConfigPage
           project={project}

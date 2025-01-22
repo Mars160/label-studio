@@ -25,7 +25,7 @@ const TemplatesInGroup = ({ templates, group, onSelectRecipe }) => {
       {picked.map((recipe) => (
         <li key={recipe.title} onClick={() => onSelectRecipe(recipe)} className={listClass.elem("template")}>
           <img src={recipe.image} alt={""} />
-          <h3>{recipe.title}</h3>
+          <h3 data-testid={recipe.title} >{recipe.title}</h3>
         </li>
       ))}
     </ul>

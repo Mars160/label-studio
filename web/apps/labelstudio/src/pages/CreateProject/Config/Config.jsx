@@ -11,7 +11,7 @@ import { Form } from "../../../components/Form";
 import { useAPI } from "../../../providers/ApiProvider";
 import { Block, cn, Elem } from "../../../utils/bem";
 import { Palette } from "../../../utils/colors";
-import { FF_UNSAVED_CHANGES, isFF } from "../../../utils/feature-flags";
+import { FF_UNSAVED_CHANGES, FF_PRODUCT_TOUR, isFF } from "../../../utils/feature-flags";
 import { colorNames } from "./colors";
 import "./Config.scss";
 import { Preview } from "./Preview";
@@ -24,6 +24,7 @@ import tags from "./schema.json";
 import { UnsavedChanges } from "./UnsavedChanges";
 import { Checkbox } from "@humansignal/ui";
 import { toSnakeCase } from "strman";
+import { Tour} from "@humansignal/core"
 
 const wizardClass = cn("wizard");
 const configClass = cn("configure");
@@ -102,13 +103,13 @@ const ConfigureControl = ({ control, template }) => {
 
   return (
     <div className={configClass.elem("labels")}>
-      <form className={configClass.elem("add-labels")} action="">
+      <form data-testid="add-new-labels" className={configClass.elem("add-labels")} action="">
         <h4>{tagname === "Choices" ? "Add choices" : "Add label names"}</h4>
         <span>Use new line as a separator to add multiple labels</span>
         <textarea name="labels" id="" cols="30" rows="5" ref={refLabels} onKeyPress={onKeyPress} />
         <input type="button" value="Add" onClick={onAddLabels} />
       </form>
-      <div className={configClass.elem("current-labels")}>
+      <div data-testid="label-editor" className={configClass.elem("current-labels")}>
         <h3>
           {tagname === "Choices" ? "Choices" : "Labels"} ({control.children.length})
         </h3>
@@ -464,8 +465,8 @@ const Configurator = ({
   );
 
   return (
-    <div className={configClass}>
-      <div className={configClass.elem("container")}>
+    <div data-testid={configClass} className={configClass}>
+      <div  className={configClass.elem("container")}>
         <h1>Labeling Interface{hasChanges ? " *" : ""}</h1>
         <header>
           <button type="button" data-leave={true} onClick={onBrowse}>
@@ -542,6 +543,8 @@ const Configurator = ({
         loading={loading}
         error={parserError || error || (configure === "code" && warning)}
       />
+      {isFF(FF_PRODUCT_TOUR) && (<Tour name="first-project-config-editor" autoStart />)}
+
     </div>
   );
 };
@@ -647,7 +650,7 @@ export const ConfigPage = ({
   if (!show) return null;
 
   return (
-    <div className={wizardClass} data-mode="list" id="config-wizard">
+    <div data-testid="config-wizard" className={wizardClass} data-mode="list" id="config-wizard">
       {mode === "list" && (
         <TemplatesList
           case="list"
@@ -675,6 +678,8 @@ export const ConfigPage = ({
           hasChanges={hasChanges}
         />
       )}
+    {isFF(FF_PRODUCT_TOUR) && (<Tour name="first-project-labeling-config" autoStart />)}
+
     </div>
   );
 };
