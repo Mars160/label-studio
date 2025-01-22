@@ -348,7 +348,7 @@ Let’s expand on the Q&A use case above with an example demonstrating how to us
 
 6. Accept the [predictions as annotations](prompts_predictions#Create-annotations-from-predictions)!
 
-#### Appendix: Preprocess jigsaw toxicity dataset
+#### Appendix: Preprocess SQuAD Q&A dataset
 
 This downloads the SQuAD dataset from Huggingface and formats it for Label Studio.
 
