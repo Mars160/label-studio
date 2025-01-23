@@ -125,12 +125,11 @@ To ensure maximum security and isolation of your data behind a VPC, only allow a
 1. Set **IP restrictions** for your storage to **allow Label Studio to perform task synchronization and generate pre-signed URLs** for media file serving. IP restrictions enhance security by ensuring that only trusted networks can access your storage. GET (`s3:GetObject` for S3) and LIST (`s3:ListBucket` for S3) permissions are required. <span class="enterprise-only">The IP ranges for `app.humansignal.com` can be found in the documentation [here](saas#IP-range).</span>
 
 2. **Establish secure connection** between Storage and Users' Browsers:
-
-  - Configure a VPC private endpoint and route VPN traffic to it so that users' browsers can securely access the S3 bucket using only your Virtual Private Network (VPN).
-  - Or limit your storage access to certain IPs or VPCs. 
+    - Configure a VPC private endpoint and route VPN traffic to it so that users' browsers can securely access the S3 bucket using only your Virtual Private Network (VPN).
+    - Or limit your storage access to certain IPs or VPCs. 
 
 **Configuration examples:**
-  - [AWS S3 storage: IP Filtering and VPN for Enhanced Security](storage#IP-Filtering-and-VPN-for-Enhanced-Security-for-S3-storage).
+  - [AWS S3 Storage: IP Filtering and VPN for Enhanced Security](storage#IP-Filtering-and-VPN-for-Enhanced-Security-for-S3-storage).
   - [Google Cloud Storage: IP Filtering for Enhanced Security](storage#IP-Filtering-for-Enhanced-Security-for-GCS-storage).
 
 <i>This image shows how you can securely configure source cloud storages with Label Studio using your VPC and IP restrictions</i> 

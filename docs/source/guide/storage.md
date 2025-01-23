@@ -433,6 +433,7 @@ Read more about [Source storage behind your VPC](security.html#Source-storage-be
 
 <details>
 <summary>Bucket Policy Example for S3 storage</summary>
+<br>
 
 !!! warning
     These example bucket policies explicitly deny access to any requests outside the allowed IP addresses. Even the user that entered the bucket policy can be denied access to the bucket if the user doesn't meet the conditions. Therefore, make sure to review the bucket policy carefully before saving it. If you get accidentally locked out, see [How to regain access to an Amazon S3 bucket](https://repost.aws/knowledge-center/s3-accidentally-denied-access).
@@ -558,7 +559,9 @@ Read more about [Source storage behind your VPC](security.html#Source-storage-be
 - Secure sensitive data by limiting access to known IP addresses
 - Control access for third-party integrations by whitelisting their IPs
 
-**How to Set Up IP Filtering:**
+<details>
+<summary>How to Set Up IP Filtering</summary>
+<br>
 
 1. First, create your GCS bucket through the console or CLI
 2. Create a JSON configuration file to define IP filtering rules. You have two options:
@@ -618,6 +621,8 @@ gcloud alpha storage buckets update gs://BUCKET_NAME --clear-ip-filter
 - May affect access from certain Google Cloud services
 
 [Read more about GCS IP filtering](https://cloud.google.com/storage/docs/ip-filtering-overview)
+
+</details>
 
 #### Application Default Credentials as Advanced Security Approach
 
