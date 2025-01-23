@@ -77,22 +77,3 @@ ts.brushRange.map(n=>(+n).toFixed(2));_=r();setInterval($=>r().some((n,i)=>n!==_
 ## Video tutorial
 
 <iframe width="100%" height="450vh" src="https://www.youtube.com/embed/fzY1DNPxkdw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-
-
-     {
-          "id": "ldRb_e3ot8",
-          "type": "taxonomy",
-          "value": {
-            "taxonomy": [
-              [
-                "False"
-              ]
-            ]
-          },
-          "origin": "manual",
-          "to_name": "image",
-          "from_name": "credit_note"
-        }
-
-        
