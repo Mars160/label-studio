@@ -27,6 +27,7 @@ When working with an external cloud storage connection, keep the following in mi
 * Label Studio doesn't import the data stored in the bucket, but instead creates *references* to the objects. Therefore, you must have full access control on the data to be synced and shown on the labeling screen.
 * Sync operations with external buckets only goes one way. It either creates tasks from objects on the bucket (Source storage) or pushes annotations to the output bucket (Target storage). Changing something on the bucket side doesn't guarantee consistency in results.
 * We recommend using a separate bucket folder for each Label Studio project. 
+* Storage Regions: To minimize latency and improve efficiency, store data in cloud storage buckets that are geographically closer to your team rather than near the Label Studio server.
 
 <div class="opensource-only">
 
@@ -281,6 +282,14 @@ After you [configure access to your S3 bucket](#Configure-access-to-your-S3-buck
 8. Click **Add Storage**.
 
 After adding the storage, click **Sync** to collect tasks from the bucket, or make an API call to [sync export storage](https://api.labelstud.io/api-reference/api-reference/export-storage/s-3/sync)
+
+<div class="opensource-only">
+
+### S3 connection with IAM role access 
+
+In Label Studio Enterprise, you can use an IAM role configured with an external ID to access S3 bucket contents securely. An 'external ID' is a unique identifier that enhances security by ensuring that only trusted entities can assume the role, reducing the risk of unauthorized access. See how to [Set up an S3 connection with IAM role access](https://docs.humansignal.com/guide/storage#Set-up-an-S3-connection-with-IAM-role-access)</span> in the Enterprise documentation.
+
+</div>
 
 <div class="enterprise-only">
 
@@ -542,6 +551,11 @@ gcloud alpha storage buckets update gs://BUCKET_NAME --clear-ip-filter
 - May affect access from certain Google Cloud services
 
 [Read more about GCS IP filtering](https://cloud.google.com/storage/docs/ip-filtering-overview)
+
+#### Application Default Credentials as Advanced Security Approach
+
+**Google ADC**: If you use Label Studio on-premises with Google Cloud Storage, you can set up [Application Default Credentials](https://cloud.google.com/docs/authentication/provide-credentials-adc) to provide cloud storage authentication globally for all projects, so users do not need to configure credentials manually.
+
 
 ##  Microsoft Azure Blob storage
 

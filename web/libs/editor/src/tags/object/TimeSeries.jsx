@@ -23,6 +23,7 @@ import { AnnotationMixin } from "../../mixins/AnnotationMixin";
 import PersistentStateMixin from "../../mixins/PersistentState";
 import { parseCSV, parseValue, tryToParseJSON } from "../../utils/data";
 import { fixMobxObserve } from "../../utils/utilities";
+import { SyncableMixin } from "../../../mixins/Syncable";
 
 import "./TimeSeries/Channel";
 
@@ -67,6 +68,7 @@ import "./TimeSeries/Channel";
  * @param {string} [overviewChannels] Comma-separated list of channel names or indexes displayed in overview.
  * @param {string} [overviewWidth=25%] Default width of overview window in percents
  * @param {boolean} [fixedScale=false] Whether to scale y-axis to the maximum to fit all the values. If false, current view scales to fit only the displayed values.
+ * @param {string} [sync] Sync group name
  */
 const TagAttrs = types.model({
   value: types.string,
@@ -85,6 +87,7 @@ const TagAttrs = types.model({
   multiaxis: types.optional(types.boolean, false), // show channels in the same view
   // visibilitycontrols: types.optional(types.boolean, false), // show channel visibility controls
   hotkey: types.maybeNull(types.string),
+  sync: types.optional(types.string, ""),
 });
 
 const Model = types
@@ -538,6 +541,18 @@ const Model = types
     },
 
     onHotKey() {},
+
+    afterCreate() {
+      if (self.sync) {
+        // We might do extra logic here if needed
+      }
+    },
+
+    updateTR(newRange, scaleFactor) {
+      self.syncSend({ brushRange: newRange }, "seek");
+
+      console.log("[TimeSeries] updateTR => Emitted sync 'seek' with newRange:", newRange);
+    },
   }));
 
 function useWidth() {
@@ -836,12 +851,36 @@ const HtxTimeSeriesViewRTS = ({ item }) => {
 
 const TimeSeriesModel = types.compose(
   "TimeSeriesModel",
+  SyncableMixin,
   ObjectBase,
   PersistentStateMixin,
   AnnotationMixin,
   TagAttrs,
   Model,
 );
+
+TimeSeriesModel.actions(self => ({
+  registerSyncHandlers() {
+    ["play", "pause", "seek"].forEach(eventName => {
+      self.syncHandlers.set(eventName, self.handleSyncEvent);
+    });
+  },
+
+  handleSyncEvent(data, event) {
+    console.log("[TimeSeries] handleSyncEvent =>", event, data);
+    if (event === "seek") {
+      // Suppose we want to respond to a new "time" from the video:
+      // if (data.time != null) {
+      //   // Convert `data.time` to an appropriate brush range
+      //   self.updateTR( [someStart, someEnd], 1.0 );
+      // }
+    }
+
+    // For "play" or "pause," TimeSeries might not do anything special by default.
+    // But if you want some visual highlight or added logic, you can do so here.
+  },
+}));
+
 const HtxTimeSeries = inject("store")(observer(HtxTimeSeriesViewRTS));
 
 Registry.addTag("timeseries", TimeSeriesModel, HtxTimeSeries);

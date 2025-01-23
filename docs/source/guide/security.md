@@ -120,9 +120,6 @@ Once Label Studio tasks are created, users can view and edit tasks in their brow
 
 #### Source storage behind your VPC
 
-!!! warning Google Cloud Storage
-    Google Cloud Storage does **not** support IP or VPN restrictions for pre-signed URLs, making this approach infeasible for GCS. As an alternative security measure for GCS, you can use **signed URLs with short lifetimes**.
-
 To ensure maximum security and isolation of your data behind a VPC, only allow access to users within your VPC. To do this, you can use the following technique — especially effective with Label Studio SaaS (Cloud, `app.humansignal.com`) and AWS S3:
 
 1. Set **IP restrictions** for your S3 storage to allow Label Studio to perform task synchronization and generate pre-signed URLs for media file serving. IP restrictions enhance security by ensuring that only trusted networks can access your storage. GET (`s3:GetObject`) and LIST (`s3:ListBucket`) permissions are required. <span class="enterprise-only">The IP ranges for `app.humansignal.com` can be found in the documentation [here](saas#IP-range).</span>
@@ -195,14 +192,6 @@ Go to your S3 bucket and then **Permissions > Bucket Policy** in the AWS managem
 <img width="49%" style="display: inline-block; margin-right: 5px;" src="/images/storages/cloud-storage-ip-restriction.jpg" alt="Label Studio + Cloud Storage IP Restriction" class="make-intense-zoom" />
 
 <img width="49%" style="display: inline-block;" src="/images/storages/cloud-storage-vpn.jpg" alt="Label Studio + Cloud Storage VPC" class="make-intense-zoom" />
-
-#### Additional Notes
-
-**Google ADC**: If you use Label Studio on-premises with Google Cloud Storage, you can set up [Application Default Credentials](https://cloud.google.com/docs/authentication/provide-credentials-adc) to provide cloud storage authentication globally for all projects, so users do not need to configure credentials manually.
-
-**AWS S3 IAM**: In Label Studio Enterprise, you can use an IAM role configured with an external ID to access S3 bucket contents securely. An 'external ID' is a unique identifier that enhances security by ensuring that only trusted entities can assume the role, reducing the risk of unauthorized access. <span class="enterprise-only">See [Set up an S3 connection with IAM role access](storage#Set-up-an-S3-connection-with-IAM-role-access)</span>
-
-**Storage Regions**: To minimize latency and improve efficiency, store data in cloud storage buckets that are geographically closer to your team rather than near the Label Studio server.
 
 !!! note More details on Cloud Storages
     See more details on [Source storage Sync and URI resolving](storage#Source-storage-Sync-and-URI-resolving). 
