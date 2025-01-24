@@ -244,18 +244,6 @@
           "treatment": "enterprise_platform_live"
         }
       }
-    },
-    {
-      "title": "Upcoming Webinar",
-      "description": "Join Jimmy Whitaker January 29th to learn how to analyze and annotate multi-turn generative AI chat responses.",
-      "link": {
-        "label": "Learn more or sign up",
-        "url": "https://humansignal.com/webinars/evaluating-llm-based-chat-systems-for-continuous-improvement/",
-        "params": {
-          "experiment": "login_revamp",
-          "treatment": "webinar_jan29_live"
-        }
-      }
     }
   ]
 }
