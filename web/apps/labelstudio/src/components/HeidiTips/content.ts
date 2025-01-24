@@ -123,8 +123,8 @@ export const defaultTipsCollection: TipsCollection = {
         params: {
           experiment: "organization_page_tip",
           treatment: "starter_cloud_live"
-        }
-      }
+        },
+      },
     },
     {
       title: "Want to automate task distribution?",
@@ -235,8 +235,8 @@ export const defaultTipsCollection: TipsCollection = {
         params: {
           experiment: "project_settings_tip",
           treatment: "starter_cloud_live"
-        }
-      }
+        },
+      },
     },
     {
       title: "Did you know?",
@@ -250,6 +250,6 @@ export const defaultTipsCollection: TipsCollection = {
           treatment: "connect_ml_models",
         },
       },
-    }
+    },
   ],
 };
