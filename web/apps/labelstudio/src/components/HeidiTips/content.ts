@@ -240,20 +240,6 @@ export const defaultTipsCollection: TipsCollection = {
           treatment: "connect_ml_models",
         },
       },
-    },
-    {
-      title: "Faster image labeling",
-      content:
-        "You can add a rectangle or an ellipse to your image with just two clicks, or double click to create a polygon, rectangle, or ellipse.",
-      closable: true,
-      link: {
-        label: "Learn more",
-        url: "https://labelstud.io/guide/labeling#Faster-image-labeling",
-        params: {
-          experiment: "project_settings_tip",
-          treatment: "two_clicks",
-        },
-      },
-    },
+    }
   ],
 };
