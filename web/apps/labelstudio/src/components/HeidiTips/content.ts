@@ -122,7 +122,7 @@ export const defaultTipsCollection: TipsCollection = {
         url: "https://humansignal.com/pricing/",
         params: {
           experiment: "organization_page_tip",
-          treatment: "starter_cloud_live"
+          treatment: "starter_cloud_live",
         },
       },
     },
@@ -234,7 +234,7 @@ export const defaultTipsCollection: TipsCollection = {
         url: "https://humansignal.com/pricing/",
         params: {
           experiment: "project_settings_tip",
-          treatment: "starter_cloud_live"
+          treatment: "starter_cloud_live",
         },
       },
     },
