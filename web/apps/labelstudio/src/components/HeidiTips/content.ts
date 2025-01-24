@@ -115,18 +115,16 @@ export const defaultTipsCollection: TipsCollection = {
       },
     },
     {
-      title: "Source data faster",
-      content:
-        "Use semantic search, similarity search, and filters to curate optimal datasets and automatically assign labeling tasks in the Enterprise platform.",
-      closable: true,
+      title: "Did you know?",
+      content: "Try Label Studio Starter Cloud, optimized for small teams and projects.",
       link: {
         label: "Learn more",
-        url: "https://docs.humansignal.com/guide/dataset_overview",
+        url: "https://humansignal.com/pricing/",
         params: {
           experiment: "organization_page_tip",
-          treatment: "data_discovery",
-        },
-      },
+          treatment: "starter_cloud_live"
+        }
+      }
     },
     {
       title: "Want to automate task distribution?",
@@ -227,6 +225,18 @@ export const defaultTipsCollection: TipsCollection = {
           treatment: "infrastructure_and_upgrades",
         },
       },
+    },
+    {
+      title: "Did you know?",
+      content: "Try Label Studio Starter Cloud, optimized for small teams and projects.",
+      link: {
+        label: "Learn more",
+        url: "https://humansignal.com/pricing/",
+        params: {
+          experiment: "project_settings_tip",
+          treatment: "starter_cloud_live"
+        }
+      }
     },
     {
       title: "Did you know?",
