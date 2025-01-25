@@ -9,6 +9,7 @@ import { GroundTruth } from "../CurrentEntity/GroundTruth";
 import "./Annotations.scss";
 import { TimeAgo } from "../../common/TimeAgo/TimeAgo";
 import { reaction } from "mobx";
+import { Tooltip } from "@mui/material";
 
 export const Annotations = observer(({ store, annotationStore, commentStore }) => {
   const dropdownRef = useRef();
@@ -223,9 +224,19 @@ const Annotation = observer(({ entity, selected, onClick, extra, ...props }) => 
                 {entity.acceptedState}
               </Elem>
             ) : (
-              <Elem name="created">
-                created, <Elem name="date" component={TimeAgo} date={entity.createdDate} />
-              </Elem>
+              <>
+                <Elem name="created">
+                  created, <Elem name="date" component={TimeAgo} date={entity.createdDate} />
+                </Elem>
+
+                {isPrediction && isDefined(entity.score) && (
+                  <Elem name="score">
+                    <Tooltip title={`Prediction score = ${entity.score}`}>
+                      {(entity.score * 100).toFixed(2)}%
+                    </Tooltip>
+                  </Elem>
+                )}
+              </>
             )}
           </Space>
         </Space>
