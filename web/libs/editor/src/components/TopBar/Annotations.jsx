@@ -9,7 +9,7 @@ import { GroundTruth } from "../CurrentEntity/GroundTruth";
 import "./Annotations.scss";
 import { TimeAgo } from "../../common/TimeAgo/TimeAgo";
 import { reaction } from "mobx";
-import { Tooltip } from "@mui/material";
+import { Tooltip } from "../../common/Tooltip/Tooltip";
 
 export const Annotations = observer(({ store, annotationStore, commentStore }) => {
   const dropdownRef = useRef();
