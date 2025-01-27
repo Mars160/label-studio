@@ -9,7 +9,6 @@ import { GroundTruth } from "../CurrentEntity/GroundTruth";
 import "./Annotations.scss";
 import { TimeAgo } from "../../common/TimeAgo/TimeAgo";
 import { reaction } from "mobx";
-import { Tooltip } from "../../common/Tooltip/Tooltip";
 
 export const Annotations = observer(({ store, annotationStore, commentStore }) => {
   const dropdownRef = useRef();
@@ -195,14 +194,6 @@ const Annotation = observer(({ entity, selected, onClick, extra, ...props }) => 
     },
   );
 
-  // Debugging: Check entity properties
-  console.log('Entity Debug:', {
-    id: entity.id,
-    type: entity.type,
-    score: entity.score,
-    isPrediction,
-  });
-
   return (
     <Elem {...props} name="entity" mod={{ selected }} onClick={onClick}>
       <Space spread>
@@ -220,7 +211,7 @@ const Annotation = observer(({ entity, selected, onClick, extra, ...props }) => 
           <Space direction="vertical" size="none">
             <Elem name="user">
               <Elem tag="span" name="name">
-                {username} {(entity?.score)}
+                {username}
               </Elem>
               <Elem tag="span" name="entity-id">
                 #{entity.pk ?? entity.id}
@@ -232,18 +223,9 @@ const Annotation = observer(({ entity, selected, onClick, extra, ...props }) => 
                 {entity.acceptedState}
               </Elem>
             ) : (
-              <>
-                <Elem name="created">
-                  created, <Elem name="date" component={TimeAgo} date={entity.createdDate} />
-                </Elem>
-                {isPrediction && isDefined(entity.score) && (
-                  <Elem name="score">
-                    <Tooltip title={`Prediction score = ${entity.score}`}>
-                      {(entity.score * 100).toFixed(2)}%
-                    </Tooltip>
-                  </Elem>
-                )}
-              </>
+              <Elem name="created">
+                created, <Elem name="date" component={TimeAgo} date={entity.createdDate} />
+              </Elem>
             )}
           </Space>
         </Space>

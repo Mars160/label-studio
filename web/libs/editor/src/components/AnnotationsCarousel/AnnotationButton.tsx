@@ -221,6 +221,13 @@ export const AnnotationButton = observer(
                 <Elem name="date" component={TimeAgo} date={entity.createdDate} />
               </Elem>
             )}
+            {isPrediction && isDefined(entity.score) && (
+              <Tooltip title={`Prediction score = ${entity.score}`}>
+                <Elem name="score">
+                  {(entity.score * 100).toFixed(2)}%
+                </Elem>
+              </Tooltip>
+            )}
           </Elem>
           {!isPrediction && (
             <Elem name="icons">
