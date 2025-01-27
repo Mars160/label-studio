@@ -228,12 +228,9 @@ const Annotation = observer(({ entity, selected, onClick, extra, ...props }) => 
                 <Elem name="created">
                   created, <Elem name="date" component={TimeAgo} date={entity.createdDate} />
                 </Elem>
-
                 {isPrediction && isDefined(entity.score) && (
                   <Elem name="score">
-                    <Tooltip title={`Prediction score = ${entity.score}`}>
-                      {(entity.score * 100).toFixed(2)}%
-                    </Tooltip>
+                    <Tooltip title={`Prediction score = ${entity.score}`}>{(entity.score * 100).toFixed(2)}%</Tooltip>
                   </Elem>
                 )}
               </>
