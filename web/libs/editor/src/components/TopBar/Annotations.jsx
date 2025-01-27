@@ -195,6 +195,14 @@ const Annotation = observer(({ entity, selected, onClick, extra, ...props }) => 
     },
   );
 
+  // Debugging: Check entity properties
+  console.log('Entity Debug:', {
+    id: entity.id,
+    type: entity.type,
+    score: entity.score,
+    isPrediction,
+  });
+
   return (
     <Elem {...props} name="entity" mod={{ selected }} onClick={onClick}>
       <Space spread>
@@ -212,7 +220,7 @@ const Annotation = observer(({ entity, selected, onClick, extra, ...props }) => 
           <Space direction="vertical" size="none">
             <Elem name="user">
               <Elem tag="span" name="name">
-                {username}
+                {username} {(entity?.score)}
               </Elem>
               <Elem tag="span" name="entity-id">
                 #{entity.pk ?? entity.id}
