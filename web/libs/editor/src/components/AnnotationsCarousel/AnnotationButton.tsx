@@ -217,16 +217,14 @@ export const AnnotationButton = observer(
               )}
             </Elem>
             {!infoIsHidden && (
-              <Elem name="created">
+              <Elem name="info">
                 <Elem name="date" component={TimeAgo} date={entity.createdDate} />
+                {isPrediction && isDefined(entity.score) && (
+                  <Elem name="score" title={`Prediction score = ${entity.score}`}>
+                    {" · "} {(entity.score * 100).toFixed(2)}%
+                  </Elem>
+                )}
               </Elem>
-            )}
-            {isPrediction && isDefined(entity.score) && (
-              <Tooltip title={`Prediction score = ${entity.score}`}>
-                <Elem name="score">
-                  {(entity.score * 100).toFixed(2)}%
-                </Elem>
-              </Tooltip>
             )}
           </Elem>
           {!isPrediction && (
