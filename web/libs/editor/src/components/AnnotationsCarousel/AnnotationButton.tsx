@@ -220,7 +220,7 @@ export const AnnotationButton = observer(
               <Elem name="info">
                 <Elem name="date" component={TimeAgo} date={entity.createdDate} />
                 {isPrediction && isDefined(entity.score) && (
-                  <span name="score" title={`Prediction score = ${entity.score}`}>
+                  <span title={`Prediction score = ${entity.score}`}>
                     {" · "} {(entity.score * 100).toFixed(2)}%
                   </span>
                 )}
