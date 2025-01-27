@@ -71,9 +71,7 @@ const ObjectBase = types
       // `checkMaxUsages` may unselect labels with already reached `maxUsages`
       const checkAndCollect = (list, s) => (s.checkMaxUsages ? list.concat(s.checkMaxUsages()) : list);
       const allStates = self.states() || [];
-      let exceeded;
-
-      exceeded = allStates.reduce(checkAndCollect, []).filter((e) => e.selected);
+      const exceeded = allStates.reduce(checkAndCollect, []).filter((e) => e.selected);
       exceeded.forEach((e) => e.setSelected(false));
 
       const states = self.activeStates() || [];
