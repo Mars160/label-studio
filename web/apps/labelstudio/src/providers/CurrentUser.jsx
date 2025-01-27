@@ -10,7 +10,8 @@ export const CurrentUserProvider = ({ children }) => {
 
   const fetch = useCallback(() => {
     setIsInProgress(true);
-    api.callApi("me")
+    api
+      .callApi("me")
       .then((user) => setUser(user))
       .finally(() => setIsInProgress(false));
   }, []);

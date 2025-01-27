@@ -16,13 +16,13 @@ export const AccountSettingsPage = () => {
   return (
     <div className={styles.accountSettings}>
       {/* <SidebarMenu menuItems={menuItems} path={AccountSettingsPage.path}> */}
-        <div className={styles.accountSettings__content}>
-          {accountSettingsSections?.map(({ component: Section, id }: any) => (
-            <Card key={id}>
-              <Section />
-            </Card>
-          ))}
-        </div>
+      <div className={styles.accountSettings__content}>
+        {accountSettingsSections?.map(({ component: Section, id }: any) => (
+          <Card key={id}>
+            <Section />
+          </Card>
+        ))}
+      </div>
       {/* </SidebarMenu> */}
     </div>
   );
