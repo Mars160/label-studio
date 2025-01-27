@@ -4,14 +4,10 @@ const FEATURE_FLAGS = window.APP_SETTINGS?.feature_flags || {};
 
 // Fix displaying of created_at in the review mode
 export const FF_DEV_1480 = "ff_front_dev_1480_created_on_in_review_180122_short";
-// Fix avatar blinking and stuck on organization page
-export const FF_DEV_1495 = "ff_front_dev_1495_avatar_mess_210122_short";
 // Notifications
 export const FF_DEV_1658 = "ff_front_dev_1658_notification_center_170222_short";
 // Model version selector per model backend
 export const FF_DEV_1682 = "ff_front_dev_1682_model_version_dropdown_070622_short";
-// Project list performance improvements
-export const FF_DEV_2575 = "ff_front_dev_2575_projects_list_performance_280622_short";
 
 /**
  * Addresses the memory leak issue in Taxonomy with Repeater
@@ -33,6 +29,10 @@ export const FF_OPTIC_2 = "fflag_feat_optic_2_ensure_draft_saved_short";
  */
 export const FF_DIA_835 = "fflag_feat_all_dia_835_prompter_workflow_long";
 
+/**
+ * Joyride
+ */
+export const FF_PRODUCT_TOUR = "fflag_feat_dia_1697_product_tour_short";
 /**
  * It adds an unsaved changes warning and fix some caching problems on a saving project
  */

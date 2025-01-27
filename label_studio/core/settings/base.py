@@ -428,6 +428,11 @@ CSRF_COOKIE_SECURE = bool(int(get_env('CSRF_COOKIE_SECURE', SESSION_COOKIE_SECUR
 CSRF_COOKIE_HTTPONLY = bool(int(get_env('CSRF_COOKIE_HTTPONLY', SESSION_COOKIE_SECURE)))
 CSRF_COOKIE_SAMESITE = get_env('CSRF_COOKIE_SAMESITE', 'Lax')
 
+# default value is from django docs: https://docs.djangoproject.com/en/5.1/ref/settings/#csrf-cookie-age
+# approximately 1 year
+CSRF_COOKIE_AGE = int(get_env('CSRF_COOKIE_AGE', 31449600))
+
+
 # Inactivity user sessions
 INACTIVITY_SESSION_TIMEOUT_ENABLED = bool(int(get_env('INACTIVITY_SESSION_TIMEOUT_ENABLED', True)))
 # The most time a login will last, regardless of activity
@@ -526,7 +531,7 @@ BATCH_SIZE = 1000
 PROJECT_TITLE_MIN_LEN = 3
 PROJECT_TITLE_MAX_LEN = 50
 LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = '/'
+LOGIN_URL = '/user/login/'
 MIN_GROUND_TRUTH = 10
 DATA_UNDEFINED_NAME = '$undefined$'
 LICENSE = {}
