@@ -117,6 +117,7 @@ export const defaultTipsCollection: TipsCollection = {
     {
       title: "Did you know?",
       content: "Try Label Studio Starter Cloud, optimized for small teams and projects.",
+      closable: true,
       link: {
         label: "Learn more",
         url: "https://humansignal.com/pricing/",
