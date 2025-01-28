@@ -1,6 +1,6 @@
 {
-  "message": "refactor: OPTIC-1555: cleanup FF (#6948)",
-  "commit": "aa6c9151e7b04a15ae7558851446c29f818567a9",
-  "date": "2025-01-23T00:54:40.000Z",
+  "message": "feat: OPTIC-1537: Update template images (#6972)",
+  "commit": "e50745e81ffed826bba963777e87b43b2cc7f841",
+  "date": "2025-01-27T16:28:17.000Z",
   "branch": "develop"
 }
