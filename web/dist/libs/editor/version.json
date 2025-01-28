@@ -1,6 +1,6 @@
 {
-  "message": "fix: OPTIC-1570: Update lodash to remove security issues (#6973)",
-  "commit": "41c6fb20f67a2b2ac301d061fe0c7704a136e030",
-  "date": "2025-01-28T14:35:40.000Z",
+  "message": "fix: OPTIC-1585: Change Annotations => Submitted Annotations to match its real meaning (#6982)",
+  "commit": "552c27754142c27d9c6c336a97c276e62646fc31",
+  "date": "2025-01-28T22:26:31.000Z",
   "branch": "develop"
 }
