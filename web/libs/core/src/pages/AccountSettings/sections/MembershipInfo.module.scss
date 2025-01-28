@@ -1,0 +1,11 @@
+.membershipInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.divider {
+  display: block;
+  height: 1px;
+  background-color: var(--sand_600, #6B6860);
+}

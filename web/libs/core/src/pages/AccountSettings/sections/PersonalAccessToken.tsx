@@ -12,28 +12,34 @@ export const PersonalAccessToken = () => {
         {!APP_SETTINGS?.whitelabel_is_active && (
           <>
             See{" "}
-            <a href="https://labelstud.io/guide/api.html" target="_blank" rel="noreferrer" className="inline-flex gap-1">
-              Docs <span><IconLaunch /></span>
+            <a
+              href="https://labelstud.io/guide/api.html"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex gap-1"
+            >
+              Docs{" "}
+              <span>
+                <IconLaunch />
+              </span>
             </a>
           </>
         )}
       </p>
       <div className="flex gap-2 w-full justify-between">
         <Input label="Access Token" name="token" />
-        <button look="Primary" size="compact">
-          <IconFileCopy />
+        <Button size="compact" icon={<IconFileCopy />}>
           Copy
-        </button>
-        <button look="Danger" size="compact">
+        </Button>
+        <Button look="Danger" size="compact">
           Reset
-        </button>
+        </Button>
       </div>
       <div className="flex gap-2 w-full justify-between">
         <TextArea label="Example CURL Request" name="example-curl" readOnly />
-        <button look="Primary" size="compact">
-          <IconFileCopy />
+        <Button size="compact" icon={<IconFileCopy />}>
           Copy
-        </button>
+        </Button>
       </div>
     </div>
   );
