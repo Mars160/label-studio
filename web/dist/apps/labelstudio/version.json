@@ -1,6 +1,6 @@
 {
-  "message": "feat: OPTIC-1537: Update template images (#6972)",
-  "commit": "e50745e81ffed826bba963777e87b43b2cc7f841",
-  "date": "2025-01-27T16:28:17.000Z",
+  "message": "fix: OPTIC-1570: Update lodash to remove security issues (#6973)",
+  "commit": "41c6fb20f67a2b2ac301d061fe0c7704a136e030",
+  "date": "2025-01-28T14:35:40.000Z",
   "branch": "develop"
 }
