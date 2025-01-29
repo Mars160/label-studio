@@ -1,6 +1,6 @@
 {
-  "message": "fix: OPTIC-1585: Change Annotations => Submitted Annotations to match its real meaning (#6982)",
-  "commit": "552c27754142c27d9c6c336a97c276e62646fc31",
-  "date": "2025-01-28T22:26:31.000Z",
+  "message": "refactor: OPTIC-1542: remove a buch of stale feature flags (#6954)",
+  "commit": "884942e0a554e8d84a295b807e45ce848c19e886",
+  "date": "2025-01-29T18:21:55.000Z",
   "branch": "develop"
 }
