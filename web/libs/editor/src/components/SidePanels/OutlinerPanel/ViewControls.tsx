@@ -200,7 +200,7 @@ const Grouping = <T extends string>({
             <DirectionIndicator direction={direction} name={value} value={value} wrap={false} />
           )
         }
-        tooltip={(isFF(FF_LSDV_4992) && readableValue.tooltip) || undefined}
+        tooltip={readableValue.tooltip || undefined}
         tooltipTheme="dark"
       >
         {readableValue.selectedLabel}
