@@ -1,5 +1,5 @@
-import { Input, TextArea } from "../../../../../../apps/labelstudio/src/components/Form";
-import { Button } from "../../../../../../apps/labelstudio/src/components/Button/Button";
+import { Input, TextArea } from "/apps/labelstudio/src/components/Form";
+import { Button } from "/apps/labelstudio/src/components/Button/Button";
 import { IconLaunch, IconFileCopy } from "@humansignal/ui";
 
 export const PersonalAccessToken = () => {

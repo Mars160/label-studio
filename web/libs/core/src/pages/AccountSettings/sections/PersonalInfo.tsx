@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { InputFile, useToast } from "@humansignal/ui";
-import { Input } from "../../../../../../apps/labelstudio/src/components/Form/Elements";
-import { Userpic } from "../../../../../../apps/labelstudio/src/components/Userpic/Userpic";
-import { useCurrentUser } from "../../../../../../apps/labelstudio/src/providers/CurrentUser";
+import { Input } from "/apps/labelstudio/src/components/Form/Elements";
+import { Userpic } from "/apps/labelstudio/src/components/Userpic/Userpic";
+import { useCurrentUser } from "/apps/labelstudio/src/providers/CurrentUser";
+import { Button } from "/apps/labelstudio/src/components/Button/Button";
 import { useAPI } from "apps/labelstudio/src/providers/ApiProvider";
 import styles from "../AccountSettings.module.scss";
 
@@ -123,9 +124,9 @@ export const PersonalInfo = () => {
             </div>
           </div>
           <div className={clsx(styles.flexRow, styles.flexEnd)}>
-            <button look="primary" style={{ width: 125 }} waiting={isInProgress}>
+            <Button look="primary" style={{ width: 125 }} waiting={isInProgress}>
               Save
-            </button>
+            </Button>
           </div>
         </form>
       </div>

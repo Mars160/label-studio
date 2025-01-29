@@ -1,10 +1,9 @@
-import { useCurrentUser } from "../../../../../../apps/labelstudio/src/providers/CurrentUser";
-import { useAPI } from "../../../../../../apps/labelstudio/src/providers/ApiProvider";
+import { useCurrentUser } from "/apps/labelstudio/src/providers/CurrentUser";
+import { useAPI } from "/apps/labelstudio/src/providers/ApiProvider";
 import { useEffect, useState } from "react";
 import { ToastType, useToast } from "@humansignal/ui";
 import { format } from "date-fns";
 import styles from "./MembershipInfo.module.scss";
-// import { OrganizationPage } from "../../../../../../apps/labelstudio/src/pages/Organization";
 export const MembershipInfo = () => {
   const api = useAPI();
   const toast = useToast();
