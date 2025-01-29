@@ -497,7 +497,7 @@ def collect_versions(force=False):
                 sentry_sdk.set_tag('version-' + package, result[package]['version'])
             if 'commit' in result[package]:
                 sentry_sdk.set_tag('commit-' + package, result[package]['commit'])
-                
+
     # edition type
     result['edition'] = settings.VERSION_EDITION
 
