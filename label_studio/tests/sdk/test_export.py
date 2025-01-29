@@ -35,3 +35,24 @@ def test_direct_export(test_project):
     df = ls.projects.exports.as_pandas(project.id)
     assert isinstance(df, pd.DataFrame)
     assert len(df) == 1
+
+    # Test low level export - import new task without annotations
+    ls.projects.import_tasks(
+        id=project.id,
+        request={
+            'data': {
+                'my_text': 'Opossums are great',
+                'ref_id': 456,
+                'meta_info': {'timestamp': '2020-03-09 18:15:28.212882', 'location': 'North Pole'},
+            }
+        },
+    )
+    data = ls.projects.exports.download_sync(project.id, download_all_tasks=False)
+    from label_studio_sdk.projects.exports.client_ext import _bytestream_to_json
+
+    assert len(_bytestream_to_json(data)) == 1
+
+    data = ls.projects.exports.download_sync(project.id, download_all_tasks=True)
+    from label_studio_sdk.projects.exports.client_ext import _bytestream_to_json
+
+    assert len(_bytestream_to_json(data)) == 2
