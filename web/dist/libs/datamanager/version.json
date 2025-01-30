@@ -1,6 +1,6 @@
 {
-  "message": "feat: OPTIC-1537: Update template images (#6972)",
-  "commit": "e50745e81ffed826bba963777e87b43b2cc7f841",
-  "date": "2025-01-27T16:28:17.000Z",
+  "message": "refactor: OPTIC-1542: remove a buch of stale feature flags (#6954)",
+  "commit": "884942e0a554e8d84a295b807e45ce848c19e886",
+  "date": "2025-01-29T18:21:55.000Z",
   "branch": "develop"
 }
