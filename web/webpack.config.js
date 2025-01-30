@@ -236,7 +236,9 @@ module.exports = composePlugins(
       // Common dependencies across at least two sub-packages
       react: path.resolve(__dirname, "node_modules/react"),
       "react-dom": path.resolve(__dirname, "node_modules/react-dom"),
+      "react-joyride": path.resolve(__dirname, "node_modules/react-joyride"),
       "@humansignal/ui": path.resolve(__dirname, "libs/ui"),
+      "@humansignal/core": path.resolve(__dirname, "libs/core"),
     };
 
     return merge(config, {

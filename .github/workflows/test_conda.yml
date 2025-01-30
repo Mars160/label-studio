@@ -40,14 +40,16 @@ jobs:
           ref: ${{ inputs.head_sha }}
 
       - name: Setup Conda
-        uses: conda-incubator/setup-miniconda@v3.1.0
+        uses: conda-incubator/setup-miniconda@v3.1.1
         with:
           auto-update-conda: true
           python-version: ${{ matrix.python-version }}
           activate-environment: test-environment
 
       - name: "Install poetry"
-        run: pipx install poetry
+        env:
+          POETRY_VERSION: ${{ vars.POETRY_VERSION }}
+        run: pipx install "poetry==${POETRY_VERSION}"
 
       - name: "Set up Python"
         id: setup_python
