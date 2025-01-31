@@ -6,7 +6,6 @@
     "declaration": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
-    "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
     "importHelpers": true,
