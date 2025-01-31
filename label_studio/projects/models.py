@@ -1190,7 +1190,7 @@ class ProjectSummary(models.Model):
         import traceback
 
         logger.info(
-            f'reset summary project_id={self.project_id} {tasks_data_based=} {self.all_data_columns=} {traceback.format_stack()=}'
+            f'reset summary project_id={self.project_id} {tasks_data_based=} {self.all_data_columns=} {traceback.format_stack(limit=4)=}'
         )
         if tasks_data_based:
             self.all_data_columns = {}
