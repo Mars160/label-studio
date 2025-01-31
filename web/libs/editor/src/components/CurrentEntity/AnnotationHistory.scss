@@ -18,9 +18,9 @@
     &::before {
       top: 0;
       left: 0;
+      padding-right: 5px;
       font-size: 12px;
       color: var(--sand_500);
-      padding-right: 5px;
       position: absolute;
       content: attr(title);
       transform: translateY(-50%);
