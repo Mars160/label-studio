@@ -1179,6 +1179,7 @@ class ProjectSummary(models.Model):
         return self.project.has_permission(user)
 
     def reset(self, tasks_data_based=True):
+        logger.info(f'reset summary project_id={self.project_id} {tasks_data_based=}')
         if tasks_data_based:
             self.all_data_columns = {}
             self.common_data_columns = []
