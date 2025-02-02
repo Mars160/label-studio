@@ -1,6 +1,6 @@
 {
-  "message": "fix: OPTIC-1585: Change Annotations => Submitted Annotations to match its real meaning (#6982)",
-  "commit": "552c27754142c27d9c6c336a97c276e62646fc31",
-  "date": "2025-01-28T22:26:31.000Z",
+  "message": "chore: Reverts tailwind and LSO Homepage (#7007)",
+  "commit": "61b9bbecd8d97f88863650fe777d129885c62421",
+  "date": "2025-01-31T21:09:28.000Z",
   "branch": "develop"
 }
