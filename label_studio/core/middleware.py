@@ -254,24 +254,28 @@ class HumanSignalCspMiddleware(CSPMiddleware):
 def get_user_jwt(request):
     from django.contrib.auth.middleware import get_user
     from rest_framework_simplejwt.authentication import JWTAuthentication
-    user = get_user(request)
-    if user.is_authenticated:
-        return user
 
-    jwt_authentication = JWTAuthentication()
-    auth_header = jwt_authentication.get_header(request)
-    if not auth_header:
-        return None
-    if isinstance(auth_header, str):
-        auth_header = auth_header.encode()
+    try:
+        user = get_user(request)
+        if user.is_authenticated:
+            return user
 
-    raw_token = jwt_authentication.get_raw_token(auth_header)
-    validated_token = jwt_authentication.get_validated_token(
-        raw_token
-    )
-    user = jwt_authentication.get_user(validated_token)
-    if user:
-        return user
+        jwt_authentication = JWTAuthentication()
+        auth_header = jwt_authentication.get_header(request)
+        if not auth_header:
+            return None
+        if isinstance(auth_header, str):
+            auth_header = auth_header.encode()
+
+        raw_token = jwt_authentication.get_raw_token(auth_header)
+        validated_token = jwt_authentication.get_validated_token(
+            raw_token
+        )
+        user = jwt_authentication.get_user(validated_token)
+    except:
+        user = None
+
+    return user
 
 class JWTAuthenticationMiddleware:
     def __init__(self, get_response):
@@ -280,7 +284,7 @@ class JWTAuthenticationMiddleware:
     def __call__(self, request):
         from django.utils.functional import SimpleLazyObject
         user = SimpleLazyObject(lambda: get_user_jwt(request))
-        if user:
+        if user and hasattr(user.active_organization, 'jwt') and user.active_organization.jwt.enabled:
             request.user = user
             request.is_jwt = True
         return self.get_response(request)
