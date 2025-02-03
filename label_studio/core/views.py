@@ -55,7 +55,8 @@ def main(request):
             return redirect(reverse('user-login'))
 
         # business mode access
-        if flag_set('fflag_all_feat_dia_1777_ls_homepage_short'):
+        if flag_set('fflag_all_feat_dia_1777_ls_homepage_short', user):
+            print('redirect to home page')
             return render(request, 'home/home.html')
         else:
             return redirect(reverse('projects:project-index'))
