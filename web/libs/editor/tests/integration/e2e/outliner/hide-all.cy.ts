@@ -45,6 +45,38 @@ describe("Outliner - Hide all regions", () => {
     Sidebar.hasHiddenRegion(3);
   });
 
+  it("should hide all regions except the target region by ID from param", () => {
+    LabelStudio.params()
+      .config(simpleRegionsConfig)
+      .data(simpleRegionsData)
+      .withResult(simpleRegionsResult)
+      .withParam("region", "label_2")
+      .init();
+    LabelStudio.setFeatureFlagsOnPageLoad({
+      fflag_feat_front_optic_1553_url_based_region_visibility_short: true,
+    });
+    cy.window().then((win) => {
+      (win as unknown as any).Htx.annotationStore.annotations[0].regionStore.setRegionVisible(
+        (win as unknown as any).LSF_CONFIG.region,
+      );
+    });
+
+    Sidebar.hasRegions(3);
+    Sidebar.hasHiddenRegion(2);
+    Sidebar.findRegionByIndex(0)
+      .should("contain.text", "Label 1")
+      .parent()
+      .should("have.class", "lsf-tree__node_hidden");
+    Sidebar.findRegionByIndex(1)
+      .should("contain.text", "Label 2")
+      .parent()
+      .should("not.have.class", "lsf-tree__node_hidden");
+    Sidebar.findRegionByIndex(2)
+      .should("contain.text", "Label 3")
+      .parent()
+      .should("have.class", "lsf-tree__node_hidden");
+  });
+
   it("should have tooltip for hide action", () => {
     LabelStudio.params().config(simpleRegionsConfig).data(simpleRegionsData).withResult(simpleRegionsResult).init();
 
@@ -61,6 +93,7 @@ describe("Outliner - Hide all regions", () => {
     Sidebar.showAllRegionsButton.trigger("mouseenter");
     Tooltip.hasText("Show all regions");
   });
+
   it("should react to changes in regions' visibility", () => {
     LabelStudio.params().config(simpleRegionsConfig).data(simpleRegionsData).withResult(simpleRegionsResult).init();
 
