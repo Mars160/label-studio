@@ -7,6 +7,7 @@ import ProcessAttrsMixin from "../../../mixins/ProcessAttrs";
 import { SyncableMixin } from "../../../mixins/Syncable";
 import { parseValue } from "../../../utils/data";
 import ObjectBase from "../Base";
+import { FF_VIDEO_FRAME_SEEK_PRECISION, isFF } from "libs/editor/src/utils/feature-flags";
 
 /**
  * Video tag plays a simple video file. Use for video annotation tasks such as classification and transcription.
@@ -52,10 +53,6 @@ const TagAttrs = types.model({
   timelineheight: types.maybeNull(types.string),
   muted: false,
 });
-
-// Browsers can only handle time to the nearest 2ms, so we need to round to that precision when seeking by frames
-// https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/currentTime
-const BROWSER_TIME_PRECISION = 0.002;
 
 const Model = types
   .model({
@@ -200,12 +197,12 @@ const Model = types
       setFrame(frame) {
         if (self.frame !== frame && self.framerate) {
           self.frame = frame;
-          if (self.ref.current) {
-            // Calculate exact frame time
-            const exactTime = (frame - 1) / self.framerate;
-            // Round to next closest browser precision frame time
-            self.ref.current.currentTime =
-              Math.round(exactTime / BROWSER_TIME_PRECISION) * BROWSER_TIME_PRECISION + BROWSER_TIME_PRECISION;
+          if (isFF(FF_VIDEO_FRAME_SEEK_PRECISION)) {
+            if (self.ref.current) {
+              self.ref.current.goToFrame(frame);
+            }
+          } else {
+            self.ref.current.currentTime = frame / self.framerate;
           }
         }
       },
