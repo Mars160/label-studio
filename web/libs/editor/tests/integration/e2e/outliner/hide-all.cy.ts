@@ -52,29 +52,71 @@ describe("Outliner - Hide all regions", () => {
       .withResult(simpleRegionsResult)
       .withParam("region", "label_2")
       .init();
-    LabelStudio.setFeatureFlagsOnPageLoad({
-      fflag_feat_front_optic_1553_url_based_region_visibility_short: true,
-    });
-    cy.window().then((win) => {
-      (win as unknown as any).Htx.annotationStore.annotations[0].regionStore.setRegionVisible(
-        (win as unknown as any).LSF_CONFIG.region,
-      );
+
+    cy.window().then((window: any | unknown) => {
+      window.Htx.annotationStore.annotations[0].regionStore.setRegionVisible(window.LSF_CONFIG.region);
     });
 
     Sidebar.hasRegions(3);
     Sidebar.hasHiddenRegion(2);
-    Sidebar.findRegionByIndex(0)
-      .should("contain.text", "Label 1")
-      .parent()
-      .should("have.class", "lsf-tree__node_hidden");
-    Sidebar.findRegionByIndex(1)
-      .should("contain.text", "Label 2")
-      .parent()
-      .should("not.have.class", "lsf-tree__node_hidden");
-    Sidebar.findRegionByIndex(2)
-      .should("contain.text", "Label 3")
-      .parent()
-      .should("have.class", "lsf-tree__node_hidden");
+
+    Sidebar.assertRegionHidden(0, "Label 1", true);
+    Sidebar.assertRegionHidden(1, "Label 2", false);
+    Sidebar.assertRegionHidden(2, "Label 3", true);
+  });
+
+  it("should hide all regions except the target region by ID within the targeted annotation tab specified by param", () => {
+    LabelStudio.params()
+      .config(simpleRegionsConfig)
+      .data(simpleRegionsData)
+      .withAnnotation({ id: "10", result: simpleRegionsResult })
+      .withAnnotation({ id: "20", result: simpleRegionsResult })
+      .withParam("annotation", "10")
+      .withParam("region", "label_2")
+      .init();
+
+    cy.window().then((window: any | unknown) => {
+      const annIdFromParam = window.LSF_CONFIG.annotation;
+      const annotations = window.Htx.annotationStore.annotations;
+      const lsfAnnotation = annotations.find((ann: any) => ann.pk === annIdFromParam || ann.id === annIdFromParam);
+      const annID = lsfAnnotation.pk ?? lsfAnnotation.id;
+
+      expect(annID).to.equal("10");
+
+      // Move to the annotation tab specified by param
+      cy.get('[class="lsf-annotations-list__toggle"]').click();
+      cy.get('[class="lsf-annotations-list__entity-id"]').contains("10").click();
+
+      annotations[1].regionStore.setRegionVisible(window.LSF_CONFIG.region);
+    });
+
+    Sidebar.hasRegions(3);
+    Sidebar.hasHiddenRegion(2);
+
+    Sidebar.assertRegionHidden(0, "Label 1", true);
+    Sidebar.assertRegionHidden(1, "Label 2", false);
+    Sidebar.assertRegionHidden(2, "Label 3", true);
+  });
+
+  it("should not hide regions in the non-targeted annotaion tab", () => {
+    LabelStudio.params()
+      .config(simpleRegionsConfig)
+      .data(simpleRegionsData)
+      .withAnnotation({ id: "10", result: simpleRegionsResult })
+      .withAnnotation({ id: "20", result: simpleRegionsResult })
+      .withParam("annotation", "10")
+      .withParam("region", "label_2")
+      .init();
+
+    cy.window().then((window: any | unknown) => {
+      window.Htx.annotationStore.annotations[1].regionStore.setRegionVisible(window.LSF_CONFIG.region);
+    });
+
+    // Validate the annotation tab
+    cy.get('[class="lsf-annotations-list__entity-id"]').should("contain.text", "20");
+
+    Sidebar.hasRegions(3);
+    Sidebar.hasHiddenRegion(0);
   });
 
   it("should have tooltip for hide action", () => {
