@@ -36,14 +36,6 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 (
-                    "ttl_days",
-                    models.IntegerField(
-                        default=30,
-                        help_text="Number of days before JWT tokens expire",
-                        verbose_name="time to live (days)",
-                    ),
-                ),
-                (
                     "created_at",
                     models.DateTimeField(auto_now_add=True, verbose_name="created at"),
                 ),
