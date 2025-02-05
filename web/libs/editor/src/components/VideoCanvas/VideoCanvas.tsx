@@ -167,8 +167,8 @@ export const VideoCanvas = memo(
         if (!contextRef.current) return;
 
         const currentTime = videoRef.current?.currentTime ?? 0;
-        const frameNumber = Math.round(currentTime * framerate);
-        const frame = clamp(frameNumber, 1, length || 1);
+        const frameNumber = Math.floor(currentTime * framerate + 0.5);
+        const frame = clamp(frameNumber + 1, 1, length || 1);
         const onChange = props.onFrameChange ?? (() => {});
 
         if (frame !== currentFrame || force === true) {
@@ -414,8 +414,7 @@ export const VideoCanvas = memo(
       },
       goToFrame(frame: number) {
         const frameClamped = clamp(frame, 1, length);
-
-        this.currentTime = frameClamped / framerate;
+        this.currentTime = (frameClamped - 1) / framerate;
         requestAnimationFrame(() => drawVideo());
       },
     };
@@ -459,7 +458,7 @@ export const VideoCanvas = memo(
           const video = videoRef.current;
 
           loadTimeout = setTimeout(() => {
-            const length = Math.ceil(video.duration * framerate);
+            const length = Math.round(video.duration * framerate);
             const [width, height] = [video.videoWidth, video.videoHeight];
 
             const dimensions = {

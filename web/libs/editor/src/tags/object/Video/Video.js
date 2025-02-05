@@ -196,7 +196,9 @@ const Model = types
       setFrame(frame) {
         if (self.frame !== frame && self.framerate) {
           self.frame = frame;
-          self.ref.current.currentTime = frame / self.framerate;
+          if (self.ref.current) {
+            self.ref.current.currentTime = (frame - 1) / self.framerate;
+          }
         }
       },
 
