@@ -53,6 +53,8 @@ const TagAttrs = types.model({
   muted: false,
 });
 
+const BROWSER_TIME_PRECISION = 0.01; // 10ms browser precision
+
 const Model = types
   .model({
     type: "video",
@@ -197,7 +199,11 @@ const Model = types
         if (self.frame !== frame && self.framerate) {
           self.frame = frame;
           if (self.ref.current) {
-            self.ref.current.currentTime = (frame - 1) / self.framerate;
+            // Calculate exact frame time
+            const exactTime = (frame - 1) / self.framerate;
+            // Round to next closest browser precision frame time
+            self.ref.current.currentTime =
+              Math.round(exactTime / BROWSER_TIME_PRECISION) * BROWSER_TIME_PRECISION + BROWSER_TIME_PRECISION;
           }
         }
       },
