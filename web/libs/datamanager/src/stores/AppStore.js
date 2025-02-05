@@ -205,7 +205,7 @@ export const AppStore = types
           interaction: null,
           region: null,
         });
-      } else {
+      } else if (isFF(FF_REGION_VISIBILITY_FROM_URL)) {
         const { task, region, annotation } = History.getParams();
         History.navigate(
           {
