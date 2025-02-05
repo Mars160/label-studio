@@ -70,7 +70,7 @@ class LSAPIToken(RefreshToken):
     based on user settings
 
     This token class extends RefreshToken to provide organization-specific token
-    lifetimes and support for truncated tokens. It uses the LSETokenBackend to
+    lifetimes and support for truncated tokens. It uses the LSTokenBackend to
     securely store the token (without the signature).
     """
 
