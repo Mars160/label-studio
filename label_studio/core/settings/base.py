@@ -788,3 +788,7 @@ if CI:
         'ignore_name': '0002_auto_20210304_1457',
         'sql-analyser': 'postgresql',
     }
+
+API_TOKEN_CREATE_SERIALIZER = get_env('LABEL_STUDIO_API_TOKEN_CREATE_SERIALIZER', 'jwt_auth.serializers.LSAPITokenCreateSerializer')
+API_TOKEN_LIST_SERIALIZER = get_env('LABEL_STUDIO_API_TOKEN_LIST_SERIALIZER', 'jwt_auth.serializers.LSAPITokenListSerializer')
+API_TOKEN_MODEL = get_env('LABEL_STUDIO_API_TOKEN_LIST_SERIALIZER', 'jwt_auth.models.LSAPIToken')
