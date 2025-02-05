@@ -1,21 +1,22 @@
 .comment-form-new {
-  --primary-action-color: var(--grape_500);
+  --primary-action-color: var(--color-primary-content);
   --primary-action-padding: 4px;
   --primary-action-border-radius: 4px;
   --primary-action-surface-color-hover: var(--grape_0);
-  --secondary-action-color: var(--sand_600);
-  --secondary-action-color-hover: var(--sand_800);
+  --secondary-action-color: var(--color-neutral-content-subtle);
+  --secondary-action-color-hover: var(--color-neutral-content);
   --text-input-min-height: 40px;
   --action-button-width: 40px;
   --action-buttons-width: calc(var(--action-button-width) * 2);
   --tooltip-text-color: var(--color-negative-content);
-  --highlight-color: var(--grape_100);
-  --highlight-border-color: var(--grape_800);
+  --highlight-color: var(--color-primary-background);
+  --highlight-border-color: var(--color-primary-border-subtler);
 
   & .textarea_inline {
     position: relative;
     z-index: 1;
     padding: 8px 16px;
+    width: 100%;
   }
 
   &__category-selector {

@@ -70,8 +70,8 @@
     }
 
     &[disabled] {
-      background-color: var(--sand_0);
-      color: var(--sand_400);
+      background-color: var(--color-neutral-background);
+      color: var(--color-neutral-content-subtlest);
     }
 
     &:hover {
