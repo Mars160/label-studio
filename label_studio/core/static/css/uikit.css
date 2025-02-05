@@ -63,7 +63,7 @@ textarea {
 }
 
 input[type=text][disabled] {
-  background: var(--color-neutral-surface);
+  background: var(--color-neutral-background);
   color: var(--color-neutral-content-subtlest);
 }
 
@@ -110,7 +110,7 @@ input[type=submit][disabled],
 input[type=reset][disabled],
 button[disabled] {
   background: rgba(0, 0, 0, 0.2);
-  border-color: transparent;
+  border-color: 1px solid var(--color-neutral-border);
   cursor: not-allowed;
 }
 

@@ -145,6 +145,7 @@ $scroll-width: 5px;
     border: 1px solid var(--color-neutral-border);
     box-sizing: content-box;
     transition: all 150ms ease-out;
+    overflow: hidden;
 
     &_active,
     &:hover {
@@ -576,12 +577,12 @@ $scroll-width: 5px;
 }
 
 .wizard .configure__preview {
+  background-color: var(--color-neutral-surface);
   flex-grow: 10;
   min-width: 500px;
   padding: 16px 16px 0;
   overflow-y: auto;
   border-left: 1px solid var(--color-neutral-border);
-  background-color: var(--color-neutral-surface);
   display: flex;
   flex-direction: column;
   color: var(--color-neutral-content);

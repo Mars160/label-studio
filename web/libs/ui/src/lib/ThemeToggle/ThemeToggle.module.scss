@@ -10,6 +10,7 @@
   padding: 4px 8px 4px 0;
   width: 80px;
   transition: all 150ms ease-out;
+  cursor: pointer;
 
   &:hover {
     background: var(--color-neutral-surface);
@@ -63,7 +64,7 @@
 }
 
 .moon {
-  left: 30px;
+  left: 31px;
   top: 0;
 }
 

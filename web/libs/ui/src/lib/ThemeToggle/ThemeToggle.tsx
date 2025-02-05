@@ -4,6 +4,10 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { ReactComponent as Sun } from "./icons/sun.svg";
 import { ReactComponent as Moon } from "./icons/moon.svg";
 
+interface ThemeToggleProps {
+  className?: string;
+}
+
 const THEME_OPTIONS = ["Auto", "Light", "Dark"];
 const PREFERRED_COLOR_SCHEME_KEY = "preferred-color-scheme";
 export const getCurrentTheme = () => {
@@ -14,7 +18,7 @@ export const getCurrentTheme = () => {
       : "Light"
     : themeSelection;
 };
-export const ThemeToggle = () => {
+export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className }) => {
   const presetTheme = window.localStorage.getItem(PREFERRED_COLOR_SCHEME_KEY) ?? THEME_OPTIONS[0];
   const [theme, setTheme] = useState(presetTheme);
   const systemMode = useMemo(
@@ -45,7 +49,7 @@ export const ThemeToggle = () => {
 
   return (
     <button
-      className={clsx(styles.themeToggle, {
+      className={clsx(styles.themeToggle, className, {
         [styles.dark]: appliedTheme === "Dark",
         [styles.light]: appliedTheme === "Light",
       })}

@@ -94,12 +94,13 @@
   margin-top: -8px;
   font-size: 14px;
   position: relative;
-  background: var(--grape_100);
+  background: var(--color-primary-background);
+  color: var(--color-neutral-content);
   line-height: 1.4em;
   transition: 0.2s all;
 
   .main-menu &:hover {
-    background: var(--grape_100);
+    background: var(--color-primary-emphasis-subtle);
   }
 }
 
