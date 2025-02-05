@@ -19,7 +19,7 @@ export const getCurrentTheme = () => {
     : themeSelection;
 };
 export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className }) => {
-  const presetTheme = window.localStorage.getItem(PREFERRED_COLOR_SCHEME_KEY) ?? THEME_OPTIONS[0];
+  const presetTheme = window.localStorage.getItem(PREFERRED_COLOR_SCHEME_KEY) ?? THEME_OPTIONS[1];
   const [theme, setTheme] = useState(presetTheme);
   const systemMode = useMemo(
     () => (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "Dark" : "Light"),
