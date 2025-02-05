@@ -1,6 +1,6 @@
 {
-  "message": "feat: LEAP-1753: Add shortcut for toggling bulk sidebar minimization (#6857)",
-  "commit": "3fef4105ab3a30bdbd9e2328d835e524a9b3612d",
-  "date": "2025-01-10T14:25:19.000Z",
+  "message": "refactor: OPTIC-1557: Remove Stale Feature Flag - fflag_fix_front_lsd… (#6997)",
+  "commit": "d2ee3a28547ff200240de7599ebfd46882b38cf2",
+  "date": "2025-02-04T19:34:20.000Z",
   "branch": "develop"
 }
