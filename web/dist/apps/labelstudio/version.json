@@ -1,6 +1,6 @@
 {
-  "message": "feat: DIA-1794: [FE] Implement home page in LSO and LSE (#6885)",
-  "commit": "e95280e1d4731af31047009a25eebf237964f435",
-  "date": "2025-01-31T14:08:59.000Z",
+  "message": "refactor: OPTIC-1557: Remove Stale Feature Flag - fflag_fix_front_lsd… (#6997)",
+  "commit": "d2ee3a28547ff200240de7599ebfd46882b38cf2",
+  "date": "2025-02-04T19:34:20.000Z",
   "branch": "develop"
 }
