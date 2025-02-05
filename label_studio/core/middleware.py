@@ -284,7 +284,7 @@ class JWTAuthenticationMiddleware:
     def __call__(self, request):
         from django.utils.functional import SimpleLazyObject
         user = SimpleLazyObject(lambda: get_user_jwt(request))
-        if user and hasattr(user.active_organization, 'jwt') and user.active_organization.jwt.enabled:
+        if user and hasattr(user.active_organization, 'jwt_base') and user.active_organization.jwt_base.enabled:
             request.user = user
             request.is_jwt = True
         return self.get_response(request)

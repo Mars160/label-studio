@@ -15,17 +15,17 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name="JWTSettings",
+            name="jwtsettings",
             fields=[
                 (
                     "organization",
                     annoying.fields.AutoOneToOneField(
                         on_delete=django.db.models.deletion.DO_NOTHING,
                         primary_key=True,
-                        related_name="jwt",
+                        related_name='jwt_base',
                         serialize=False,
-                        to="organizations.organization",
-                    ),
+                        to='organizations.organization'
+                    )
                 ),
                 (
                     "enabled",

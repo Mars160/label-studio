@@ -13,7 +13,7 @@ from rest_framework_simplejwt.tokens import RefreshToken, api_settings
 class JWTSettings(models.Model):
     """Organization-specific JWT settings for authentication"""
 
-    organization = AutoOneToOneField(Organization, related_name='jwt', primary_key=True, on_delete=models.DO_NOTHING)
+    organization = AutoOneToOneField(Organization, related_name='jwt_base', primary_key=True, on_delete=models.DO_NOTHING)
     enabled = models.BooleanField(
         _('enabled'), default=False, help_text='Enable JWT authentication for this organization'
     )
