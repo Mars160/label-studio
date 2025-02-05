@@ -53,7 +53,9 @@ const TagAttrs = types.model({
   muted: false,
 });
 
-const BROWSER_TIME_PRECISION = 0.01; // 10ms browser precision
+// Browsers can only handle time to the nearest 2ms, so we need to round to that precision when seeking by frames
+// https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/currentTime
+const BROWSER_TIME_PRECISION = 0.002;
 
 const Model = types
   .model({
