@@ -6,8 +6,8 @@ import IsReadyMixin from "../../../mixins/IsReadyMixin";
 import ProcessAttrsMixin from "../../../mixins/ProcessAttrs";
 import { SyncableMixin } from "../../../mixins/Syncable";
 import { parseValue } from "../../../utils/data";
+import { FF_VIDEO_FRAME_SEEK_PRECISION, isFF } from "../../../utils/feature-flags";
 import ObjectBase from "../Base";
-import { FF_VIDEO_FRAME_SEEK_PRECISION, isFF } from "libs/editor/src/utils/feature-flags";
 
 /**
  * Video tag plays a simple video file. Use for video annotation tasks such as classification and transcription.
@@ -198,9 +198,7 @@ const Model = types
         if (self.frame !== frame && self.framerate) {
           self.frame = frame;
           if (isFF(FF_VIDEO_FRAME_SEEK_PRECISION)) {
-            if (self.ref.current) {
-              self.ref.current.goToFrame(frame);
-            }
+            self.ref.current?.goToFrame(frame);
           } else {
             self.ref.current.currentTime = frame / self.framerate;
           }
