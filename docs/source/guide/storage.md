@@ -532,7 +532,7 @@ In the Label Studio UI, do the following to set up the connection:
     - Enable **Treat every bucket object as a source file** if your bucket contains BLOB storage files such as JPG, MP3, or similar file types. This setting creates a URL for each bucket object to use for labeling, such as `gs://my-gcs-bucket/image.jpg`. Leave this option disabled if you have multiple JSON files in the bucket with one task per JSON file.
     - Choose whether to disable **Use pre-signed URLs**. If your tasks contain gs://... links, they must be pre-signed in order to be displayed in the browser.
     - Adjust the counter for how many minutes the pre-signed URLs are valid.
-8. In the **Google Application Credentials** field, add a JSON file with the GCS credentials you created to manage authentication for your bucket. You can also use the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to specify this file. For example:
+8. In the **Google Application Credentials** field, add a JSON file with the GCS credentials you created to manage authentication for your bucket. If you're running Label Studio in GCP On-Premise environment, you can use the `GOOGLE_APPLICATION_CREDENTIALS` environment variable or set up [Application Default Credentials](https://cloud.google.com/docs/authentication/provide-credentials-adc) to provide cloud storage authentication globally for all projects, so users do not need to configure credentials manually. For example:
 ```bash
   export GOOGLE_APPLICATION_CREDENTIALS=json-file-with-GCP-creds-23441-8f8sd99vsd115a.json
   ```
