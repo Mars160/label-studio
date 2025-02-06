@@ -20,7 +20,7 @@ class TokenRefreshResponseSerializer(serializers.Serializer):
 class JWTSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = JWTSettings
-        fields = ('enabled', 'ttl_days')
+        fields = ('enabled')
 
 
 class JWTSettingsUpdateSerializer(JWTSettingsSerializer):

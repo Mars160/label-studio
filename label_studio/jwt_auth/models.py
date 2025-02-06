@@ -17,9 +17,6 @@ class JWTSettings(models.Model):
     enabled = models.BooleanField(
         _('enabled'), default=False, help_text='Enable JWT authentication for this organization'
     )
-    # ttl_days = models.IntegerField(
-    #     _('time to live (days)'), default=30, help_text='Number of days before JWT tokens expire'
-    # )
 
     created_at = models.DateTimeField(_('created at'), auto_now_add=True)
     updated_at = models.DateTimeField(_('updated at'), auto_now=True)
