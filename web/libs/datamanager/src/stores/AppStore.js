@@ -229,8 +229,9 @@ export const AppStore = types
 
       if (annotationID !== undefined) {
         self.annotationStore.setSelected(annotationID);
+      } else {
+        self.taskStore.setSelected(taskID);
       }
-      self.taskStore.setSelected(taskID);
 
       const taskPromise = self.taskStore.loadTask(taskID, {
         select: !!taskID && !!annotationID,
