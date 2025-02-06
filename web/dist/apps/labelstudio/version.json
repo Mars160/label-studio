@@ -1,6 +1,6 @@
 {
-  "message": "refactor: OPTIC-1542: remove a buch of stale feature flags (#6954)",
-  "commit": "884942e0a554e8d84a295b807e45ce848c19e886",
-  "date": "2025-01-29T18:21:55.000Z",
+  "message": "refactor: OPTIC-1557: Remove Stale Feature Flag - fflag_fix_front_lsd… (#6997)",
+  "commit": "d2ee3a28547ff200240de7599ebfd46882b38cf2",
+  "date": "2025-02-04T19:34:20.000Z",
   "branch": "develop"
 }
