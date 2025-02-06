@@ -919,6 +919,33 @@
       "version": 5,
       "deleted": false
     },
+    "fflag__feature_develop__prompts__dia_1829_jwt_token_auth": {
+      "key": "fflag__feature_develop__prompts__dia_1829_jwt_token_auth",
+      "on": false,
+      "prerequisites": [],
+      "targets": [],
+      "contextTargets": [],
+      "rules": [],
+      "fallthrough": {
+        "variation": 0
+      },
+      "offVariation": 1,
+      "variations": [
+        true,
+        false
+      ],
+      "clientSideAvailability": {
+        "usingMobileKey": false,
+        "usingEnvironmentId": false
+      },
+      "clientSide": false,
+      "salt": "e907cff690ed4dc490a6104c7dca73d9",
+      "trackEvents": false,
+      "trackEventsFallthrough": false,
+      "debugEventsUntilDate": null,
+      "version": 3,
+      "deleted": false
+    },
     "fflag_all_feat_dia_1777_ls_homepage_short": {
       "key": "fflag_all_feat_dia_1777_ls_homepage_short",
       "on": false,
@@ -1110,7 +1137,7 @@
     },
     "fflag_feat_all_leap_1181_bulk_annotation_short": {
       "key": "fflag_feat_all_leap_1181_bulk_annotation_short",
-      "on": false,
+      "on": true,
       "prerequisites": [],
       "targets": [],
       "contextTargets": [],
@@ -1132,7 +1159,7 @@
       "trackEvents": false,
       "trackEventsFallthrough": false,
       "debugEventsUntilDate": null,
-      "version": 4,
+      "version": 5,
       "deleted": false
     },
     "fflag_feat_all_leap_1429_flexible_reject_mode_250924_short": {
@@ -1716,6 +1743,33 @@
       "version": 2,
       "deleted": false
     },
+    "fflag_feat_back_optic_1579_force_memory_profiler": {
+      "key": "fflag_feat_back_optic_1579_force_memory_profiler",
+      "on": false,
+      "prerequisites": [],
+      "targets": [],
+      "contextTargets": [],
+      "rules": [],
+      "fallthrough": {
+        "variation": 1
+      },
+      "offVariation": 1,
+      "variations": [
+        true,
+        false
+      ],
+      "clientSideAvailability": {
+        "usingMobileKey": false,
+        "usingEnvironmentId": false
+      },
+      "clientSide": false,
+      "salt": "ca386034d55e4907a022740cbe2250e8",
+      "trackEvents": false,
+      "trackEventsFallthrough": false,
+      "debugEventsUntilDate": null,
+      "version": 2,
+      "deleted": false
+    },
     "fflag_feat_back_optic_428_scim_multi_mapping": {
       "key": "fflag_feat_back_optic_428_scim_multi_mapping",
       "on": false,
@@ -2042,7 +2096,7 @@
     },
     "fflag_feat_front_leap_1424_grid_preview_short": {
       "key": "fflag_feat_front_leap_1424_grid_preview_short",
-      "on": false,
+      "on": true,
       "prerequisites": [],
       "targets": [],
       "contextTargets": [],
@@ -2064,7 +2118,7 @@
       "trackEvents": false,
       "trackEventsFallthrough": false,
       "debugEventsUntilDate": null,
-      "version": 2,
+      "version": 3,
       "deleted": false
     },
     "fflag_feat_front_leap_482_self_serve_short": {
@@ -2474,7 +2528,7 @@
     },
     "fflag_feat_front_optic_1479_improve_image_tag_memory_usage_short": {
       "key": "fflag_feat_front_optic_1479_improve_image_tag_memory_usage_short",
-      "on": false,
+      "on": true,
       "prerequisites": [],
       "targets": [],
       "contextTargets": [],
@@ -2496,7 +2550,7 @@
       "trackEvents": false,
       "trackEventsFallthrough": false,
       "debugEventsUntilDate": null,
-      "version": 2,
+      "version": 3,
       "deleted": false
     },
     "fflag_feat_front_optic_1553_url_based_region_visibility_short": {
@@ -3965,6 +4019,33 @@
       },
       "clientSide": false,
       "salt": "15587c19c881430081d2fa63699543b9",
+      "trackEvents": false,
+      "trackEventsFallthrough": false,
+      "debugEventsUntilDate": null,
+      "version": 3,
+      "deleted": false
+    },
+    "fflag_fix_front_optic_1608_improve_video_frame_seek_precision_short": {
+      "key": "fflag_fix_front_optic_1608_improve_video_frame_seek_precision_short",
+      "on": false,
+      "prerequisites": [],
+      "targets": [],
+      "contextTargets": [],
+      "rules": [],
+      "fallthrough": {
+        "variation": 0
+      },
+      "offVariation": 1,
+      "variations": [
+        true,
+        false
+      ],
+      "clientSideAvailability": {
+        "usingMobileKey": false,
+        "usingEnvironmentId": false
+      },
+      "clientSide": false,
+      "salt": "840ef429000b4d5e9656830ed46692cf",
       "trackEvents": false,
       "trackEventsFallthrough": false,
       "debugEventsUntilDate": null,
