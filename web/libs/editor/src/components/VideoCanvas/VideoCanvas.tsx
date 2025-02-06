@@ -172,7 +172,7 @@ export const VideoCanvas = memo(
 
         const currentTime = videoRef.current?.currentTime ?? 0;
         const frameNumber = isFF(FF_VIDEO_FRAME_SEEK_PRECISION)
-          ? Math.floor(currentTime * framerate) + 1
+          ? Math.ceil(currentTime * framerate)
           : Math.round(currentTime * framerate);
         const frame = clamp(frameNumber, 1, length || 1);
         const onChange = props.onFrameChange ?? (() => {});
