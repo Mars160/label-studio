@@ -429,7 +429,8 @@ export const VideoCanvas = memo(
         const exactTime = frameZeroBased / framerate;
 
         // Round to next closest browser precision frame time
-        this.currentTime = Math.round(exactTime / BROWSER_TIME_PRECISION) * BROWSER_TIME_PRECISION + BROWSER_TIME_PRECISION;
+        this.currentTime =
+          Math.round(exactTime / BROWSER_TIME_PRECISION) * BROWSER_TIME_PRECISION + BROWSER_TIME_PRECISION;
       },
     };
 
