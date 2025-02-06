@@ -420,8 +420,14 @@ export const VideoCanvas = memo(
       },
       goToFrame(frame: number) {
         const frameClamped = clamp(frame, 1, length);
+
+        // We need to subtract 1 from the frame number because the frame number is 1-based
+        // and the currentTime is 0-based
+        const frameZeroBased = frameClamped - 1;
+
         // Calculate exact frame time
-        const exactTime = (frameClamped - 1) / framerate;
+        const exactTime = frameZeroBased / framerate;
+
         // Round to next closest browser precision frame time
         this.currentTime = Math.round(exactTime / BROWSER_TIME_PRECISION) * BROWSER_TIME_PRECISION + BROWSER_TIME_PRECISION;
       },
