@@ -56,4 +56,5 @@ STALE_FEATURE_FLAGS = {
     'fflag_feat_all_dia_1576_prompts_easy_breezy_onboarding_short_async_presets_ks': False,
     'fflag__feature_develop__prompts__dia_1362_custom_llm_endpoint': True,
     'fflag_front_dia_1150_ddisco_sneak_preview': False,
+    'fflag_feat_all_dia_1576_prompts_easy_breezy_onboarding_long': True,
 }
