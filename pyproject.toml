@@ -208,7 +208,7 @@ setuptools = ">=75.4.0"
 tldextract = ">=5.1.3"
 
 # Humansignal repo dependencies
-label-studio-sdk = {url = "https://github.com/HumanSignal/label-studio-sdk/archive/2547755090341885fedf17181f72290a0b48034a.zip"}
+label-studio-sdk = {url = "https://github.com/HumanSignal/label-studio-sdk/archive/7a0224d18fe7d0b3541a043140c85e5d9ad1175e.zip"}
 
 [tool.poetry.group.test.dependencies]
 pytest = "7.2.2"
