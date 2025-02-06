@@ -60,6 +60,7 @@ class JWTSettingsAPI(CreateAPIView):
 # https://django-rest-framework-simplejwt.readthedocs.io/en/latest/drf_yasg_integration.html
 class DecoratedTokenRefreshView(TokenRefreshView):
     @swagger_auto_schema(
+        tags=['JWT'],
         responses={
             status.HTTP_200_OK: TokenRefreshResponseSerializer,
         }
@@ -67,6 +68,22 @@ class DecoratedTokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
 
+@method_decorator(
+    name='get',
+    decorator=swagger_auto_schema(
+        tags=['JWT'],
+        operation_summary='List API tokens',
+        operation_description='List all API tokens for the current user.',
+    ),
+)
+@method_decorator(
+    name='post',
+    decorator=swagger_auto_schema(
+        tags=['JWT'],
+        operation_summary='Create API token',
+        operation_description='Create a new API token for the current user.',
+    ),
+)
 class LSAPITokenView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
