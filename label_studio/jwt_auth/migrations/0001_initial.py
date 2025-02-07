@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                     annoying.fields.AutoOneToOneField(
                         on_delete=django.db.models.deletion.DO_NOTHING,
                         primary_key=True,
-                        related_name='jwt_base',
+                        related_name='jwt',
                         serialize=False,
                         to='organizations.organization'
                     )
@@ -34,6 +34,13 @@ class Migration(migrations.Migration):
                         help_text="Enable JWT authentication for this organization",
                         verbose_name="enabled",
                     ),
+                ),
+                (
+                    'ttl_days',
+                    models.IntegerField(
+                        default=30,
+                        help_text='Number of days before JWT tokens expire',
+                        verbose_name='time to live (days)')
                 ),
                 (
                     "created_at",

@@ -13,9 +13,12 @@ from rest_framework_simplejwt.tokens import RefreshToken, api_settings
 class JWTSettings(models.Model):
     """Organization-specific JWT settings for authentication"""
 
-    organization = AutoOneToOneField(Organization, related_name='jwt_base', primary_key=True, on_delete=models.DO_NOTHING)
+    organization = AutoOneToOneField(Organization, related_name='jwt', primary_key=True, on_delete=models.DO_NOTHING)
     enabled = models.BooleanField(
         _('enabled'), default=False, help_text='Enable JWT authentication for this organization'
+    )
+    ttl_days = models.IntegerField(
+        _('time to live (days)'), default=30, help_text='Number of days before JWT tokens expire'
     )
 
     created_at = models.DateTimeField(_('created at'), auto_now_add=True)

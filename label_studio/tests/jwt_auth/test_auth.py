@@ -18,7 +18,7 @@ def jwt_disabled_user():
     user.active_organization = org
     user.save()
 
-    jwt_settings = user.active_organization.jwt_base
+    jwt_settings = user.active_organization.jwt
     jwt_settings.enabled = False
     jwt_settings.save()
 
@@ -32,7 +32,7 @@ def jwt_enabled_user():
     user.active_organization = org
     user.save()
 
-    jwt_settings = user.active_organization.jwt_base
+    jwt_settings = user.active_organization.jwt
     jwt_settings.enabled = True
     jwt_settings.save()
 

@@ -28,7 +28,7 @@ def test_jwt_settings_permissions():
         user=user,
         organization=org,
     )
-    jwt_settings = org.jwt_base
+    jwt_settings = org.jwt
     jwt_settings.enabled = True
 
     user.is_owner = True

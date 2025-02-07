@@ -11,7 +11,7 @@ class JWTAuthenticationMiddleware:
             # annoyingly, this only returns one object on failure so have to unpack awkwardly
             user_and_token = JWTAuthentication().authenticate(request)
             user = user_and_token[0] if user_and_token else None
-            if user and hasattr(user.active_organization, 'jwt_base') and user.active_organization.jwt_base.enabled:
+            if user and user.active_organization.jwt.enabled:
                 request.user = user
                 request.is_jwt = True
         return self.get_response(request)

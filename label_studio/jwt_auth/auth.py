@@ -21,7 +21,7 @@ class TokenAuthenticationPhaseout(TokenAuthentication):
             org_id = org.id if org else None
 
             # raise 401 if JWT enabled (i.e. this token is no longer valid)
-            if org and hasattr(org, 'jwt_base') and org.jwt_base.enabled:
+            if org and org.jwt.enabled:
                 raise AuthenticationFailed('Authentication token no longer valid: JWT authentication is required for this organization')
 
             logger.warning(

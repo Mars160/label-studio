@@ -9,8 +9,8 @@ def create_organization(title, created_by):
         org = Organization.objects.create(title=title, created_by=created_by)
         OrganizationMember.objects.create(user=created_by, organization=org)
         if hasattr(org, 'jwt'):
-            org.jwt_base.enabled = True
-            org.jwt_base.save()
+            org.jwt.enabled = True
+            org.jwt.save()
         return org
 
 

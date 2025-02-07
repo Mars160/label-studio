@@ -1,14 +1,12 @@
 import logging
-from unittest.mock import MagicMock, patch
 
 import pytest
+from jwt_auth.models import LSAPIToken
 from organizations.models import Organization
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
-from jwt_auth.models import LSAPIToken
 from users.models import User
-from organizations.models import OrganizationMember
 
 from ..utils import mock_feature_flag
 
@@ -21,7 +19,7 @@ def jwt_disabled_user():
     user.active_organization = org
     user.save()
     
-    jwt_settings = user.active_organization.jwt_base
+    jwt_settings = user.active_organization.jwt
     jwt_settings.enabled = False
     jwt_settings.save()
     
@@ -35,7 +33,7 @@ def jwt_enabled_user():
     user.active_organization = org
     user.save()
    
-    jwt_settings = user.active_organization.jwt_base
+    jwt_settings = user.active_organization.jwt
     jwt_settings.enabled = True
     jwt_settings.save()
     
@@ -101,30 +99,11 @@ def test_request_with_valid_token_returns_authenticated_user(jwt_enabled_user):
     refresh = LSAPIToken.for_user(jwt_enabled_user)
     client = APIClient()
     client.credentials(HTTP_AUTHORIZATION=f'Bearer {refresh.access_token}')
-    
-    request = client.get('/api/projects/').wsgi_request
-    
-    assert request.user == jwt_enabled_user
 
-@pytest.mark.django_db
-def test_jwt_settings_permissions():
-    user = User.objects.create()
-    org = Organization.objects.create(created_by=user)
-    OrganizationMember.objects.create(
-        user=user,
-        organization=org,
-    )
-    jwt_settings = org.jwt_base
-    jwt_settings.enabled = True
-    
-    user.is_owner = True
-    user.save()
-    assert jwt_settings.has_permission(user) is True
-    
-    user.is_owner = False
-    user.save()
-    assert jwt_settings.has_permission(user) is False
-   
+    response = client.get('/api/projects/')
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.wsgi_request.user == jwt_enabled_user
 
 @mock_feature_flag(flag_name="fflag__feature_develop__prompts__dia_1829_jwt_token_auth", value=True)
 @pytest.mark.django_db
