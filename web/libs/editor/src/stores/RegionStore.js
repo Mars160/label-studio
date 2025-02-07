@@ -507,15 +507,24 @@ export default types
     },
 
     findRegionID(id) {
+      if (!id) return null;
       return self.regions.find((r) => r.id === id);
     },
 
     findRegion(id) {
-      return self.regions.find((r) => r.id === id);
+      return self.findRegionID(id);
     },
 
     filterByParentID(id) {
       return self.regions.filter((r) => r.parentID === id);
+    },
+
+    normalizeRegionId(regionId) {
+      if (!regionId) return "";
+      if (!regionId.includes("#")) {
+        regionId = `${regionId}#${self.annotation.id}`;
+      }
+      return regionId;
     },
 
     afterCreate() {
@@ -583,9 +592,16 @@ export default types
       });
     },
 
+    selectRegionByID(regionId) {
+      const normalizedRegionId = self.normalizeRegionId(regionId);
+      const targetRegion = self.findRegionID(normalizedRegionId);
+      if (!targetRegion) return;
+      self.toggleSelection(targetRegion, true);
+    },
+
     setRegionVisible(regionId) {
-      regionId = `${regionId}#${self.annotation.id}`; // LS adds suffix to region id after '#'
-      const targetRegion = self.regions.find((r) => r.id === regionId);
+      const normalizedRegionId = self.normalizeRegionId(regionId);
+      const targetRegion = self.findRegionID(normalizedRegionId);
       if (!targetRegion) return;
 
       self.regions.forEach((area) => {

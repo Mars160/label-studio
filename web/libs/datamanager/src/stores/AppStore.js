@@ -257,7 +257,10 @@ export const AppStore = types
           }
           if (regionIDFromUrl) {
             const currentAnn = self.LSF?.currentAnnotation;
+            // Focus on the region by hiding all other regions
             currentAnn?.regionStore?.setRegionVisible(regionIDFromUrl);
+            // Select the region so outliner details are visible
+            currentAnn?.regionStore?.selectRegionByID(regionIDFromUrl);
           }
         }
 
