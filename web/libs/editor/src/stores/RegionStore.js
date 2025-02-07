@@ -292,7 +292,7 @@ export default types
 
         lookup.forEach((el) => {
           const pid = el.item.parentID;
-          const parent = pid ? lookup.get(pid) ?? lookup.get(pid.replace(/#(.+)/i, "")) : null;
+          const parent = pid ? (lookup.get(pid) ?? lookup.get(pid.replace(/#(.+)/i, ""))) : null;
 
           if (parent) return parent.children.push(el);
 
@@ -519,7 +519,7 @@ export default types
       return self.regions.filter((r) => r.parentID === id);
     },
 
-    normalizeRegionId(regionId) {
+    normalizeRegionID(regionId) {
       if (!regionId) return "";
       if (!regionId.includes("#")) {
         regionId = `${regionId}#${self.annotation.id}`;
@@ -593,14 +593,14 @@ export default types
     },
 
     selectRegionByID(regionId) {
-      const normalizedRegionId = self.normalizeRegionId(regionId);
+      const normalizedRegionId = self.normalizeRegionID(regionId);
       const targetRegion = self.findRegionID(normalizedRegionId);
       if (!targetRegion) return;
       self.toggleSelection(targetRegion, true);
     },
 
     setRegionVisible(regionId) {
-      const normalizedRegionId = self.normalizeRegionId(regionId);
+      const normalizedRegionId = self.normalizeRegionID(regionId);
       const targetRegion = self.findRegionID(normalizedRegionId);
       if (!targetRegion) return;
 
