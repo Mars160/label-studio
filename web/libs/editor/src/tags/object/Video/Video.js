@@ -198,7 +198,7 @@ const Model = types
         if (self.frame !== frame && self.framerate) {
           self.frame = frame;
           if (isFF(FF_VIDEO_FRAME_SEEK_PRECISION)) {
-            self.ref.current?.goToFrame(frame);
+            self.ref.current.goToFrame(frame);
           } else {
             self.ref.current.currentTime = frame / self.framerate;
           }
