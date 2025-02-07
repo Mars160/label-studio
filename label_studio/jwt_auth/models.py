@@ -28,7 +28,7 @@ class JWTSettings(models.Model):
         """Check if user has permission to modify JWT settings"""
         if not self.organization.has_permission(user):
             return False
-        return user.is_owner
+        return user.is_owner or ((not hasattr(user, 'is_administrator')) or user.is_administrator)
 
 
 class LSTokenBackend(TokenBackend):
