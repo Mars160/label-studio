@@ -18,7 +18,6 @@ STALE_FEATURE_FLAGS = {
     'ff_front_dev_2432_auto_save_polygon_draft_210622_short': True,
     'ff_front_1170_outliner_030222_short': True,
     'fflag_fix_front_lsdv_4620_memory_leaks_100723_short': False,
-    'fflag_feat_front_prod_292_archive_workspaces_short': True,
     'fflag_feat_all_lsdv_4915_async_task_import_13042023_short': True,
     'fflag_fix_all_lsdv_4971_async_reimport_09052023_short': True,
     # Jan 16
