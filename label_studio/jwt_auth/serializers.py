@@ -9,13 +9,6 @@ from rest_framework import serializers
 class TokenRefreshResponseSerializer(serializers.Serializer):
     access = serializers.CharField()
 
-    # TODO do we really need these NotImplementedErrors?
-    def create(self, validated_data):
-        raise NotImplementedError()
-
-    def update(self, instance, validated_data):
-        raise NotImplementedError()
-
 
 class JWTSettingsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -42,6 +35,7 @@ class LSAPITokenListSerializer(LSAPITokenCreateSerializer):
 
     def get_token(self, obj):
         return obj.token
+
 
 class LSAPITokenBlacklistSerializer(serializers.Serializer):
     refresh = serializers.CharField(write_only=True)

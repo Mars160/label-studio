@@ -119,9 +119,10 @@ class LSAPITokenView(generics.ListCreateAPIView):
 
 
 class LSTokenBlacklistView(TokenViewBase):
-    _serializer_class = 'lse_jwt_auth.serializers.LSETokenBlacklistSerializer'
+    _serializer_class = 'jwt_auth.serializers.LSAPITokenBlacklistSerializer'
 
     @swagger_auto_schema(
+        tags=['JWT'],
         responses={
             status.HTTP_200_OK: LSAPITokenBlacklistSerializer,
         }
