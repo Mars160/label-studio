@@ -17,7 +17,8 @@ from jwt_auth.serializers import (JWTSettingsSerializer,
                                   TokenRefreshResponseSerializer)
 
 from .models import LSAPIToken, TruncatedLSAPIToken
-from .serializers import LSAPITokenBlacklistSerializer
+from .serializers import (LSAPITokenBlacklistSerializer,
+                          LSAPITokenCreateSerializer, LSAPITokenListSerializer)
 
 
 @method_decorator(
@@ -87,6 +88,7 @@ class DecoratedTokenRefreshView(TokenRefreshView):
 )
 class LSAPITokenView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
+    token_class = LSAPIToken
 
     def get_queryset(self):
         return OutstandingToken.objects.filter(user_id=self.request.user.id)
@@ -108,12 +110,11 @@ class LSAPITokenView(generics.ListCreateAPIView):
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
-            return import_string(settings.API_TOKEN_CREATE_SERIALIZER)
-        return import_string(settings.API_TOKEN_LIST_SERIALIZER)
+            return LSAPITokenCreateSerializer
+        return LSAPITokenListSerializer
 
     def perform_create(self, serializer):
-        token_class = import_string(settings.API_TOKEN_MODEL)
-        token = token_class.for_user(self.request.user)
+        token = self.token_class.for_user(self.request.user)
         serializer.instance = token
 
 
