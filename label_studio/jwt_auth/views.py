@@ -17,6 +17,7 @@ from jwt_auth.serializers import (JWTSettingsSerializer,
                                   TokenRefreshResponseSerializer)
 
 from .models import LSAPIToken, TruncatedLSAPIToken
+from .serializers import LSAPITokenBlacklistSerializer
 
 
 @method_decorator(
@@ -114,3 +115,15 @@ class LSAPITokenView(generics.ListCreateAPIView):
         token_class = import_string(settings.API_TOKEN_MODEL)
         token = token_class.for_user(self.request.user)
         serializer.instance = token
+
+
+class LSTokenBlacklistView(TokenViewBase):
+    _serializer_class = 'lse_jwt_auth.serializers.LSETokenBlacklistSerializer'
+
+    @swagger_auto_schema(
+        responses={
+            status.HTTP_200_OK: LSAPITokenBlacklistSerializer,
+        }
+    )
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
