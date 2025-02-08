@@ -26,7 +26,7 @@ class TokenAuthenticationPhaseout(TokenAuthentication):
                     'Authentication token no longer valid: JWT authentication is required for this organization'
                 )
 
-            logger.warning(
+            logger.info(
                 'Basic token authentication used',
                 extra={'user_id': user.id, 'organization_id': org_id, 'endpoint': request.path}
             )
