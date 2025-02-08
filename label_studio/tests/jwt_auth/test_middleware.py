@@ -18,7 +18,7 @@ def jwt_disabled_user():
     user.save()
     
     jwt_settings = user.active_organization.jwt
-    jwt_settings.enabled = False
+    jwt_settings.api_tokens_enabled = False
     jwt_settings.save()
     
     return user
@@ -33,7 +33,7 @@ def jwt_enabled_user():
     user.save()
    
     jwt_settings = user.active_organization.jwt
-    jwt_settings.enabled = True
+    jwt_settings.api_tokens_enabled = True
     jwt_settings.save()
     
     return user

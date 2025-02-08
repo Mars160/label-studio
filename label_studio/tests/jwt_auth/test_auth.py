@@ -20,7 +20,7 @@ def jwt_disabled_user():
     user.save()
 
     jwt_settings = user.active_organization.jwt
-    jwt_settings.enabled = False
+    jwt_settings.api_tokens_enabled = False
     jwt_settings.save()
 
     return user
@@ -35,10 +35,25 @@ def jwt_enabled_user():
     user.save()
 
     jwt_settings = user.active_organization.jwt
-    jwt_settings.enabled = True
+    jwt_settings.api_tokens_enabled = True
     jwt_settings.save()
 
     return user
+
+@pytest.mark.django_db
+@pytest.fixture
+def legacy_disabled_user():
+    user = User.objects.create(email='legacy_disabled@example.com')
+    org = Organization.objects.create(created_by=user)
+    user.active_organization = org
+    user.save()
+
+    jwt_settings = user.active_organization.jwt
+    jwt_settings.legacy_api_tokens_enabled = False
+    jwt_settings.save()
+
+    return user
+
 
 
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
@@ -74,8 +89,8 @@ def test_no_logging_when_jwt_token_auth_used(jwt_enabled_user, caplog):
 
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.mark.django_db
-def test_jwt_enabled_user_cannot_use_basic_token(jwt_enabled_user):
-    token, _ = Token.objects.get_or_create(user=jwt_enabled_user)
+def test_legacy_api_token_disabled_user_cannot_use_basic_token(legacy_disabled_user):
+    token, _ = Token.objects.get_or_create(user=legacy_disabled_user)
     client = APIClient()
     client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
 

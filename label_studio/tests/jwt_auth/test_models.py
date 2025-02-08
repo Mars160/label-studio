@@ -29,7 +29,7 @@ def test_jwt_settings_permissions():
         organization=org,
     )
     jwt_settings = org.jwt
-    jwt_settings.enabled = True
+    jwt_settings.api_tokens_enabled = True
 
     user.is_owner = True
     user.save()

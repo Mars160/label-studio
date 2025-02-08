@@ -14,11 +14,14 @@ class JWTSettings(models.Model):
     """Organization-specific JWT settings for authentication"""
 
     organization = AutoOneToOneField(Organization, related_name='jwt', primary_key=True, on_delete=models.DO_NOTHING)
-    enabled = models.BooleanField(
-        _('enabled'), default=False, help_text='Enable JWT authentication for this organization'
+    api_tokens_enabled = models.BooleanField(
+        _('JWT API tokens enabled'), default=False, help_text='Enable JWT API token authentication for this organization'
     )
-    ttl_days = models.IntegerField(
-        _('time to live (days)'), default=30, help_text='Number of days before JWT tokens expire'
+    api_token_ttl_days = models.IntegerField(
+        _('JWT API token time to live (days)'), default=30, help_text='Number of days before JWT API tokens expire'
+    )
+    legacy_api_tokens_enabled = models.BooleanField(
+        _('legacy API tokens enabled'), default=True, help_text='Enable legacy API token authentication for this organization'
     )
 
     created_at = models.DateTimeField(_('created at'), auto_now_add=True)

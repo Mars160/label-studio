@@ -28,19 +28,27 @@ class Migration(migrations.Migration):
                     )
                 ),
                 (
-                    "enabled",
+                    "api_tokens_enabled",
                     models.BooleanField(
                         default=False,
-                        help_text="Enable JWT authentication for this organization",
-                        verbose_name="enabled",
+                        help_text="Enable JWT API token authentication for this organization",
+                        verbose_name="JWT API tokens enabled",
                     ),
                 ),
                 (
-                    'ttl_days',
+                    'api_token_ttl_days',
                     models.IntegerField(
                         default=30,
-                        help_text='Number of days before JWT tokens expire',
-                        verbose_name='time to live (days)')
+                        help_text='Number of days before JWT API tokens expire',
+                        verbose_name='JWT API token time to live (days)')
+                ),
+                (
+                    "legacy_api_tokens_enabled",
+                    models.BooleanField(
+                        default=True,
+                        help_text="Enable legacy API token authentication for this organization",
+                        verbose_name="legacy API tokens enabled",
+                    ),
                 ),
                 (
                     "created_at",
