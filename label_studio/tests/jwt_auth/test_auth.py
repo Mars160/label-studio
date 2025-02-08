@@ -24,6 +24,7 @@ def jwt_disabled_user():
 
     return user
 
+
 @pytest.mark.django_db
 @pytest.fixture
 def jwt_enabled_user():
@@ -38,7 +39,8 @@ def jwt_enabled_user():
 
     return user
 
-@mock_feature_flag(flag_name="fflag__feature_develop__prompts__dia_1829_jwt_token_auth", value=True)
+
+@mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.mark.django_db
 def test_logging_when_basic_token_auth_used(jwt_disabled_user, caplog):
     token, _ = Token.objects.get_or_create(user=jwt_disabled_user)
@@ -47,10 +49,7 @@ def test_logging_when_basic_token_auth_used(jwt_disabled_user, caplog):
     caplog.set_level(logging.WARNING)
 
     client.get('/api/projects/')
-    basic_auth_warnings = [
-        record for record in caplog.records
-        if record.message == 'Basic token authentication used'
-    ]
+    basic_auth_warnings = [record for record in caplog.records if record.message == 'Basic token authentication used']
 
     assert len(basic_auth_warnings) == 1
     record = basic_auth_warnings[0]
@@ -58,7 +57,7 @@ def test_logging_when_basic_token_auth_used(jwt_disabled_user, caplog):
     assert record.organization_id == jwt_disabled_user.active_organization.id
     assert record.endpoint == '/api/projects/'
 
-@mock_feature_flag(flag_name="fflag__feature_develop__prompts__dia_1829_jwt_token_auth", value=True)
+@mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.mark.django_db
 def test_no_logging_when_jwt_token_auth_used(jwt_enabled_user, caplog):
     refresh = LSAPIToken.for_user(jwt_enabled_user)
@@ -68,14 +67,11 @@ def test_no_logging_when_jwt_token_auth_used(jwt_enabled_user, caplog):
 
     client.get('/api/projects/')
 
-    basic_auth_warnings = [
-        record for record in caplog.records
-        if record.message == 'Basic token authentication used'
-    ]
+    basic_auth_warnings = [record for record in caplog.records if record.message == 'Basic token authentication used']
     assert len(basic_auth_warnings) == 0
 
 
-@mock_feature_flag(flag_name="fflag__feature_develop__prompts__dia_1829_jwt_token_auth", value=True)
+@mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.mark.django_db
 def test_jwt_enabled_user_cannot_use_basic_token(jwt_enabled_user):
     token, _ = Token.objects.get_or_create(user=jwt_enabled_user)

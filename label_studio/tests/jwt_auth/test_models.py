@@ -19,8 +19,7 @@ def test_token_user():
     yield user
 
 
-
-@mock_feature_flag(flag_name="fflag__feature_develop__prompts__dia_1829_jwt_token_auth", value=True)
+@mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.mark.django_db
 def test_jwt_settings_permissions():
     user = User.objects.create()
@@ -40,7 +39,8 @@ def test_jwt_settings_permissions():
     user.save()
     assert jwt_settings.has_permission(user) is False
 
-@mock_feature_flag(flag_name="fflag__feature_develop__prompts__dia_1829_jwt_token_auth", value=True)
+
+@mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.fixture
 def token_backend():
     return LSTokenBackend(
@@ -55,7 +55,7 @@ def token_backend():
     )
 
 
-@mock_feature_flag(flag_name="fflag__feature_develop__prompts__dia_1829_jwt_token_auth", value=True)
+@mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 def test_encode_returns_only_header_and_payload(token_backend):
     payload = {
         'user_id': 123,
@@ -71,7 +71,7 @@ def test_encode_returns_only_header_and_payload(token_backend):
     assert all(part.replace('-', '+').replace('_', '/') for part in parts)
 
 
-@mock_feature_flag(flag_name="fflag__feature_develop__prompts__dia_1829_jwt_token_auth", value=True)
+@mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 def test_encode_full_returns_complete_jwt(token_backend):
     payload = {
         'user_id': 123,
@@ -86,7 +86,7 @@ def test_encode_full_returns_complete_jwt(token_backend):
     assert all(part.replace('-', '+').replace('_', '/') for part in parts)
 
 
-@mock_feature_flag(flag_name="fflag__feature_develop__prompts__dia_1829_jwt_token_auth", value=True)
+@mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 def test_encode_vs_encode_full_comparison(token_backend):
     payload = {
         'user_id': 123,
@@ -99,7 +99,7 @@ def test_encode_vs_encode_full_comparison(token_backend):
     assert full_token.startswith(partial_token)
 
 
-@mock_feature_flag(flag_name="fflag__feature_develop__prompts__dia_1829_jwt_token_auth", value=True)
+@mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.mark.django_db
 def test_token_lifecycle(test_token_user):
     """Test full token lifecycle including creation, access token generation, blacklisting, and validation"""
@@ -121,7 +121,6 @@ def test_token_lifecycle(test_token_user):
 
     # 5. Verify that the revoked token can no longer be used
     assert BlacklistedToken.objects.filter(token__jti=jti).exists()
-
 
 
 @pytest.mark.django_db

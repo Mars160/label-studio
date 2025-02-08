@@ -61,10 +61,11 @@ class DecoratedTokenRefreshView(TokenRefreshView):
         tags=['JWT'],
         responses={
             status.HTTP_200_OK: TokenRefreshResponseSerializer,
-        }
+        },
     )
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
+
 
 @method_decorator(
     name='get',
@@ -121,7 +122,7 @@ class LSTokenBlacklistView(TokenViewBase):
         tags=['JWT'],
         responses={
             status.HTTP_200_OK: LSAPITokenBlacklistSerializer,
-        }
+        },
     )
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)

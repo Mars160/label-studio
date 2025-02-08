@@ -64,7 +64,6 @@ class LSTokenBackend(TokenBackend):
         return super().encode(payload)
 
 
-
 class LSAPIToken(RefreshToken):
     """API token that utilizes JWT, but stores a truncated version and expires
     based on user settings

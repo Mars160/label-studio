@@ -394,7 +394,7 @@ def file_exists_in_storage(response, exists=True, file_path=None):
     assert os.path.isfile(file_path) == exists
 
 
-def mock_feature_flag(flag_name: str, value: bool, parent_module: str='core.feature_flags'):
+def mock_feature_flag(flag_name: str, value: bool, parent_module: str = 'core.feature_flags'):
     """Decorator to mock a feature flag state for a test function.
     
     Args:
@@ -413,6 +413,8 @@ def mock_feature_flag(flag_name: str, value: bool, parent_module: str='core.feat
 
             with mock.patch(f'{parent_module}.flag_set', wraps=fake_flag_set):
                 return func(*args, **kwargs)
+
         return wrapper
+
     return decorator
 
