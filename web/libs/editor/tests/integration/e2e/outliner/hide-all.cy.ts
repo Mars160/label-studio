@@ -119,6 +119,23 @@ describe("Outliner - Hide all regions", () => {
     Sidebar.hasHiddenRegion(0);
   });
 
+  it("should select the target region by ID from param", () => {
+    LabelStudio.params()
+      .config(simpleRegionsConfig)
+      .data(simpleRegionsData)
+      .withResult(simpleRegionsResult)
+      .withParam("region", "label_2")
+      .init();
+
+    cy.window().then((window: any | unknown) => {
+      window.Htx.annotationStore.annotations[0].regionStore.selectRegionByID(window.LSF_CONFIG.region);
+    });
+
+    Sidebar.hasRegions(3);
+    Sidebar.hasSelectedRegions(1);
+    Sidebar.hasSelectedRegion(1);
+  });
+
   it("should have tooltip for hide action", () => {
     LabelStudio.params().config(simpleRegionsConfig).data(simpleRegionsData).withResult(simpleRegionsResult).init();
 
