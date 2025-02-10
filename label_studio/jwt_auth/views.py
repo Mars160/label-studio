@@ -94,6 +94,10 @@ class LSAPITokenView(generics.ListCreateAPIView):
     token_class = LSAPIToken
 
     def get_queryset(self):
+        """Returns all non-expired non-blacklisted tokens for the current user.
+
+        The `list` method handles filtering for refresh tokens (as opposed to access tokens),
+        since simple-jwt makes it hard to do this at the DB level."""
         current_blacklisted_tokens = BlacklistedToken.objects.filter(token__expires_at__gt=datetime.now()).values_list(
             'token_id', flat=True
         )
