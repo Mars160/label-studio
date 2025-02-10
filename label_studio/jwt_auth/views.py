@@ -149,11 +149,9 @@ class LSTokenBlacklistView(TokenViewBase):
     )
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        token = serializer.validated_data['refresh']
         try:
-            token.blacklist()
-            return Response(status=204)
+            serializer.is_valid(raise_exception=True)
         except TokenAlreadyBlacklisted as e:
             return Response({'detail': str(e)}, status=404)
+
+        return Response(status=204)
