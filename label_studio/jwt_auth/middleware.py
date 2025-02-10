@@ -1,6 +1,11 @@
 import logging
+from django.contrib.auth import get_user_model
+from django.http import JsonResponse
+from rest_framework import status
 
 logger = logging.getLogger(__name__)
+
+User = get_user_model()
 
 
 class JWTAuthenticationMiddleware:
@@ -10,17 +15,29 @@ class JWTAuthenticationMiddleware:
     def __call__(self, request):
         from core.feature_flags import flag_set
         from rest_framework_simplejwt.authentication import JWTAuthentication
-        from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+        from rest_framework_simplejwt.exceptions import InvalidToken, TokenError, AuthenticationFailed
 
         JWT_ACCESS_TOKEN_ENABLED = flag_set('fflag__feature_develop__prompts__dia_1829_jwt_token_auth')
         if JWT_ACCESS_TOKEN_ENABLED:
             try:
-                # annoyingly, this only returns one object on failure so have to unpack awkwardly
                 user_and_token = JWTAuthentication().authenticate(request)
-                user = user_and_token[0] if user_and_token else None
-                if user and user.active_organization.jwt.api_tokens_enabled:
+                if not user_and_token:
+                    return self.get_response(request)
+
+                user = User.objects.get(pk=user_and_token[0].pk)
+                if user.active_organization.jwt.api_tokens_enabled:
                     request.user = user
                     request.is_jwt = True
-            except (InvalidToken, TokenError) as e:
+            except User.DoesNotExist:
+                logger.info('JWT authentication failed: User no longer exists')
+                return JsonResponse(
+                    {'detail': 'User not found'},
+                    status=status.HTTP_401_UNAUTHORIZED
+                )
+            except (InvalidToken, TokenError, AuthenticationFailed) as e:
                 logger.info('JWT authentication failed: %s', e)
+                return JsonResponse(
+                    {'detail': str(e)},
+                    status=status.HTTP_401_UNAUTHORIZED
+                )
         return self.get_response(request)
