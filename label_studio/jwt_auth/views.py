@@ -95,7 +95,7 @@ class LSAPITokenView(generics.ListCreateAPIView):
     token_class = LSAPIToken
 
     def get_queryset(self):
-        return OutstandingToken.objects.filter(user_id=self.request.user.id)
+        return OutstandingToken.objects.filter(user_id=self.request.user.id, token_type='refresh')
 
     def list(self, request, *args, **kwargs):
         outstanding_tokens = self.get_queryset()

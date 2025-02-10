@@ -33,7 +33,7 @@ class LSAPITokenCreateSerializer(serializers.Serializer):
 
 class LSAPITokenListSerializer(LSAPITokenCreateSerializer):
     def get_token(self, obj):
-        return obj.token
+        return str(obj)
 
 
 class LSAPITokenBlacklistSerializer(serializers.Serializer):
