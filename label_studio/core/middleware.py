@@ -249,4 +249,3 @@ class HumanSignalCspMiddleware(CSPMiddleware):
                 del response['Content-Security-Policy-Report-Only']
             delattr(response, '_override_report_only_csp')
         return response
-

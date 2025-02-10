@@ -30,6 +30,7 @@ def test_request_with_invalid_token_returns_401():
 @pytest.mark.django_db
 def test_request_with_valid_token_returns_authenticated_user():
     from .utils import create_user_with_token_settings
+
     user = create_user_with_token_settings(api_tokens_enabled=True, legacy_api_tokens_enabled=False)
     refresh = LSAPIToken.for_user(user)
     client = APIClient()
@@ -45,11 +46,12 @@ def test_request_with_valid_token_returns_authenticated_user():
 @pytest.mark.django_db
 def test_legacy_token_auth_user_cannot_use_jwt_token():
     from .utils import create_user_with_token_settings
+
     user = create_user_with_token_settings(api_tokens_enabled=False, legacy_api_tokens_enabled=True)
     refresh = LSAPIToken.for_user(user)
     client = APIClient()
     client.credentials(HTTP_AUTHORIZATION=f'Bearer {refresh.access_token}')
-    
+
     response = client.get('/api/projects/')
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
@@ -58,24 +60,25 @@ def test_legacy_token_auth_user_cannot_use_jwt_token():
 @pytest.mark.django_db
 def test_user_with_both_auth_enabled_can_use_both_methods():
     from .utils import create_user_with_token_settings
+
     user = create_user_with_token_settings(api_tokens_enabled=True, legacy_api_tokens_enabled=True)
     client = APIClient()
 
     # JWT token auth
     refresh = LSAPIToken.for_user(user)
     client.credentials(HTTP_AUTHORIZATION=f'Bearer {refresh.access_token}')
-    
+
     response = client.get('/api/projects/')
-     
+
     assert response.status_code == status.HTTP_200_OK
     assert response.wsgi_request.user == user
 
     # Basic token auth
     token, _ = Token.objects.get_or_create(user=user)
     client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
-    
+
     response = client.get('/api/projects/')
-     
+
     assert response.status_code == status.HTTP_200_OK
     assert response.wsgi_request.user == user
 
@@ -84,23 +87,24 @@ def test_user_with_both_auth_enabled_can_use_both_methods():
 @pytest.mark.django_db
 def test_user_with_no_auth_enabled_cannot_use_either_method():
     from .utils import create_user_with_token_settings
+
     user = create_user_with_token_settings(api_tokens_enabled=False, legacy_api_tokens_enabled=False)
     client = APIClient()
 
     # JWT token auth
     refresh = LSAPIToken.for_user(user)
     client.credentials(HTTP_AUTHORIZATION=f'Bearer {refresh.access_token}')
-    
+
     response = client.get('/api/projects/')
-     
+
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     # Basic token auth
     token, _ = Token.objects.get_or_create(user=user)
     client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
-    
+
     response = client.get('/api/projects/')
-     
+
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
@@ -108,6 +112,7 @@ def test_user_with_no_auth_enabled_cannot_use_either_method():
 @pytest.mark.django_db
 def test_jwt_token_invalid_after_user_deleted():
     from .utils import create_user_with_token_settings
+
     user = create_user_with_token_settings(api_tokens_enabled=True, legacy_api_tokens_enabled=False)
     refresh = LSAPIToken.for_user(user)
     client = APIClient()
@@ -116,9 +121,9 @@ def test_jwt_token_invalid_after_user_deleted():
     response = client.get('/api/projects/')
     assert response.status_code == status.HTTP_200_OK
     assert response.wsgi_request.user == user
-    
+
     user.delete()
-    
+
     response = client.get('/api/projects/')
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
@@ -131,12 +136,12 @@ def test_user_with_default_auth_settings_can_use_jwt_but_not_basic_token():
     org = create_organization(title='Default Settings Org', created_by=user)
     user.active_organization = org
     user.save()
-    
+
     # JWT token auth should work (enabled by default)
     refresh = LSAPIToken.for_user(user)
     client = APIClient()
     client.credentials(HTTP_AUTHORIZATION=f'Bearer {refresh.access_token}')
-    
+
     response = client.get('/api/projects/')
     assert response.status_code == status.HTTP_200_OK
     assert response.wsgi_request.user == user
@@ -144,6 +149,6 @@ def test_user_with_default_auth_settings_can_use_jwt_but_not_basic_token():
     # Basic token auth should not work (disabled by default)
     token, _ = Token.objects.get_or_create(user=user)
     client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
-    
+
     response = client.get('/api/projects/')
     assert response.status_code == status.HTTP_401_UNAUTHORIZED

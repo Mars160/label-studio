@@ -28,6 +28,6 @@ class TokenAuthenticationPhaseout(TokenAuthentication):
 
             logger.info(
                 'Basic token authentication used',
-                extra={'user_id': user.id, 'organization_id': org_id, 'endpoint': request.path}
+                extra={'user_id': user.id, 'organization_id': org_id, 'endpoint': request.path},
             )
         return auth_result

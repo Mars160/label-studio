@@ -9,12 +9,14 @@ from rest_framework_simplejwt.token_blacklist.models import OutstandingToken
 from rest_framework_simplejwt.views import TokenRefreshView, TokenViewBase
 
 from jwt_auth.models import JWTSettings, LSAPIToken, TruncatedLSAPIToken
-from jwt_auth.serializers import (JWTSettingsSerializer,
-                                  JWTSettingsUpdateSerializer,
-                                  LSAPITokenBlacklistSerializer,
-                                  LSAPITokenCreateSerializer,
-                                  LSAPITokenListSerializer,
-                                  TokenRefreshResponseSerializer)
+from jwt_auth.serializers import (
+    JWTSettingsSerializer,
+    JWTSettingsUpdateSerializer,
+    LSAPITokenBlacklistSerializer,
+    LSAPITokenCreateSerializer,
+    LSAPITokenListSerializer,
+    TokenRefreshResponseSerializer,
+)
 
 
 @method_decorator(

@@ -396,7 +396,7 @@ def file_exists_in_storage(response, exists=True, file_path=None):
 
 def mock_feature_flag(flag_name: str, value: bool, parent_module: str = 'core.feature_flags'):
     """Decorator to mock a feature flag state for a test function.
-    
+
     Args:
         flag_name: Name of the feature flag to mock
         value: True or False to set the flag state
@@ -417,4 +417,3 @@ def mock_feature_flag(flag_name: str, value: bool, parent_module: str = 'core.fe
         return wrapper
 
     return decorator
-
