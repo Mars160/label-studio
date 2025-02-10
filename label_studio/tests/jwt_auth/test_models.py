@@ -1,10 +1,9 @@
 import pytest
+from jwt_auth.models import LSAPIToken, LSTokenBackend
 from organizations.models import OrganizationMember
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.settings import api_settings as simple_jwt_settings
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
-
-from jwt_auth.models import LSAPIToken, LSTokenBackend
 
 from ..utils import mock_feature_flag
 from .utils import create_user_with_token_settings
@@ -127,8 +126,7 @@ def test_token_creation_and_storage():
 
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.mark.django_db
-def test_lsapi_token_is_blacklisted():
-    user = create_user_with_token_settings(api_tokens_enabled=True, legacy_api_tokens_enabled=False)
+def test_LSAPIToken_is_blacklisted():
     token = LSAPIToken()
     assert not token.is_blacklisted
 

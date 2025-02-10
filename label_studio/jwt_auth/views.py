@@ -4,6 +4,14 @@ from datetime import datetime
 from core.permissions import all_permissions
 from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
+from jwt_auth.models import JWTSettings, LSAPIToken, TokenAlreadyBlacklisted, TruncatedLSAPIToken
+from jwt_auth.serializers import (
+    JWTSettingsSerializer,
+    JWTSettingsUpdateSerializer,
+    LSAPITokenCreateSerializer,
+    LSAPITokenListSerializer,
+    TokenRefreshResponseSerializer,
+)
 from rest_framework import generics, status
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -11,16 +19,6 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.exceptions import TokenBackendError, TokenError
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 from rest_framework_simplejwt.views import TokenRefreshView, TokenViewBase
-
-from jwt_auth.models import JWTSettings, LSAPIToken, TokenAlreadyBlacklisted, TruncatedLSAPIToken
-from jwt_auth.serializers import (
-    JWTSettingsSerializer,
-    JWTSettingsUpdateSerializer,
-    LSAPITokenBlacklistSerializer,
-    LSAPITokenCreateSerializer,
-    LSAPITokenListSerializer,
-    TokenRefreshResponseSerializer,
-)
 
 logger = logging.getLogger(__name__)
 
@@ -118,7 +116,7 @@ class LSAPITokenView(generics.ListCreateAPIView):
         token_objects = list(filter(None, [_maybe_get_token(token) for token in all_tokens]))
         refresh_tokens = [tok for tok in token_objects if tok['token_type'] == 'refresh']
 
-        serializer = self.get_serializer(token_objects, many=True)
+        serializer = self.get_serializer(refresh_tokens, many=True)
         data = serializer.data
         return Response(data)
 
