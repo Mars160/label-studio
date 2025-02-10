@@ -9,7 +9,7 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.exceptions import TokenBackendError, TokenError
-from rest_framework_simplejwt.token_blacklist.models import OutstandingToken
+from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 from rest_framework_simplejwt.views import TokenRefreshView, TokenViewBase
 
 logger = logging.getLogger(__name__)
@@ -95,18 +95,16 @@ class LSAPITokenView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     token_class = LSAPIToken
 
-    @staticmethod
-    def _get_token_type(tok):
-        api_tok = TruncatedLSAPIToken(tok.token)
-        return api_tok['token_type']
-
     def get_queryset(self):
-        return OutstandingToken.objects.filter(user_id=self.request.user.id, expires_at__gt=datetime.now())
+        current_blacklisted_tokens = BlacklistedToken.objects.filter(token__expires_at__gt=datetime.now()).values_list(
+            'token_id', flat=True
+        )
+        return OutstandingToken.objects.filter(user_id=self.request.user.id, expires_at__gt=datetime.now()).exclude(
+            id__in=current_blacklisted_tokens
+        )
 
     def list(self, request, *args, **kwargs):
         all_tokens = self.get_queryset()
-        # Annoyingly, token_type not stored directly. Shouldn't be many unexpired tokens to iterate through.
-        refresh_tokens = [tok for tok in all_tokens if self._get_token_type(tok) == 'refresh']
 
         def _maybe_get_token(token: OutstandingToken):
             try:
@@ -115,7 +113,10 @@ class LSAPITokenView(generics.ListCreateAPIView):
                 logger.info('JWT API token validation failed: %s', e)
                 return None
 
-        token_objects = list(filter(None, [_maybe_get_token(token) for token in refresh_tokens]))
+        # Annoyingly, token_type not stored directly so we have to filter it here.
+        # Shouldn't be many unexpired tokens to iterate through.
+        token_objects = list(filter(None, [_maybe_get_token(token) for token in all_tokens]))
+        refresh_tokens = [tok for tok in token_objects if tok['token_type'] == 'refresh']
 
         serializer = self.get_serializer(token_objects, many=True)
         data = serializer.data
