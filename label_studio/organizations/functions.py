@@ -8,7 +8,8 @@ def create_organization(title, created_by):
     with transaction.atomic():
         org = Organization.objects.create(title=title, created_by=created_by)
         OrganizationMember.objects.create(user=created_by, organization=org)
-        org.jwt.enabled = True
+        org.jwt.api_tokens_enabled = True
+        org.jwt.legacy_api_tokens_enabled = False
         org.jwt.save()
         return org
 
