@@ -1,6 +1,6 @@
 {
-  "message": "chore(deps): bump nanoid from 3.3.7 to 3.3.8 in /web (#6774)",
-  "commit": "53e29e8692a010362f0c1af94e805353ce0e1f47",
-  "date": "2025-02-07T15:11:38.000Z",
+  "message": "fix: LEAP-1741: Prevent comment category from overflow (#7039)",
+  "commit": "6a6c3baf93ffd9f8e576fe17bc2072f1c5d06586",
+  "date": "2025-02-10T15:56:19.000Z",
   "branch": "develop"
 }
