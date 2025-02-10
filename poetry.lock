@@ -1212,7 +1212,7 @@ version = "3.13.1"
 description = "A platform independent file lock."
 optional = false
 python-versions = ">=3.8"
-groups = ["test"]
+groups = ["main", "test"]
 markers = "python_version >= \"3.12\" or python_version <= \"3.11\""
 files = [
     {file = "filelock-3.13.1-py3-none-any.whl", hash = "sha256:57dbda9b35157b05fb3e58ee91448612eb674172fab98ee235ccb0b5bee19a1c"},
@@ -2133,14 +2133,14 @@ testing = ["pytest (>=6)", "pytest-black (>=0.3.7)", "pytest-checkdocs (>=2.4)",
 
 [[package]]
 name = "label-studio-sdk"
-version = "1.0.9"
+version = "1.0.11"
 description = ""
 optional = false
 python-versions = ">=3.9,<4"
 groups = ["main"]
 markers = "python_version >= \"3.12\" or python_version <= \"3.11\""
 files = [
-    {file = "510e71ab176061588a0f7cfec92e43c207bb5d9f.zip", hash = "sha256:0e04dadc233210140e2d38f241c962f998d54ba7f19f58d686d8eff748434333"},
+    {file = "56be6dc9f0dfb186ed965338471706d4201fd4b0.zip", hash = "sha256:c3606b9c4788dde3036135c4fbac55111d3c2fbd123a2257e6fd4bedb1da88bc"},
 ]
 
 [package.dependencies]
@@ -2165,7 +2165,7 @@ xmljson = "0.2.1"
 
 [package.source]
 type = "url"
-url = "https://github.com/HumanSignal/label-studio-sdk/archive/510e71ab176061588a0f7cfec92e43c207bb5d9f.zip"
+url = "https://github.com/HumanSignal/label-studio-sdk/archive/56be6dc9f0dfb186ed965338471706d4201fd4b0.zip"
 
 [[package]]
 name = "launchdarkly-server-sdk"
@@ -3999,6 +3999,22 @@ socks = ["PySocks (>=1.5.6,!=1.5.7)"]
 use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
+name = "requests-file"
+version = "2.1.0"
+description = "File transport adapter for Requests"
+optional = false
+python-versions = "*"
+groups = ["main"]
+markers = "python_version >= \"3.12\" or python_version <= \"3.11\""
+files = [
+    {file = "requests_file-2.1.0-py2.py3-none-any.whl", hash = "sha256:cf270de5a4c5874e84599fc5778303d496c10ae5e870bfa378818f35d21bda5c"},
+    {file = "requests_file-2.1.0.tar.gz", hash = "sha256:0f549a3f3b0699415ac04d167e9cb39bccfb730cb832b4d20be3d9867356e658"},
+]
+
+[package.dependencies]
+requests = ">=1.0.0"
+
+[[package]]
 name = "requests-mock"
 version = "1.12.1"
 description = "Mock out responses from the requests package"
@@ -4598,6 +4614,29 @@ stevedore = ">=4,<5"
 dev = ["Faker", "allure-pytest", "bump2version", "colorlog", "coverage[toml]", "flask (>=2.2.3)", "flit (>=3.2,<4)", "fluent-logger", "itsdangerous", "mypy", "mypy-extensions", "pip-tools", "pre-commit", "py", "pygments", "pytest-cov", "pytest-xdist", "tox (>=4,<5)", "twine", "types-PyYAML", "types-requests", "types-setuptools", "wheel"]
 
 [[package]]
+name = "tldextract"
+version = "5.1.3"
+description = "Accurately separates a URL's subdomain, domain, and public suffix, using the Public Suffix List (PSL). By default, this includes the public ICANN TLDs and their exceptions. You can optionally support the Public Suffix List's private domains as well."
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+markers = "python_version >= \"3.12\" or python_version <= \"3.11\""
+files = [
+    {file = "tldextract-5.1.3-py3-none-any.whl", hash = "sha256:78de310cc2ca018692de5ddf320f9d6bd7c5cf857d0fd4f2175f0cdf4440ea75"},
+    {file = "tldextract-5.1.3.tar.gz", hash = "sha256:d43c7284c23f5dc8a42fd0fee2abede2ff74cc622674e4cb07f514ab3330c338"},
+]
+
+[package.dependencies]
+filelock = ">=3.0.8"
+idna = "*"
+requests = ">=2.1.0"
+requests-file = ">=1.4"
+
+[package.extras]
+release = ["build", "twine"]
+testing = ["mypy", "pytest", "pytest-gitignore", "pytest-mock", "responses", "ruff", "syrupy", "tox", "tox-uv", "types-filelock", "types-requests"]
+
+[[package]]
 name = "toml"
 version = "0.10.2"
 description = "Python Library for Tom's Obvious, Minimal Language"
@@ -5034,4 +5073,4 @@ uwsgi = ["pyuwsgi", "uwsgitop"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<4"
-content-hash = "9687682016b7a7d1eea5ff7274ca99dde9a378ef65d673799b6b38c0d3e5afe6"
+content-hash = "9d90009c24cbbb441c972940430cafce40db1f9150e50b5353cfff797d5c18bf"
