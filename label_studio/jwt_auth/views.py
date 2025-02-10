@@ -12,8 +12,6 @@ from rest_framework_simplejwt.exceptions import TokenBackendError, TokenError
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 from rest_framework_simplejwt.views import TokenRefreshView, TokenViewBase
 
-logger = logging.getLogger(__name__)
-
 from jwt_auth.models import JWTSettings, LSAPIToken, TokenAlreadyBlacklisted, TruncatedLSAPIToken
 from jwt_auth.serializers import (
     JWTSettingsSerializer,
@@ -23,6 +21,8 @@ from jwt_auth.serializers import (
     LSAPITokenListSerializer,
     TokenRefreshResponseSerializer,
 )
+
+logger = logging.getLogger(__name__)
 
 
 @method_decorator(

@@ -7,8 +7,8 @@ from django.utils.translation import gettext_lazy as _
 from organizations.models import Organization
 from rest_framework_simplejwt.backends import TokenBackend
 from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken
 from rest_framework_simplejwt.tokens import RefreshToken, api_settings
-from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 
 
 class JWTSettings(models.Model):
@@ -41,6 +41,7 @@ class JWTSettings(models.Model):
 
 class TokenAlreadyBlacklisted(TokenError):
     """Raised when attempting to blacklist an already blacklisted token."""
+
     pass
 
 
@@ -128,7 +129,7 @@ class TruncatedLSAPIToken(LSAPIToken):
         if len(parts) > 2:
             token = '.'.join(parts[:2])
         elif len(parts) < 2:
-            raise TokenError("Invalid token format - must have at least header and payload")
+            raise TokenError('Invalid Label Studio token')
 
         # Add dummy signature with exactly 43 'x' characters to match expected JWT signature length
         token = token + '.' + ('x' * 43)
@@ -137,5 +138,5 @@ class TruncatedLSAPIToken(LSAPIToken):
     def blacklist(self):
         """Blacklist this token, raising an error if it's already blacklisted."""
         if self.is_blacklisted:
-            raise TokenAlreadyBlacklisted("Token is already blacklisted.")
+            raise TokenAlreadyBlacklisted('Token is already blacklisted.')
         return super().blacklist()
