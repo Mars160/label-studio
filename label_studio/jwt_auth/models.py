@@ -6,7 +6,9 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from organizations.models import Organization
 from rest_framework_simplejwt.backends import TokenBackend
+from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken, api_settings
+from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 
 
 class JWTSettings(models.Model):
@@ -35,6 +37,11 @@ class JWTSettings(models.Model):
         if not self.organization.has_permission(user):
             return False
         return user.is_owner or (hasattr(user, 'is_administrator') and user.is_administrator)
+
+
+class TokenAlreadyBlacklisted(TokenError):
+    """Raised when attempting to blacklist an already blacklisted token."""
+    pass
 
 
 class LSTokenBackend(TokenBackend):
@@ -92,6 +99,15 @@ class LSAPIToken(RefreshToken):
         api_settings.JSON_ENCODER,
     )
 
+    @property
+    def is_blacklisted(self) -> bool:
+        """Check if this token has been blacklisted.
+
+        Returns:
+            bool: True if the token is blacklisted, False otherwise
+        """
+        return BlacklistedToken.objects.filter(token__jti=self.payload['jti']).exists()
+
     def get_full_jwt(self) -> str:
         """Get the complete JWT token string (including the signature).
 
@@ -105,6 +121,21 @@ class TruncatedLSAPIToken(LSAPIToken):
     """Handles JWT tokens that contain only header and payload (no signature).
     Used when frontend has access to truncated refresh tokens only."""
 
-    def __init__(self, token: str) -> None:
-        full_token = token + '.' + ('x' * 43)
-        return super().__init__(full_token, verify=False)
+    def __init__(self, token, *args, **kwargs):
+        """Initialize a truncated token, ensuring it has exactly 2 parts before adding a dummy signature."""
+        # Ensure we have exactly 2 parts (header and payload)
+        parts = token.split('.')
+        if len(parts) > 2:
+            token = '.'.join(parts[:2])
+        elif len(parts) < 2:
+            raise TokenError("Invalid token format - must have at least header and payload")
+
+        # Add dummy signature with exactly 43 'x' characters to match expected JWT signature length
+        token = token + '.' + ('x' * 43)
+        super().__init__(token, verify=False, *args, **kwargs)
+
+    def blacklist(self):
+        """Blacklist this token, raising an error if it's already blacklisted."""
+        if self.is_blacklisted:
+            raise TokenAlreadyBlacklisted("Token is already blacklisted.")
+        return super().blacklist()

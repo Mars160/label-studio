@@ -1,7 +1,6 @@
-from typing import Any
-
 from jwt_auth.models import JWTSettings, LSAPIToken, TruncatedLSAPIToken
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenBlacklistSerializer
 
 
 # Recommended implementation from JWT to support drf-yasg:
@@ -36,18 +35,5 @@ class LSAPITokenListSerializer(LSAPITokenCreateSerializer):
         return str(obj)
 
 
-class LSAPITokenBlacklistSerializer(serializers.Serializer):
-    refresh = serializers.CharField(write_only=True)
-    token_class = LSAPIToken
-
-    def validate(self, attrs: dict[str, Any]) -> dict[Any, Any]:
-        token_str = attrs['refresh']
-        if len(token_str.split('.')) == 2:
-            token = TruncatedLSAPIToken(token_str)
-        else:
-            token = LSAPIToken(token_str)
-        try:
-            token.blacklist()
-        except AttributeError:
-            pass
-        return {}
+class LSAPITokenBlacklistSerializer(TokenBlacklistSerializer):
+    token_class = TruncatedLSAPIToken
