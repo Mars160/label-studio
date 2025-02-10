@@ -1,3 +1,5 @@
+import logging
+
 from core.permissions import all_permissions
 from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
@@ -5,8 +7,11 @@ from rest_framework import generics, status
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework_simplejwt.exceptions import TokenBackendError, TokenError
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken
 from rest_framework_simplejwt.views import TokenRefreshView, TokenViewBase
+
+logger = logging.getLogger(__name__)
 
 from jwt_auth.models import JWTSettings, LSAPIToken, TruncatedLSAPIToken
 from jwt_auth.serializers import (
@@ -98,7 +103,8 @@ class LSAPITokenView(generics.ListCreateAPIView):
         def _maybe_get_token(token: OutstandingToken):
             try:
                 return TruncatedLSAPIToken(str(token.token))
-            except:  # expired/invalid token
+            except (TokenError, TokenBackendError) as e:  # expired/invalid token
+                logger.info('JWT API token validation failed: %s', e)
                 return None
 
         token_objects = list(filter(None, [_maybe_get_token(token) for token in outstanding_tokens]))

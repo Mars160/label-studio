@@ -10,6 +10,7 @@ class JWTAuthenticationMiddleware:
     def __call__(self, request):
         from core.feature_flags import flag_set
         from rest_framework_simplejwt.authentication import JWTAuthentication
+        from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 
         JWT_ACCESS_TOKEN_ENABLED = flag_set('fflag__feature_develop__prompts__dia_1829_jwt_token_auth')
         if JWT_ACCESS_TOKEN_ENABLED:
@@ -20,6 +21,6 @@ class JWTAuthenticationMiddleware:
                 if user and user.active_organization.jwt.api_tokens_enabled:
                     request.user = user
                     request.is_jwt = True
-            except:
-                logger.info('Could not auth using jwt, falling back to other auth methods')
+            except (InvalidToken, TokenError) as e:
+                logger.info('JWT authentication failed: %s', e)
         return self.get_response(request)
