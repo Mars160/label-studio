@@ -1224,6 +1224,78 @@
         "decorators": ""
     },
     {
+        "url": "/admin/token_blacklist/outstandingtoken/",
+        "module": "django.contrib.admin.options.changelist_view",
+        "name": "admin:token_blacklist_outstandingtoken_changelist",
+        "decorators": ""
+    },
+    {
+        "url": "/admin/token_blacklist/outstandingtoken/add/",
+        "module": "django.contrib.admin.options.add_view",
+        "name": "admin:token_blacklist_outstandingtoken_add",
+        "decorators": ""
+    },
+    {
+        "url": "/admin/token_blacklist/outstandingtoken/<path:object_id>/history/",
+        "module": "django.contrib.admin.options.history_view",
+        "name": "admin:token_blacklist_outstandingtoken_history",
+        "decorators": ""
+    },
+    {
+        "url": "/admin/token_blacklist/outstandingtoken/<path:object_id>/delete/",
+        "module": "django.contrib.admin.options.delete_view",
+        "name": "admin:token_blacklist_outstandingtoken_delete",
+        "decorators": ""
+    },
+    {
+        "url": "/admin/token_blacklist/outstandingtoken/<path:object_id>/change/",
+        "module": "django.contrib.admin.options.change_view",
+        "name": "admin:token_blacklist_outstandingtoken_change",
+        "decorators": ""
+    },
+    {
+        "url": "/admin/token_blacklist/outstandingtoken/<path:object_id>/",
+        "module": "django.views.generic.base.RedirectView",
+        "name": "",
+        "decorators": ""
+    },
+    {
+        "url": "/admin/token_blacklist/blacklistedtoken/",
+        "module": "django.contrib.admin.options.changelist_view",
+        "name": "admin:token_blacklist_blacklistedtoken_changelist",
+        "decorators": ""
+    },
+    {
+        "url": "/admin/token_blacklist/blacklistedtoken/add/",
+        "module": "django.contrib.admin.options.add_view",
+        "name": "admin:token_blacklist_blacklistedtoken_add",
+        "decorators": ""
+    },
+    {
+        "url": "/admin/token_blacklist/blacklistedtoken/<path:object_id>/history/",
+        "module": "django.contrib.admin.options.history_view",
+        "name": "admin:token_blacklist_blacklistedtoken_history",
+        "decorators": ""
+    },
+    {
+        "url": "/admin/token_blacklist/blacklistedtoken/<path:object_id>/delete/",
+        "module": "django.contrib.admin.options.delete_view",
+        "name": "admin:token_blacklist_blacklistedtoken_delete",
+        "decorators": ""
+    },
+    {
+        "url": "/admin/token_blacklist/blacklistedtoken/<path:object_id>/change/",
+        "module": "django.contrib.admin.options.change_view",
+        "name": "admin:token_blacklist_blacklistedtoken_change",
+        "decorators": ""
+    },
+    {
+        "url": "/admin/token_blacklist/blacklistedtoken/<path:object_id>/",
+        "module": "django.views.generic.base.RedirectView",
+        "name": "",
+        "decorators": ""
+    },
+    {
         "url": "/admin/users/user/<id>/password/",
         "module": "django.contrib.auth.admin.user_change_password",
         "name": "admin:auth_user_password_change",
@@ -1755,6 +1827,30 @@
         "url": "/api-auth/logout/",
         "module": "django.contrib.auth.views.LogoutView",
         "name": "rest_framework:logout",
+        "decorators": ""
+    },
+    {
+        "url": "/api/jwt/settings",
+        "module": "jwt_auth.views.JWTSettingsAPI",
+        "name": "jwt_auth:api-jwt-settings",
+        "decorators": ""
+    },
+    {
+        "url": "/api/token/",
+        "module": "jwt_auth.views.LSAPITokenView",
+        "name": "jwt_auth:token_manage",
+        "decorators": ""
+    },
+    {
+        "url": "/api/token/refresh/",
+        "module": "jwt_auth.views.DecoratedTokenRefreshView",
+        "name": "jwt_auth:token_refresh",
+        "decorators": ""
+    },
+    {
+        "url": "/api/token/blacklist/",
+        "module": "jwt_auth.views.LSTokenBlacklistView",
+        "name": "jwt_auth:token_blacklist",
         "decorators": ""
     }
 ]
