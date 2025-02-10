@@ -30,14 +30,8 @@ class JWTAuthenticationMiddleware:
                     request.is_jwt = True
             except User.DoesNotExist:
                 logger.info('JWT authentication failed: User no longer exists')
-                return JsonResponse(
-                    {'detail': 'User not found'},
-                    status=status.HTTP_401_UNAUTHORIZED
-                )
+                return JsonResponse({'detail': 'User not found'}, status=status.HTTP_401_UNAUTHORIZED)
             except (InvalidToken, TokenError, AuthenticationFailed) as e:
                 logger.info('JWT authentication failed: %s', e)
-                return JsonResponse(
-                    {'detail': str(e)},
-                    status=status.HTTP_401_UNAUTHORIZED
-                )
+                return JsonResponse({'detail': str(e)}, status=status.HTTP_401_UNAUTHORIZED)
         return self.get_response(request)
