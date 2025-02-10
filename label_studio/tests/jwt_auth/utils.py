@@ -1,6 +1,5 @@
-"""Utilities for JWT auth tests."""
-from users.models import User
 from organizations.functions import create_organization
+from users.models import User
 
 
 def create_user_with_token_settings(api_tokens_enabled: bool, legacy_api_tokens_enabled: bool) -> User:
