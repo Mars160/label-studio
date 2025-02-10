@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 
 from core.permissions import all_permissions
 from django.utils.decorators import method_decorator
@@ -94,11 +95,18 @@ class LSAPITokenView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     token_class = LSAPIToken
 
+    @staticmethod
+    def _get_token_type(tok):
+        api_tok = TruncatedLSAPIToken(tok.token)
+        return api_tok['token_type']
+
     def get_queryset(self):
-        return OutstandingToken.objects.filter(user_id=self.request.user.id, token_type='refresh')
+        return OutstandingToken.objects.filter(user_id=self.request.user.id, expires_at__gt=datetime.now())
 
     def list(self, request, *args, **kwargs):
-        outstanding_tokens = self.get_queryset()
+        all_tokens = self.get_queryset()
+        # Annoyingly, token_type not stored directly. Shouldn't be many unexpired tokens to iterate through.
+        refresh_tokens = [tok for tok in all_tokens if self._get_token_type(tok) == 'refresh']
 
         def _maybe_get_token(token: OutstandingToken):
             try:
@@ -107,7 +115,7 @@ class LSAPITokenView(generics.ListCreateAPIView):
                 logger.info('JWT API token validation failed: %s', e)
                 return None
 
-        token_objects = list(filter(None, [_maybe_get_token(token) for token in outstanding_tokens]))
+        token_objects = list(filter(None, [_maybe_get_token(token) for token in refresh_tokens]))
 
         serializer = self.get_serializer(token_objects, many=True)
         data = serializer.data
