@@ -677,7 +677,7 @@ export const AppStore = types
       });
 
       if (result.async) {
-        self.SDK.invoke("toast", { message: "Your action is being processed.", type: "info" });
+        self.SDK.invoke("toast", { message: "Your action is being processed in the background.", type: "info" });
       }
 
       if (result.reload) {
