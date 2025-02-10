@@ -7,6 +7,7 @@ from rest_framework.test import APIClient
 from users.models import User
 
 from ..utils import mock_feature_flag
+from .utils import create_user_with_token_settings
 
 
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
@@ -29,8 +30,6 @@ def test_request_with_invalid_token_returns_401():
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.mark.django_db
 def test_request_with_valid_token_returns_authenticated_user():
-    from .utils import create_user_with_token_settings
-
     user = create_user_with_token_settings(api_tokens_enabled=True, legacy_api_tokens_enabled=False)
     refresh = LSAPIToken.for_user(user)
     client = APIClient()
@@ -45,8 +44,6 @@ def test_request_with_valid_token_returns_authenticated_user():
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.mark.django_db
 def test_legacy_token_auth_user_cannot_use_jwt_token():
-    from .utils import create_user_with_token_settings
-
     user = create_user_with_token_settings(api_tokens_enabled=False, legacy_api_tokens_enabled=True)
     refresh = LSAPIToken.for_user(user)
     client = APIClient()
@@ -59,8 +56,6 @@ def test_legacy_token_auth_user_cannot_use_jwt_token():
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.mark.django_db
 def test_user_with_both_auth_enabled_can_use_both_methods():
-    from .utils import create_user_with_token_settings
-
     user = create_user_with_token_settings(api_tokens_enabled=True, legacy_api_tokens_enabled=True)
     client = APIClient()
 
@@ -86,8 +81,6 @@ def test_user_with_both_auth_enabled_can_use_both_methods():
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.mark.django_db
 def test_user_with_no_auth_enabled_cannot_use_either_method():
-    from .utils import create_user_with_token_settings
-
     user = create_user_with_token_settings(api_tokens_enabled=False, legacy_api_tokens_enabled=False)
     client = APIClient()
 
@@ -111,8 +104,6 @@ def test_user_with_no_auth_enabled_cannot_use_either_method():
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.mark.django_db
 def test_jwt_token_invalid_after_user_deleted():
-    from .utils import create_user_with_token_settings
-
     user = create_user_with_token_settings(api_tokens_enabled=True, legacy_api_tokens_enabled=False)
     refresh = LSAPIToken.for_user(user)
     client = APIClient()
