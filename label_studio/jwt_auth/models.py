@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-
+from datetime import timedelta
 from typing import Any
 
 from annoying.fields import AutoOneToOneField
@@ -75,6 +74,7 @@ class LSAPIToken(RefreshToken):
     lifetimes and support for truncated tokens. It uses the LSTokenBackend to
     securely store the token (without the signature).
     """
+    lifetime = timedelta(days=365 * 200)  # "eternity" (200 years)
 
     _token_backend = LSTokenBackend(
         api_settings.ALGORITHM,
