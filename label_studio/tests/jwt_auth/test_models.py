@@ -1,43 +1,31 @@
 import pytest
-from jwt_auth.models import LSAPIToken, LSTokenBackend, TruncatedLSAPIToken
-from organizations.models import Organization, OrganizationMember
+from jwt_auth.models import LSAPIToken, LSTokenBackend
+from organizations.models import OrganizationMember
+from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.settings import api_settings as simple_jwt_settings
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
-from users.models import User
 
 from ..utils import mock_feature_flag
-
-
-@pytest.fixture
-@pytest.mark.django_db
-def test_token_user():
-    user = User.objects.create(email='test@example.com')
-    org = Organization(created_by=user)
-    org.save()
-    user.active_organization = org
-    user.save()
-    yield user
+from .utils import create_user_with_token_settings
 
 
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.mark.django_db
 def test_jwt_settings_permissions():
-    user = User.objects.create()
-    org = Organization.objects.create(created_by=user)
+    user = create_user_with_token_settings(api_tokens_enabled=True, legacy_api_tokens_enabled=False)
+    org = user.active_organization
     OrganizationMember.objects.create(
         user=user,
         organization=org,
     )
-    jwt_settings = org.jwt
-    jwt_settings.api_tokens_enabled = True
 
     user.is_owner = True
     user.save()
-    assert jwt_settings.has_permission(user) is True
+    assert org.jwt.has_permission(user) is True
 
     user.is_owner = False
     user.save()
-    assert jwt_settings.has_permission(user) is False
+    assert org.jwt.has_permission(user) is False
 
 
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
@@ -101,32 +89,28 @@ def test_encode_vs_encode_full_comparison(token_backend):
 
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.mark.django_db
-def test_token_lifecycle(test_token_user):
+def test_token_lifecycle():
     """Test full token lifecycle including creation, access token generation, blacklisting, and validation"""
-    # 1. Create an api token
-    refresh_token = LSAPIToken.for_user(test_token_user)
+    user = create_user_with_token_settings(api_tokens_enabled=True, legacy_api_tokens_enabled=False)
+    token = LSAPIToken.for_user(user)
 
-    # 2. Create an access token
-    access_token = refresh_token.access_token
-    access_token.verify()  # Verify it's valid
+    # Test that the token is valid
+    assert token.check_blacklist() is None
 
-    # 3. Get the (truncated) token from the db (like how the FE would get access, before revoking)
-    jti = refresh_token[simple_jwt_settings.JTI_CLAIM]
-    outstanding_token = OutstandingToken.objects.get(jti=jti)
-    truncated_token_str = outstanding_token.token
+    # Test that blacklisting the token works
+    token.blacklist()
+    assert BlacklistedToken.objects.filter(token__jti=token['jti']).exists()
 
-    # 4. Revoke (blacklist) the token
-    truncated_token = TruncatedLSAPIToken(truncated_token_str)
-    truncated_token.blacklist()
-
-    # 5. Verify that the revoked token can no longer be used
-    assert BlacklistedToken.objects.filter(token__jti=jti).exists()
+    # Test that the blacklisted token is detected
+    with pytest.raises(TokenError):
+        token.check_blacklist()
 
 
 @pytest.mark.django_db
-def test_token_creation_and_storage(test_token_user):
+def test_token_creation_and_storage():
     """Test that tokens are created and stored correctly with truncated format"""
-    token = LSAPIToken.for_user(test_token_user)
+    user = create_user_with_token_settings(api_tokens_enabled=True, legacy_api_tokens_enabled=False)
+    token = LSAPIToken.for_user(user)
     assert token is not None
 
     # Token in database shouldn't contain the signature
