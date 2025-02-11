@@ -1,10 +1,19 @@
 import { types } from "mobx-state-tree";
 import { FF_LOPS_E_3, isFF } from "../utils/feature-flags";
-import { CustomCalback, HtmlOrReact, StringOrNumberID } from "./types";
+import { CustomCalback, HtmlOrReact, StringOrNumber, StringOrNumberID } from "./types";
 
 const SelectOptions = types.model("SelectOptions", {
   label: types.string,
   value: types.string,
+  id: types.maybeNull(StringOrNumber),
+  searchBy: types.optional(types.maybeNull(types.array(types.string)), []),
+  children: types.optional(types.maybeNull(types.array(types.late(() => MultiSelectTreeDropdownOptions))), null),
+});
+
+const FieldSchema = types.model("FieldSchema", {
+  id: types.string,
+  label: types.string,
+  searchBy: types.optional(types.maybeNull(types.array(types.string)), null),
 });
 
 const ActionFormField = types.model("ActionForm", {
@@ -12,7 +21,17 @@ const ActionFormField = types.model("ActionForm", {
   name: types.string,
   value: types.maybeNull(types.union(types.string, types.array(types.string))),
   options: types.maybeNull(types.union(types.array(types.string), types.array(SelectOptions))),
-  type: types.enumeration(["input", "number", "checkbox", "radio", "toggle", "select", "range"]),
+  type: types.enumeration([
+    "input",
+    "number",
+    "checkbox",
+    "radio",
+    "toggle",
+    "select",
+    "range",
+    "multi-select-dropdown",
+  ]),
+  schema: types.optional(types.maybeNull(FieldSchema), null),
 });
 
 const ActionFormCoulmn = types.model("ActionFormCoulmn", {

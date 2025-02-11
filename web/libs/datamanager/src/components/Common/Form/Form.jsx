@@ -6,6 +6,7 @@ import { Button } from "../Button/Button";
 import { Oneof } from "../Oneof/Oneof";
 import { Space } from "../Space/Space";
 import { Counter, Input, Select, Toggle } from "./Elements";
+import { MultiTreeSelectDropdown } from "@humansignal/ui";
 import "./Form.scss";
 import {
   FormContext,
@@ -452,6 +453,19 @@ Form.Builder = forwardRef(
 
         const InputComponent = (() => {
           switch (field.type) {
+            case "multi-select-dropdown":
+              if (Array.isArray(restProps.options) && !restProps.data) {
+                restProps.data = restProps.options.toJSON().map(({ children, id, label, searchBy, value }) => {
+                  return {
+                    children: children?.toJSON?.(),
+                    id,
+                    label,
+                    searchBy: searchBy.toJSON(),
+                    value,
+                  };
+                });
+              }
+              return MultiTreeSelectDropdown;
             case "select":
               return Select;
             case "counter":

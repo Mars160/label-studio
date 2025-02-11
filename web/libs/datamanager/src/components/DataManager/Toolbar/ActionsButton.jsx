@@ -9,6 +9,7 @@ import Form from "../../Common/Form/Form";
 import { Menu } from "../../Common/Menu/Menu";
 import { Modal } from "../../Common/Modal/ModalPopup";
 import "./ActionsButton.scss";
+import { unprotect } from "mobx-state-tree";
 
 const isFFLOPSE3 = isFF(FF_LOPS_E_3);
 const isNewUI = isFF(FF_LOPS_E_10);
@@ -36,7 +37,7 @@ export const ActionsButton = injector(
     const [isOpen, setIsOpen] = useState(false);
     const selectedCount = store.currentView.selectedCount;
     const actions = store.availableActions.filter((a) => !a.hidden).sort((a, b) => a.order - b.order);
-
+    unprotect(store);
     const invokeAction = (action, destructive) => {
       if (action.dialog) {
         const { type: dialogType, text, form, title } = action.dialog;
