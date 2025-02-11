@@ -49,12 +49,12 @@ class JWTSettingsAPI(CreateAPIView):
         return JWTSettingsUpdateSerializer
 
     def get(self, request, *args, **kwargs):
-        jwt = request.user.active_organization.jwt
-        return Response(self.get_serializer(jwt).data)
+        jwt_settings = request.user.active_organization.jwt
+        return Response(self.get_serializer(jwt_settings).data)
 
     def post(self, request, *args, **kwargs):
-        jwt = request.user.active_organization.jwt
-        serializer = self.get_serializer(data=request.data, instance=jwt)
+        jwt_settings = request.user.active_organization.jwt
+        serializer = self.get_serializer(data=request.data, instance=jwt_settings)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
@@ -112,7 +112,7 @@ class LSAPITokenView(generics.ListCreateAPIView):
             try:
                 return TruncatedLSAPIToken(str(token.token))
             except (TokenError, TokenBackendError) as e:  # expired/invalid token
-                logger.info('JWT API token validation failed: %s', e)
+                logger.debug('JWT API token validation failed: %s', e)
                 return None
 
         # Annoyingly, token_type not stored directly so we have to filter it here.
@@ -142,9 +142,8 @@ class LSTokenBlacklistView(TokenViewBase):
         operation_summary='Blacklist a JWT refresh token',
         operation_description='Adds a JWT refresh token to the blacklist, preventing it from being used to obtain new access tokens.',
         responses={
-            204: 'Token was successfully blacklisted',
-            404: 'Token is already blacklisted',
-            401: 'Token is invalid or expired',
+            status.HTTP_204_NO_CONTENT: 'Token was successfully blacklisted',
+            status.HTTP_404_NOT_FOUND: 'Token is already blacklisted',
         },
     )
     def post(self, request, *args, **kwargs):
@@ -152,6 +151,6 @@ class LSTokenBlacklistView(TokenViewBase):
         try:
             serializer.is_valid(raise_exception=True)
         except TokenAlreadyBlacklisted as e:
-            return Response({'detail': str(e)}, status=404)
+            return Response({'detail': str(e)}, status=status.HTTP_404_NOT_FOUND)
 
-        return Response(status=204)
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -32,6 +32,7 @@ class LSAPITokenCreateSerializer(serializers.Serializer):
 
 class LSAPITokenListSerializer(LSAPITokenCreateSerializer):
     def get_token(self, obj):
+        # only return header/payload portion of token, using LSTokenBackend
         return str(obj)
 
 

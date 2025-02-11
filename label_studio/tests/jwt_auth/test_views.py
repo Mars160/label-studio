@@ -1,5 +1,6 @@
 import pytest
 from jwt_auth.models import LSAPIToken
+from rest_framework import status
 
 from ..utils import mock_feature_flag
 from .utils import create_user_with_token_settings
@@ -15,7 +16,7 @@ def test_blacklist_view_returns_404_with_already_blacklisted_token(client):
     token.blacklist()
     response = client.post('/api/token/blacklist/', data={'refresh': token.get_full_jwt()})
 
-    assert response.status_code == 404
+    assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
@@ -27,5 +28,5 @@ def test_blacklist_view_returns_204_with_valid_token(client):
     token = LSAPIToken()
     response = client.post('/api/token/blacklist/', data={'refresh': token.get_full_jwt()})
 
-    assert response.status_code == 204
+    assert response.status_code == status.HTTP_204_NO_CONTENT
     assert token.is_blacklisted
