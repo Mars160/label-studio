@@ -7,7 +7,9 @@ logger = logging.getLogger(__name__)
 
 
 class TokenAuthenticationPhaseout(TokenAuthentication):
-    """TokenAuthentication that logs usage to help track basic token authentication usage."""
+    """TokenAuthentication with features to help phase out legacy token auth
+
+    Logs usage and triggers a 401 if legacy token auth is not enabled for the organization."""
 
     def authenticate(self, request):
         """Authenticate the request and log if successful."""
@@ -23,7 +25,7 @@ class TokenAuthenticationPhaseout(TokenAuthentication):
             # raise 401 if legacy API token auth disabled (i.e. this token is no longer valid)
             if org and (not org.jwt.legacy_api_tokens_enabled):
                 raise AuthenticationFailed(
-                    'Authentication token no longer valid: JWT authentication is required for this organization'
+                    'Authentication token no longer valid: legacy token authentication has been disabled for this organization'
                 )
 
             logger.info(
