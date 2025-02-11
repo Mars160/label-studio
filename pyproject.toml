@@ -201,9 +201,10 @@ django-csp = "3.7"
 openai = "^1.10.0"
 django-migration-linter = "^5.1.0"
 setuptools = ">=75.4.0"
+tldextract = ">=5.1.3"
 
 # Humansignal repo dependencies
-label-studio-sdk = {url = "https://github.com/HumanSignal/label-studio-sdk/archive/abf1ea4207e22d3d3cdfb8f4bb12ffb4d59384e4.zip"}
+label-studio-sdk = {url = "https://github.com/HumanSignal/label-studio-sdk/archive/9c8177d096dba63cb0213fbb1fb0b17edb539172.zip"}
 
 [tool.poetry.group.test.dependencies]
 pytest = "7.2.2"
