@@ -20,7 +20,7 @@ def test_logging_when_basic_token_auth_used(caplog):
     caplog.set_level(logging.INFO)
 
     client.get('/api/projects/')
-    basic_auth_logs = [record for record in caplog.records if record.message == 'Basic token authentication used']
+    basic_auth_logs = [record for record in caplog.records if record.message == 'Legacy token authentication used']
 
     assert len(basic_auth_logs) == 1
     record = basic_auth_logs[0]

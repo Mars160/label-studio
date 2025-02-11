@@ -8,7 +8,8 @@ from organizations.models import Organization
 from rest_framework_simplejwt.backends import TokenBackend
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken
-from rest_framework_simplejwt.tokens import RefreshToken, api_settings
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import api_settings as simple_jwt_settings
 
 
 class JWTSettings(models.Model):
@@ -90,14 +91,14 @@ class LSAPIToken(RefreshToken):
     lifetime = timedelta(days=365 * 200)  # "eternity" (200 years)
 
     _token_backend = LSTokenBackend(
-        api_settings.ALGORITHM,
-        api_settings.SIGNING_KEY,
-        api_settings.VERIFYING_KEY,
-        api_settings.AUDIENCE,
-        api_settings.ISSUER,
-        api_settings.JWK_URL,
-        api_settings.LEEWAY,
-        api_settings.JSON_ENCODER,
+        simple_jwt_settings.ALGORITHM,
+        simple_jwt_settings.SIGNING_KEY,
+        simple_jwt_settings.VERIFYING_KEY,
+        simple_jwt_settings.AUDIENCE,
+        simple_jwt_settings.ISSUER,
+        simple_jwt_settings.JWK_URL,
+        simple_jwt_settings.LEEWAY,
+        simple_jwt_settings.JSON_ENCODER,
     )
 
     @property
