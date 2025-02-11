@@ -4,10 +4,9 @@ from datetime import datetime
 from core.permissions import all_permissions
 from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
-from jwt_auth.models import JWTSettings, LSAPIToken, TokenAlreadyBlacklisted, TruncatedLSAPIToken
+from jwt_auth.models import JWTSettings, LSAPIToken, TruncatedLSAPIToken
 from jwt_auth.serializers import (
     JWTSettingsSerializer,
-    JWTSettingsUpdateSerializer,
     LSAPITokenCreateSerializer,
     LSAPITokenListSerializer,
     TokenRefreshResponseSerializer,
@@ -42,11 +41,7 @@ logger = logging.getLogger(__name__)
 class JWTSettingsAPI(CreateAPIView):
     queryset = JWTSettings.objects.all()
     permission_required = all_permissions.organizations_change
-
-    def get_serializer_class(self):
-        if self.request.method == 'GET':
-            return JWTSettingsSerializer
-        return JWTSettingsUpdateSerializer
+    serializer_class = JWTSettingsSerializer
 
     def get(self, request, *args, **kwargs):
         jwt_settings = request.user.active_organization.jwt
@@ -98,6 +93,12 @@ class LSAPITokenView(generics.ListCreateAPIView):
 
         The `list` method handles filtering for refresh tokens (as opposed to access tokens),
         since simple-jwt makes it hard to do this at the DB level."""
+        # Notably, if the list of non-expired blacklisted tokens ever gets too long
+        # (e.g. users from orgs who have not set a token expiration for their org
+        # revoke enough tokens for this to blow up), this will become inefficient.
+        # Would be ideal to just add a "blacklisted" attr to our own subclass of
+        # OutstandingToken so we can check at that level, or just clean up
+        # OutstandingTokens that have been blacklisted every so often.
         current_blacklisted_tokens = BlacklistedToken.objects.filter(token__expires_at__gt=datetime.now()).values_list(
             'token_id', flat=True
         )
@@ -149,8 +150,10 @@ class LSTokenBlacklistView(TokenViewBase):
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         try:
+            # Notably, simple jwt's serializer (which we inherit from) calls
+            # .blacklist() on the token under the hood
             serializer.is_valid(raise_exception=True)
-        except TokenAlreadyBlacklisted as e:
+        except TokenError as e:
             return Response({'detail': str(e)}, status=status.HTTP_404_NOT_FOUND)
 
         return Response(status=status.HTTP_204_NO_CONTENT)

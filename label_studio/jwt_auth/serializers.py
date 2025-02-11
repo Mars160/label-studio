@@ -15,10 +15,6 @@ class JWTSettingsSerializer(serializers.ModelSerializer):
         fields = ('api_tokens_enabled', 'legacy_api_tokens_enabled')
 
 
-class JWTSettingsUpdateSerializer(JWTSettingsSerializer):
-    pass
-
-
 class LSAPITokenCreateSerializer(serializers.Serializer):
     token = serializers.SerializerMethodField()
 

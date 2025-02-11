@@ -7,7 +7,6 @@ from django.utils.translation import gettext_lazy as _
 from organizations.models import Organization
 from rest_framework_simplejwt.backends import TokenBackend
 from rest_framework_simplejwt.exceptions import TokenError
-from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.tokens import api_settings as simple_jwt_settings
 
@@ -22,7 +21,9 @@ class JWTSettings(models.Model):
         help_text='Enable JWT API token authentication for this organization',
     )
     api_token_ttl_days = models.IntegerField(
-        _('JWT API token time to live (days)'), default=30, help_text='Number of days before JWT API tokens expire'
+        _('JWT API token time to live (days)'),
+        default=(200 * 365),  # "eternity", 200 years
+        help_text='Number of days before JWT API tokens expire',
     )
     legacy_api_tokens_enabled = models.BooleanField(
         _('legacy API tokens enabled'),
@@ -38,12 +39,6 @@ class JWTSettings(models.Model):
         if not self.organization.has_permission(user):
             return False
         return user.is_owner or (hasattr(user, 'is_administrator') and user.is_administrator)
-
-
-class TokenAlreadyBlacklisted(TokenError):
-    """Raised when attempting to blacklist an already blacklisted token."""
-
-    pass
 
 
 class LSTokenBackend(TokenBackend):
@@ -101,15 +96,6 @@ class LSAPIToken(RefreshToken):
         simple_jwt_settings.JSON_ENCODER,
     )
 
-    @property
-    def is_blacklisted(self) -> bool:
-        """Check if this token has been blacklisted.
-
-        Returns:
-            bool: True if the token is blacklisted, False otherwise
-        """
-        return BlacklistedToken.objects.filter(token__jti=self.payload['jti']).exists()
-
     def get_full_jwt(self) -> str:
         """Get the complete JWT token string (including the signature).
 
@@ -117,6 +103,15 @@ class LSAPIToken(RefreshToken):
             The full JWT token string with header, payload and signature
         """
         return self.get_token_backend().encode_full(self.payload)
+
+    def blacklist(self):
+        """Blacklist this token.
+
+        Raises:
+            rest_framework_simplejwt.exceptions.TokenError: If the token is already blacklisted.
+        """
+        self.check_blacklist()
+        return super().blacklist()
 
 
 class TruncatedLSAPIToken(LSAPIToken):
@@ -135,9 +130,3 @@ class TruncatedLSAPIToken(LSAPIToken):
         # Add dummy signature with exactly 43 'x' characters to match expected JWT signature length
         token = token + '.' + ('x' * 43)
         super().__init__(token, verify=False, *args, **kwargs)
-
-    def blacklist(self):
-        """Blacklist this token, raising an error if it's already blacklisted."""
-        if self.is_blacklisted:
-            raise TokenAlreadyBlacklisted('Token is already blacklisted.')
-        return super().blacklist()

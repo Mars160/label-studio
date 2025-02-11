@@ -122,14 +122,3 @@ def test_token_creation_and_storage():
     full_token = token.get_full_jwt()
     full_token_parts = full_token.split('.')
     assert len(full_token_parts) == 3  # Header, payload, and signature
-
-
-@mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
-@pytest.mark.django_db
-def test_LSAPIToken_is_blacklisted():
-    token = LSAPIToken()
-    assert not token.is_blacklisted
-
-    token.blacklist()
-
-    assert token.is_blacklisted

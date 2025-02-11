@@ -43,7 +43,7 @@ def test_request_with_valid_token_returns_authenticated_user():
 
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.mark.django_db
-def test_legacy_token_auth_user_cannot_use_jwt_token():
+def test_jwt_token_auth_disabled_user_cannot_use_jwt_token():
     user = create_user_with_token_settings(api_tokens_enabled=False, legacy_api_tokens_enabled=True)
     refresh = LSAPIToken.for_user(user)
     client = APIClient()
@@ -68,7 +68,7 @@ def test_user_with_both_auth_enabled_can_use_both_methods():
     assert response.status_code == status.HTTP_200_OK
     assert response.wsgi_request.user == user
 
-    # Basic token auth
+    # Legacy token auth
     token, _ = Token.objects.get_or_create(user=user)
     client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
 
@@ -92,7 +92,7 @@ def test_user_with_no_auth_enabled_cannot_use_either_method():
 
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-    # Basic token auth
+    # Legacy token auth
     token, _ = Token.objects.get_or_create(user=user)
     client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
 
@@ -121,7 +121,7 @@ def test_jwt_token_invalid_after_user_deleted():
 
 @mock_feature_flag(flag_name='fflag__feature_develop__prompts__dia_1829_jwt_token_auth', value=True)
 @pytest.mark.django_db
-def test_user_with_default_auth_settings_can_use_jwt_but_not_basic_token():
+def test_user_with_default_auth_settings_can_use_jwt_but_not_legacy_token():
     # Create user and org with default settings from create_organization
     user = User.objects.create(email='default_auth_settings@example.com')
     org = create_organization(title='Default Settings Org', created_by=user)
@@ -137,7 +137,7 @@ def test_user_with_default_auth_settings_can_use_jwt_but_not_basic_token():
     assert response.status_code == status.HTTP_200_OK
     assert response.wsgi_request.user == user
 
-    # Basic token auth should not work (disabled by default)
+    # Legacy token auth should not work (disabled by default)
     token, _ = Token.objects.get_or_create(user=user)
     client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
 
