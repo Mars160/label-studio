@@ -237,7 +237,7 @@
       "description": "Now you can use Data Preview to expand, zoom, and pan on images from the grid view. On the Enterprise edition, you can even select and classify multiple images in bulk.",
       "link": {
         "label": "Learn more",
-        "url": "https://labelstud.io/learn/categories/release-notes/",
+        "url": "https://humansignal.com/blog/bulk-labeling-how-to-classify-in-batches/",
         "params": {
           "experiment": "login_revamp",
           "treatment": "data_preview_live"
