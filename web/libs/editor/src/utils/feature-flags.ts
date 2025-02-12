@@ -140,12 +140,6 @@ export const FF_LSDV_4988 = "fflag_fix_front_lsdv_4988_dynamic_no_label_120523_s
 export const FF_LSDV_4930 = "fflag_fix_front_lsdv_4930_selection_tool_fixes_240423_short";
 
 /**
- * Restore "hide all regions" button functionality in the outliner
- * @link https://app.launchdarkly.com/default/production/features/fflag_fix_front_lsdv_4992_hide_all_regions_04052023_short
- */
-export const FF_LSDV_4992 = "fflag_fix_front_lsdv_4992_hide_all_regions_04052023_short";
-
-/**
  * Resetting shared stores on task change to correctly generate dynamic children
  * @see: fflag_fix_front_dev_3617_taxonomy_memory_leaks_fix: To enable shared store
  * @link https://app.launchdarkly.com/default/production/features/fflag_fix_front_lsdv_4998_missed_dynamic_children_030523_short
@@ -213,6 +207,8 @@ export const FF_LEAP_1173 = "fflag_feat_front_leap_1173_disable_postpone_skip_sh
 export const FF_PER_FIELD_COMMENTS = "fflag_feat_all_leap_1430_per_field_comments_100924_short";
 
 export const FF_IMAGE_MEMORY_USAGE = "fflag_feat_front_optic_1479_improve_image_tag_memory_usage_short";
+
+export const FF_VIDEO_FRAME_SEEK_PRECISION = "fflag_fix_front_optic_1608_improve_video_frame_seek_precision_short";
 
 Object.assign(window, {
   APP_SETTINGS: {

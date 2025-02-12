@@ -214,6 +214,7 @@ INSTALLED_APPS = [
     'annoying',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt.token_blacklist',
     'drf_generators',
     'core',
     'users',
@@ -229,6 +230,7 @@ INSTALLED_APPS = [
     'labels_manager',
     'ml_models',
     'ml_model_providers',
+    'jwt_auth',
 ]
 
 MIDDLEWARE = [
@@ -247,12 +249,13 @@ MIDDLEWARE = [
     'core.middleware.ContextLogMiddleware',
     'core.middleware.DatabaseIsLockedRetryMiddleware',
     'core.current_request.ThreadLocalMiddleware',
+    'jwt_auth.middleware.JWTAuthenticationMiddleware',
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
+        'jwt_auth.auth.TokenAuthenticationPhaseout',
         'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': [
@@ -712,6 +715,24 @@ if get_env('STORAGE_TYPE') == 'gcs':
 CSRF_TRUSTED_ORIGINS = get_env('CSRF_TRUSTED_ORIGINS', [])
 if CSRF_TRUSTED_ORIGINS:
     CSRF_TRUSTED_ORIGINS = CSRF_TRUSTED_ORIGINS.split(',')
+
+# Custom S3 endpoints on these domains will get detailed error reporting
+S3_TRUSTED_STORAGE_DOMAINS = get_env_list(
+    'S3_TRUSTED_STORAGE_DOMAINS',
+    [
+        'amazonaws.com',
+        'scw.cloud',
+        'yandexcloud.net',
+        'digitaloceanspaces.com',
+        'orange-business.com',
+        'computecanada.ca',
+        'cloudflarestorage.com',
+        'wasabisys.com',
+        'oracle.com',
+        'amazon.com',
+        'appdomain.cloud',
+    ],
+)
 
 REAL_HOSTNAME = os.getenv('HOSTNAME')  # we have to use getenv, because we don't use LABEL_STUDIO_ prefix
 GCS_CLOUD_STORAGE_FORCE_DEFAULT_CREDENTIALS = get_bool_env('GCS_CLOUD_STORAGE_FORCE_DEFAULT_CREDENTIALS', False)
