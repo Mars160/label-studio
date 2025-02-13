@@ -1,6 +1,6 @@
 {
-  "message": "fix: LEAP-1661: Don't allow to review skipped annotations (#7055)",
-  "commit": "6b51f559d21674f2e9048d01bdf9fd5954925e77",
-  "date": "2025-02-12T14:47:32.000Z",
+  "message": "refactor: OPTIC-1678: ff clean up left overs (#7077)",
+  "commit": "1eeddc6b17a8f5e380e963faf7bc4e271710cd55",
+  "date": "2025-02-13T20:22:41.000Z",
   "branch": "develop"
 }

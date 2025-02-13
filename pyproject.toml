@@ -228,8 +228,10 @@ s3transfer = "0.7.0"
 mock = ">=5.1.0"
 moto = ">=4.2.6"
 requests-mock = "1.12.1"
+
 [tool.poetry.group.build.dependencies]
-twine = ">=4.0.2"
+twine = ">=6.1.0"
+packaging = ">=24.2"
 
 [tool.poetry.extras]
 uwsgi = ["pyuwsgi","uwsgitop"]
