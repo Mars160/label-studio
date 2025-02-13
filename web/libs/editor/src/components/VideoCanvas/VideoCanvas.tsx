@@ -424,7 +424,10 @@ export const VideoCanvas = memo(
       },
       frameSteppedTime(time?: number): number {
         if (isFF(FF_VIDEO_FRAME_SEEK_PRECISION)) {
-          return Math.round((time ?? this.currentTime) / BROWSER_TIME_PRECISION) * BROWSER_TIME_PRECISION + BROWSER_TIME_PRECISION;
+          return (
+            Math.round((time ?? this.currentTime) / BROWSER_TIME_PRECISION) * BROWSER_TIME_PRECISION +
+            BROWSER_TIME_PRECISION
+          );
         }
         return time ?? this.currentTime;
       },
