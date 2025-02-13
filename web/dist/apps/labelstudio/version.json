@@ -1,6 +1,6 @@
 {
-  "message": "fix: LEAP-1741: Prevent comment category from overflow (#7039)",
-  "commit": "6a6c3baf93ffd9f8e576fe17bc2072f1c5d06586",
-  "date": "2025-02-10T15:56:19.000Z",
+  "message": "fix: LEAP-1829: Fix \"No LabelModel in NodeView\" error in Sentry (#7067)",
+  "commit": "687f3f9272c03a49ea1d39f644c90a892ae2f46d",
+  "date": "2025-02-12T23:13:22.000Z",
   "branch": "develop"
 }
