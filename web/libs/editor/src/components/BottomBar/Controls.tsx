@@ -63,7 +63,11 @@ const ControlButton = observer(({ button, disabled, onClick }: ControlButtonProp
   if (!button.tooltip) {
     return result;
   }
-  return <ButtonTooltip title={button.tooltip}>{result}</ButtonTooltip>;
+  return (
+    <ButtonTooltip title={button.tooltip}>
+      <Elem name="tooltip-wrapper">{result}</Elem>
+    </ButtonTooltip>
+  );
 });
 
 export const Controls = controlsInjector<{ annotation: MSTAnnotation }>(
