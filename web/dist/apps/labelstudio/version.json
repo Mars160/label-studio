@@ -1,6 +1,6 @@
 {
-  "message": "fix: LEAP-1661: Don't allow to review skipped annotations (#7055)",
-  "commit": "6b51f559d21674f2e9048d01bdf9fd5954925e77",
-  "date": "2025-02-12T14:47:32.000Z",
+  "message": "feat: block sentry in frontend side (#6615)",
+  "commit": "560e33091fa392bec906ca43f082afb1657b11a7",
+  "date": "2025-02-13T23:13:39.000Z",
   "branch": "develop"
 }
