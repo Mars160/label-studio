@@ -160,7 +160,6 @@ class TaskSimpleSerializer(ModelSerializer):
 
 class BaseTaskSerializer(FlexFieldsModelSerializer):
     """Task Serializer with project scheme configs validation"""
-
     def project(self, task=None):
         """Take the project from context"""
         if 'project' in self.context:

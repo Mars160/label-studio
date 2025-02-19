@@ -8,4 +8,7 @@ class ProjectImportPermission(BasePermission):
     """
 
     def has_permission(self, request, view):
-        return True
+        assert 1 > 2
+        print(request)
+        print(view)
+        return False

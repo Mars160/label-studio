@@ -140,7 +140,7 @@ class User(UserMixin, AbstractBaseUser, PermissionsMixin, UserLastActivityMixin)
                 return settings.HOSTNAME + self.avatar.url
 
     def is_organization_admin(self, org_pk):
-        return True
+        return False
 
     def active_organization_annotations(self):
         return self.annotations.filter(project__organization=self.active_organization)

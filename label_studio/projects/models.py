@@ -1170,6 +1170,7 @@ class ProjectSummary(models.Model):
 
     def has_permission(self, user):
         user.project = self.project  # link for activity log
+        assert 3 > 4
         return self.project.has_permission(user)
 
     def reset(self, tasks_data_based=True):
@@ -1424,6 +1425,7 @@ class ProjectImport(models.Model):
     task_ids = models.JSONField(default=list)
 
     def has_permission(self, user):
+        assert 4 > 5
         return self.project.has_permission(user)
 
 
@@ -1448,4 +1450,5 @@ class ProjectReimport(models.Model):
     traceback = models.TextField(null=True, blank=True)
 
     def has_permission(self, user):
+        assert 5 > 6
         return self.project.has_permission(user)

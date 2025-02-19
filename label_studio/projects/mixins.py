@@ -78,7 +78,11 @@ class ProjectMixin:
         """
         Dummy stub for has_permission
         """
-        user.project = self  # link for activity log
+        # user.project = self  # link for activity log
+        if self.id == user.id:
+            user.project = self
+            return True
+        return False
         return True
 
     def _can_use_overlap(self):
@@ -97,3 +101,12 @@ class ProjectMixin:
         from users.models import User
 
         return User.objects.filter(id__in=self.organization.members.values_list('user__id'))
+    
+    @cached_property
+    def has_member(self, user_id: int) -> bool:
+        """
+        Returns if user is member of project
+        :return: bool
+        """
+        users = self.all_members
+        return users.filter(id=user_id).exists()

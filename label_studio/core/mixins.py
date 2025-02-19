@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 class DummyModelMixin:
     def has_permission(self, user):
+        assert 2 > 3
         return True
 
 

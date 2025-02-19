@@ -294,6 +294,7 @@ class TaskAPI(generics.RetrieveUpdateDestroyAPIView):
     def get(self, request, pk):
         context = self.get_retrieve_serializer_context(request)
         context['project'] = project = self.task.project
+        context['user'] = request.user
 
         # get prediction
         if (
@@ -302,10 +303,18 @@ class TaskAPI(generics.RetrieveUpdateDestroyAPIView):
             evaluate_predictions([self.task])
             self.task.refresh_from_db()
 
-        serializer = self.get_serializer_class()(
+        serializer = self.get_serializer_class()
+        serializer = serializer(
             self.task, many=False, context=context, expand=['annotations.completed_by']
         )
+        annotations = serializer.data["annotations"]
+        filtered_annotations = []
+        for annotation in annotations:
+            completed_by = annotation.get("completed_by").get("id")
+            if completed_by == request.user.id:
+                filtered_annotations.append(annotation)
         data = serializer.data
+        data["annotations"] = filtered_annotations
         return Response(data)
 
     def get_queryset(self):

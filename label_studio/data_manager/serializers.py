@@ -372,6 +372,7 @@ class DataManagerTaskSerializer(TaskSerializer):
             ret.pop('annotations', None)
         if not self.context.get('predictions'):
             ret.pop('predictions', None)
+
         return ret
 
     def _pretty_results(self, task, field, unique=False):

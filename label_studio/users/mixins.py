@@ -4,10 +4,10 @@ from organizations.models import OrganizationMember
 class UserMixin:
     @property
     def is_annotator(self):
-        return False
+        return True
 
     def is_project_annotator(self, project):
-        return False
+        return True
 
     def has_permission(self, user):
         return OrganizationMember.objects.filter(
