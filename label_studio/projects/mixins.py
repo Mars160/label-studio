@@ -95,15 +95,5 @@ class ProjectMixin:
         Returns all users of project
         :return: QuerySet[User]
         """
-        from users.models import User
-
-        return User.objects.filter(id__in=self.organization.members.values_list('user__id'))
-    
-    @cached_property
-    def has_member(self, user_id: int) -> bool:
-        """
-        Returns if user is member of project
-        :return: bool
-        """
-        users = self.all_members
-        return users.filter(id=user_id).exists()
+        from projects.models import ProjectMember
+        return ProjectMember.objects.filter(project=self).values_list('user', flat=True)
