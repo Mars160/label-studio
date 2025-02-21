@@ -38,6 +38,7 @@ from projects.serializers import (
     ProjectSummarySerializer,
     ProjectMemberSerializer,
 )
+from projects.permissions import ProjectMemberPermission
 from users.models import User
 from rest_framework import filters, generics, status
 from rest_framework.exceptions import NotFound
@@ -821,7 +822,7 @@ class ProjectTaskListAPI(GetParentObjectMixin, generics.ListCreateAPIView, gener
         x_fern_sdk_method_name='add_member',
         x_fern_audiences=['public'],
         operation_summary='Add project member',
-        operation_description='Add a member to a specific project. Need to have the `projects_change` permission to add a member to a project.',
+        operation_description='Add a member to a specific project. Need to be the project\'s admin to add a member to a project.',
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
@@ -829,6 +830,12 @@ class ProjectTaskListAPI(GetParentObjectMixin, generics.ListCreateAPIView, gener
                     title='user_id',
                     description='A unique integer value identifying this user.',
                     type=openapi.TYPE_INTEGER,
+                ),
+                'role': openapi.Schema(
+                    title='role',
+                    description='User role in the project',
+                    type=openapi.TYPE_STRING,
+                    enum=['annotator', 'approver', 'admin'],
                 ),
             },
         ),
@@ -843,7 +850,7 @@ class ProjectTaskListAPI(GetParentObjectMixin, generics.ListCreateAPIView, gener
         x_fern_sdk_method_name='remove_member',
         x_fern_audiences=['public'],
         operation_summary='Remove project member',
-        operation_description='Remove a member from a specific project. Need to have the `projects_change` permission to remove a member from a project.',
+        operation_description='Remove a member from a specific project. Need to be the project\'s admin to remove a member from a project.',
         manual_parameters=[
             openapi.Parameter(
                 name='id',
@@ -851,27 +858,31 @@ class ProjectTaskListAPI(GetParentObjectMixin, generics.ListCreateAPIView, gener
                 in_=openapi.IN_PATH,
                 description='A unique integer value identifying this project.',
             ),
-            openapi.Parameter(
-                name='user_id',
-                type=openapi.TYPE_INTEGER,
-                in_=openapi.IN_PATH,
-                description='A unique integer value identifying this user.',
-            ),
         ],
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'user_id': openapi.Schema(
+                    title='user_id',
+                    description='A unique integer value identifying this user.',
+                    type=openapi.TYPE_INTEGER,
+                ),
+            },
+        ),
     ),
 )
+
 class ProjectMembersAPI(generics.ListCreateAPIView, generics.DestroyAPIView):
     parser_classes = (JSONParser, FormParser)
-    permission_required = ViewClassPermission(
-        GET=all_permissions.projects_view,
-        POST=all_permissions.projects_change,
-        DELETE=all_permissions.projects_change,
-    )
+    permission_classes = (ProjectMemberPermission,)
     serializer_class = ProjectMemberSerializer
 
     def get_queryset(self):
         project = generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=self.kwargs['pk'])
+        users = project.members.all()
+        print(users.__dict__)
         return project.members.all()
+        #return []
 
     ## TODO: 验证是否有权限
     def post(self, request, *args, **kwargs):
@@ -880,15 +891,22 @@ class ProjectMembersAPI(generics.ListCreateAPIView, generics.DestroyAPIView):
         project = generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=project_id)
         user_id = self.request.data.get('user_id')
         user = generics.get_object_or_404(User.objects.all(), pk=user_id)
+        # check if user is already a member
+        project_member = ProjectMember.objects.filter(project=project, user=user)
+        if project_member.exists():
+            return Response({'detail': 'User is already a member of this project'}, status=status.HTTP_400_BAD_REQUEST)
         project_member = ProjectMember.objects.create(project=project, user=user)
         return Response(ProjectMemberSerializer(project_member).data, status=status.HTTP_201_CREATED)
 
     def delete(self, request, *args, **kwargs):
         project = generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=self.kwargs['pk'])
-        user_id = self.kwargs.get('user_id')
+        user_id = self.request.data.get('user_id')
         user = generics.get_object_or_404(project.organization.users, pk=user_id)
-        project.members.remove(user)
-        return Response(status=204)
+        project_member = ProjectMember.objects.filter(project=project, user=user)
+        if project_member.exists():
+            project_member.delete()
+            return Response(status=204)
+        return Response({'detail': 'User is not a member of this project'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 

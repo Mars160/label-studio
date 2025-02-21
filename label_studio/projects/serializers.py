@@ -366,9 +366,14 @@ class GetFieldsSerializer(serializers.Serializer):
 
 class ProjectMemberSerializer(serializers.ModelSerializer):
     user = UserSimpleSerializer(read_only=True)
-    user_id = serializers.IntegerField(write_only=True, help_text="用户ID，用于添加成员")
+    # user_id = serializers.IntegerField(write_only=True, help_text="用户ID，用于添加成员")
+    role = serializers.ChoiceField(choices=ProjectMember.ROLE_CHOICES, help_text="角色")
+    enabled = serializers.BooleanField(help_text="是否启用")
 
     class Meta:
         model = ProjectMember
-        fields = ['id', 'user', 'user_id', 'enabled', 'created_at', 'updated_at']
-        read_only_fields = ['id', 'created_at', 'updated_at']
+        fields = '__all__'
+        extra_kwargs = {
+            'project': {'required': False},
+            'user': {'required': False},
+        }
