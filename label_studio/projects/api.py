@@ -26,7 +26,7 @@ from ml.serializers import MLBackendSerializer
 from projects.functions.next_task import get_next_task
 from projects.functions.stream_history import get_label_stream_history
 from projects.functions.utils import recalculate_created_annotations_and_labels_from_scratch
-from projects.models import Project, ProjectImport, ProjectManager, ProjectReimport, ProjectSummary
+from projects.models import Project, ProjectImport, ProjectManager, ProjectReimport, ProjectSummary, ProjectMember
 from projects.serializers import (
     GetFieldsSerializer,
     ProjectCountsSerializer,
@@ -36,7 +36,9 @@ from projects.serializers import (
     ProjectReimportSerializer,
     ProjectSerializer,
     ProjectSummarySerializer,
+    ProjectMemberSerializer,
 )
+from users.models import User
 from rest_framework import filters, generics, status
 from rest_framework.exceptions import NotFound
 from rest_framework.exceptions import ValidationError as RestValidationError
@@ -787,6 +789,108 @@ class ProjectTaskListAPI(GetParentObjectMixin, generics.ListCreateAPIView, gener
             self.request.user.active_organization, project, WebhookAction.TASKS_CREATED, [instance]
         )
         return instance
+    
+
+## get project members
+@method_decorator(
+    name='get',
+    decorator=swagger_auto_schema(
+        tags=['Projects'],
+        x_fern_sdk_group_name='projects',
+        x_fern_sdk_method_name='members',
+        x_fern_audiences=['public'],
+        operation_summary='Get project members',
+        operation_description='Retrieve a list of members for a specific project. No permissions are required to view this information.',
+        manual_parameters=[
+            openapi.Parameter(
+                name='id',
+                type=openapi.TYPE_INTEGER,
+                in_=openapi.IN_PATH,
+                description='A unique integer value identifying this project.',
+            ),
+        ]
+        + paginator_help('members', 'Projects')['manual_parameters'],
+    ),
+)
+## add project members
+@method_decorator(
+    name='post',
+    decorator=swagger_auto_schema(
+        tags=['Projects'],
+        x_fern_sdk_group_name='projects',
+        x_fern_sdk_method_name='add_member',
+        x_fern_audiences=['public'],
+        operation_summary='Add project member',
+        operation_description='Add a member to a specific project. Need to have the `projects_change` permission to add a member to a project.',
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'user_id': openapi.Schema(
+                    title='user_id',
+                    description='A unique integer value identifying this user.',
+                    type=openapi.TYPE_INTEGER,
+                ),
+            },
+        ),
+    ),
+)
+## remove project members
+@method_decorator(
+    name='delete',
+    decorator=swagger_auto_schema(
+        tags=['Projects'],
+        x_fern_sdk_group_name='projects',
+        x_fern_sdk_method_name='remove_member',
+        x_fern_audiences=['public'],
+        operation_summary='Remove project member',
+        operation_description='Remove a member from a specific project. Need to have the `projects_change` permission to remove a member from a project.',
+        manual_parameters=[
+            openapi.Parameter(
+                name='id',
+                type=openapi.TYPE_INTEGER,
+                in_=openapi.IN_PATH,
+                description='A unique integer value identifying this project.',
+            ),
+            openapi.Parameter(
+                name='user_id',
+                type=openapi.TYPE_INTEGER,
+                in_=openapi.IN_PATH,
+                description='A unique integer value identifying this user.',
+            ),
+        ],
+    ),
+)
+class ProjectMembersAPI(generics.ListCreateAPIView, generics.DestroyAPIView):
+    parser_classes = (JSONParser, FormParser)
+    permission_required = ViewClassPermission(
+        GET=all_permissions.projects_view,
+        POST=all_permissions.projects_change,
+        DELETE=all_permissions.projects_change,
+    )
+    serializer_class = ProjectMemberSerializer
+
+    def get_queryset(self):
+        project = generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=self.kwargs['pk'])
+        return project.members.all()
+
+    ## TODO: 验证是否有权限
+    def post(self, request, *args, **kwargs):
+        project_id = self.kwargs.get('pk')
+        # select project by project_id
+        project = generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=project_id)
+        user_id = self.request.data.get('user_id')
+        user = generics.get_object_or_404(User.objects.all(), pk=user_id)
+        project_member = ProjectMember.objects.create(project=project, user=user)
+        return Response(ProjectMemberSerializer(project_member).data, status=status.HTTP_201_CREATED)
+
+    def delete(self, request, *args, **kwargs):
+        project = generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=self.kwargs['pk'])
+        user_id = self.kwargs.get('user_id')
+        user = generics.get_object_or_404(project.organization.users, pk=user_id)
+        project.members.remove(user)
+        return Response(status=204)
+
+
 
 
 def read_templates_and_groups():

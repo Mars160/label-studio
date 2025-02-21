@@ -78,12 +78,9 @@ class ProjectMixin:
         """
         Dummy stub for has_permission
         """
-        # user.project = self  # link for activity log
-        if self.id == user.id:
-            user.project = self
-            return True
-        return False
-        return True
+        # 从Projects_ProjectMember表中查询是否有权限
+        from projects.models import ProjectMember, Project
+        return ProjectMember.objects.filter(user_id=user.id, project=self.id).exists() or Project.objects.filter(id=self.id, created_by_id=user.id).exists()
 
     def _can_use_overlap(self):
         """
