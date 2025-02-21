@@ -12,6 +12,23 @@ class ProjectImportPermission(BasePermission):
         return True
     
 
+class ProjectAdminPermission(BasePermission):
+    """
+    Checks if the user has access to the project Manage API
+    """
+
+    def has_permission(self, request, view):
+        # 查看request方法
+        if request.method == 'GET':
+            return True
+        project_id = view.kwargs.get('pk')
+        user_id = request.user.id
+
+        project_member = ProjectMember.objects.filter(project_id=project_id, user_id=user_id).first()
+        if project_member and project_member.role in ['admin']:
+            return True
+        return False
+
 
 class ProjectMemberPermission(BasePermission):
     """

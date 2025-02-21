@@ -38,7 +38,7 @@ from projects.serializers import (
     ProjectSummarySerializer,
     ProjectMemberSerializer,
 )
-from projects.permissions import ProjectMemberPermission
+from projects.permissions import ProjectMemberPermission, ProjectAdminPermission
 from users.models import User
 from rest_framework import filters, generics, status
 from rest_framework.exceptions import NotFound
@@ -47,6 +47,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.utils.serializer_helpers import ReturnDict
 from rest_framework.settings import api_settings
 from rest_framework.views import exception_handler
 from tasks.models import Task
@@ -282,7 +283,14 @@ class ProjectListAPI(generics.ListCreateAPIView):
 
     @api_webhook(WebhookAction.PROJECT_CREATED)
     def post(self, request, *args, **kwargs):
-        return super(ProjectListAPI, self).post(request, *args, **kwargs)
+        result = super(ProjectListAPI, self).post(request, *args, **kwargs)
+        data :ReturnDict = result.data
+        project_id = data.get('id')
+        project_member = ProjectMember.objects.create(
+            project_id=project_id, user=request.user, role='admin'
+        )
+        project_member.save()
+        return result
 
 
 @method_decorator(
@@ -417,6 +425,7 @@ class ProjectAPI(generics.RetrieveUpdateDestroyAPIView):
         PUT=all_permissions.projects_change,
         POST=all_permissions.projects_create,
     )
+    permission_classes = (ProjectAdminPermission,)
     serializer_class = ProjectSerializer
 
     redirect_route = 'projects:project-detail'
