@@ -19,7 +19,7 @@ from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import no_body, swagger_auto_schema
 from projects.functions.stream_history import fill_history_annotation
-from projects.models import Project
+from projects.models import Project, ProjectMember
 from rest_framework import generics, viewsets
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
@@ -296,6 +296,13 @@ class TaskAPI(generics.RetrieveUpdateDestroyAPIView):
         context['project'] = project = self.task.project
         context['user'] = request.user
 
+        show_others = True
+
+        project_member = ProjectMember.objects.filter(project=project, user=request.user).first()
+        if project_member.role == 'annotator':
+            show_others = False
+            
+
         # get prediction
         if (
             project.evaluate_predictions_automatically or project.show_collab_predictions
@@ -311,7 +318,7 @@ class TaskAPI(generics.RetrieveUpdateDestroyAPIView):
         filtered_annotations = []
         for annotation in annotations:
             completed_by = annotation.get("completed_by").get("id")
-            if completed_by == request.user.id:
+            if completed_by == request.user.id or show_others:
                 filtered_annotations.append(annotation)
         data = serializer.data
         data["annotations"] = filtered_annotations
