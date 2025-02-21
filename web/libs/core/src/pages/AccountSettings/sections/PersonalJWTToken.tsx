@@ -13,7 +13,7 @@ import styles from "./PersonalJWTToken.module.scss";
  * each one of these eventually has to be migrated to core/ui
  */
 import { API } from "/apps/labelstudio/src/providers/ApiProvider";
-import { modal } from "/apps/labelstudio/src/components/Modal/Modal";
+import { modal, confirm } from "/apps/labelstudio/src/components/Modal/Modal";
 import { Button } from "/apps/labelstudio/src/components/Button/Button";
 import { Input, Label } from "/apps/labelstudio/src/components/Form/Elements";
 import { Tooltip } from "/apps/labelstudio/src/components/Tooltip/Tooltip";
@@ -99,6 +99,7 @@ export function PersonalJWTToken() {
   const [dialogOpened, setDialogOpened] = useState(false);
   const tokens = useAtomValue(tokensListAtom);
   const revokeToken = useAtomValue(revokeTokenAtom);
+  const createToken = useAtomValue(refreshTokenAtom);
 
   const tokensListClassName = clsx({
     [styles.tokensList]: tokens.data && tokens.data.length,
@@ -106,14 +107,24 @@ export function PersonalJWTToken() {
 
   const revoke = useCallback(
     async (token: string) => {
-      await revokeToken.mutateAsync({ token });
+      confirm({
+        title: "Revoke Token",
+        body: `Are you sure you want to delete this access token? Any application using this token will need a new token to be able to access ${
+          window?.APP_SETTINGS?.app_name || "Label Studio"
+        }`,
+        okText: "Revoke",
+        buttonLook: "danger",
+        onOk: async () => {
+          await revokeToken.mutateAsync({ token });
+        },
+      });
     },
     [revokeToken],
   );
 
   const disallowAddingTokens = useMemo(() => {
-    return tokens.isLoading || (tokens.data?.length ?? 0) > 0;
-  }, [tokens.isLoading, tokens.data]);
+    return createToken.isPending || tokens.isLoading || (tokens.data?.length ?? 0) > 0;
+  }, [createToken.isPending, tokens.isLoading, tokens.data]);
 
   function openDialog() {
     if (dialogOpened) return;
@@ -123,6 +134,7 @@ export function PersonalJWTToken() {
       title: "New Auth Token",
       style: { width: 680 },
       body: CreateTokenForm,
+      closeOnClickOutside: false,
       onHidden: () => setDialogOpened(false),
     });
   }
@@ -161,7 +173,7 @@ export function PersonalJWTToken() {
       </div>
       <Tooltip title="You can only have one active token" disabled={!disallowAddingTokens}>
         <div style={{ width: "max-content" }}>
-          <Button disabled={disallowAddingTokens} onClick={openDialog}>
+          <Button disabled={disallowAddingTokens || dialogOpened} onClick={openDialog}>
             Create New Token
           </Button>
         </div>

@@ -1,6 +1,6 @@
 {
-  "message": "feat: block sentry in frontend side (#6615)",
-  "commit": "560e33091fa392bec906ca43f082afb1657b11a7",
-  "date": "2025-02-13T23:13:39.000Z",
+  "message": "fix: OPTIC-1709: Ensure checks for feature flag enablement are done correctly (#7121)",
+  "commit": "459ffbf8e7a133c938453ae21b689dd28280b5ea",
+  "date": "2025-02-20T22:35:54.000Z",
   "branch": "develop"
 }
