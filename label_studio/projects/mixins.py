@@ -72,11 +72,8 @@ class ProjectMixin:
         )
 
     def has_permission(self, user):
-        """
-        Dummy stub for has_permission
-        """
         user.project = self  # link for activity log
-        return True
+        return self.has_collaborator_enabled(user)
 
     def _can_use_overlap(self):
         """
@@ -93,4 +90,4 @@ class ProjectMixin:
         """
         from users.models import User
 
-        return User.objects.filter(id__in=self.organization.members.values_list('user__id'))
+        return User.objects.filter(project_memberships__project=self, project_memberships__enabled=True).distinct()
