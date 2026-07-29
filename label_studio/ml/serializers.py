@@ -33,6 +33,12 @@ class MLBackendSerializer(serializers.ModelSerializer):
                 return self.instance.basic_auth_pass
         return value
 
+    def validate_project(self, project):
+        request = self.context.get('request')
+        if request is None or not project.is_admin(request.user):
+            raise serializers.ValidationError('Only project administrators can configure machine learning backends.')
+        return project
+
     def validate_url(self, value):
         validate_upload_url(value, block_local_urls=settings.ML_BLOCK_LOCAL_IP)
 

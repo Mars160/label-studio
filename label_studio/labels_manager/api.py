@@ -1,7 +1,7 @@
 import logging
 
 from core.permissions import ViewClassPermission, all_permissions
-from django.db.models import CharField, Count, Q
+from django.db.models import CharField, Count, Exists, OuterRef, Prefetch, Q
 from django.db.models.functions import Cast
 from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
@@ -12,6 +12,7 @@ from labels_manager.serializers import (
     LabelLinkSerializer,
     LabelSerializer,
 )
+from projects.models import Project
 from rest_framework import views, viewsets
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -96,9 +97,9 @@ class LabelAPI(viewsets.ModelViewSet):
     serializer_class = LabelSerializer
     permission_required = ViewClassPermission(
         GET=all_permissions.labels_view,
-        POST=all_permissions.labels_create,
-        PATCH=all_permissions.labels_change,
-        DELETE=all_permissions.labels_delete,
+        POST=all_permissions.labels_view,
+        PATCH=all_permissions.labels_view,
+        DELETE=all_permissions.labels_view,
     )
 
     def get_serializer(self, *args, **kwargs):
@@ -111,7 +112,21 @@ class LabelAPI(viewsets.ModelViewSet):
         serializer.save(created_by=self.request.user, organization=self.request.user.active_organization)
 
     def get_queryset(self):
-        return Label.objects.filter(organization=self.request.user.active_organization).prefetch_related('links')
+        authorized_project_ids = Project.objects.admin_for_user(self.request.user).values('id')
+        authorized_links = LabelLink.objects.filter(project_id__in=authorized_project_ids)
+        unauthorized_links = LabelLink.objects.filter(label_id=OuterRef('pk')).exclude(
+            project_id__in=authorized_project_ids
+        )
+        return (
+            Label.objects.filter(
+                organization=self.request.user.active_organization,
+                links__in=authorized_links,
+            )
+            .annotate(has_unauthorized_links=Exists(unauthorized_links))
+            .filter(has_unauthorized_links=False)
+            .prefetch_related(Prefetch('links', queryset=authorized_links))
+            .distinct()
+        )
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -203,19 +218,26 @@ class LabelLinkAPI(viewsets.ModelViewSet):
     serializer_class = LabelLinkSerializer
     permission_required = ViewClassPermission(
         GET=all_permissions.labels_view,
-        POST=all_permissions.labels_create,
-        PATCH=all_permissions.labels_change,
-        DELETE=all_permissions.labels_delete,
+        POST=all_permissions.labels_view,
+        PATCH=all_permissions.labels_view,
+        DELETE=all_permissions.labels_view,
     )
 
     def get_queryset(self):
-        return LabelLink.objects.filter(label__organization=self.request.user.active_organization).annotate(
-            annotations_count=Count(
-                'project__tasks__annotations',
-                filter=Q(
-                    project__tasks__annotations__result__icontains=Cast('label__value', output_field=CharField())
-                ),
+        return (
+            LabelLink.objects.filter(
+                label__organization=self.request.user.active_organization,
+                project_id__in=Project.objects.admin_for_user(self.request.user).values('id'),
             )
+            .annotate(
+                annotations_count=Count(
+                    'project__tasks__annotations',
+                    filter=Q(
+                        project__tasks__annotations__result__icontains=Cast('label__value', output_field=CharField())
+                    ),
+                )
+            )
+            .distinct()
         )
 
     @api_webhook('LABEL_LINK_UPDATED')
@@ -243,10 +265,10 @@ class LabelLinkAPI(viewsets.ModelViewSet):
     ),
 )
 class LabelBulkUpdateAPI(views.APIView):
-    permission_required = all_permissions.labels_change
+    permission_required = all_permissions.labels_view
 
     def post(self, request):
-        serializer = LabelBulkUpdateSerializer(data=request.data)
+        serializer = LabelBulkUpdateSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         project = serializer.validated_data['project']
         if project is not None:

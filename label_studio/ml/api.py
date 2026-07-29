@@ -13,11 +13,17 @@ from ml.models import MLBackend
 from ml.serializers import MLBackendSerializer, MLInteractiveAnnotatingRequest
 from projects.models import Project, Task
 from rest_framework import generics, status
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 logger = logging.getLogger(__name__)
+
+
+def admin_ml_backends(user):
+    return MLBackend.objects.filter(project_id__in=Project.objects.admin_for_user(user).values('id'))
+
 
 _ml_backend_schema = {
     'type': 'object',
@@ -115,7 +121,7 @@ class MLBackendListAPI(generics.ListCreateAPIView):
     parser_classes = (JSONParser, FormParser, MultiPartParser)
     permission_required = ViewClassPermission(
         GET=all_permissions.projects_view,
-        POST=all_permissions.projects_change,
+        POST=all_permissions.projects_view,
     )
     serializer_class = MLBackendSerializer
     filter_backends = [DjangoFilterBackend]
@@ -123,13 +129,20 @@ class MLBackendListAPI(generics.ListCreateAPIView):
 
     def get_queryset(self):
         project_pk = self.request.query_params.get('project')
-        project = generics.get_object_or_404(Project, pk=project_pk)
+        project = generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=project_pk)
 
-        self.check_object_permissions(self.request, project)
+        if not project.is_admin(self.request.user):
+            raise PermissionDenied('Only project administrators can access machine learning settings.')
 
         ml_backends = project.update_ml_backends_state()
 
         return ml_backends
+
+    def create(self, request, *args, **kwargs):
+        project = generics.get_object_or_404(Project.objects.for_user(request.user), pk=request.data.get('project'))
+        if not project.is_admin(request.user):
+            raise PermissionDenied('Only project administrators can configure machine learning backends.')
+        return super().create(request, *args, **kwargs)
 
     def perform_create(self, serializer):
         ml_backend = serializer.save()
@@ -208,8 +221,10 @@ class MLBackendListAPI(generics.ListCreateAPIView):
 class MLBackendDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     parser_classes = (JSONParser, FormParser, MultiPartParser)
     serializer_class = MLBackendSerializer
-    permission_required = all_permissions.projects_change
-    queryset = MLBackend.objects.all()
+    permission_required = all_permissions.projects_view
+
+    def get_queryset(self):
+        return admin_ml_backends(self.request.user)
 
     def get_object(self):
         ml_backend = super(MLBackendDetailAPI, self).get_object()
@@ -270,10 +285,13 @@ class MLBackendDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     ),
 )
 class MLBackendTrainAPI(APIView):
-    permission_required = all_permissions.projects_change
+    permission_required = all_permissions.projects_view
 
     def post(self, request, *args, **kwargs):
-        ml_backend = generics.get_object_or_404(MLBackend, pk=self.kwargs['pk'])
+        ml_backend = generics.get_object_or_404(
+            admin_ml_backends(request.user),
+            pk=self.kwargs['pk'],
+        )
         self.check_object_permissions(self.request, ml_backend)
 
         ml_backend.train()
@@ -316,10 +334,13 @@ class MLBackendTrainAPI(APIView):
 )
 class MLBackendPredictTestAPI(APIView):
     serializer_class = MLBackendSerializer
-    permission_required = all_permissions.projects_change
+    permission_required = all_permissions.projects_view
 
     def post(self, request, *args, **kwargs):
-        ml_backend = generics.get_object_or_404(MLBackend, pk=self.kwargs['pk'])
+        ml_backend = generics.get_object_or_404(
+            admin_ml_backends(request.user),
+            pk=self.kwargs['pk'],
+        )
         self.check_object_permissions(self.request, ml_backend)
 
         random = request.query_params.get('random', False)
@@ -457,10 +478,13 @@ class MLBackendInteractiveAnnotating(APIView):
 )
 class MLBackendVersionsAPI(generics.RetrieveAPIView):
     # TODO(jo): implement this view with a serializer and replace the handwritten schema above with it
-    permission_required = all_permissions.projects_change
+    permission_required = all_permissions.projects_view
 
     def get(self, request, *args, **kwargs):
-        ml_backend = generics.get_object_or_404(MLBackend, pk=self.kwargs['pk'])
+        ml_backend = generics.get_object_or_404(
+            admin_ml_backends(request.user),
+            pk=self.kwargs['pk'],
+        )
         self.check_object_permissions(self.request, ml_backend)
         versions_response = ml_backend.get_versions()
         if versions_response.status_code == 200:

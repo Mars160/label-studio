@@ -40,11 +40,11 @@ def validate_storage_instance(request, serializer_class):
 
     if storage_id:
         instance = get_object_or_404(serializer_class.Meta.model.objects.all(), pk=storage_id)
-        if not instance.has_permission(request.user):
+        if not instance.has_permission(request.user) or not instance.project.is_admin(request.user):
             raise PermissionDenied()
 
     # combine instance fields with request.data
-    serializer = serializer_class(data=request.data)
+    serializer = serializer_class(data=request.data, context={'request': request})
     serializer.is_valid(raise_exception=True)
 
     # if storage exists, we have to use instance from DB,

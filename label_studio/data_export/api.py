@@ -23,7 +23,7 @@ from drf_spectacular.utils import OpenApiParameter, OpenApiResponse, extend_sche
 from projects.models import Project
 from ranged_fileresponse import RangedFileResponse
 from rest_framework import generics, status
-from rest_framework.exceptions import NotFound, ValidationError
+from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from tasks.models import Task
@@ -83,7 +83,7 @@ class ExportFormatsListAPI(generics.RetrieveAPIView):
     permission_required = all_permissions.projects_view
 
     def get_queryset(self):
-        return Project.objects.filter(organization=self.request.user.active_organization)
+        return Project.objects.admin_for_user(self.request.user)
 
     def get(self, request, *args, **kwargs):
         project = self.get_object()
@@ -175,10 +175,10 @@ class ExportFormatsListAPI(generics.RetrieveAPIView):
     ),
 )
 class ExportAPI(generics.RetrieveAPIView):
-    permission_required = all_permissions.projects_change
+    permission_required = all_permissions.projects_view
 
     def get_queryset(self):
-        return Project.objects.filter(organization=self.request.user.active_organization)
+        return Project.objects.admin_for_user(self.request.user)
 
     def get_task_queryset(self, queryset):
         # Import here to avoid circular dependencies
@@ -267,10 +267,10 @@ class ExportAPI(generics.RetrieveAPIView):
 # ) just in case we put it back in swagger API docs
 @extend_schema(exclude=True)
 class ProjectExportFiles(generics.RetrieveAPIView):
-    permission_required = all_permissions.projects_change
+    permission_required = all_permissions.projects_view
 
     def get_queryset(self):
-        return Project.objects.filter(organization=self.request.user.active_organization)
+        return Project.objects.admin_for_user(self.request.user)
 
     def get(self, request, *args, **kwargs):
         # project permission check
@@ -292,7 +292,7 @@ class ProjectExportFilesAuthCheck(APIView):
     """Check auth for nginx auth_request (/api/auth/export/)"""
 
     http_method_names = ['get']
-    permission_required = all_permissions.projects_change
+    permission_required = all_permissions.projects_view
 
     def get(self, request, *args, **kwargs):
         """Get export files list"""
@@ -304,7 +304,9 @@ class ProjectExportFilesAuthCheck(APIView):
         except ValueError:
             return Response({'detail': 'Incorrect filename in export'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
-        generics.get_object_or_404(Project.objects.filter(organization=self.request.user.active_organization), pk=pk)
+        project = generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=pk)
+        if not project.is_admin(self.request.user):
+            raise PermissionDenied('Only project administrators can access exports.')
         return Response({'detail': 'auth ok'}, status=status.HTTP_200_OK)
 
 
@@ -354,7 +356,7 @@ class ExportListAPI(generics.ListCreateAPIView):
     queryset = Export.objects.all().order_by('-created_at')
     project_model = Project
     serializer_class = ExportSerializer
-    permission_required = all_permissions.projects_change
+    permission_required = all_permissions.projects_view
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -374,6 +376,8 @@ class ExportListAPI(generics.ListCreateAPIView):
             self.project_model.objects.for_user(self.request.user),
             pk=project_pk,
         )
+        if not project.is_admin(self.request.user):
+            raise PermissionDenied('Only project administrators can access exports.')
         return project
 
     def perform_create(self, serializer):
@@ -460,7 +464,7 @@ class ExportDetailAPI(generics.RetrieveDestroyAPIView):
     project_model = Project
     serializer_class = ExportSerializer
     lookup_url_kwarg = 'export_pk'
-    permission_required = all_permissions.projects_change
+    permission_required = all_permissions.projects_view
 
     def delete(self, *args, **kwargs):
         if flag_set('ff_back_dev_4664_remove_storage_file_on_export_delete_29032023_short'):
@@ -488,6 +492,8 @@ class ExportDetailAPI(generics.RetrieveDestroyAPIView):
             self.project_model.objects.for_user(self.request.user),
             pk=project_pk,
         )
+        if not project.is_admin(self.request.user):
+            raise PermissionDenied('Only project administrators can access exports.')
         return project
 
     def get_queryset(self):
@@ -549,7 +555,7 @@ class ExportDownloadAPI(generics.RetrieveAPIView):
     project_model = Project
     serializer_class = None
     lookup_url_kwarg = 'export_pk'
-    permission_required = all_permissions.projects_change
+    permission_required = all_permissions.projects_view
 
     def _get_project(self):
         project_pk = self.kwargs.get('pk')
@@ -557,6 +563,8 @@ class ExportDownloadAPI(generics.RetrieveAPIView):
             self.project_model.objects.for_user(self.request.user),
             pk=project_pk,
         )
+        if not project.is_admin(self.request.user):
+            raise PermissionDenied('Only project administrators can access exports.')
         return project
 
     def get_queryset(self):
@@ -701,9 +709,11 @@ def set_convert_background_failure(job, connection, type, value, traceback_obj):
     ),
 )
 class ExportConvertAPI(generics.CreateAPIView):
-    queryset = Export.objects.all()
     lookup_url_kwarg = 'export_pk'
-    permission_required = all_permissions.projects_change
+    permission_required = all_permissions.projects_view
+
+    def get_queryset(self):
+        return Export.objects.filter(project_id__in=Project.objects.admin_for_user(self.request.user).values('id'))
 
     def post(self, request, *args, **kwargs):
         snapshot = self.get_object()

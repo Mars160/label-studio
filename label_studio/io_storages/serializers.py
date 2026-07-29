@@ -16,6 +16,12 @@ class ImportStorageSerializer(serializers.ModelSerializer):
     type = serializers.ReadOnlyField(default=os.path.basename(os.path.dirname(__file__)))
     synchronizable = serializers.BooleanField(required=False, default=True)
 
+    def validate_project(self, project):
+        request = self.context.get('request')
+        if request is None or not project.is_admin(request.user):
+            raise serializers.ValidationError('Only project administrators can configure storage.')
+        return project
+
     def validate(self, data):
         data = super(ImportStorageSerializer, self).validate(data)
         if settings.IMPORT_STORAGE_SERIALIZER_VALIDATE:
@@ -31,6 +37,12 @@ class ImportStorageSerializer(serializers.ModelSerializer):
 class ExportStorageSerializer(serializers.ModelSerializer):
     type = serializers.ReadOnlyField(default=os.path.basename(os.path.dirname(__file__)))
     synchronizable = serializers.BooleanField(required=False, default=True)
+
+    def validate_project(self, project):
+        request = self.context.get('request')
+        if request is None or not project.is_admin(request.user):
+            raise serializers.ValidationError('Only project administrators can configure storage.')
+        return project
 
     class Meta:
         model = ExportStorage

@@ -25,7 +25,7 @@ from label_studio_sdk.label_interface import LabelInterface
 from projects.models import Project, ProjectImport, ProjectReimport
 from ranged_fileresponse import RangedFileResponse
 from rest_framework import generics, status
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -52,6 +52,14 @@ from .serializers import FileUploadSerializer, ImportApiSerializer, PredictionSe
 from .uploader import create_file_uploads, load_tasks
 
 logger = logging.getLogger(__name__)
+
+
+def get_admin_project_or_404(request, pk):
+    project = generics.get_object_or_404(Project.objects.for_user(request.user), pk=pk)
+    if not project.is_admin(request.user):
+        raise PermissionDenied('Only project administrators can import or reimport project data.')
+    return project
+
 
 ProjectImportPermission = load_func(settings.PROJECT_IMPORT_PERMISSION)
 
@@ -251,7 +259,7 @@ task_create_response_scheme = {
 )
 # Import
 class ImportAPI(generics.CreateAPIView):
-    permission_required = all_permissions.projects_change
+    permission_required = all_permissions.projects_view
     permission_classes = api_settings.DEFAULT_PERMISSION_CLASSES + [ProjectImportPermission]
     parser_classes = (JSONParser, MultiPartParser, FormParser)
     serializer_class = ImportApiSerializer
@@ -260,7 +268,7 @@ class ImportAPI(generics.CreateAPIView):
     def get_serializer_context(self):
         project_id = self.kwargs.get('pk')
         if project_id:
-            project = generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=project_id)
+            project = get_admin_project_or_404(self.request, project_id)
         else:
             project = None
         return {'project': project, 'user': self.request.user}
@@ -272,7 +280,7 @@ class ImportAPI(generics.CreateAPIView):
         serializer = self.get_serializer(data=tasks, many=True)
         serializer.is_valid(raise_exception=True)
         task_instances = serializer.save(project_id=self.kwargs['pk'])
-        project = generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=self.kwargs['pk'])
+        project = get_admin_project_or_404(self.request, self.kwargs['pk'])
         emit_webhooks_for_instance(
             self.request.user.active_organization, project, WebhookAction.TASKS_CREATED, task_instances
         )
@@ -425,7 +433,7 @@ class ImportAPI(generics.CreateAPIView):
         preannotated_from_fields = list_of_strings_from_request(request.query_params, 'preannotated_from_fields', None)
 
         # check project permissions
-        project = generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=self.kwargs['pk'])
+        project = get_admin_project_or_404(self.request, self.kwargs['pk'])
 
         if settings.VERSION_EDITION != 'Community':
             return self.async_import(request, project, preannotated_from_fields, commit_to_project, return_task_ids)
@@ -487,14 +495,14 @@ class ImportPredictionsAPI(generics.CreateAPIView):
     When flag is disabled: Uses legacy implementation for safe fallback
     """
 
-    permission_required = all_permissions.projects_change
+    permission_required = all_permissions.projects_view
     parser_classes = (JSONParser, MultiPartParser, FormParser)
     serializer_class = PredictionSerializer
     queryset = Project.objects.all()
 
     def create(self, request, *args, **kwargs):
         # check project permissions
-        project = self.get_object()
+        project = get_admin_project_or_404(request, self.kwargs['pk'])
 
         # Use feature flag to control memory-efficient implementation rollout
         if flag_set('fflag_fix_back_4620_memory_efficient_predictions_import_08012025_short', user=self.request.user):
@@ -649,7 +657,7 @@ class TasksBulkCreateAPI(ImportAPI):
 
 
 class ReImportAPI(ImportAPI):
-    permission_required = all_permissions.projects_change
+    permission_required = all_permissions.projects_view
 
     def sync_reimport(self, project, file_upload_ids, files_as_tasks_list):
         start = time.time()
@@ -721,7 +729,7 @@ class ReImportAPI(ImportAPI):
         file_upload_ids = self.request.data.get('file_upload_ids')
 
         # check project permissions
-        project = generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=self.kwargs['pk'])
+        project = get_admin_project_or_404(self.request, self.kwargs['pk'])
 
         if not file_upload_ids:
             return Response(
@@ -804,12 +812,12 @@ class FileUploadListAPI(generics.mixins.ListModelMixin, generics.mixins.DestroyM
     serializer_class = FileUploadSerializer
     permission_required = ViewClassPermission(
         GET=all_permissions.projects_view,
-        DELETE=all_permissions.projects_change,
+        DELETE=all_permissions.projects_view,
     )
     queryset = FileUpload.objects.all()
 
     def get_queryset(self):
-        project = generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=self.kwargs.get('pk', 0))
+        project = get_admin_project_or_404(self.request, self.kwargs.get('pk', 0))
         if project.is_draft or bool_from_request(self.request.query_params, 'all', False):
             # If project is in draft state, we return all uploaded files, ignoring queried ids
             logger.debug(f'Return all uploaded files for draft project {project}')
@@ -824,7 +832,7 @@ class FileUploadListAPI(generics.mixins.ListModelMixin, generics.mixins.DestroyM
         return self.list(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        project = generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=self.kwargs['pk'])
+        project = get_admin_project_or_404(self.request, self.kwargs['pk'])
         ids = self.request.data.get('file_upload_ids')
         if ids is None:
             deleted, _ = FileUpload.objects.filter(project=project).delete()
@@ -879,7 +887,9 @@ class FileUploadAPI(generics.RetrieveUpdateDestroyAPIView):
     parser_classes = (JSONParser, MultiPartParser, FormParser)
     permission_classes = (IsAuthenticated,)
     serializer_class = FileUploadSerializer
-    queryset = FileUpload.objects.all()
+
+    def get_queryset(self):
+        return FileUpload.objects.filter(project_id__in=Project.objects.admin_for_user(self.request.user).values('id'))
 
     def get(self, *args, **kwargs):
         return super(FileUploadAPI, self).get(*args, **kwargs)
