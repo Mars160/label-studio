@@ -27,6 +27,9 @@ const initializeDataManager = async (root, props, params) => {
 
   const { ...settings } = root.dataset;
 
+  const canImport = params.project?.capabilities?.import_tasks === true;
+  const canExport = params.project?.capabilities?.export_tasks === true;
+
   const dmConfig = {
     root,
     projectId: params.id,
@@ -37,8 +40,8 @@ const initializeDataManager = async (root, props, params) => {
     showPreviews: false,
     apiEndpoints: APIConfig.endpoints,
     interfaces: {
-      import: true,
-      export: true,
+      import: canImport,
+      export: canExport,
       backButton: false,
       labelingHeader: false,
       autoAnnotation: params.autoAnnotation,
@@ -78,9 +81,12 @@ export const DataManagerPage = ({ ...props }) => {
     if (!project?.id) return;
     if (dataManagerRef.current) return;
 
-    const mlBackends = await api.callApi("mlBackends", {
-      params: { project: project.id },
-    });
+    const canManageProject = project.capabilities?.manage_project === true;
+    const mlBackends = canManageProject
+      ? await api.callApi("mlBackends", {
+          params: { project: project.id },
+        })
+      : [];
 
     const interactiveBacked = (mlBackends ?? []).find(({ is_interactive }) => is_interactive);
 
@@ -119,20 +125,29 @@ export const DataManagerPage = ({ ...props }) => {
     });
 
     dataManager.on("settingsClicked", () => {
-      history.push(buildLink("/settings/labeling", { id: params?.id ?? project?.id }));
+      history.push(
+        buildLink(project.capabilities?.manage_project ? "/settings/labeling" : "/settings/members", {
+          id: params?.id ?? project?.id,
+        }),
+      );
     });
 
     dataManager.on("importClicked", () => {
-      history.push(buildLink("/data/import", { id: params?.id ?? project?.id }));
+      if (project.capabilities?.import_tasks) {
+        history.push(buildLink("/data/import", { id: params?.id ?? project?.id }));
+      }
     });
 
-    // Navigate to Storage Settings and auto-open Add Source Storage modal
     dataManager.on("openSourceStorageModal", () => {
-      history.push(buildLink("/settings/storage?open=source", { id: params?.id ?? project?.id }));
+      if (project.capabilities?.manage_project) {
+        history.push(buildLink("/settings/storage?open=source", { id: params?.id ?? project?.id }));
+      }
     });
 
     dataManager.on("exportClicked", () => {
-      history.push(buildLink("/data/export", { id: params?.id ?? project?.id }));
+      if (project.capabilities?.export_tasks) {
+        history.push(buildLink("/data/export", { id: params?.id ?? project?.id }));
+      }
     });
 
     dataManager.on("error", (response) => {

@@ -4,7 +4,7 @@ from decimal import Decimal
 
 import bleach
 from constants import SAFE_HTML_ATTRIBUTES, SAFE_HTML_TAGS
-from django.db.models import Q
+from django.db.models import Count, Q
 from drf_spectacular.utils import extend_schema_field, extend_schema_serializer
 from fsm.serializer_fields import FSMStateField
 from label_studio_sdk.label_interface import LabelInterface
@@ -31,11 +31,21 @@ from label_studio_sdk.label_interface.control_tags import (
     TimeSeriesLabelsTag,
     VideoRectangleTag,
 )
-from projects.models import Project, ProjectImport, ProjectOnboarding, ProjectReimport, ProjectSummary
+from organizations.models import OrganizationMember
+from projects.models import (
+    Project,
+    ProjectImport,
+    ProjectMember,
+    ProjectMemberRole,
+    ProjectOnboarding,
+    ProjectReimport,
+    ProjectSummary,
+)
 from rest_flex_fields import FlexFieldsModelSerializer
 from rest_framework import serializers
 from rest_framework.serializers import SerializerMethodField
-from tasks.models import Task
+from tasks.models import Annotation, Task
+from users.models import User
 from users.serializers import UserSimpleSerializer
 
 
@@ -148,7 +158,43 @@ class ProjectSerializer(FlexFieldsModelSerializer):
 
     queue_total = serializers.SerializerMethodField()
     queue_done = serializers.SerializerMethodField()
+    current_user_role = serializers.SerializerMethodField()
+    capabilities = serializers.SerializerMethodField()
     state = FSMStateField(read_only=True)  # FSM state - automatically uses annotation if present
+
+    def get_current_user_role(self, project):
+        request = self.context.get('request')
+        return project.get_role(request.user) if request else None
+
+    def get_capabilities(self, project):
+        request = self.context.get('request')
+        is_admin = bool(request and project.is_admin(request.user))
+        return {
+            'manage_project': is_admin,
+            'manage_members': is_admin,
+            'view_all_annotations': is_admin,
+            'manage_tasks': is_admin,
+            'import_tasks': is_admin,
+            'export_tasks': is_admin,
+        }
+
+    def to_representation(self, project):
+        data = super().to_representation(project)
+        request = self.context.get('request')
+        if request and request.user.is_project_annotator(project):
+            data.pop('task_data_login', None)
+            data.pop('task_data_password', None)
+            annotations = Annotation.objects.filter(project=project, completed_by=request.user)
+            stats = annotations.aggregate(
+                finished_task_number=Count('task_id', filter=Q(was_cancelled=False), distinct=True),
+                total_annotations_number=Count('id'),
+                useful_annotation_number=Count('id', filter=Q(was_cancelled=False, ground_truth=False)),
+                ground_truth_number=Count('id', filter=Q(ground_truth=True)),
+                skipped_annotations_number=Count('id', filter=Q(was_cancelled=True)),
+                num_tasks_with_annotations=Count('task_id', distinct=True),
+            )
+            data.update(stats)
+        return data
 
     @property
     def user_id(self):
@@ -312,6 +358,8 @@ class ProjectSerializer(FlexFieldsModelSerializer):
             'queue_total',
             'queue_done',
             'config_suitable_for_bulk_annotation',
+            'current_user_role',
+            'capabilities',
             'state',
         ]
 
@@ -385,6 +433,57 @@ class ProjectCountsSerializer(ProjectSerializer):
             'ground_truth_number',
             'skipped_annotations_number',
         ]
+
+
+class ProjectMemberSerializer(serializers.ModelSerializer):
+    user = UserSimpleSerializer(read_only=True)
+
+    class Meta:
+        model = ProjectMember
+        fields = ('id', 'user', 'role', 'enabled', 'created_at', 'updated_at')
+        read_only_fields = fields
+
+
+class ProjectMemberCreateSerializer(serializers.Serializer):
+    user_id = serializers.PrimaryKeyRelatedField(
+        source='user', queryset=User.objects.all(), required=False, write_only=True
+    )
+    email = serializers.EmailField(required=False, write_only=True)
+
+    def validate(self, attrs):
+        user = attrs.get('user')
+        email = attrs.pop('email', None)
+        if bool(user) == bool(email):
+            raise serializers.ValidationError('Provide exactly one of user_id or email.')
+        if email:
+            user = User.objects.filter(email__iexact=email).first()
+            if user is None:
+                raise serializers.ValidationError({'email': 'No account exists with this email address.'})
+
+        project = self.context['project']
+        if not OrganizationMember.objects.filter(
+            user=user, organization=project.organization, deleted_at__isnull=True
+        ).exists():
+            raise serializers.ValidationError({'user_id': 'The account must belong to the project organization.'})
+        if ProjectMember.objects.filter(project=project, user=user, enabled=True).exists():
+            raise serializers.ValidationError({'user_id': 'This account is already a project member.'})
+        attrs['user'] = user
+        return attrs
+
+    def create(self, validated_data):
+        project = self.context['project']
+        membership, _ = ProjectMember.objects.update_or_create(
+            project=project,
+            user=validated_data['user'],
+            defaults={'role': ProjectMemberRole.ANNOTATOR, 'enabled': True},
+        )
+        return membership
+
+
+class ProjectMemberUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProjectMember
+        fields = ('role',)
 
 
 class ProjectOnboardingSerializer(serializers.ModelSerializer):

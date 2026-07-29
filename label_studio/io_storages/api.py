@@ -12,17 +12,21 @@ from drf_spectacular.utils import extend_schema
 from io_storages.serializers import ExportStorageSerializer, ImportStorageSerializer
 from projects.models import Project
 from rest_framework import generics, status
-from rest_framework.exceptions import NotFound, ValidationError
+from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.response import Response
 
 logger = logging.getLogger(__name__)
 
 
+def admin_storages(model, user):
+    return model.objects.filter(project_id__in=Project.objects.admin_for_user(user).values('id'))
+
+
 class ImportStorageListAPI(generics.ListCreateAPIView):
     permission_required = ViewClassPermission(
         GET=all_permissions.storages_view,
-        POST=all_permissions.storages_change,
+        POST=all_permissions.storages_view,
     )
     parser_classes = (JSONParser, FormParser, MultiPartParser)
 
@@ -33,8 +37,9 @@ class ImportStorageListAPI(generics.ListCreateAPIView):
         if not project_pk:
             raise ValidationError('query parameter "project" is required')
 
-        project = generics.get_object_or_404(Project, pk=project_pk)
-        self.check_object_permissions(self.request, project)
+        project = generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=project_pk)
+        if not project.is_admin(self.request.user):
+            raise PermissionDenied('Only project administrators can access storage settings.')
         StorageClass = self.serializer_class.Meta.model
         storages = StorageClass.objects.filter(project_id=project.id)
 
@@ -48,12 +53,15 @@ class ImportStorageDetailAPI(generics.RetrieveUpdateDestroyAPIView):
 
     permission_required = ViewClassPermission(
         GET=all_permissions.storages_view,
-        PATCH=all_permissions.storages_change,
-        PUT=all_permissions.storages_change,
-        DELETE=all_permissions.storages_change,
+        PATCH=all_permissions.storages_view,
+        PUT=all_permissions.storages_view,
+        DELETE=all_permissions.storages_view,
     )
     parser_classes = (JSONParser, FormParser, MultiPartParser)
     serializer_class = ImportStorageSerializer
+
+    def get_queryset(self):
+        return admin_storages(self.serializer_class.Meta.model, self.request.user)
 
     @extend_schema(exclude=True)
     def put(self, request, *args, **kwargs):
@@ -63,7 +71,7 @@ class ImportStorageDetailAPI(generics.RetrieveUpdateDestroyAPIView):
 class ExportStorageListAPI(generics.ListCreateAPIView):
     permission_required = ViewClassPermission(
         GET=all_permissions.storages_view,
-        POST=all_permissions.storages_change,
+        POST=all_permissions.storages_view,
     )
     parser_classes = (JSONParser, FormParser, MultiPartParser)
     serializer_class = ExportStorageSerializer
@@ -73,8 +81,9 @@ class ExportStorageListAPI(generics.ListCreateAPIView):
         if not project_pk:
             raise ValidationError('query parameter "project" is required')
 
-        project = generics.get_object_or_404(Project, pk=project_pk)
-        self.check_object_permissions(self.request, project)
+        project = generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=project_pk)
+        if not project.is_admin(self.request.user):
+            raise PermissionDenied('Only project administrators can access storage settings.')
         StorageClass = self.serializer_class.Meta.model
         storages = StorageClass.objects.filter(project_id=project.id)
 
@@ -101,12 +110,15 @@ class ExportStorageDetailAPI(generics.RetrieveUpdateDestroyAPIView):
 
     permission_required = ViewClassPermission(
         GET=all_permissions.storages_view,
-        PATCH=all_permissions.storages_change,
-        PUT=all_permissions.storages_change,
-        DELETE=all_permissions.storages_change,
+        PATCH=all_permissions.storages_view,
+        PUT=all_permissions.storages_view,
+        DELETE=all_permissions.storages_view,
     )
     parser_classes = (JSONParser, FormParser, MultiPartParser)
     serializer_class = ExportStorageSerializer
+
+    def get_queryset(self):
+        return admin_storages(self.serializer_class.Meta.model, self.request.user)
 
     @extend_schema(exclude=True)
     def put(self, request, *args, **kwargs):
@@ -115,14 +127,13 @@ class ExportStorageDetailAPI(generics.RetrieveUpdateDestroyAPIView):
 
 class ImportStorageSyncAPI(generics.GenericAPIView):
     permission_required = ViewClassPermission(
-        POST=all_permissions.storages_sync,
+        POST=all_permissions.storages_view,
     )
     parser_classes = (JSONParser, FormParser, MultiPartParser)
     serializer_class = ImportStorageSerializer
 
     def get_queryset(self):
-        ImportStorageClass = self.serializer_class.Meta.model
-        return ImportStorageClass.objects.all()
+        return admin_storages(self.serializer_class.Meta.model, self.request.user)
 
     def post(self, request, *args, **kwargs):
         storage = self.get_object()
@@ -138,14 +149,13 @@ class ImportStorageSyncAPI(generics.GenericAPIView):
 
 class ExportStorageSyncAPI(generics.GenericAPIView):
     permission_required = ViewClassPermission(
-        POST=all_permissions.storages_sync,
+        POST=all_permissions.storages_view,
     )
     parser_classes = (JSONParser, FormParser, MultiPartParser)
     serializer_class = ExportStorageSerializer
 
     def get_queryset(self):
-        ExportStorageClass = self.serializer_class.Meta.model
-        return ExportStorageClass.objects.all()
+        return admin_storages(self.serializer_class.Meta.model, self.request.user)
 
     def post(self, request, *args, **kwargs):
         storage = self.get_object()
@@ -160,7 +170,7 @@ class ExportStorageSyncAPI(generics.GenericAPIView):
 
 
 class StorageValidateAPI(generics.CreateAPIView):
-    permission_required = all_permissions.storages_change
+    permission_required = all_permissions.storages_view
     parser_classes = (JSONParser, FormParser, MultiPartParser)
 
     def create(self, request, *args, **kwargs):
@@ -172,7 +182,7 @@ class StorageValidateAPI(generics.CreateAPIView):
 
 @extend_schema(exclude=True)
 class ImportStorageListFilesAPI(generics.CreateAPIView):
-    permission_required = all_permissions.storages_change
+    permission_required = all_permissions.storages_view
     parser_classes = (JSONParser, FormParser, MultiPartParser)
     serializer_class = None  # Default serializer
 

@@ -32,7 +32,7 @@ from django.conf import settings
 from django.contrib.postgres.search import SearchVectorField
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import connection, models, transaction
-from django.db.models import Avg, BooleanField, Case, Count, GeneratedField, JSONField, Max, Q, Sum, Value, When
+from django.db.models import Avg, Count, GeneratedField, JSONField, Max, Prefetch, Q, Sum
 from django.db.models.expressions import RawSQL
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
@@ -111,7 +111,36 @@ class ProjectManager(models.Manager):
         return ProjectQuerySetWithFSM(self.model, using=self._db)
 
     def for_user(self, user):
-        return self.get_queryset().filter(organization=user.active_organization)
+        if not getattr(user, 'is_authenticated', False):
+            return self.get_queryset().none()
+        active_organization_id = getattr(user, 'active_organization_id', None)
+        if active_organization_id is None:
+            return self.get_queryset().none()
+        return (
+            self.get_queryset()
+            .filter(
+                organization_id=active_organization_id,
+                organization__organizationmember__user=user,
+                organization__organizationmember__deleted_at__isnull=True,
+                members__user=user,
+                members__enabled=True,
+            )
+            .prefetch_related(
+                Prefetch(
+                    'members',
+                    queryset=ProjectMember.objects.filter(user=user, enabled=True),
+                    to_attr=f'user_{user.pk}_memberships',
+                )
+            )
+            .distinct()
+        )
+
+    def admin_for_user(self, user):
+        return self.for_user(user).filter(
+            members__user=user,
+            members__enabled=True,
+            members__role=ProjectMemberRole.ADMIN,
+        )
 
     def with_state(self):
         """
@@ -160,6 +189,11 @@ ProjectMixin = load_func(settings.PROJECT_MIXIN)
 
 # LSE recalculate all stats
 recalculate_all_stats = load_func(settings.RECALCULATE_ALL_STATS)
+
+
+class ProjectMemberRole(models.TextChoices):
+    ADMIN = 'admin', _('Admin')
+    ANNOTATOR = 'annotator', _('Annotator')
 
 
 class Project(ProjectMixin, FsmHistoryStateModel):
@@ -476,24 +510,39 @@ class Project(ProjectMixin, FsmHistoryStateModel):
         self.token = create_hash()
         self.save(update_fields=['token'])
 
-    def add_collaborator(self, user):
-        created = False
-        with transaction.atomic():
-            try:
-                ProjectMember.objects.get(user=user, project=self)
-            except ProjectMember.DoesNotExist:
-                ProjectMember.objects.create(user=user, project=self)
-                created = True
-            else:
-                logger.debug(f'Project membership {self} for user {user} already exists')
+    def add_collaborator(self, user, role=ProjectMemberRole.ANNOTATOR):
+        membership, created = ProjectMember.objects.get_or_create(
+            user=user, project=self, defaults={'role': role, 'enabled': True}
+        )
+        if not created and not membership.enabled:
+            membership.enabled = True
+            membership.save(update_fields=['enabled', 'updated_at'])
         return created
 
     def has_collaborator(self, user):
         return ProjectMember.objects.filter(user=user, project=self).exists()
 
     def has_collaborator_enabled(self, user):
-        membership = ProjectMember.objects.filter(user=user, project=self)
-        return membership.exists() and membership.first().enabled
+        return self.get_membership(user) is not None
+
+    def get_membership(self, user):
+        if not getattr(user, 'is_authenticated', False):
+            return None
+        if getattr(user, 'active_organization_id', None) != self.organization_id:
+            return None
+        prefetched_memberships = getattr(self, f'user_{user.pk}_memberships', None)
+        if prefetched_memberships is not None:
+            return prefetched_memberships[0] if prefetched_memberships else None
+        if not user.om_through.filter(organization_id=self.organization_id, deleted_at__isnull=True).exists():
+            return None
+        return ProjectMember.objects.filter(user=user, project=self, enabled=True).first()
+
+    def get_role(self, user):
+        membership = self.get_membership(user)
+        return membership.role if membership else None
+
+    def is_admin(self, user):
+        return self.get_role(user) == ProjectMemberRole.ADMIN
 
     def _update_tasks_states(
         self, maximum_annotations_changed, overlap_cohort_percentage_changed, tasks_number_changed
@@ -954,27 +1003,14 @@ class Project(ProjectMixin, FsmHistoryStateModel):
         return hasattr(self, 'team_link') and self.team_link.team.has_user(user)
 
     def annotators(self):
-        """Annotators connected to this project including team members"""
+        """Return users with an enabled membership in this project."""
         from users.models import User
 
-        member_ids = self.get_member_ids()
-        team_members = User.objects.filter(id__in=member_ids).order_by('email')
-
-        # add members from invited projects
-        project_member_ids = self.members.values_list('user__id', flat=True)
-        project_members = User.objects.filter(id__in=project_member_ids)
-
-        annotators = team_members | project_members
-
-        # set annotator.team_member=True if annotator is not an invited user
-        annotators = annotators.annotate(
-            team_member=Case(
-                When(id__in=project_member_ids, then=Value(False)),
-                default=Value(True),
-                output_field=BooleanField(),
-            )
+        return (
+            User.objects.filter(project_memberships__project=self, project_memberships__enabled=True)
+            .annotate(team_member=models.Value(False, output_field=models.BooleanField()))
+            .order_by('email')
         )
-        return annotators
 
     def annotators_with_annotations(self, min_count=500):
         """Annotators with annotation number > min_number
@@ -1398,9 +1434,20 @@ class ProjectMember(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='project_memberships', help_text='User ID'
     )
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='members', help_text='Project ID')
+    role = models.CharField(
+        max_length=16, choices=ProjectMemberRole.choices, default=ProjectMemberRole.ANNOTATOR, help_text='Project role'
+    )
     enabled = models.BooleanField(default=True, help_text='Project member is enabled')
     created_at = models.DateTimeField(_('created at'), auto_now_add=True)
     updated_at = models.DateTimeField(_('updated at'), auto_now=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['project', 'user'], name='unique_project_member'),
+        ]
+
+    def has_permission(self, user):
+        return self.project.has_permission(user)
 
 
 class ProjectSummary(models.Model):

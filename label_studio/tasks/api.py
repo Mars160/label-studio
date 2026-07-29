@@ -12,7 +12,7 @@ from data_manager.functions import evaluate_predictions
 from data_manager.models import PrepareParams
 from data_manager.serializers import DataManagerTaskSerializer
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import Prefetch
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
@@ -179,25 +179,28 @@ class TaskListAPI(DMTaskListAPI):
     serializer_class = TaskSerializer
     permission_required = ViewClassPermission(
         GET=all_permissions.tasks_view,
-        POST=all_permissions.tasks_create,
+        POST=all_permissions.tasks_view,
     )
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['project']
 
     def filter_queryset(self, queryset):
         queryset = super().filter_queryset(queryset)
-        return queryset.filter(project__organization=self.request.user.active_organization)
+        project_ids = Project.objects.for_user(self.request.user).values('id')
+        return queryset.filter(project_id__in=project_ids)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
         project_id = self.request.data.get('project')
         if project_id:
-            context['project'] = generics.get_object_or_404(Project, pk=project_id)
+            context['project'] = generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=project_id)
         return context
 
     def perform_create(self, serializer):
         project_id = self.request.data.get('project')
-        project = generics.get_object_or_404(Project, pk=project_id)
+        project = generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=project_id)
+        if not project.is_admin(self.request.user):
+            raise PermissionDenied('Only project administrators can create tasks.')
         instance = serializer.save(project=project)
         emit_webhooks_for_instance(
             self.request.user.active_organization, project, WebhookAction.TASKS_CREATED, [instance]
@@ -279,9 +282,9 @@ class TaskAPI(generics.RetrieveUpdateDestroyAPIView):
     parser_classes = (JSONParser, FormParser, MultiPartParser)
     permission_required = ViewClassPermission(
         GET=all_permissions.tasks_view,
-        PUT=all_permissions.tasks_change,
-        PATCH=all_permissions.tasks_change,
-        DELETE=all_permissions.tasks_delete,
+        PUT=all_permissions.tasks_view,
+        PATCH=all_permissions.tasks_view,
+        DELETE=all_permissions.tasks_view,
     )
 
     def initial(self, request, *args, **kwargs):
@@ -290,9 +293,12 @@ class TaskAPI(generics.RetrieveUpdateDestroyAPIView):
 
     def prefetch(self, queryset):
         return queryset.prefetch_related(
-            'annotations',
+            Prefetch(
+                'annotations',
+                queryset=Annotation.objects.for_user(self.request.user).select_related('completed_by'),
+                to_attr='visible_annotations',
+            ),
             'predictions',
-            'annotations__completed_by',
             'project',
             'io_storages_azureblobimportstoragelink',
             'io_storages_gcsimportstoragelink',
@@ -302,6 +308,16 @@ class TaskAPI(generics.RetrieveUpdateDestroyAPIView):
             'file_upload',
             'project__ml_backends',
         )
+
+    def perform_update(self, serializer):
+        if not serializer.instance.project.is_admin(self.request.user):
+            raise PermissionDenied('Only project administrators can update tasks.')
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        if not instance.project.is_admin(self.request.user):
+            raise PermissionDenied('Only project administrators can delete tasks.')
+        instance.delete()
 
     def get_retrieve_serializer_context(self, request):
         """Build serializer context for task retrieval.
@@ -340,10 +356,9 @@ class TaskAPI(generics.RetrieveUpdateDestroyAPIView):
             # refresh task from db with prefetches
             self.task = self.get_object()
 
-        # Don't use expand for annotations when using stub mode (FIT-720)
-        # The expand mechanism would override get_annotations and use AnnotationSerializer
-        # instead of AnnotationStubSerializer
-        expand = [] if context.get('annotations_stub') else ['annotations.completed_by']
+        # Flex expansion reads the unfiltered reverse relation, so annotators must use get_annotations().
+        use_annotation_method = context.get('annotations_stub') or request.user.is_project_annotator(project)
+        expand = [] if use_annotation_method else ['annotations.completed_by']
         serializer = self.get_serializer_class()(self.task, many=False, context=context, expand=expand)
         data = serializer.data
         return Response(data)
@@ -384,7 +399,7 @@ class TaskAPI(generics.RetrieveUpdateDestroyAPIView):
         # First check permissions using a lightweight query
         # select_related('project') avoids extra query when permission check accesses task.project
         lean_task = generics.get_object_or_404(
-            Task.objects.filter(project__organization=self.request.user.active_organization).select_related('project'),
+            Task.objects.for_user(self.request.user).select_related('project'),
             pk=task_id,
         )
         self.check_object_permissions(self.request, lean_task)
@@ -469,14 +484,17 @@ class TaskAgreementAPI(generics.RetrieveAPIView):
             return Response({'error': 'Task not found'}, status=404)
 
         # Check project access using LSO's native permission check
-        if not task.project.has_permission(request.user):
+        if not Project.has_permission(task.project, request.user):
             raise PermissionDenied('You do not have permission to view this task')
 
-        # Get all annotations for this task with their results in a single query
-        annotations = Annotation.objects.filter(
-            task=task,
-            was_cancelled=False,
-        ).values_list('result', flat=True)
+        annotations = (
+            Annotation.objects.for_user(request.user)
+            .filter(
+                task=task,
+                was_cancelled=False,
+            )
+            .values_list('result', flat=True)
+        )
 
         total_annotations = len(annotations)
         distributions = {}
@@ -642,24 +660,47 @@ class AnnotationAPI(generics.RetrieveUpdateDestroyAPIView):
     )
 
     serializer_class = AnnotationSerializer
-    queryset = Annotation.objects.all()
+
+    def get_queryset(self):
+        return Annotation.objects.for_user(self.request.user)
+
+    def perform_update(self, serializer):
+        annotation = serializer.instance
+        project = annotation.project
+        is_admin = project.is_admin(self.request.user)
+
+        if not is_admin:
+            protected_fields = {'ground_truth', 'task', 'project'}
+            changed_fields = {
+                field
+                for field in protected_fields
+                if field in serializer.validated_data
+                and getattr(annotation, f'{field}_id', getattr(annotation, field, None))
+                != getattr(
+                    serializer.validated_data[field],
+                    'id',
+                    serializer.validated_data[field],
+                )
+            }
+            if changed_fields:
+                raise PermissionDenied(f'Only project administrators can change {", ".join(sorted(changed_fields))}.')
+
+        with transaction.atomic():
+            Task.objects.select_for_update().get(pk=annotation.task_id)
+            annotation = serializer.save(
+                **({} if is_admin else {'completed_by': self.request.user}),
+                updated_by=self.request.user,
+            )
+            if serializer.validated_data.get('ground_truth'):
+                annotation.task.ensure_unique_groundtruth(annotation_id=annotation.id)
 
     def perform_destroy(self, annotation):
         annotation.delete()
 
     def update(self, request, *args, **kwargs):
-        # save user history with annotator_id, time & annotation result
         annotation = self.get_object()
-        # use updated instead of save to avoid duplicated signals
-        Annotation.objects.filter(id=annotation.id).update(updated_by=request.user)
-
         task = annotation.task
-        if self.request.data.get('ground_truth'):
-            task.ensure_unique_groundtruth(annotation_id=annotation.id)
-        task.update_is_labeled()
-        task.save()  # refresh task metrics
-
-        result = super(AnnotationAPI, self).update(request, *args, **kwargs)
+        result = super().update(request, *args, **kwargs)
 
         task.update_is_labeled()
         task.save(update_fields=['updated_at'])  # refresh task metrics
@@ -770,7 +811,7 @@ class AnnotationsListAPI(GetParentObjectMixin, generics.ListCreateAPIView):
 
     def get_queryset(self):
         task = generics.get_object_or_404(Task.objects.for_user(self.request.user), pk=self.kwargs.get('pk', 0))
-        return Annotation.objects.filter(Q(task=task) & Q(was_cancelled=False)).order_by('pk')
+        return Annotation.objects.for_user(self.request.user).filter(task=task, was_cancelled=False).order_by('pk')
 
     def delete_draft(self, draft_id, annotation_id):
         try:
@@ -816,8 +857,7 @@ class AnnotationsListAPI(GetParentObjectMixin, generics.ListCreateAPIView):
         if 'was_cancelled' in self.request.GET:
             extra_args['was_cancelled'] = bool_from_request(self.request.GET, 'was_cancelled', False)
 
-        if 'completed_by' not in ser.validated_data:
-            extra_args['completed_by'] = self.request.user
+        extra_args['completed_by'] = self.request.user
 
         draft_id = self.request.data.get('draft_id')
         draft = AnnotationDraft.objects.filter(id=draft_id).first()
@@ -829,6 +869,9 @@ class AnnotationsListAPI(GetParentObjectMixin, generics.ListCreateAPIView):
         if draft is not None:
             # if the annotation will be created from draft - get created_at from draft to keep continuity of history
             extra_args['draft_created_at'] = draft.created_at
+
+        if self.request.data.get('ground_truth') and not task.project.is_admin(user):
+            raise PermissionDenied('Only project administrators can create ground-truth annotations.')
 
         # create annotation
         logger.debug(f'User={self.request.user}: save annotation')
@@ -847,9 +890,6 @@ class AnnotationsListAPI(GetParentObjectMixin, generics.ListCreateAPIView):
             logger.debug(f'Remove draft {draft_id} after creating annotation {annotation.id}')
             self.delete_draft(draft_id, annotation.id)
 
-        if self.request.data.get('ground_truth'):
-            annotation.task.ensure_unique_groundtruth(annotation_id=annotation.id)
-
         fill_history_annotation(user, task, annotation)
 
         return annotation
@@ -866,22 +906,35 @@ class AnnotationDraftListAPI(generics.ListCreateAPIView):
     queryset = AnnotationDraft.objects.all()
 
     def filter_queryset(self, queryset):
-        task_id = self.kwargs['pk']
-        return queryset.filter(task_id=task_id)
+        task = generics.get_object_or_404(Task.objects.for_user(self.request.user), pk=self.kwargs['pk'])
+        return AnnotationDraft.objects.for_user(self.request.user).filter(task=task)
 
     def perform_create(self, serializer):
-        task_id = self.kwargs['pk']
+        task = generics.get_object_or_404(Task.objects.for_user(self.request.user), pk=self.kwargs['pk'])
         annotation_id = self.kwargs.get('annotation_id')
         user = self.request.user
-        logger.debug(f'User {user} is going to create draft for task={task_id}, annotation={annotation_id}')
-        serializer.save(task_id=self.kwargs['pk'], annotation_id=annotation_id, user=self.request.user)
+        annotation = None
+        if annotation_id is not None:
+            annotation = generics.get_object_or_404(
+                Annotation.objects.for_user(user),
+                pk=annotation_id,
+                task=task,
+            )
+        logger.debug(f'User {user} is going to create draft for task={task.id}, annotation={annotation_id}')
+        serializer.save(task=task, annotation=annotation, user=user)
 
 
 @extend_schema(exclude=True)
 class AnnotationDraftAPI(generics.RetrieveUpdateDestroyAPIView):
     parser_classes = (JSONParser, MultiPartParser, FormParser)
     serializer_class = AnnotationDraftSerializer
-    queryset = AnnotationDraft.objects.all()
+
+    def get_queryset(self):
+        return AnnotationDraft.objects.for_user(self.request.user)
+
+    def perform_update(self, serializer):
+        serializer.save(user=serializer.instance.user)
+
     permission_required = ViewClassPermission(
         GET=all_permissions.annotations_view,
         PUT=all_permissions.annotations_change,
@@ -1056,7 +1109,25 @@ class PredictionAPI(viewsets.ModelViewSet):
     filterset_fields = ['task', 'task__project', 'project']
 
     def get_queryset(self):
-        return Prediction.objects.filter(project__organization=self.request.user.active_organization)
+        return Prediction.objects.filter(project_id__in=Project.objects.for_user(self.request.user).values('id'))
+
+    def perform_create(self, serializer):
+        project = serializer.validated_data.get('project')
+        task = serializer.validated_data.get('task')
+        project = project or (task.project if task else None)
+        if project is None or not project.is_admin(self.request.user):
+            raise PermissionDenied('Only project administrators can create predictions.')
+        serializer.save()
+
+    def perform_update(self, serializer):
+        if not serializer.instance.project.is_admin(self.request.user):
+            raise PermissionDenied('Only project administrators can update predictions.')
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        if not instance.project.is_admin(self.request.user):
+            raise PermissionDenied('Only project administrators can delete predictions.')
+        instance.delete()
 
 
 @method_decorator(name='get', decorator=extend_schema(exclude=True))

@@ -89,12 +89,20 @@ class PredictionSerializer(ModelSerializer):
     created_ago = serializers.CharField(default='', read_only=True, help_text='Delta time from creation time')
 
     def validate(self, data):
-        """Validate prediction using LabelInterface against project configuration"""
-        project = None
-        if 'task' in data:
-            project = data['task'].project
-        elif 'project' in data:
-            project = data['project']
+        """Validate prediction data and keep task/project relationships consistent."""
+        task = data.get('task', getattr(self.instance, 'task', None))
+        project = data.get('project', getattr(self.instance, 'project', None))
+
+        if self.instance is not None:
+            if 'task' in data and data['task'].pk != self.instance.task_id:
+                raise ValidationError({'task': 'Prediction task cannot be changed.'})
+            if 'project' in data and data['project'].pk != self.instance.project_id:
+                raise ValidationError({'project': 'Prediction project cannot be changed.'})
+
+        if task is not None and project is not None and task.project_id != project.id:
+            raise ValidationError({'project': 'Prediction project must match the task project.'})
+
+        # Validate prediction using LabelInterface against project configuration
         ff_user = project.organization.created_by if project else 'auto'
 
         if not flag_set('fflag_feat_utc_210_prediction_validation_15082025', user=ff_user):
@@ -149,6 +157,20 @@ class AnnotationSerializer(FlexFieldsModelSerializer):
     created_ago = serializers.CharField(default='', read_only=True, help_text='Time delta from creation time')
     completed_by = serializers.PrimaryKeyRelatedField(required=False, queryset=User.objects.all())
     unique_id = serializers.CharField(required=False, write_only=True)
+
+    def validate(self, data):
+        task = data.get('task', getattr(self.instance, 'task', None))
+        project = data.get('project', getattr(self.instance, 'project', None))
+
+        if self.instance is not None:
+            if 'task' in data and data['task'].pk != self.instance.task_id:
+                raise ValidationError({'task': 'Annotation task cannot be changed.'})
+            if 'project' in data and data['project'].pk != self.instance.project_id:
+                raise ValidationError({'project': 'Annotation project cannot be changed.'})
+
+        if task is not None and project is not None and task.project_id != project.id:
+            raise ValidationError({'project': 'Annotation project must match the task project.'})
+        return super().validate(data)
 
     def create(self, *args, **kwargs):
         try:
@@ -275,7 +297,16 @@ class TaskSimpleSerializer(FlexFieldsModelSerializer):
             data = instance.data
             replace_task_data_undefined_with_config_field(data, project)
 
-        return super().to_representation(instance)
+        representation = super().to_representation(instance)
+        request = self.context.get('request')
+        if request and request.user.is_project_annotator(project):
+            annotations = Annotation.objects.for_user(request.user).filter(task=instance)
+            representation['annotations'] = AnnotationSerializer(
+                annotations, many=True, context=self.context, read_only=True
+            ).data
+            representation['total_annotations'] = annotations.filter(was_cancelled=False).count()
+            representation['cancelled_annotations'] = annotations.filter(was_cancelled=True).count()
+        return representation
 
     class Meta:
         model = Task
@@ -335,7 +366,15 @@ class BaseTaskSerializer(FlexFieldsModelSerializer):
             data = instance.data
             replace_task_data_undefined_with_config_field(data, project)
 
-        return super().to_representation(instance)
+        representation = super().to_representation(instance)
+        request = self.context.get('request')
+        if request and project and request.user.is_project_annotator(project):
+            annotations = Annotation.objects.for_user(request.user).filter(task=instance)
+            if 'total_annotations' in representation:
+                representation['total_annotations'] = annotations.filter(was_cancelled=False).count()
+            if 'cancelled_annotations' in representation:
+                representation['cancelled_annotations'] = annotations.filter(was_cancelled=True).count()
+        return representation
 
     class Meta:
         model = Task
@@ -878,9 +917,20 @@ class AnnotationDraftSerializer(ModelSerializer):
             ret.pop('state', None)
         return ret
 
+    def validate(self, attrs):
+        if self.instance is not None:
+            for field in ('task', 'annotation'):
+                if field not in self.initial_data:
+                    continue
+                current_id = getattr(self.instance, f'{field}_id')
+                if str(self.initial_data[field]) != str(current_id):
+                    raise serializers.ValidationError({field: f'Draft {field} cannot be changed.'})
+        return super().validate(attrs)
+
     class Meta:
         model = AnnotationDraft
         fields = '__all__'
+        read_only_fields = ('task', 'annotation')
 
 
 class TaskWithAnnotationsAndPredictionsAndDraftsSerializer(TaskSerializer):
@@ -913,13 +963,13 @@ class TaskWithAnnotationsAndPredictionsAndDraftsSerializer(TaskSerializer):
         annotations = task.annotations
 
         user = self._get_user()
-        if user and user.is_annotator:
-            annotations = annotations.filter(completed_by=user)
+        if user:
+            annotations = Annotation.objects.for_user(user).filter(task=task)
 
         return AnnotationSerializer(annotations, many=True, read_only=True, default=[], context=self.context).data
 
     def get_drafts(self, task):
-        """Return drafts only for the current user"""
+        """Return drafts visible to the current project role."""
         # it's for swagger documentation
         if not isinstance(task, Task):
             return AnnotationDraftSerializer(many=True)
@@ -927,7 +977,7 @@ class TaskWithAnnotationsAndPredictionsAndDraftsSerializer(TaskSerializer):
         drafts = task.drafts
         if 'request' in self.context and hasattr(self.context['request'], 'user'):
             user = self.context['request'].user
-            drafts = drafts.filter(user=user)
+            drafts = AnnotationDraft.objects.for_user(user).filter(task=task)
 
         return AnnotationDraftSerializer(drafts, many=True, read_only=True, default=[], context=self.context).data
 
@@ -955,11 +1005,7 @@ class NextTaskSerializer(TaskWithAnnotationsAndPredictionsAndDraftsSerializer):
 
             if use_stub:
                 # Get annotations queryset and filter by user
-                annotations = task.annotations
-                if user.is_annotator:
-                    annotations = annotations.filter(completed_by=user)
-                else:
-                    annotations = annotations.filter(completed_by=user)
+                annotations = Annotation.objects.for_user(user).filter(task=task)
                 return AnnotationStubSerializer(annotations, many=True, read_only=True, context=self.context).data
             else:
                 annotations = super().get_annotations(task)

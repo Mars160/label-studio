@@ -634,6 +634,20 @@ class AnnotationQuerySetWithFSM(FSMStateQuerySetMixin, AnnotationQuerySet):
     pass
 
 
+def annotation_visibility_q(user):
+    """Return the project-role ownership predicate for annotations visible to a user."""
+    from projects.models import ProjectMemberRole
+
+    project_access = Q(
+        project__organization_id=getattr(user, 'active_organization_id', None),
+        project__organization__organizationmember__user=user,
+        project__organization__organizationmember__deleted_at__isnull=True,
+        project__members__user=user,
+        project__members__enabled=True,
+    )
+    return project_access & (Q(project__members__role=ProjectMemberRole.ADMIN) | Q(completed_by=user))
+
+
 class AnnotationManager(models.Manager):
     """
     Manager for Annotation model with FSM state support.
@@ -651,7 +665,10 @@ class AnnotationManager(models.Manager):
         return AnnotationQuerySetWithFSM(self.model, using=self._db)
 
     def for_user(self, user):
-        return self.get_queryset().filter(project__organization=user.active_organization)
+        if not getattr(user, 'is_authenticated', False):
+            return self.get_queryset().none()
+
+        return self.get_queryset().filter(annotation_visibility_q(user))
 
     def with_state(self):
         """Return queryset with FSM state annotated."""
@@ -813,7 +830,11 @@ class Annotation(AnnotationMixin, FsmHistoryStateModel):
         mixin_has_permission = cast(bool, super().has_permission(user))
 
         user.project = self.project  # link for activity log
-        return mixin_has_permission and self.project.has_permission(user)
+        return (
+            mixin_has_permission
+            and self.project.has_permission(user)
+            and (self.project.is_admin(user) or self.completed_by_id == user.id)
+        )
 
     def increase_project_summary_counters(self):
         if hasattr(self.project, 'summary'):
@@ -957,6 +978,18 @@ class AnnotationDraftManager(models.Manager):
         """Return QuerySet with FSM state annotation support"""
         return AnnotationDraftQuerySetWithFSM(self.model, using=self._db)
 
+    def for_user(self, user):
+        if not getattr(user, 'is_authenticated', False):
+            return self.get_queryset().none()
+
+        from projects.models import Project
+
+        admin_project_ids = Project.objects.admin_for_user(user).values('id')
+        member_project_ids = Project.objects.for_user(user).values('id')
+        return self.get_queryset().filter(
+            Q(task__project_id__in=admin_project_ids) | Q(task__project_id__in=member_project_ids, user=user)
+        )
+
     def with_state(self):
         """Return queryset with FSM state annotated."""
         return self.get_queryset().with_state()
@@ -1016,7 +1049,7 @@ class AnnotationDraft(FsmHistoryStateModel):
 
     def has_permission(self, user):
         user.project = self.task.project  # link for activity log
-        return self.task.project.has_permission(user)
+        return self.task.project.has_permission(user) and (self.task.project.is_admin(user) or self.user_id == user.id)
 
     def save(self, *args, **kwargs):
         with transaction.atomic():

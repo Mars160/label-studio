@@ -1,3 +1,4 @@
+import { useProject } from "../../providers/ProjectProvider";
 import { SidebarMenu } from "../../components/SidebarMenu/SidebarMenu";
 import { WebhookPage } from "../WebhookPage/WebhookPage";
 import { DangerZone } from "./DangerZone";
@@ -7,13 +8,15 @@ import { LabelingSettings } from "./LabelingSettings";
 import { MachineLearningSettings } from "./MachineLearningSettings/MachineLearningSettings";
 import { PredictionsSettings } from "./PredictionsSettings/PredictionsSettings";
 import { StorageSettings } from "./StorageSettings/StorageSettings";
+import { ProjectMembersSettings } from "./ProjectMembersSettings";
 import "./settings.prefix.css";
 
 export const MenuLayout = ({ children, ...routeProps }) => {
-  return (
-    <SidebarMenu
-      menuItems={[
+  const { project } = useProject();
+  const menuItems = project?.capabilities?.manage_project
+    ? [
         GeneralSettings,
+        ProjectMembersSettings,
         LabelingSettings,
         AnnotationSettings,
         MachineLearningSettings,
@@ -21,11 +24,10 @@ export const MenuLayout = ({ children, ...routeProps }) => {
         StorageSettings,
         WebhookPage,
         DangerZone,
-      ].filter(Boolean)}
-      path={routeProps.match.url}
-      children={children}
-    />
-  );
+      ]
+    : [ProjectMembersSettings];
+
+  return <SidebarMenu menuItems={menuItems.filter(Boolean)} path={routeProps.match.url} children={children} />;
 };
 
 const pages = {
@@ -35,7 +37,13 @@ const pages = {
   PredictionsSettings,
   StorageSettings,
   WebhookPage,
+  ProjectMembersSettings,
   DangerZone,
+};
+
+const SettingsLanding = () => {
+  const { project } = useProject();
+  return project?.capabilities?.manage_project ? <GeneralSettings /> : <ProjectMembersSettings />;
 };
 
 export const SettingsPage = {
@@ -43,6 +51,6 @@ export const SettingsPage = {
   path: "/settings",
   exact: true,
   layout: MenuLayout,
-  component: GeneralSettings,
+  component: SettingsLanding,
   pages,
 };

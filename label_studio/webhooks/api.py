@@ -1,10 +1,11 @@
 import django_filters
 from core.permissions import ViewClassPermission, all_permissions
+from django.db.models import Q
 from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, OpenApiResponse, extend_schema
-from projects import models as project_models
+from projects.models import Project
 from rest_framework import generics
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -17,7 +18,7 @@ from .serializers import WebhookSerializer, WebhookSerializerForUpdate
 
 class WebhookFilterSet(django_filters.FilterSet):
     project = django_filters.ModelChoiceFilter(
-        field_name='project', queryset=project_models.Project.objects.all(), null_label='isnull'
+        field_name='project', queryset=Project.objects.all(), null_label='isnull'
     )
 
 
@@ -63,15 +64,25 @@ class WebhookListAPI(generics.ListCreateAPIView):
     filterset_class = WebhookFilterSet
     permission_required = ViewClassPermission(
         GET=all_permissions.webhooks_view,
-        POST=all_permissions.webhooks_change,
+        POST=all_permissions.webhooks_view,
     )
 
     def get_queryset(self):
-        return Webhook.objects.filter(organization=self.request.user.active_organization)
+        return (
+            Webhook.objects.filter(organization=self.request.user.active_organization)
+            .filter(
+                Q(project__isnull=True)
+                | Q(project_id__in=Project.objects.admin_for_user(self.request.user).values('id'))
+            )
+            .distinct()
+        )
 
     def perform_create(self, serializer):
         project = serializer.validated_data.get('project')
-        if project is None or project.organization_id != self.request.user.active_organization.id:
+        if project is not None and (
+            project.organization_id != self.request.user.active_organization_id
+            or not project.is_admin(self.request.user)
+        ):
             raise NotFound('Project not found.')
         serializer.save(organization=self.request.user.active_organization)
 
@@ -130,9 +141,9 @@ class WebhookAPI(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     permission_required = ViewClassPermission(
         GET=all_permissions.webhooks_view,
-        PATCH=all_permissions.webhooks_change,
-        PUT=all_permissions.webhooks_change,
-        DELETE=all_permissions.webhooks_change,
+        PATCH=all_permissions.webhooks_view,
+        PUT=all_permissions.webhooks_view,
+        DELETE=all_permissions.webhooks_view,
     )
 
     def get_serializer_class(self):
@@ -141,7 +152,14 @@ class WebhookAPI(generics.RetrieveUpdateDestroyAPIView):
         return super().get_serializer_class()
 
     def get_queryset(self):
-        return Webhook.objects.filter(organization=self.request.user.active_organization)
+        return (
+            Webhook.objects.filter(organization=self.request.user.active_organization)
+            .filter(
+                Q(project__isnull=True)
+                | Q(project_id__in=Project.objects.admin_for_user(self.request.user).values('id'))
+            )
+            .distinct()
+        )
 
 
 @method_decorator(

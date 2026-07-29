@@ -91,6 +91,16 @@ class LabelCreateSerializer(serializers.ModelSerializer):
     project = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all())
     from_name = serializers.CharField()
 
+    def validate_project(self, project):
+        request = self.context.get('request')
+        if (
+            request is None
+            or project.organization_id != request.user.active_organization_id
+            or not project.is_admin(request.user)
+        ):
+            raise serializers.ValidationError('Only project administrators can manage labels.')
+        return project
+
     class Meta:
         model = Label
         list_serializer_class = LabelListSerializer
@@ -99,6 +109,23 @@ class LabelCreateSerializer(serializers.ModelSerializer):
 
 class LabelLinkSerializer(FlexFieldsModelSerializer):
     annotations_count = serializers.IntegerField(read_only=True)
+
+    def validate_project(self, project):
+        request = self.context.get('request')
+        if (
+            request is None
+            or project.organization_id != request.user.active_organization_id
+            or not project.is_admin(request.user)
+        ):
+            raise serializers.ValidationError('Only project administrators can manage labels.')
+        return project
+
+    def validate(self, attrs):
+        project = attrs.get('project', getattr(self.instance, 'project', None))
+        label = attrs.get('label', getattr(self.instance, 'label', None))
+        if project is not None and label is not None and project.organization_id != label.organization_id:
+            raise serializers.ValidationError({'label': 'Label and project must belong to the same organization.'})
+        return super().validate(attrs)
 
     class Meta:
         model = LabelLink
@@ -117,5 +144,17 @@ class LabelSerializer(FlexFieldsModelSerializer):
 
 class LabelBulkUpdateSerializer(serializers.Serializer):
     project = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all(), required=False, default=None)
+
+    def validate_project(self, project):
+        request = self.context.get('request')
+        if (
+            project is None
+            or request is None
+            or project.organization_id != request.user.active_organization_id
+            or not project.is_admin(request.user)
+        ):
+            raise serializers.ValidationError('Only project administrators can update annotation labels.')
+        return project
+
     old_label = serializers.JSONField()
     new_label = serializers.JSONField()

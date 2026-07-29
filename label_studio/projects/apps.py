@@ -11,10 +11,5 @@ class ProjectsConfig(AppConfig):
     name = 'projects'
 
     def ready(self):
-        """
-        Projects app initialization.
-
-        Note: FSM transitions are now registered centrally in fsm/apps.py.
-        Do NOT import transitions here to avoid duplicate registration.
-        """
-        pass
+        # Register project lifecycle receivers after all app models are loaded.
+        from projects import receivers  # noqa: F401

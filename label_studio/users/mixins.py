@@ -7,7 +7,9 @@ class UserMixin:
         return False
 
     def is_project_annotator(self, project):
-        return False
+        from projects.models import ProjectMemberRole
+
+        return project.get_role(self) == ProjectMemberRole.ANNOTATOR
 
     def has_permission(self, user):
         return OrganizationMember.objects.filter(

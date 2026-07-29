@@ -95,17 +95,40 @@ class OrganizationMemberSerializer(DynamicFieldsMixin, serializers.ModelSerializ
 
     def get_annotations_count(self, member) -> int:
         org = self.context.get('organization')
-        return member.user.annotations.filter(project__organization=org).count()
+        request = self.context.get('request')
+        if not request:
+            return 0
+        return (
+            Annotation.objects.for_user(request.user)
+            .filter(completed_by=member.user, project__organization=org)
+            .count()
+        )
 
     def get_contributed_projects_count(self, member) -> int:
         org = self.context.get('organization')
-        return member.user.annotations.filter(project__organization=org).values('project').distinct().count()
+        request = self.context.get('request')
+        if not request:
+            return 0
+        return (
+            Annotation.objects.for_user(request.user)
+            .filter(completed_by=member.user, project__organization=org)
+            .values('project')
+            .distinct()
+            .count()
+        )
 
     def get_created_projects(self, member) -> list[ProjectInfo] | None:
         if not self.context.get('contributed_to_projects', False):
             return None
         organization = self.context.get('organization')
-        projects = Project.objects.filter(created_by=member.user, organization=organization).values('id', 'title')
+        request = self.context.get('request')
+        if not request:
+            return []
+        projects = (
+            Project.objects.for_user(request.user)
+            .filter(created_by=member.user, organization=organization)
+            .values('id', 'title')
+        )
         projects = projects[:100]  # Limit to 100 projects
         return [
             {
@@ -119,8 +142,12 @@ class OrganizationMemberSerializer(DynamicFieldsMixin, serializers.ModelSerializ
         if not self.context.get('contributed_to_projects', False):
             return None
         organization = self.context.get('organization')
+        request = self.context.get('request')
+        if not request:
+            return []
         annotations = (
-            Annotation.objects.filter(completed_by=member.user, project__organization=organization)
+            Annotation.objects.for_user(request.user)
+            .filter(completed_by=member.user, project__organization=organization)
             .values('project__id', 'project__title')
             .distinct()
         )

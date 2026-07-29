@@ -208,48 +208,37 @@ def cast_value(_filter):
             _filter.value = cast_bool_from_str(_filter.value)
 
 
-def add_result_filter(field_name, _filter, filter_expressions, project):
+def add_result_filter(field_name, _filter, filter_expressions, project, request):
     from django.db.models.expressions import RawSQL
     from tasks.models import Annotation, Prediction
 
-    _class = Annotation if field_name == 'annotations_results' else Prediction
-
-    # Annotation
     if field_name == 'annotations_results':
-        subquery = Q(
-            id__in=Annotation.objects.annotate(json_str=RawSQL('cast(result as text)', ''))
-            .filter(Q(project=project) & Q(json_str__contains=_filter.value))
-            .filter(task=OuterRef('pk'))
-            .values_list('task', flat=True)
-        )
-    # Predictions: they don't have `project` yet
+        records = Annotation.objects.for_user(request.user).filter(project=project)
     else:
-        subquery = Exists(
-            _class.objects.annotate(json_str=RawSQL('cast(result as text)', '')).filter(
-                Q(task=OuterRef('pk')) & Q(json_str__contains=_filter.value)
-            )
-        )
+        records = Prediction.objects.filter(task__project=project)
 
+    records = records.filter(task=OuterRef('pk'))
     if _filter.operator in [Operator.EQUAL, Operator.NOT_EQUAL]:
         try:
             value = json.loads(_filter.value)
         except:  # noqa: E722
             return 'exit'
 
-        q = Exists(_class.objects.filter(Q(task=OuterRef('pk')) & Q(result=value)))
+        q = Exists(records.filter(result=value))
         filter_expressions.append(q if _filter.operator == Operator.EQUAL else ~q)
         return 'continue'
-    elif _filter.operator == Operator.CONTAINS:
-        filter_expressions.append(Q(subquery))
+
+    records = records.annotate(json_str=RawSQL('cast(result as text)', ''))
+    q = Exists(records.filter(json_str__contains=_filter.value))
+    if _filter.operator == Operator.CONTAINS:
+        filter_expressions.append(q)
         return 'continue'
-    elif _filter.operator == Operator.NOT_CONTAINS:
-        filter_expressions.append(~Q(subquery))
+    if _filter.operator == Operator.NOT_CONTAINS:
+        filter_expressions.append(~q)
         return 'continue'
-    elif _filter.operator == Operator.EMPTY:
-        if cast_bool_from_str(_filter.value):
-            q = Q(annotations__result__isnull=True) | Q(annotations__result=[])
-        else:
-            q = Q(annotations__result__isnull=False) & ~Q(annotations__result=[])
+    if _filter.operator == Operator.EMPTY:
+        empty = Q(result__isnull=True) | Q(result=[])
+        q = Exists(records.filter(empty if cast_bool_from_str(_filter.value) else ~empty))
         filter_expressions.append(q)
         return 'continue'
 
@@ -258,12 +247,44 @@ def add_user_filter(enabled, key, _filter, filter_expressions):
     if enabled and _filter.operator == Operator.CONTAINS:
         filter_expressions.append(Q(**{key: int(_filter.value)}))
         return 'continue'
-    elif enabled and _filter.operator == Operator.NOT_CONTAINS:
+    if enabled and _filter.operator == Operator.NOT_CONTAINS:
         filter_expressions.append(~Q(**{key: int(_filter.value)}))
         return 'continue'
-    elif enabled and _filter.operator == Operator.EMPTY:
+    if enabled and _filter.operator == Operator.EMPTY:
         value = cast_bool_from_str(_filter.value)
         filter_expressions.append(Q(**{key + '__isnull': value}))
+        return 'continue'
+
+
+def add_annotation_user_filter(enabled, _filter, filter_expressions, annotations):
+    if not enabled:
+        return None
+    if _filter.operator == Operator.CONTAINS:
+        q = Exists(annotations.filter(completed_by=int(_filter.value)))
+    elif _filter.operator == Operator.NOT_CONTAINS:
+        q = ~Exists(annotations.filter(completed_by=int(_filter.value)))
+    elif _filter.operator == Operator.EMPTY:
+        q = Exists(annotations.filter(completed_by__isnull=cast_bool_from_str(_filter.value)))
+    else:
+        return None
+    filter_expressions.append(q)
+    return 'continue'
+
+
+def add_annotation_id_filter(_filter, filter_expressions, annotations):
+    if 'contains' in _filter.operator:
+        values = [int(value) for value in re.split(',|;| ', _filter.value) if value and value.isdigit()]
+        q = Exists(annotations.filter(id__in=values))
+        filter_expressions.append(q if _filter.operator == Operator.CONTAINS else ~q)
+        return 'continue'
+    if 'equal' in _filter.operator:
+        value = int(_filter.value) if _filter.value.isdigit() else 0
+        q = Exists(annotations.filter(id=value))
+        filter_expressions.append(q if _filter.operator == Operator.EQUAL else ~q)
+        return 'continue'
+    if _filter.operator == Operator.EMPTY:
+        q = Exists(annotations)
+        filter_expressions.append(~q if cast_bool_from_str(_filter.value) else q)
         return 'continue'
 
 
@@ -273,6 +294,10 @@ def apply_filters(queryset, filters, project, request):
 
     # convert conjunction to orm statement
     custom_filter_expressions = load_func(settings.DATA_MANAGER_CUSTOM_FILTER_EXPRESSIONS)
+
+    from tasks.models import Annotation
+
+    visible_annotations = Annotation.objects.for_user(request.user).filter(project=project, task=OuterRef('pk'))
 
     # combine child filters with their parent in the same filter expression
     filter_line_expressions: list[list[Q]] = []
@@ -308,8 +333,8 @@ def apply_filters(queryset, filters, project, request):
                 continue
 
             # annotators
-            result = add_user_filter(
-                field_name == 'annotators', 'annotations__completed_by', _filter, filter_expressions
+            result = add_annotation_user_filter(
+                field_name == 'annotators', _filter, filter_expressions, visible_annotations
             )
             if result == 'continue':
                 continue
@@ -321,7 +346,7 @@ def apply_filters(queryset, filters, project, request):
 
             # annotations results & predictions results
             if field_name in ['annotations_results', 'predictions_results']:
-                result = add_result_filter(field_name, _filter, filter_expressions, project)
+                result = add_result_filter(field_name, _filter, filter_expressions, project, request)
                 if result == 'exit':
                     return queryset.none()
                 elif result == 'continue':
@@ -329,16 +354,9 @@ def apply_filters(queryset, filters, project, request):
 
             # annotation ids
             if field_name == 'annotations_ids':
-                field_name = 'annotations__id'
-                if 'contains' in _filter.operator:
-                    # convert string like "1 2,3" => [1,2,3]
-                    _filter.value = [
-                        int(value) for value in re.split(',|;| ', _filter.value) if value and value.isdigit()
-                    ]
-                    _filter.operator = 'in_list' if _filter.operator == 'contains' else 'not_in_list'
-                elif 'equal' in _filter.operator:
-                    if not _filter.value.isdigit():
-                        _filter.value = 0
+                result = add_annotation_id_filter(_filter, filter_expressions, visible_annotations)
+                if result == 'continue':
+                    continue
 
             # predictions model versions
             if field_name == 'predictions_model_versions' and _filter.operator == Operator.CONTAINS:
@@ -552,15 +570,33 @@ class GroupConcat(Aggregate):
         super().__init__(expression, distinct='DISTINCT ' if distinct else '', output_field=output_field, **extra)
 
 
-def newest_annotation_subquery() -> Subquery:
+def visible_annotations_filter(queryset):
+    request = getattr(queryset, 'request', None)
+    user = getattr(request, 'user', None)
+    if not getattr(user, 'is_authenticated', False):
+        return Q()
+
+    from projects.models import Project
+
+    admin_project_ids = Project.objects.admin_for_user(user).values('id')
+    member_project_ids = Project.objects.for_user(user).values('id')
+    return Q(project_id__in=admin_project_ids) | Q(project_id__in=member_project_ids, annotations__completed_by=user)
+
+
+def newest_annotation_subquery(queryset) -> Subquery:
     from tasks.models import Annotation
 
-    newest_annotations = Annotation.objects.filter(task=OuterRef('pk')).order_by('-id')[:1]
+    request = getattr(queryset, 'request', None)
+    user = getattr(request, 'user', None)
+    newest_annotations = (
+        Annotation.objects.for_user(user) if getattr(user, 'is_authenticated', False) else Annotation.objects.none()
+    )
+    newest_annotations = newest_annotations.filter(task=OuterRef('pk')).order_by('-id')[:1]
     return Subquery(newest_annotations.values('created_at'))
 
 
 def base_annotate_completed_at(queryset: TaskQuerySet) -> TaskQuerySet:
-    return queryset.annotate(completed_at=Case(When(is_labeled=True, then=newest_annotation_subquery())))
+    return queryset.annotate(completed_at=Case(When(is_labeled=True, then=newest_annotation_subquery(queryset))))
 
 
 def annotate_completed_at(queryset: TaskQuerySet) -> TaskQuerySet:
@@ -612,7 +648,7 @@ def annotated_completed_at_considering_agreement_threshold(queryset):
                 Q(_agreement__gte=agreement_threshold)
                 | Q(annotator_count__gte=(F('overlap') + max_additional_annotators_assignable))
             ),
-            then=newest_annotation_subquery(),
+            then=newest_annotation_subquery(queryset),
         ),
         default=Value(None),
         output_field=DateTimeField(),
@@ -631,14 +667,21 @@ def annotate_storage_filename(queryset: TaskQuerySet) -> TaskQuerySet:
 
 
 def annotate_annotations_results(queryset):
+    annotation_filter = visible_annotations_filter(queryset)
     if settings.DJANGO_DB == settings.DJANGO_DB_SQLITE:
         return queryset.annotate(
             annotations_results=Coalesce(
-                GroupConcat('annotations__result'), Value(''), output_field=models.CharField()
+                GroupConcat('annotations__result', filter=annotation_filter),
+                Value(''),
+                output_field=models.CharField(),
             )
         )
     else:
-        return queryset.annotate(annotations_results=ArrayAgg('annotations__result', distinct=True, default=Value([])))
+        return queryset.annotate(
+            annotations_results=ArrayAgg(
+                'annotations__result', distinct=True, default=Value([]), filter=annotation_filter
+            )
+        )
 
 
 def annotate_predictions_results(queryset):
@@ -653,12 +696,21 @@ def annotate_predictions_results(queryset):
 
 
 def annotate_annotators(queryset):
+    annotation_filter = visible_annotations_filter(queryset)
     if settings.DJANGO_DB == settings.DJANGO_DB_SQLITE:
         return queryset.annotate(
-            annotators=Coalesce(GroupConcat('annotations__completed_by'), Value(''), output_field=models.CharField())
+            annotators=Coalesce(
+                GroupConcat('annotations__completed_by', filter=annotation_filter),
+                Value(''),
+                output_field=models.CharField(),
+            )
         )
     else:
-        return queryset.annotate(annotators=ArrayAgg('annotations__completed_by', distinct=True, default=Value([])))
+        return queryset.annotate(
+            annotators=ArrayAgg(
+                'annotations__completed_by', distinct=True, default=Value([]), filter=annotation_filter
+            )
+        )
 
 
 def annotate_predictions_score(queryset):
@@ -689,10 +741,15 @@ def annotate_predictions_score(queryset):
 
 
 def annotate_annotations_ids(queryset):
+    annotation_filter = visible_annotations_filter(queryset)
     if settings.DJANGO_DB == settings.DJANGO_DB_SQLITE:
-        return queryset.annotate(annotations_ids=GroupConcat('annotations__id', output_field=models.CharField()))
+        return queryset.annotate(
+            annotations_ids=GroupConcat('annotations__id', output_field=models.CharField(), filter=annotation_filter)
+        )
     else:
-        return queryset.annotate(annotations_ids=ArrayAgg('annotations__id', default=Value([])))
+        return queryset.annotate(
+            annotations_ids=ArrayAgg('annotations__id', default=Value([]), filter=annotation_filter)
+        )
 
 
 def annotate_predictions_model_versions(queryset):
@@ -705,13 +762,20 @@ def annotate_predictions_model_versions(queryset):
 
 
 def annotate_avg_lead_time(queryset):
-    return queryset.annotate(avg_lead_time=Avg('annotations__lead_time'))
+    return queryset.annotate(avg_lead_time=Avg('annotations__lead_time', filter=visible_annotations_filter(queryset)))
 
 
 def annotate_draft_exists(queryset):
     from tasks.models import AnnotationDraft
 
-    return queryset.annotate(draft_exists=Exists(AnnotationDraft.objects.filter(task=OuterRef('pk'))))
+    request = getattr(queryset, 'request', None)
+    user = getattr(request, 'user', None)
+    drafts = (
+        AnnotationDraft.objects.for_user(user)
+        if getattr(user, 'is_authenticated', False)
+        else AnnotationDraft.objects.none()
+    )
+    return queryset.annotate(draft_exists=Exists(drafts.filter(task=OuterRef('pk'))))
 
 
 def file_upload(queryset):
@@ -891,7 +955,12 @@ class TaskManager(models.Manager):
         return TaskQuerySet(self.model, using=self._db)
 
     def for_user(self, user):
-        return self.get_queryset().filter(project__organization=user.active_organization)
+        if not getattr(user, 'is_authenticated', False):
+            return self.get_queryset().none()
+
+        from projects.models import Project
+
+        return self.get_queryset().filter(project_id__in=Project.objects.for_user(user).values('id'))
 
     def with_state(self):
         """Return queryset with FSM state annotated."""

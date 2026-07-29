@@ -19,7 +19,7 @@ from data_manager.serializers import (
     ViewSerializer,
 )
 from django.conf import settings
-from django.db.models import Sum
+from django.db.models import Prefetch, Q, Sum
 from django.db.models.functions import Coalesce
 from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
@@ -29,10 +29,11 @@ from projects.models import Project
 from projects.serializers import ProjectSerializer
 from rest_framework import generics, viewsets
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from tasks.models import Annotation, Prediction, Task
+from tasks.models import Annotation, Prediction, Task, annotation_visibility_q
 
 logger = logging.getLogger(__name__)
 
@@ -234,7 +235,14 @@ class ViewAPI(viewsets.ModelViewSet):
         return Response(status=200)
 
     def get_queryset(self):
-        return View.objects.filter(project__organization=self.request.user.active_organization).order_by('order', 'id')
+        member_project_ids = Project.objects.for_user(self.request.user).values('id')
+        admin_project_ids = Project.objects.admin_for_user(self.request.user).values('id')
+        return (
+            View.objects.filter(project_id__in=member_project_ids)
+            .filter(Q(project_id__in=admin_project_ids) | Q(user=self.request.user))
+            .distinct()
+            .order_by('order', 'id')
+        )
 
 
 class TaskPagination(PageNumberPagination):
@@ -249,7 +257,9 @@ class TaskPagination(PageNumberPagination):
         predictions_count_qs = Prediction.objects.filter(task_id__in=queryset)
         self.total_predictions = await sync_to_async(predictions_count_qs.count, thread_sensitive=True)()
 
-        annotations_count_qs = Annotation.objects.filter(task_id__in=queryset, was_cancelled=False)
+        annotations_count_qs = Annotation.objects.filter(
+            annotation_visibility_q(request.user), task_id__in=queryset, was_cancelled=False
+        )
         self.total_annotations = await sync_to_async(annotations_count_qs.count, thread_sensitive=True)()
         # Use .only('id') to avoid loading heavy task.data fields during pagination
         # Full task objects are loaded later with proper annotations
@@ -258,7 +268,9 @@ class TaskPagination(PageNumberPagination):
 
     def sync_paginate_queryset(self, queryset, request, view=None):
         self.total_predictions = Prediction.objects.filter(task_id__in=queryset).count()
-        self.total_annotations = Annotation.objects.filter(task_id__in=queryset, was_cancelled=False).count()
+        self.total_annotations = Annotation.objects.filter(
+            annotation_visibility_q(request.user), task_id__in=queryset, was_cancelled=False
+        ).count()
         # Use .only('id') to avoid loading heavy task.data fields during pagination
         # Full task objects are loaded later with proper annotations
         id_only_queryset = queryset.only('id')
@@ -343,11 +355,14 @@ class TaskListAPI(generics.ListCreateAPIView):
         return Task.prepared.only_filtered(prepare_params=prepare_params)
 
     @staticmethod
-    def prefetch(queryset):
+    def prefetch(queryset, user):
         return queryset.prefetch_related(
-            'annotations',
+            Prefetch(
+                'annotations',
+                queryset=Annotation.objects.for_user(user).select_related('completed_by'),
+                to_attr='visible_annotations',
+            ),
             'predictions',
-            'annotations__completed_by',
             'project',
             'io_storages_azureblobimportstoragelink',
             'io_storages_gcsimportstoragelink',
@@ -362,12 +377,12 @@ class TaskListAPI(generics.ListCreateAPIView):
         view_pk = int_from_request(request.GET, 'view', 0) or int_from_request(request.data, 'view', 0)
         project_pk = int_from_request(request.GET, 'project', 0) or int_from_request(request.data, 'project', 0)
         if project_pk:
-            project = generics.get_object_or_404(Project, pk=project_pk)
+            project = generics.get_object_or_404(Project.objects.for_user(request.user), pk=project_pk)
             self.check_object_permissions(request, project)
         elif view_pk:
             view = generics.get_object_or_404(View, pk=view_pk)
+            self.check_object_permissions(request, view)
             project = view.project
-            self.check_object_permissions(request, project)
         else:
             return Response({'detail': 'Neither project nor view id specified'}, status=404)
         # get prepare params (from view or from payload directly)
@@ -393,7 +408,8 @@ class TaskListAPI(generics.ListCreateAPIView):
                     fields_for_evaluation=fields_for_evaluation,
                     all_fields=all_fields,
                     request=request,
-                )
+                ),
+                request.user,
             )
 
             tasks_by_ids = {task.id: task for task in tasks}
@@ -511,19 +527,19 @@ class ProjectStateAPI(APIView):
 
     def get(self, request):
         pk = int_from_request(request.GET, 'project', 1)  # replace 1 to None, it's for debug only
-        project = generics.get_object_or_404(Project, pk=pk)
-        self.check_object_permissions(request, project)
-        data = ProjectSerializer(project).data
+        project = generics.get_object_or_404(Project.objects.for_user(request.user), pk=pk)
+        data = ProjectSerializer(project, context={'request': request}).data
+        is_admin = project.is_admin(request.user)
 
         data.update(
             {
-                'can_delete_tasks': True,
-                'can_manage_annotations': True,
-                'can_manage_tasks': True,
+                'can_delete_tasks': is_admin,
+                'can_manage_annotations': is_admin,
+                'can_manage_tasks': is_admin,
                 'source_syncing': False,
                 'target_syncing': False,
                 'task_count': project.tasks.count(),
-                'annotation_count': Annotation.objects.filter(project=project).count(),
+                'annotation_count': Annotation.objects.for_user(request.user).filter(project=project).count(),
                 'config_has_control_tags': len(project.get_parsed_config()) > 0,
             }
         )
@@ -683,14 +699,16 @@ class ProjectActionsAPI(APIView):
 
     def get(self, request):
         pk = int_from_request(request.GET, 'project', 0)
-        project = generics.get_object_or_404(Project, pk=pk)
-        self.check_object_permissions(request, project)
+        project = generics.get_object_or_404(Project.objects.for_user(request.user), pk=pk)
+        if not project.is_admin(request.user):
+            return Response([])
         return Response(get_all_actions(request.user, project))
 
     def post(self, request):
         pk = int_from_request(request.GET, 'project', 0)
-        project = generics.get_object_or_404(Project, pk=pk)
-        self.check_object_permissions(request, project)
+        project = generics.get_object_or_404(Project.objects.for_user(request.user), pk=pk)
+        if not project.is_admin(request.user):
+            raise PermissionDenied('Only project administrators can perform Data Manager actions.')
 
         # keep ordering only when needed, otherwise drop to avoid expensive sorts/annotations
         action_id = request.GET.get('id', None)
@@ -753,8 +771,9 @@ class ProjectActionsFormAPI(APIView):
 
     def get(self, request, action_id):
         pk = int_from_request(request.GET, 'project', 0)
-        project = generics.get_object_or_404(Project, pk=pk)
-        self.check_object_permissions(request, project)
+        project = generics.get_object_or_404(Project.objects.for_user(request.user), pk=pk)
+        if not project.is_admin(request.user):
+            raise PermissionDenied('Only project administrators can use Data Manager action forms.')
 
         form = get_action_form(action_id, project, request.user)
         return Response(form)

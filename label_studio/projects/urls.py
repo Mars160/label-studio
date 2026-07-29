@@ -18,6 +18,12 @@ _api_urlpatterns = [
     # CRUD
     path('', api.ProjectListAPI.as_view(), name='project-list'),
     path('<int:pk>/', api.ProjectAPI.as_view(), name='project-detail'),
+    path('<int:pk>/members/', api.ProjectMemberListAPI.as_view(), name='project-members-list'),
+    path(
+        '<int:pk>/members/<int:member_pk>/',
+        api.ProjectMemberDetailAPI.as_view(),
+        name='project-members-detail',
+    ),
     path('counts/', api.ProjectCountsListAPI.as_view(), name='project-counts-list'),
     # Get next task
     path('<int:pk>/next/', api.ProjectNextTaskAPI.as_view(), name='project-next'),

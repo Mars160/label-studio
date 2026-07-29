@@ -22,6 +22,10 @@ export const API_CONFIG = {
     updateProject: "PATCH:/projects/:pk",
     createProject: "POST:/projects",
     deleteProject: "DELETE:/projects/:pk",
+    projectMembers: "/projects/:pk/members",
+    addProjectMember: "POST:/projects/:pk/members",
+    updateProjectMember: "PATCH:/projects/:pk/members/:memberPk",
+    deleteProjectMember: "DELETE:/projects/:pk/members/:memberPk",
     projectResetCache: "POST:/projects/:pk/summary/reset",
 
     // Presigning

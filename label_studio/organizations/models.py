@@ -15,6 +15,49 @@ logger = logging.getLogger(__name__)
 OrganizationMemberMixin = load_func(settings.ORGANIZATION_MEMBER_MIXIN)
 
 
+def revoke_project_memberships(user, organization):
+    """Disable project access and preserve an effective admin during organization offboarding."""
+    from projects.models import Project, ProjectMember, ProjectMemberRole
+
+    memberships = ProjectMember.objects.filter(
+        user=user,
+        project__organization=organization,
+        enabled=True,
+    )
+    project_ids = list(memberships.values_list('project_id', flat=True))
+    if not project_ids:
+        return
+
+    projects = list(Project.objects.select_for_update().filter(id__in=project_ids))
+    memberships.update(enabled=False, updated_at=timezone.now())
+
+    for project in projects:
+        effective_admins = ProjectMember.objects.filter(
+            project=project,
+            enabled=True,
+            role=ProjectMemberRole.ADMIN,
+            user__om_through__organization=organization,
+            user__om_through__deleted_at__isnull=True,
+        )
+        if effective_admins.exists():
+            continue
+        replacement_id = (
+            ProjectMember.objects.filter(
+                project=project,
+                enabled=True,
+                user__om_through__organization=organization,
+                user__om_through__deleted_at__isnull=True,
+            )
+            .order_by('id')
+            .values_list('id', flat=True)
+            .first()
+        )
+        if replacement_id is not None:
+            ProjectMember.objects.filter(id=replacement_id).update(
+                role=ProjectMemberRole.ADMIN, updated_at=timezone.now()
+            )
+
+
 class OrganizationMember(OrganizationMemberMixin, models.Model):
     """ """
 
@@ -62,6 +105,7 @@ class OrganizationMember(OrganizationMemberMixin, models.Model):
         with transaction.atomic():
             self.deleted_at = timezone.now()
             self.save(update_fields=['deleted_at'])
+            revoke_project_memberships(self.user, self.organization)
             self.user.active_organization = self.user.organizations.filter(
                 organizationmember__deleted_at__isnull=True
             ).first()
@@ -126,13 +170,13 @@ class Organization(OrganizationMixin, models.Model):
             raise KeyError(f"Can't find Organization by welcome URL: {url}")
 
     def has_user(self, user):
-        return self.users.filter(pk=user.pk).exists()
+        return OrganizationMember.objects.filter(user=user, organization=self, deleted_at__isnull=True).exists()
 
     def has_deleted(self, user):
         return OrganizationMember.objects.filter(user=user, organization=self, deleted_at__isnull=False).exists()
 
     def has_project_member(self, user):
-        return self.projects.filter(members__user=user).exists()
+        return self.has_user(user) and self.projects.filter(members__user=user, members__enabled=True).exists()
 
     def has_permission(self, user):
         return OrganizationMember.objects.filter(user=user, organization=self, deleted_at__isnull=True).exists()
@@ -149,10 +193,14 @@ class Organization(OrganizationMixin, models.Model):
             return om
 
     def remove_user(self, user):
-        OrganizationMember.objects.filter(user=user, organization=self).delete()
-        if user.active_organization_id == self.id:
-            user.active_organization = user.organizations.filter(organizationmember__deleted_at__isnull=True).first()
-            user.save(update_fields=['active_organization'])
+        with transaction.atomic():
+            OrganizationMember.objects.filter(user=user, organization=self).delete()
+            revoke_project_memberships(user, self)
+            if user.active_organization_id == self.id:
+                user.active_organization = user.organizations.filter(
+                    organizationmember__deleted_at__isnull=True
+                ).first()
+                user.save(update_fields=['active_organization'])
 
     def reset_token(self):
         self.token = create_hash()
