@@ -139,7 +139,8 @@ class OrganizationMemberListAPI(generics.ListAPIView):
         members = self.paginated_members
         user_ids = [member.user_id for member in members]
         projects = (
-            Project.objects.filter(created_by_id__in=user_ids, organization=self.request.user.active_organization)
+            Project.objects.for_user(self.request.user)
+            .filter(created_by_id__in=user_ids, organization=self.request.user.active_organization)
             .values('created_by_id', 'id', 'title')
             .distinct()
         )
@@ -156,16 +157,19 @@ class OrganizationMemberListAPI(generics.ListAPIView):
     def _get_contributed_to_projects_map(self):
         members = self.paginated_members
         user_ids = [member.user_id for member in members]
-        org_project_ids = Project.objects.filter(organization=self.request.user.active_organization).values_list(
-            'id', flat=True
+        org_project_ids = (
+            Project.objects.for_user(self.request.user)
+            .filter(organization=self.request.user.active_organization)
+            .values_list('id', flat=True)
         )
         annotations = (
-            Annotation.objects.filter(completed_by__in=list(user_ids), project__in=list(org_project_ids))
+            Annotation.objects.for_user(self.request.user)
+            .filter(completed_by__in=list(user_ids), project__in=list(org_project_ids))
             .values('completed_by', 'project_id')
             .distinct()
         )
         project_ids = [annotation['project_id'] for annotation in annotations]
-        projects_map = Project.objects.in_bulk(id_list=project_ids, field_name='id')
+        projects_map = Project.objects.for_user(self.request.user).in_bulk(id_list=project_ids, field_name='id')
 
         contributed_to_projects_map = {}
         for annotation in annotations:

@@ -12,7 +12,7 @@ from drf_spectacular.utils import extend_schema_field
 from fsm.serializer_fields import FSMStateField
 from projects.models import Project
 from rest_framework import serializers
-from tasks.models import Task
+from tasks.models import Annotation, AnnotationDraft, Task
 from tasks.serializers import (
     AnnotationDraftSerializer,
     AnnotationSerializer,
@@ -145,6 +145,13 @@ class ViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = View
         fields = '__all__'
+        read_only_fields = ('user',)
+
+    def validate_project(self, project):
+        request = self.context.get('request')
+        if request and not Project.objects.for_user(request.user).filter(pk=project.pk).exists():
+            raise serializers.ValidationError('You do not have access to this project.')
+        return project
 
     def to_internal_value(self, data):
         """
@@ -293,11 +300,11 @@ class ViewSerializer(serializers.ModelSerializer):
                 instance.ordering = ordering
                 instance.save()
 
-            if validated_data['data'] != instance.data:
-                instance.data = validated_data['data']
-                instance.save()
+            data = validated_data.pop('data', instance.data)
+            if data != instance.data:
+                instance.data = data
 
-            return instance
+            return super().update(instance, validated_data)
 
 
 @extend_schema_field(
@@ -476,6 +483,9 @@ class DataManagerTaskSerializer(TaskSerializer):
             ret.pop('annotations', None)
         if not self.context.get('predictions'):
             ret.pop('predictions', None)
+        request = self.context.get('request')
+        if 'annotations' in ret and request and request.user.is_project_annotator(obj.project):
+            ret['annotations'] = self.get_annotations(obj)
         # Remove state field if feature flags are disabled
         user = CurrentContext.get_user()
         if not (
@@ -526,7 +536,12 @@ class DataManagerTaskSerializer(TaskSerializer):
         if not self.context.get('annotations'):
             return []
 
-        annotations = task.annotations.all()
+        request = self.context.get('request')
+        annotations = getattr(task, 'visible_annotations', None)
+        if annotations is None:
+            annotations = (
+                Annotation.objects.for_user(request.user).filter(task=task) if request else task.annotations.none()
+            )
 
         # Use stub serializer if requested (feature flag checked at API level)
         if self.context.get('annotations_stub'):
@@ -585,11 +600,11 @@ class DataManagerTaskSerializer(TaskSerializer):
         return AnnotationDraftSerializer
 
     def get_drafts_queryset(self, user, drafts):
-        """Get all user's draft"""
-        return drafts.filter(user=user)
+        """Get drafts visible to the current project role."""
+        return AnnotationDraft.objects.for_user(user).filter(task=drafts.instance)
 
     def get_drafts(self, task):
-        """Return drafts only for the current user"""
+        """Return drafts visible to the current project role."""
         # it's for openapi3 documentation
         if not isinstance(task, Task) or not self.context.get('drafts'):
             return []
