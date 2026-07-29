@@ -97,4 +97,13 @@ declare type APIProject = {
    * Number of finished tasks
    */
   queue_done: number;
+  current_user_role?: "admin" | "annotator";
+  capabilities?: {
+    manage_project: boolean;
+    manage_members: boolean;
+    view_all_annotations: boolean;
+    manage_tasks: boolean;
+    import_tasks: boolean;
+    export_tasks: boolean;
+  };
 };
