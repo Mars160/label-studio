@@ -11,11 +11,11 @@ const UserOrReference = types.union({
       return User;
     }
     // Otherwise, it's a reference to a user ID
-    return types.reference(User);
+    return types.safeReference(User);
   },
   cases: {
     [User.name]: User,
-    reference: types.reference(User),
+    reference: types.safeReference(User),
   },
 });
 
@@ -29,28 +29,28 @@ export const Assignee = types
   })
   .views((self) => ({
     get firstName() {
-      return self.user.firstName;
+      return self.user?.firstName;
     },
     get lastName() {
-      return self.user.lastName;
+      return self.user?.lastName;
     },
     get username() {
-      return self.user.username;
+      return self.user?.username;
     },
     get email() {
-      return self.user.email;
+      return self.user?.email;
     },
     get lastActivity() {
-      return self.user.lastActivity;
+      return self.user?.lastActivity;
     },
     get avatar() {
-      return self.user.avatar;
+      return self.user?.avatar;
     },
     get initials() {
-      return self.user.initials;
+      return self.user?.initials;
     },
     get fullName() {
-      return self.user.fullName;
+      return self.user?.fullName;
     },
   }))
   .preProcessSnapshot((sn) => {
