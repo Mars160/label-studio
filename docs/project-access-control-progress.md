@@ -1,6 +1,6 @@
 # Project Access Control Progress
 
-Last reviewed: 2026-07-27
+Last reviewed: 2026-07-30
 
 Status: **Ready for review; PostgreSQL migration verification remains an environment follow-up**
 
@@ -44,6 +44,7 @@ The authorization boundary is `ProjectMember(project, user, role, enabled)`. Fro
 - View ownership is read-only to prevent tab transfer.
 - Project statistics are owner-filtered for annotators.
 - Project annotator lists return only the requesting annotator to non-admin members.
+- Data Manager loads globally fetched users before task hydration and safely degrades missing historical user references.
 
 ### Administrator-only project operations
 
@@ -64,8 +65,10 @@ The following commands/checks have passed in the local uv environment:
 | `manage.py makemigrations --check --dry-run` | No changes detected |
 | Python `compileall` and `git diff --check` | Passed |
 | Biome 2.4.6 on 7 changed frontend files | No errors; 2 pre-existing unused-variable warnings |
+| Data Manager assignee reference regression test | 2 passed |
+| Biome 2.4.6 on the 3 assignee fix files | Passed |
 
-Tests cover creator-admin provisioning, nonmember hiding, member addition, role management, final-admin protection, soft and hard organization offboarding with replacement-admin promotion, disabled membership, admin/annotator annotation and draft visibility, role-safe Data Manager filtering, own-tab isolation, tab-owner immutability and persistence, annotator denial for ground-truth/prediction/model-version/live-ML/import/storage/webhook operations, prediction/draft/label relationship integrity, credential redaction, organization-level webhooks, migration promotion behavior, and affected existing API behavior.
+Tests cover creator-admin provisioning, nonmember hiding, member addition, role management, final-admin protection, soft and hard organization offboarding with replacement-admin promotion, disabled membership, admin/annotator annotation and draft visibility, role-safe Data Manager filtering, own-tab isolation, tab-owner immutability and persistence, annotator denial for ground-truth/prediction/model-version/live-ML/import/storage/webhook operations, prediction/draft/label relationship integrity, credential redaction, organization-level webhooks, migration promotion behavior, missing Data Manager assignee references, and affected existing API behavior.
 
 ## Resolved Security Review Findings
 
