@@ -102,7 +102,8 @@ RUN if [ -n "$ALPINE_REPOSITORY" ]; then \
     pcre2-dev
 
 ADD https://install.python-poetry.org /tmp/install-poetry.py
-RUN if [ -n "$PIP_INDEX_URL" ]; then export PIP_INDEX_URL; fi && python /tmp/install-poetry.py
+RUN if [ -n "$PIP_INDEX_URL" ]; then export PIP_INDEX_URL; fi && \
+    POETRY_VERSION="$POETRY_VERSION" python /tmp/install-poetry.py
 
 WORKDIR /label-studio
 
