@@ -43,6 +43,13 @@ Do not replace `uv.lock` or `web/pnpm-lock.yaml` with a lockfile from another pa
 
 For full-stack development, use the root Makefile targets. `make run-dev` starts Django with SQLite, while `make frontend-dev` starts the frontend HMR server. Docker development is available through `make docker-dev-setup` and `make docker-run-dev`.
 
+### Docker Image Builds
+
+- Every Docker image build must configure mainland China mirrors in its build stages before installing dependencies: npm uses `https://registry.npmmirror.com`, PyPI uses `https://mirrors.aliyun.com/pypi/simple/`, and Alpine package repositories use the corresponding `mirrors.aliyun.com/alpine` release repositories.
+- Configure mirrors inside the Dockerfile/build stage rather than relying on the Docker host. Preserve any explicitly supplied registry or index build arguments so private registries remain usable.
+- Pass a `BUILD_JOBS` build argument from the build command, defaulting to the available CPU count (for example, `--build-arg BUILD_JOBS="$(nproc)"`). Use it for native compilation through `MAKEFLAGS="-j${BUILD_JOBS}"`, `CMAKE_BUILD_PARALLEL_LEVEL="${BUILD_JOBS}"`, and equivalent build-tool options. This applies to packages compiled from source, including OpenCV.
+- Do not bake a fixed CPU count into Dockerfiles. Keep runtime image stages free of build-only mirror configuration and compiler parallelism settings unless they are required at runtime.
+
 ## Common Commands
 
 Run commands from the repository root unless the command explicitly changes directories.
