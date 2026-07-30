@@ -6,7 +6,7 @@ This file is the default guide for coding agents working in this repository. Kee
 
 ## Repository Map
 
-Label Studio is a Python/Django backend plus a Yarn/Nx React monorepo.
+Label Studio is a Python/Django backend plus a pnpm/Nx React monorepo.
 
 - `label_studio/`: Django application, APIs, models, migrations, and backend tests.
 - `web/apps/labelstudio/`: main frontend application and backend/frontend integration point.
@@ -26,20 +26,20 @@ More specific `AGENTS.md` files, if added below this directory, take precedence 
 
 ## Environment Setup
 
-Backend requirements are Python 3.10+ and Poetry 2.x:
+Backend requirements are Python 3.10+ and uv:
 
 ```bash
-poetry install --with test
+uv sync
 make migrate-dev
 ```
 
-Frontend CI uses Node 22 and Yarn 1.22:
+Frontend CI uses Node 22 and pnpm 11:
 
 ```bash
 make frontend-install
 ```
 
-Do not replace `poetry.lock` or `web/yarn.lock` with a lockfile from another package manager. Only update a lockfile when dependencies actually change.
+Do not replace `uv.lock` or `web/pnpm-lock.yaml` with a lockfile from another package manager. Only update a lockfile when dependencies actually change.
 
 For full-stack development, use the root Makefile targets. `make run-dev` starts Django with SQLite, while `make frontend-dev` starts the frontend HMR server. Docker development is available through `make docker-dev-setup` and `make docker-run-dev`.
 
@@ -63,36 +63,36 @@ For a focused backend test, run pytest from `label_studio/` so its `pytest.ini` 
 
 ```bash
 cd label_studio
-DJANGO_DB=sqlite poetry run pytest path/to/test_file.py -v
+DJANGO_DB=sqlite uv run pytest path/to/test_file.py -v
 ```
 
 ### Frontend
 
-Run Yarn/Nx commands from `web/`:
+Run pnpm/Nx commands from `web/`:
 
 ```bash
-yarn dev                     # main app development build/HMR
-yarn build                   # production frontend build
-yarn test:unit               # all frontend unit targets
-yarn ls:unit                 # main app unit tests
-yarn lsf:unit                # editor unit tests
-yarn dm:unit                 # Data Manager unit tests
-yarn lsf:integration         # editor Cypress integration tests
-yarn lint                    # Biome check with fixes
-yarn biome check . --diagnostic-level=error  # CI-style lint check without fixes
-yarn ui:serve                # shared UI Storybook
+pnpm dev                     # main app development build/HMR
+pnpm build                   # production frontend build
+pnpm test:unit               # all frontend unit targets
+pnpm ls:unit                 # main app unit tests
+pnpm lsf:unit                # editor unit tests
+pnpm dm:unit                 # Data Manager unit tests
+pnpm lsf:integration         # editor Cypress integration tests
+pnpm lint                    # Biome check with fixes
+pnpm exec biome check . --diagnostic-level=error  # CI-style lint check without fixes
+pnpm ui:serve                # shared UI Storybook
 ```
 
 Prefer the narrowest Nx project target that covers the change. Do not run the full Cypress or backend suite when a focused test proves the change, but broaden verification for shared libraries, migrations, or cross-cutting behavior.
 
 ### Documentation
 
-The docs site has its own Yarn workspace:
+The docs site has its own pnpm workspace:
 
 ```bash
 cd docs
-yarn install --frozen-lockfile
-yarn build
+pnpm install --frozen-lockfile
+pnpm build
 ```
 
 ## Implementation Rules
