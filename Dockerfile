@@ -4,6 +4,9 @@ ARG PYTHON_VERSION=3.13
 ARG POETRY_VERSION=2.3.2
 ARG VERSION_OVERRIDE
 ARG BRANCH_OVERRIDE
+ARG ALPINE_REPOSITORY
+ARG YARN_REGISTRY
+ARG PIP_INDEX_URL
 
 ################################ Overview
 
@@ -17,6 +20,8 @@ ARG BRANCH_OVERRIDE
 
 ################################ Stage: frontend-builder (build frontend assets)
 FROM --platform=${BUILDPLATFORM} node:${NODE_VERSION}-alpine AS frontend-builder
+ARG ALPINE_REPOSITORY
+ARG YARN_REGISTRY
 ENV BUILD_NO_SERVER=true \
     BUILD_NO_HASH=true \
     BUILD_NO_CHUNKS=true \
@@ -28,7 +33,10 @@ ENV BUILD_NO_SERVER=true \
 
 WORKDIR /label-studio/web
 
-RUN apk add --no-cache \
+RUN if [ -n "$ALPINE_REPOSITORY" ]; then \
+        sed -i "s|https://dl-cdn.alpinelinux.org/alpine|${ALPINE_REPOSITORY%/}|g" /etc/apk/repositories; \
+    fi && \
+    apk add --no-cache \
     build-base \
     pkgconfig \
     cairo-dev \
@@ -44,7 +52,11 @@ COPY web/yarn.lock .
 COPY web/tools tools
 RUN --mount=type=cache,target=/root/web/.yarn,id=yarn-cache,sharing=locked \
     --mount=type=cache,target=/root/web/.nx,id=nx-cache,sharing=locked \
-    yarn install --prefer-offline --no-progress --pure-lockfile --frozen-lockfile --ignore-engines --non-interactive --production=false
+    if [ -n "$YARN_REGISTRY" ]; then \
+        yarn config set registry "$YARN_REGISTRY" && \
+        sed -i "s|https://registry.yarnpkg.com|${YARN_REGISTRY%/}|g" yarn.lock; \
+    fi && \
+    yarn install --network-timeout 600000 --prefer-offline --no-progress --pure-lockfile --frozen-lockfile --ignore-engines --non-interactive --production=false
 
 COPY web/ .
 COPY pyproject.toml ../pyproject.toml
@@ -63,6 +75,8 @@ RUN --mount=type=cache,target=/root/web/.yarn,id=yarn-cache,sharing=locked \
 FROM python:${PYTHON_VERSION}-alpine AS venv-builder
 ARG POETRY_VERSION
 ARG PYTHON_VERSION
+ARG ALPINE_REPOSITORY
+ARG PIP_INDEX_URL
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -76,7 +90,10 @@ ENV PYTHONUNBUFFERED=1 \
     POETRY_VIRTUALENVS_PREFER_ACTIVE_PYTHON=true \
     PATH="/opt/poetry/bin:$PATH"
 
-RUN apk add --no-cache \
+RUN if [ -n "$ALPINE_REPOSITORY" ]; then \
+        sed -i "s|https://dl-cdn.alpinelinux.org/alpine|${ALPINE_REPOSITORY%/}|g" /etc/apk/repositories; \
+    fi && \
+    apk add --no-cache \
     build-base \
     git \
     linux-headers \
@@ -84,7 +101,7 @@ RUN apk add --no-cache \
     pcre2-dev
 
 ADD https://install.python-poetry.org /tmp/install-poetry.py
-RUN python /tmp/install-poetry.py
+RUN if [ -n "$PIP_INDEX_URL" ]; then export PIP_INDEX_URL; fi && python /tmp/install-poetry.py
 
 WORKDIR /label-studio
 
@@ -101,11 +118,21 @@ ARG INCLUDE_DEV=false
 
 # Install dependencies
 RUN --mount=type=cache,target=/.poetry-cache,id=poetry-cache-alpine,sharing=locked \
+    if [ -n "$PIP_INDEX_URL" ]; then \
+        cp pyproject.toml /tmp/pyproject.toml && \
+        cp poetry.lock /tmp/poetry.lock && \
+        poetry source add --priority=primary build-mirror "${PIP_INDEX_URL%/}/" && \
+        poetry lock; \
+    fi && \
     poetry check --lock && \
     if [ "$INCLUDE_DEV" = "true" ]; then \
         poetry install --no-root --extras uwsgi --with test; \
     else \
         poetry install --no-root --without test --extras uwsgi; \
+    fi && \
+    if [ -n "$PIP_INDEX_URL" ]; then \
+        mv /tmp/pyproject.toml pyproject.toml && \
+        mv /tmp/poetry.lock poetry.lock; \
     fi
 
 # Install LS
@@ -126,6 +153,7 @@ RUN --mount=type=bind,source=.git,target=./.git \
 
 ################################### Stage: prod
 FROM python:${PYTHON_VERSION}-alpine AS production
+ARG ALPINE_REPOSITORY
 
 ENV LS_DIR=/label-studio \
     HOME=/label-studio \
@@ -139,7 +167,10 @@ ENV LS_DIR=/label-studio \
 WORKDIR $LS_DIR
 
 # install prerequisites for app
-RUN apk add --no-cache \
+RUN if [ -n "$ALPINE_REPOSITORY" ]; then \
+        sed -i "s|https://dl-cdn.alpinelinux.org/alpine|${ALPINE_REPOSITORY%/}|g" /etc/apk/repositories; \
+    fi && \
+    apk add --no-cache \
     expat \
     mesa-gl \
     glib \
