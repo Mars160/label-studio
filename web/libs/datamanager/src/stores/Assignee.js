@@ -1,23 +1,24 @@
-import { types } from "mobx-state-tree";
+import { getRoot, types } from "mobx-state-tree";
 import { User } from "./Users";
 import { StringOrNumberID } from "./types";
 import { FF_DISABLE_GLOBAL_USER_FETCHING, isFF } from "../utils/feature-flags";
 
-// Create a union type that can handle both user references and direct user objects
-const UserOrReference = types.union({
-  dispatcher: (snapshot) => {
-    // If it's a full user object (has firstName, email, etc.), use User model
-    if (snapshot && typeof snapshot === "object" && (snapshot.firstName || snapshot.email || snapshot.username)) {
-      return User;
-    }
-    // Otherwise, it's a reference to a user ID
-    return types.safeReference(User);
+const UserReference = types.safeReference(User, {
+  get(identifier, parent) {
+    return getRoot(parent).users?.find((user) => String(user.id) === String(identifier));
   },
-  cases: {
-    [User.name]: User,
-    reference: types.safeReference(User),
+  set(user) {
+    return user.id;
   },
 });
+
+const UserOrReference = types.union(
+  {
+    dispatcher: (snapshot) => (snapshot !== null && typeof snapshot === "object" ? User : UserReference),
+  },
+  User,
+  UserReference,
+);
 
 export const Assignee = types
   .model("Assignee", {
