@@ -22,7 +22,7 @@ More specific `AGENTS.md` files, if added below this directory, take precedence 
 
 ## Current Work
 
-- Project-scoped access control progress is tracked in `docs/project-access-control-progress.md`. Read it before changing membership, roles, project authorization, annotation/tab visibility, or related frontend capabilities. Keep its implementation status, security findings, policy decisions, and verification results synchronized with the code.
+- Project-scoped access control is implemented on `develop`; PostgreSQL verification of migration `projects.0035_projectmember_role` is the only recorded environment follow-up. Read `docs/project-access-control-progress.md` before changing membership, roles, project authorization, annotation/tab visibility, or related frontend capabilities, and keep its implementation status, security findings, policy decisions, and verification results synchronized with the code.
 
 ## Environment Setup
 

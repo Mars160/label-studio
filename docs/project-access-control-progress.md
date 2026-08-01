@@ -1,10 +1,10 @@
 # Project Access Control Progress
 
-Last reviewed: 2026-07-30
+Last reviewed: 2026-08-01
 
-Status: **Ready for review; PostgreSQL migration verification remains an environment follow-up**
+Status: **Implemented on `develop`; PostgreSQL migration verification remains an environment follow-up**
 
-This is the engineering handoff record for the uncommitted project-scoped access-control implementation. Keep it synchronized with code, tests, policy decisions, and unresolved findings.
+This is the engineering handoff record for the committed project-scoped access-control implementation. Keep it synchronized with code, tests, policy decisions, documentation, and unresolved findings.
 
 ## Goal
 
@@ -51,9 +51,15 @@ The authorization boundary is `ProjectMember(project, user, role, enabled)`. Fro
 
 Server-side admin checks cover member visibility and management, project/task mutation, imports, exports, file uploads, storage settings and sync, ML backends, project webhooks, Data Manager bulk actions, label configuration validation, and project summary reset. Frontend capability checks hide or disable the matching member, settings, import/export, storage, and ML entry points.
 
+### User documentation
+
+- Added a fork-specific access-control overview to the root `README.md`, including role boundaries and member-management behavior.
+- Added `docs/README.zh-CN.md` as the Simplified Chinese user guide with matching access-control and deployment guidance.
+- Updated Docker examples in both user guides to use `docker.io/mars160/label-studio:latest` and the fork's default `28000` host port.
+
 ## Verified
 
-The following commands/checks have passed in the local uv environment:
+The following commands/checks have passed in the local test environment:
 
 | Check | Result |
 | --- | --- |
@@ -106,6 +112,7 @@ The independent review findings have been fixed and reverified:
 - [x] Run 131 focused backend tests, including affected API, webhook, and Data Manager filter suites.
 - [x] Run Ruff, Django checks, migration drift, `compileall`, `git diff --check`, and frontend Biome.
 - [x] Complete the final diff audit for generated files, unrelated changes, permission declaration mismatches, and unscoped querysets.
-- [ ] Validate the migration on PostgreSQL when that service is available; SQLite migration/test verification is complete.
+- [x] Land the implementation on `develop` and publish matching English and Simplified Chinese user guidance.
+- [ ] Validate migration `projects.0035_projectmember_role` on PostgreSQL when that service is available; SQLite migration/test verification is complete.
 
-No known blocking authorization finding remains. The implementation and local verification are ready for review; PostgreSQL migration verification is the only documented environment-dependent follow-up.
+No known blocking authorization finding remains. The implementation is committed on `develop`; PostgreSQL verification of migration `projects.0035_projectmember_role` is the only documented environment-dependent follow-up.
