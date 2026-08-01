@@ -33,16 +33,16 @@ Label Studio 是一款开源数据标注工具，支持音频、文本、图像�
 
 ## 快速开始
 
-### 使用官方 Docker 镜像
+### 使用本分支 Docker 镜像
 
-拉取官方镜像并在 `http://localhost:8080` 访问 Label Studio：
+拉取本分支镜像并在 `http://localhost:28000` 访问 Label Studio：
 
 ```bash
-docker pull heartexlabs/label-studio:latest
+docker pull docker.io/mars160/label-studio:latest
 docker run -it \
-  -p 8080:8080 \
+  -p 28000:8080 \
   -v "$(pwd)/mydata:/label-studio/data" \
-  heartexlabs/label-studio:latest
+  docker.io/mars160/label-studio:latest
 ```
 
 SQLite 数据库和上传文件会保存在当前目录的 `mydata` 文件夹中。
@@ -51,9 +51,9 @@ SQLite 数据库和上传文件会保存在当前目录的 `mydata` 文件夹中
 
 ```bash
 docker run -it \
-  -p 8080:8080 \
+  -p 28000:8080 \
   -v "$(pwd)/mydata:/label-studio/data" \
-  heartexlabs/label-studio:latest \
+  docker.io/mars160/label-studio:latest \
   label-studio --log-level DEBUG
 ```
 

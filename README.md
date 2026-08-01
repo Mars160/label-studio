@@ -48,20 +48,18 @@ Install Label Studio locally or deploy it in a cloud instance. [Or sign up for a
 - [Deploy in a cloud instance](#deploy-in-a-cloud-instance)
 
 ### Install locally with Docker
-Official Label Studio docker image is [here](https://hub.docker.com/r/heartexlabs/label-studio) and it can be downloaded with `docker pull`. 
-Run Label Studio in a Docker container and access it at `http://localhost:8080`.
-
+Pull this fork's image and access Label Studio at `http://localhost:28000`:
 
 ```bash
-docker pull heartexlabs/label-studio:latest
-docker run -it -p 8080:8080 -v $(pwd)/mydata:/label-studio/data heartexlabs/label-studio:latest
+docker pull docker.io/mars160/label-studio:latest
+docker run -it -p 28000:8080 -v $(pwd)/mydata:/label-studio/data docker.io/mars160/label-studio:latest
 ```
 You can find all the generated assets, including SQLite3 database storage `label_studio.sqlite3` and uploaded files, in the `./mydata` directory.
 
 #### Override default Docker install
 You can override the default launch command by appending the new arguments:
 ```bash
-docker run -it -p 8080:8080 -v $(pwd)/mydata:/label-studio/data heartexlabs/label-studio:latest label-studio --log-level DEBUG
+docker run -it -p 28000:8080 -v $(pwd)/mydata:/label-studio/data docker.io/mars160/label-studio:latest label-studio --log-level DEBUG
 ```
 
 #### Build a local image with Docker
