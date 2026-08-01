@@ -44,7 +44,7 @@ jobs:
       sha: ${{ steps.version.outputs.sha }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           submodules: 'recursive'
           ref: ${{ inputs.sha }}
@@ -102,7 +102,7 @@ jobs:
           echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
 
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           submodules: 'recursive'
           ref: ${{ inputs.sha }}
@@ -264,7 +264,7 @@ jobs:
           GITHUB_REPOSITORY: "${{ github.repository }}"
           GITHUB_RUN_ID: "${{ github.run_id }}"
           GITHUB_SHA: "${{ github.sha }}"
-        uses: slackapi/slack-github-action@v3.0
+        uses: slackapi/slack-github-action@v4.0
         with:
           method: chat.postMessage
           token: ${{ secrets.SLACK_LSE_BOT_TOKEN }}
