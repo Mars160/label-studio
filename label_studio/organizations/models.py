@@ -15,11 +15,13 @@ logger = logging.getLogger(__name__)
 OrganizationMemberMixin = load_func(settings.ORGANIZATION_MEMBER_MIXIN)
 
 
-def revoke_project_memberships(user, organization):
+def revoke_project_memberships(user, organization, using=None):
     """Disable project access and preserve an effective admin during organization offboarding."""
     from projects.models import Project, ProjectMember, ProjectMemberRole
 
-    memberships = ProjectMember.objects.filter(
+    database = using or organization._state.db or 'default'
+    project_members = ProjectMember.objects.using(database)
+    memberships = project_members.filter(
         user=user,
         project__organization=organization,
         enabled=True,
@@ -28,23 +30,25 @@ def revoke_project_memberships(user, organization):
     if not project_ids:
         return
 
-    projects = list(Project.objects.select_for_update().filter(id__in=project_ids))
+    projects = list(Project.objects.using(database).select_for_update().filter(id__in=project_ids))
     memberships.update(enabled=False, updated_at=timezone.now())
 
     for project in projects:
-        effective_admins = ProjectMember.objects.filter(
+        effective_admins = project_members.filter(
             project=project,
             enabled=True,
             role=ProjectMemberRole.ADMIN,
+            user__is_active=True,
             user__om_through__organization=organization,
             user__om_through__deleted_at__isnull=True,
         )
         if effective_admins.exists():
             continue
         replacement_id = (
-            ProjectMember.objects.filter(
+            project_members.filter(
                 project=project,
                 enabled=True,
+                user__is_active=True,
                 user__om_through__organization=organization,
                 user__om_through__deleted_at__isnull=True,
             )
@@ -53,9 +57,7 @@ def revoke_project_memberships(user, organization):
             .first()
         )
         if replacement_id is not None:
-            ProjectMember.objects.filter(id=replacement_id).update(
-                role=ProjectMemberRole.ADMIN, updated_at=timezone.now()
-            )
+            project_members.filter(id=replacement_id).update(role=ProjectMemberRole.ADMIN, updated_at=timezone.now())
 
 
 class OrganizationMember(OrganizationMemberMixin, models.Model):

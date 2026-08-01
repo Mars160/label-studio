@@ -9,8 +9,8 @@ from core.utils.db import fast_first
 from django.conf import settings
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
-from django.db import models
-from django.db.models.signals import post_save
+from django.db import models, transaction
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.functional import cached_property
@@ -240,8 +240,33 @@ class User(UserMixin, AbstractBaseUser, PermissionsMixin, UserLastActivityMixin)
         return initials
 
 
+@receiver(pre_save, sender=User)
+def track_user_activation(sender, instance=None, raw=False, using='default', **kwargs):
+    if raw or instance is None or instance.pk is None or instance.is_active:
+        return
+    instance._was_active = (
+        sender.objects.using(using).filter(pk=instance.pk).values_list('is_active', flat=True).first() is True
+    )
+
+
 @receiver(post_save, sender=User)
-def init_user(sender, instance=None, created=False, **kwargs):
+def init_user(sender, instance=None, created=False, raw=False, using='default', **kwargs):
+    if raw or instance is None:
+        return
     if created:
         # create token for user
         Token.objects.create(user=instance)
+    elif getattr(instance, '_was_active', False) and not instance.is_active:
+        from organizations.models import revoke_project_memberships
+
+        organizations = (
+            Organization.objects.using(using)
+            .filter(
+                organizationmember__user=instance,
+                organizationmember__deleted_at__isnull=True,
+            )
+            .distinct()
+        )
+        with transaction.atomic(using=using):
+            for organization in organizations:
+                revoke_project_memberships(instance, organization, using=using)

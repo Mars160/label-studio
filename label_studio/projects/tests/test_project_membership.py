@@ -55,10 +55,42 @@ class ProjectMembershipAPITest(APITestCase):
         assert 'task_data_login' not in payload
         assert 'task_data_password' not in payload
 
-    def test_any_member_can_add_annotator_but_only_admin_can_manage_roles(self):
+    def test_only_admin_can_view_or_manage_project_members(self):
+        members_url = f'/api/projects/{self.project.id}/members/'
+        candidates_url = f'/api/projects/{self.project.id}/members/candidates/'
+
         self.client.force_authenticate(self.annotator)
+        annotator_membership = ProjectMember.objects.get(project=self.project, user=self.annotator)
+        assert self.client.get(members_url).status_code == 403
+        assert self.client.get(candidates_url).status_code == 403
+        assert (
+            self.client.post(
+                members_url,
+                {'user_ids': [self.other_member.id], 'role': ProjectMemberRole.ADMIN},
+                format='json',
+            ).status_code
+            == 403
+        )
+        assert (
+            self.client.patch(
+                f'{members_url}{annotator_membership.id}/',
+                {'role': ProjectMemberRole.ADMIN},
+                format='json',
+            ).status_code
+            == 403
+        )
+        assert self.client.delete(f'{members_url}{annotator_membership.id}/').status_code == 403
         response = self.client.post(
-            f'/api/projects/{self.project.id}/members/',
+            members_url,
+            {'email': self.other_member.email},
+            format='json',
+        )
+        assert response.status_code == 403
+        assert not ProjectMember.objects.filter(project=self.project, user=self.other_member).exists()
+
+        self.client.force_authenticate(self.admin)
+        response = self.client.post(
+            members_url,
             {'email': self.other_member.email},
             format='json',
         )
@@ -67,20 +99,137 @@ class ProjectMembershipAPITest(APITestCase):
         assert response.json()['role'] == ProjectMemberRole.ANNOTATOR
 
         response = self.client.patch(
-            f'/api/projects/{self.project.id}/members/{membership_id}/',
-            {'role': ProjectMemberRole.ADMIN},
-            format='json',
-        )
-        assert response.status_code == 403
-
-        self.client.force_authenticate(self.admin)
-        response = self.client.patch(
-            f'/api/projects/{self.project.id}/members/{membership_id}/',
+            f'{members_url}{membership_id}/',
             {'role': ProjectMemberRole.ADMIN},
             format='json',
         )
         assert response.status_code == 200
         assert response.json()['role'] == ProjectMemberRole.ADMIN
+
+    def test_admin_can_bulk_add_members_with_one_role(self):
+        first_user = UserFactory(active_organization=self.project.organization)
+        second_user = UserFactory(active_organization=self.project.organization)
+        self.client.force_authenticate(self.admin)
+
+        response = self.client.post(
+            f'/api/projects/{self.project.id}/members/',
+            {
+                'user_ids': [first_user.id, second_user.id],
+                'role': ProjectMemberRole.ADMIN,
+            },
+            format='json',
+        )
+
+        assert response.status_code == 201
+        assert {item['user']['id'] for item in response.json()} == {first_user.id, second_user.id}
+        assert {item['role'] for item in response.json()} == {ProjectMemberRole.ADMIN}
+        assert (
+            ProjectMember.objects.filter(
+                project=self.project,
+                user__in=[first_user, second_user],
+                role=ProjectMemberRole.ADMIN,
+                enabled=True,
+            ).count()
+            == 2
+        )
+
+    def test_bulk_add_rejects_an_empty_selection(self):
+        self.client.force_authenticate(self.admin)
+
+        response = self.client.post(
+            f'/api/projects/{self.project.id}/members/',
+            {'user_ids': [], 'role': ProjectMemberRole.ANNOTATOR},
+            format='json',
+        )
+
+        assert response.status_code == 400
+
+    def test_bulk_add_is_atomic_when_one_account_is_already_a_member(self):
+        new_user = UserFactory(active_organization=self.project.organization)
+        self.client.force_authenticate(self.admin)
+
+        response = self.client.post(
+            f'/api/projects/{self.project.id}/members/',
+            {
+                'user_ids': [new_user.id, self.annotator.id],
+                'role': ProjectMemberRole.ANNOTATOR,
+            },
+            format='json',
+        )
+
+        assert response.status_code == 400
+        assert not ProjectMember.objects.filter(project=self.project, user=new_user).exists()
+
+    def test_bulk_add_rolls_back_when_a_later_write_fails(self):
+        first_user = UserFactory(active_organization=self.project.organization)
+        second_user = UserFactory(active_organization=self.project.organization)
+        self.client.force_authenticate(self.admin)
+        membership_manager = ProjectMember.objects
+        update_or_create = membership_manager.update_or_create
+        call_count = 0
+
+        def fail_second_write(*args, **kwargs):
+            nonlocal call_count
+            call_count += 1
+            if call_count == 2:
+                raise RuntimeError('simulated write failure')
+            return update_or_create(*args, **kwargs)
+
+        with patch.object(membership_manager, 'update_or_create', side_effect=fail_second_write):
+            response = self.client.post(
+                f'/api/projects/{self.project.id}/members/',
+                {
+                    'user_ids': [first_user.id, second_user.id],
+                    'role': ProjectMemberRole.ANNOTATOR,
+                },
+                format='json',
+            )
+
+        assert response.status_code == 500
+
+        assert not ProjectMember.objects.filter(project=self.project, user__in=[first_user, second_user]).exists()
+
+    def test_bulk_add_does_not_reveal_accounts_outside_the_organization(self):
+        outside_user = UserFactory()
+        self.client.force_authenticate(self.admin)
+        responses = [
+            self.client.post(
+                f'/api/projects/{self.project.id}/members/',
+                {'user_ids': [user_id], 'role': ProjectMemberRole.ANNOTATOR},
+                format='json',
+            )
+            for user_id in (outside_user.id, outside_user.id + 1_000_000)
+        ]
+
+        assert [response.status_code for response in responses] == [400, 400]
+        payloads = [{key: value for key, value in response.json().items() if key != 'id'} for response in responses]
+        assert payloads[0] == payloads[1]
+
+    def test_admin_can_search_eligible_organization_members(self):
+        matching_user = UserFactory(
+            active_organization=self.project.organization,
+            first_name='Membership',
+            last_name='Needle',
+            username='searchable-handle',
+        )
+        UserFactory(active_organization=self.project.organization, first_name='DifferentAccount')
+        inactive_user = UserFactory(
+            active_organization=self.project.organization,
+            first_name='Membership',
+            last_name='NeedleInactive',
+            is_active=False,
+        )
+        self.client.force_authenticate(self.admin)
+
+        response = self.client.get(f'/api/projects/{self.project.id}/members/candidates/?search=Membership%20Needle')
+
+        assert response.status_code == 200
+        assert [item['id'] for item in response.json()] == [matching_user.id]
+        assert inactive_user.id not in {item['id'] for item in response.json()}
+        assert self.annotator.id not in {item['id'] for item in response.json()}
+
+        response = self.client.get(f'/api/projects/{self.project.id}/members/candidates/?search=searchable-handle')
+        assert [item['id'] for item in response.json()] == [matching_user.id]
 
     def test_last_admin_cannot_be_demoted_or_removed(self):
         membership = ProjectMember.objects.get(project=self.project, user=self.admin)
@@ -95,6 +244,56 @@ class ProjectMembershipAPITest(APITestCase):
 
         response = self.client.delete(f'/api/projects/{self.project.id}/members/{membership.id}/')
         assert response.status_code == 400
+
+    def test_inactive_admin_does_not_satisfy_last_admin_protection(self):
+        inactive_admin = UserFactory(active_organization=self.project.organization, is_active=False)
+        ProjectMember.objects.create(
+            project=self.project,
+            user=inactive_admin,
+            role=ProjectMemberRole.ADMIN,
+        )
+        membership = ProjectMember.objects.get(project=self.project, user=self.admin)
+        self.client.force_authenticate(self.admin)
+
+        response = self.client.patch(
+            f'/api/projects/{self.project.id}/members/{membership.id}/',
+            {'role': ProjectMemberRole.ANNOTATOR},
+            format='json',
+        )
+
+        assert response.status_code == 400
+
+    def test_deactivating_admin_revokes_membership_and_promotes_active_member(self):
+        project = ProjectFactory()
+        replacement = UserFactory(active_organization=project.organization)
+        replacement_membership = ProjectMember.objects.create(project=project, user=replacement)
+        departing_admin = project.created_by
+
+        departing_admin.is_active = False
+        departing_admin.save(update_fields=['is_active'])
+
+        departing_membership = ProjectMember.objects.get(project=project, user=departing_admin)
+        replacement_membership.refresh_from_db()
+        assert departing_membership.enabled is False
+        assert replacement_membership.role == ProjectMemberRole.ADMIN
+
+    def test_admin_offboarding_skips_inactive_replacement(self):
+        project = ProjectFactory()
+        inactive_user = UserFactory(active_organization=project.organization, is_active=False)
+        inactive_membership = ProjectMember.objects.create(project=project, user=inactive_user)
+        active_user = UserFactory(active_organization=project.organization)
+        active_membership = ProjectMember.objects.create(project=project, user=active_user)
+
+        OrganizationMember.objects.get(
+            organization=project.organization,
+            user=project.created_by,
+            deleted_at__isnull=True,
+        ).soft_delete()
+
+        inactive_membership.refresh_from_db()
+        active_membership.refresh_from_db()
+        assert inactive_membership.role == ProjectMemberRole.ANNOTATOR
+        assert active_membership.role == ProjectMemberRole.ADMIN
 
     def test_admin_offboarding_promotes_an_enabled_member(self):
         project = ProjectFactory()
@@ -542,6 +741,17 @@ class ProjectMembershipBackfillTest(TestCase):
             organization=project.organization,
             user=project.created_by,
         ).update(deleted_at=timezone.now())
+
+        self.migration.backfill_project_memberships(apps, None)
+
+        replacement_membership.refresh_from_db()
+        assert replacement_membership.role == ProjectMemberRole.ADMIN
+
+    def test_inactive_admin_does_not_block_migration_promotion(self):
+        project = ProjectFactory()
+        project.created_by.__class__.objects.filter(pk=project.created_by_id).update(is_active=False)
+        replacement = UserFactory(active_organization=project.organization)
+        replacement_membership = ProjectMember.objects.create(project=project, user=replacement)
 
         self.migration.backfill_project_memberships(apps, None)
 

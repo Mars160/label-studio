@@ -12,7 +12,7 @@ Replace organization-wide project visibility with explicit project membership an
 
 - **Admin**: manages the project and members and can see all project annotations and tabs.
 - **Annotator**: works in assigned projects and sees only their own annotations, drafts, and Data Manager tabs.
-- Every project member may add an existing active organization account to the project as an annotator.
+- Only project admins may view project membership, search eligible organization accounts, or manage members.
 - A new project's creator automatically becomes an enabled project admin.
 
 The authorization boundary is `ProjectMember(project, user, role, enabled)`. Frontend behavior is driven by role-derived project capabilities, but every restriction must also be enforced server-side.
@@ -29,11 +29,12 @@ The authorization boundary is `ProjectMember(project, user, role, enabled)`. Fro
 
 ### Member management
 
-- Added project member list/create and detail update/delete APIs.
-- Any enabled member may add an existing active organization account; the new role is always annotator.
-- Only admins may change roles or remove members.
+- Added admin-only project member list/create, candidate-search, and detail update/delete APIs.
+- Admins can atomically add multiple active organization accounts as annotators or administrators.
+- Candidate search matches name, username, or email and excludes inactive accounts and existing enabled members.
 - Disabled memberships are re-enabled when the account is added again.
-- Added a Project Members settings screen with add, role, and removal controls.
+- Added an admin-only Project Members settings screen with searchable multi-select add, role, removal, and current-member search controls.
+- Removed member/settings navigation from annotators and redirect direct member-settings access back to project data.
 
 ### Project, annotation, and tab isolation
 
@@ -48,7 +49,7 @@ The authorization boundary is `ProjectMember(project, user, role, enabled)`. Fro
 
 ### Administrator-only project operations
 
-Server-side admin checks cover project/task mutation, imports, exports, file uploads, storage settings and sync, ML backends, project webhooks, Data Manager bulk actions, label configuration validation, and project summary reset. Frontend capability checks hide or disable the matching settings, import/export, storage, and ML entry points.
+Server-side admin checks cover member visibility and management, project/task mutation, imports, exports, file uploads, storage settings and sync, ML backends, project webhooks, Data Manager bulk actions, label configuration validation, and project summary reset. Frontend capability checks hide or disable the matching member, settings, import/export, storage, and ML entry points.
 
 ## Verified
 
@@ -56,19 +57,20 @@ The following commands/checks have passed in the local uv environment:
 
 | Check | Result |
 | --- | --- |
-| New project membership/role suite | 26 passed |
+| New project membership/role suite | 36 passed |
 | Combined project, task, Data Manager, export, storage, and webhook API suites | 79 passed |
 | Data Manager ordering/filter regression suite | 42 passed |
-| Total distinct focused backend tests | 121 passed |
-| Ruff lint and format on 30 changed Python files | Passed |
+| Total distinct focused backend tests | 131 passed |
+| Ruff lint and format on changed Python files | Passed |
 | Django `manage.py check` | Passed |
 | `manage.py makemigrations --check --dry-run` | No changes detected |
 | Python `compileall` and `git diff --check` | Passed |
-| Biome 2.4.6 on 7 changed frontend files | No errors; 2 pre-existing unused-variable warnings |
+| Biome 2.4.6 on 7 changed member-management frontend files | Passed |
+| Label Studio TypeScript check and development build | Passed |
 | Data Manager assignee and feature-flag regression tests | 7 passed |
 | Biome 2.4.6 on the 4 assignee/feature-flag files | Passed |
 
-Tests cover creator-admin provisioning, nonmember hiding, member addition, role management, final-admin protection, soft and hard organization offboarding with replacement-admin promotion, disabled membership, admin/annotator annotation and draft visibility, role-safe Data Manager filtering, own-tab isolation, tab-owner immutability and persistence, annotator denial for ground-truth/prediction/model-version/live-ML/import/storage/webhook operations, prediction/draft/label relationship integrity, credential redaction, organization-level webhooks, migration promotion behavior, Data Manager task-path assignee references, the opensource user-fetch feature-flag override, missing assignee degradation, and affected existing API behavior.
+Tests cover creator-admin provisioning, nonmember hiding, admin-only membership visibility and management, atomic multi-account role assignment and rollback, eligible-account full-name/username search, account-enumeration resistance, empty and invalid batch rejection, role management, active-user-aware final-admin protection, deactivation/soft/hard-offboarding replacement-admin promotion, disabled membership, admin/annotator annotation and draft visibility, role-safe Data Manager filtering, own-tab isolation, tab-owner immutability and persistence, annotator denial for ground-truth/prediction/model-version/live-ML/import/storage/webhook operations, prediction/draft/label relationship integrity, credential redaction, organization-level webhooks, migration promotion behavior, Data Manager task-path assignee references, the opensource user-fetch feature-flag override, missing assignee degradation, and affected existing API behavior.
 
 ## Resolved Security Review Findings
 
@@ -87,11 +89,13 @@ The independent review findings have been fixed and reverified:
 11. **Data Manager filter isolation:** annotation result, ID, owner, equality, negation, containment, and empty filters operate only on role-visible annotations.
 12. **Draft relationship integrity:** draft task/annotation relationships are immutable, and URL annotations must be visible and belong to the URL task.
 13. **Live model redaction:** annotators cannot request ML backend settings through the project model-version endpoint.
-14. **Effective admin invariant:** last-admin checks and migration/runtime replacement consider only enabled members with a live organization membership.
+14. **Effective admin invariant:** last-admin checks, account deactivation, and migration/runtime replacement consider only enabled, active members with a live organization membership.
+15. **Member-management races and disclosure:** project-row locking serializes member mutations and revalidates admin access inside the transaction; account resolution is organization-scoped with uniform errors; failed frontend mutations no longer show success.
 
 ## Policy Decisions
 
-- Annotators may add accounts only as annotators. They cannot grant admin, change roles, remove members, or escalate themselves.
+- Annotators cannot view, search, add, change, or remove project members; all membership operations are admin-only.
+- Admins may batch-add existing active organization accounts as annotators or administrators.
 - Project management, task management, imports/exports, integrations, labels, ML, and project-wide actions are admin-only.
 - Existing organization users who do not have a project membership intentionally lose access. This is the requested move from organization-wide visibility to explicit project membership, not a compatibility backfill.
 - The current member-add API accepts existing accounts that already belong to the project's organization. Supporting unregistered-email invitations would require a separate invitation/token and post-signup flow and is outside the current implementation.
@@ -99,7 +103,7 @@ The independent review findings have been fixed and reverified:
 ## Completion Checklist
 
 - [x] Fix every independent security review finding and add focused regression coverage for high-risk paths.
-- [x] Run 121 focused backend tests, including affected API, webhook, and Data Manager filter suites.
+- [x] Run 131 focused backend tests, including affected API, webhook, and Data Manager filter suites.
 - [x] Run Ruff, Django checks, migration drift, `compileall`, `git diff --check`, and frontend Biome.
 - [x] Complete the final diff audit for generated files, unrelated changes, permission declaration mismatches, and unscoped querysets.
 - [ ] Validate the migration on PostgreSQL when that service is available; SQLite migration/test verification is complete.

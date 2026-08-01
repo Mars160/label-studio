@@ -18,7 +18,7 @@ from core.utils.serializer_to_openapi_params import serializer_to_openapi_params
 from data_manager.functions import filters_ordering_selected_items_exist, get_prepared_queryset
 from django.conf import settings
 from django.db import IntegrityError, transaction
-from django.db.models import F
+from django.db.models import F, Q
 from django.http import Http404
 from django.utils.decorators import method_decorator
 from django_filters import CharFilter, FilterSet
@@ -44,6 +44,7 @@ from projects.serializers import (
     ProjectCountsSerializer,
     ProjectImportSerializer,
     ProjectLabelConfigSerializer,
+    ProjectMemberBulkCreateSerializer,
     ProjectMemberCreateSerializer,
     ProjectMemberSerializer,
     ProjectMemberUpdateSerializer,
@@ -441,8 +442,21 @@ class ProjectMemberListAPI(generics.ListCreateAPIView):
         POST=all_permissions.projects_view,
     )
 
-    def get_project(self):
-        return generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=self.kwargs['pk'])
+    def get_project(self, lock=False):
+        project = getattr(self, '_project', None)
+        if project is not None and (not lock or getattr(self, '_project_locked', False)):
+            return project
+        if lock:
+            if project is None:
+                generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=self.kwargs['pk'])
+            project = generics.get_object_or_404(Project.objects.select_for_update(), pk=self.kwargs['pk'])
+            self._project_locked = True
+        else:
+            project = generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=self.kwargs['pk'])
+        if not project.is_admin(self.request.user):
+            raise PermissionDenied('Only project administrators can view or manage members.')
+        self._project = project
+        return project
 
     def get_queryset(self):
         return (
@@ -452,7 +466,11 @@ class ProjectMemberListAPI(generics.ListCreateAPIView):
         )
 
     def get_serializer_class(self):
-        return ProjectMemberCreateSerializer if self.request.method == 'POST' else ProjectMemberSerializer
+        if self.request.method == 'POST':
+            return (
+                ProjectMemberBulkCreateSerializer if 'user_ids' in self.request.data else ProjectMemberCreateSerializer
+            )
+        return ProjectMemberSerializer
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -460,12 +478,48 @@ class ProjectMemberListAPI(generics.ListCreateAPIView):
         return context
 
     def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        membership = serializer.save()
-        return Response(
-            ProjectMemberSerializer(membership, context={'request': request}).data, status=status.HTTP_201_CREATED
+        with transaction.atomic():
+            self.get_project(lock=True)
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            membership_or_memberships = serializer.save()
+            is_bulk = isinstance(membership_or_memberships, list)
+            data = ProjectMemberSerializer(membership_or_memberships, many=is_bulk, context={'request': request}).data
+        return Response(data, status=status.HTTP_201_CREATED)
+
+
+class ProjectMemberCandidateListAPI(generics.ListAPIView):
+    permission_required = all_permissions.projects_view
+    serializer_class = UserSimpleSerializer
+    pagination_class = None
+
+    def get_project(self):
+        project = generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=self.kwargs['pk'])
+        if not project.is_admin(self.request.user):
+            raise PermissionDenied('Only project administrators can search organization members.')
+        return project
+
+    def get_queryset(self):
+        project = self.get_project()
+        queryset = (
+            User.objects.filter(
+                is_active=True,
+                om_through__organization=project.organization,
+                om_through__deleted_at__isnull=True,
+            )
+            .exclude(id__in=ProjectMember.objects.filter(project=project, enabled=True).values('user_id'))
+            .distinct()
         )
+        search = self.request.query_params.get('search', '').strip()
+        if search:
+            for token in search.split()[:5]:
+                queryset = queryset.filter(
+                    Q(email__icontains=token)
+                    | Q(username__icontains=token)
+                    | Q(first_name__icontains=token)
+                    | Q(last_name__icontains=token)
+                )
+        return queryset.order_by('email')[:50]
 
 
 class ProjectMemberDetailAPI(generics.GenericAPIView):
@@ -475,8 +529,12 @@ class ProjectMemberDetailAPI(generics.GenericAPIView):
     )
     serializer_class = ProjectMemberUpdateSerializer
 
-    def get_project(self):
-        project = generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=self.kwargs['pk'])
+    def get_project(self, lock=False):
+        if lock:
+            generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=self.kwargs['pk'])
+            project = generics.get_object_or_404(Project.objects.select_for_update(), pk=self.kwargs['pk'])
+        else:
+            project = generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=self.kwargs['pk'])
         if not project.is_admin(self.request.user):
             raise PermissionDenied('Only project administrators can manage roles or remove members.')
         return project
@@ -494,6 +552,7 @@ class ProjectMemberDetailAPI(generics.GenericAPIView):
         effective_admins = project.members.filter(
             role=ProjectMemberRole.ADMIN,
             enabled=True,
+            user__is_active=True,
             user__om_through__organization=project.organization,
             user__om_through__deleted_at__isnull=True,
         ).distinct()
@@ -501,9 +560,8 @@ class ProjectMemberDetailAPI(generics.GenericAPIView):
             raise RestValidationError('A project must have at least one administrator.')
 
     def patch(self, request, *args, **kwargs):
-        project = self.get_project()
         with transaction.atomic():
-            project = Project.objects.select_for_update().get(pk=project.pk)
+            project = self.get_project(lock=True)
             membership = self.get_locked_membership(project)
             serializer = self.get_serializer(membership, data=request.data, partial=True)
             serializer.is_valid(raise_exception=True)
@@ -514,9 +572,8 @@ class ProjectMemberDetailAPI(generics.GenericAPIView):
         return Response(ProjectMemberSerializer(membership, context={'request': request}).data)
 
     def delete(self, request, *args, **kwargs):
-        project = self.get_project()
         with transaction.atomic():
-            project = Project.objects.select_for_update().get(pk=project.pk)
+            project = self.get_project(lock=True)
             membership = self.get_locked_membership(project)
             self.ensure_another_admin(project, membership)
             membership.delete()

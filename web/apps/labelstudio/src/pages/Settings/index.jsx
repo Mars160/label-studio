@@ -1,4 +1,6 @@
+import { Redirect } from "react-router-dom";
 import { useProject } from "../../providers/ProjectProvider";
+import { useParams } from "../../providers/RoutesProvider";
 import { SidebarMenu } from "../../components/SidebarMenu/SidebarMenu";
 import { WebhookPage } from "../WebhookPage/WebhookPage";
 import { DangerZone } from "./DangerZone";
@@ -13,6 +15,8 @@ import "./settings.prefix.css";
 
 export const MenuLayout = ({ children, ...routeProps }) => {
   const { project } = useProject();
+  const params = useParams();
+  const routeProjectId = Number(params.id);
   const menuItems = project?.capabilities?.manage_project
     ? [
         GeneralSettings,
@@ -25,7 +29,10 @@ export const MenuLayout = ({ children, ...routeProps }) => {
         WebhookPage,
         DangerZone,
       ]
-    : [ProjectMembersSettings];
+    : [];
+
+  if (!project?.id || project.id !== routeProjectId) return null;
+  if (!project.capabilities?.manage_project) return <Redirect to={`/projects/${project.id}/data`} />;
 
   return <SidebarMenu menuItems={menuItems.filter(Boolean)} path={routeProps.match.url} children={children} />;
 };
@@ -43,7 +50,10 @@ const pages = {
 
 const SettingsLanding = () => {
   const { project } = useProject();
-  return project?.capabilities?.manage_project ? <GeneralSettings /> : <ProjectMembersSettings />;
+  const params = useParams();
+  const routeProjectId = Number(params.id);
+  if (!project?.id || project.id !== routeProjectId) return null;
+  return project.capabilities?.manage_project ? <GeneralSettings /> : <Redirect to={`/projects/${project.id}/data`} />;
 };
 
 export const SettingsPage = {

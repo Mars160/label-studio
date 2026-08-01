@@ -124,13 +124,15 @@ export const DataManagerPage = ({ ...props }) => {
       }
     });
 
-    dataManager.on("settingsClicked", () => {
-      history.push(
-        buildLink(project.capabilities?.manage_project ? "/settings/labeling" : "/settings/members", {
-          id: params?.id ?? project?.id,
-        }),
-      );
-    });
+    if (project.capabilities?.manage_project) {
+      dataManager.on("settingsClicked", () => {
+        history.push(
+          buildLink("/settings/labeling", {
+            id: params?.id ?? project?.id,
+          }),
+        );
+      });
+    }
 
     dataManager.on("importClicked", () => {
       if (project.capabilities?.import_tasks) {
@@ -257,9 +259,7 @@ DataManagerPage.context = ({ dmRef }) => {
   const { project } = useProject();
   const [mode, setMode] = useState(dmRef?.mode ?? "explorer");
 
-  const links = {
-    "/settings": "Settings",
-  };
+  const links = project?.capabilities?.manage_project ? { "/settings": "Settings" } : {};
 
   const updateCrumbs = (currentMode) => {
     const isExplorer = currentMode === "explorer";

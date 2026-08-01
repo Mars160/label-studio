@@ -20,6 +20,11 @@ _api_urlpatterns = [
     path('<int:pk>/', api.ProjectAPI.as_view(), name='project-detail'),
     path('<int:pk>/members/', api.ProjectMemberListAPI.as_view(), name='project-members-list'),
     path(
+        '<int:pk>/members/candidates/',
+        api.ProjectMemberCandidateListAPI.as_view(),
+        name='project-members-candidates',
+    ),
+    path(
         '<int:pk>/members/<int:member_pk>/',
         api.ProjectMemberDetailAPI.as_view(),
         name='project-members-detail',

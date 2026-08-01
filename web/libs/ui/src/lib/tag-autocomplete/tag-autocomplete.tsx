@@ -284,6 +284,8 @@ export const TagAutocomplete = forwardRef(
 
                 <input
                   ref={inputRef}
+                  id={name}
+                  name={name}
                   type="text"
                   className={styles.input}
                   value={query}

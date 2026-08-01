@@ -5,7 +5,9 @@ def backfill_project_memberships(apps, schema_editor):
     OrganizationMember = apps.get_model('organizations', 'OrganizationMember')
     Project = apps.get_model('projects', 'Project')
     ProjectMember = apps.get_model('projects', 'ProjectMember')
+    User = apps.get_model('users', 'User')
     database = schema_editor.connection.alias if schema_editor is not None else 'default'
+    active_user_ids = User.objects.using(database).filter(is_active=True).values('id')
     organization_members = OrganizationMember.objects.using(database)
     project_members = ProjectMember.objects.using(database)
 
@@ -40,9 +42,11 @@ def backfill_project_memberships(apps, schema_editor):
             elif creator_membership.role != 'admin':
                 project_members.filter(id=creator_membership.id).update(role='admin')
 
-        live_user_ids = organization_members.filter(organization_id=organization_id, deleted_at__isnull=True).values(
-            'user_id'
-        )
+        live_user_ids = organization_members.filter(
+            organization_id=organization_id,
+            deleted_at__isnull=True,
+            user_id__in=active_user_ids,
+        ).values('user_id')
         if not project_members.filter(
             project_id=project_id,
             role='admin',

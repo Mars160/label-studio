@@ -31,7 +31,6 @@ from label_studio_sdk.label_interface.control_tags import (
     TimeSeriesLabelsTag,
     VideoRectangleTag,
 )
-from organizations.models import OrganizationMember
 from projects.models import (
     Project,
     ProjectImport,
@@ -445,26 +444,32 @@ class ProjectMemberSerializer(serializers.ModelSerializer):
 
 
 class ProjectMemberCreateSerializer(serializers.Serializer):
-    user_id = serializers.PrimaryKeyRelatedField(
-        source='user', queryset=User.objects.all(), required=False, write_only=True
-    )
+    user_id = serializers.IntegerField(required=False, write_only=True, min_value=1)
     email = serializers.EmailField(required=False, write_only=True)
 
     def validate(self, attrs):
-        user = attrs.get('user')
+        user_id = attrs.pop('user_id', None)
         email = attrs.pop('email', None)
-        if bool(user) == bool(email):
+        if (user_id is None) == (email is None):
             raise serializers.ValidationError('Provide exactly one of user_id or email.')
-        if email:
-            user = User.objects.filter(email__iexact=email).first()
-            if user is None:
-                raise serializers.ValidationError({'email': 'No account exists with this email address.'})
 
         project = self.context['project']
-        if not OrganizationMember.objects.filter(
-            user=user, organization=project.organization, deleted_at__isnull=True
-        ).exists():
-            raise serializers.ValidationError({'user_id': 'The account must belong to the project organization.'})
+        lookup = Q(id=user_id) if user_id is not None else Q(email__iexact=email)
+        user = (
+            User.objects.filter(
+                lookup,
+                is_active=True,
+                om_through__organization=project.organization,
+                om_through__deleted_at__isnull=True,
+            )
+            .distinct()
+            .first()
+        )
+        if user is None:
+            field = 'user_id' if user_id is not None else 'email'
+            raise serializers.ValidationError(
+                {field: 'The account must be active and belong to the project organization.'}
+            )
         if ProjectMember.objects.filter(project=project, user=user, enabled=True).exists():
             raise serializers.ValidationError({'user_id': 'This account is already a project member.'})
         attrs['user'] = user
@@ -478,6 +483,52 @@ class ProjectMemberCreateSerializer(serializers.Serializer):
             defaults={'role': ProjectMemberRole.ANNOTATOR, 'enabled': True},
         )
         return membership
+
+
+class ProjectMemberBulkCreateSerializer(serializers.Serializer):
+    user_ids = serializers.ListField(
+        source='users', child=serializers.IntegerField(min_value=1), allow_empty=False, write_only=True
+    )
+    role = serializers.ChoiceField(choices=ProjectMemberRole.choices, default=ProjectMemberRole.ANNOTATOR)
+
+    def validate_user_ids(self, user_ids):
+        if len(user_ids) != len(set(user_ids)):
+            raise serializers.ValidationError('Select each account only once.')
+
+        project = self.context['project']
+        users_by_id = {
+            user.id: user
+            for user in User.objects.filter(
+                id__in=user_ids,
+                is_active=True,
+                om_through__organization=project.organization,
+                om_through__deleted_at__isnull=True,
+            ).distinct()
+        }
+        if set(users_by_id) != set(user_ids):
+            raise serializers.ValidationError('Every account must be active and belong to the project organization.')
+
+        existing_user_ids = set(
+            ProjectMember.objects.filter(project=project, user_id__in=user_ids, enabled=True).values_list(
+                'user_id', flat=True
+            )
+        )
+        if existing_user_ids:
+            raise serializers.ValidationError('One or more selected accounts are already project members.')
+        return [users_by_id[user_id] for user_id in user_ids]
+
+    def create(self, validated_data):
+        project = self.context['project']
+        role = validated_data['role']
+        memberships = []
+        for user in validated_data['users']:
+            membership, _ = ProjectMember.objects.update_or_create(
+                project=project,
+                user=user,
+                defaults={'role': role, 'enabled': True},
+            )
+            memberships.append(membership)
+        return memberships
 
 
 class ProjectMemberUpdateSerializer(serializers.ModelSerializer):
