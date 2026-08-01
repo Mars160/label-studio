@@ -3,11 +3,12 @@
   flex-direction: column;
   gap: var(--spacing-wide);
   width: 100%;
-  max-width: 72rem;
+  max-width: 68rem;
   padding: var(--spacing-wider);
 }
 
 .project-members__header h1,
+.project-members__add-heading h2,
 .project-members__toolbar h2 {
   margin: 0;
 }
@@ -17,19 +18,31 @@
 }
 
 .project-members__header p,
-.project-members__toolbar span {
+.project-members__add-heading p {
   margin: 0;
   color: var(--color-neutral-content-subtle);
 }
 
 .project-members__add {
-  display: grid;
-  grid-template-columns: minmax(18rem, 1fr) minmax(10rem, 14rem) auto;
-  align-items: end;
+  display: flex;
+  flex-direction: column;
   gap: var(--spacing-base);
   padding: var(--spacing-wide) 0;
   border-top: 1px solid var(--color-neutral-border);
   border-bottom: 1px solid var(--color-neutral-border);
+}
+
+.project-members__add-heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-tighter);
+}
+
+.project-members__add-controls {
+  display: grid;
+  grid-template-columns: minmax(18rem, 1fr) minmax(10rem, 14rem) auto;
+  align-items: end;
+  gap: var(--spacing-base);
 }
 
 .project-members__field {
@@ -59,15 +72,14 @@
 
 .project-members__toolbar {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   gap: var(--spacing-wide);
 }
 
-.project-members__toolbar > div:first-child {
-  display: flex;
-  align-items: baseline;
-  gap: var(--spacing-tight);
+.project-members__toolbar h2 span {
+  color: var(--color-neutral-content-subtle);
+  font-weight: var(--font-weight-400);
 }
 
 .project-members__toolbar > :last-child {
@@ -88,6 +100,8 @@
 
 .project-members__table {
   width: 100%;
+  min-width: 38rem;
+  table-layout: fixed;
   border-collapse: collapse;
 }
 
@@ -101,20 +115,25 @@
 .project-members__table th {
   color: var(--color-neutral-content-subtle);
   background: var(--color-neutral-surface);
+  font-weight: var(--font-weight-500);
 }
 
 .project-members__table tr:last-child td {
   border-bottom: 0;
 }
 
-.project-members__table td:first-child strong,
-.project-members__table td:first-child span {
+.project-members__account strong,
+.project-members__account span {
   display: block;
+  overflow-wrap: anywhere;
 }
 
-.project-members__table td:first-child span {
-  margin-top: var(--spacing-tight);
+.project-members__account span {
   color: var(--color-neutral-content-subtle);
+}
+
+.project-members__account strong + span {
+  margin-top: var(--spacing-tighter);
 }
 
 .project-members__table th:nth-child(2),
@@ -124,7 +143,7 @@
 
 .project-members__table th:last-child,
 .project-members__table td:last-child {
-  width: 3rem;
+  width: 5rem;
   text-align: right;
 }
 
@@ -135,7 +154,7 @@
 }
 
 @media (max-width: 64rem) {
-  .project-members__add {
+  .project-members__add-controls {
     grid-template-columns: minmax(16rem, 1fr) minmax(10rem, 12rem);
   }
 
@@ -149,7 +168,7 @@
     padding: var(--spacing-wide);
   }
 
-  .project-members__add {
+  .project-members__add-controls {
     grid-template-columns: minmax(0, 1fr);
   }
 

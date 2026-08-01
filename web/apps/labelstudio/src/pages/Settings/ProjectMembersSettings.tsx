@@ -31,10 +31,17 @@ const roleOptions = [
   { value: "admin", label: "Administrator" },
 ];
 
-const getUserName = (user: APIUserSimple) => [user.first_name, user.last_name].filter(Boolean).join(" ") || user.email;
+const getUserName = (user: APIUserSimple) => [user.first_name, user.last_name].filter(Boolean).join(" ");
+
+const getUserDisplayName = (user: APIUserSimple) => {
+  const name = getUserName(user);
+  return name || (user.username && user.username !== user.email ? user.username : "");
+};
+
+const getUserLabel = (user: APIUserSimple) => getUserDisplayName(user) || user.email;
 
 const getCandidateLabel = (user: APIUserSimple) => {
-  const name = getUserName(user);
+  const name = getUserLabel(user);
   return name === user.email ? user.email : `${name} (${user.email})`;
 };
 
@@ -258,48 +265,54 @@ export const ProjectMembersSettings = () => {
       </header>
 
       <form className="project-members__add" onSubmit={addMembers}>
-        <div className="project-members__field project-members__field--accounts">
-          <label htmlFor="project-member-accounts">Accounts</label>
-          <TagAutocomplete<number>
-            name="project-member-accounts"
-            options={candidateOptions}
-            value={selectedUserIds}
-            onChange={setSelectedUserIds}
-            onSearch={searchCandidates}
-            searchFilter={candidateSearchFilter}
-            renderOption={renderCandidateOption}
-            isLoading={searchingCandidates}
-            minSearchLength={1}
-            placeholder="Search by name or email"
-            triggerClassName="project-members__account-picker"
-            contentClassName="project-members__account-options"
-          />
+        <div className="project-members__add-heading">
+          <h2>Add members</h2>
+          <p>Select organization accounts, then choose their project role.</p>
         </div>
-        <div className="project-members__field project-members__field--role">
-          <label htmlFor="project-member-role">Role</label>
-          <Select
-            id="project-member-role"
-            aria-label="Role for new members"
-            value={newMemberRole}
-            options={roleOptions}
-            onChange={(role) => setNewMemberRole(role as ProjectRole)}
-          />
+        <div className="project-members__add-controls">
+          <div className="project-members__field project-members__field--accounts">
+            <label htmlFor="project-member-accounts">Accounts</label>
+            <TagAutocomplete<number>
+              name="project-member-accounts"
+              options={candidateOptions}
+              value={selectedUserIds}
+              onChange={setSelectedUserIds}
+              onSearch={searchCandidates}
+              searchFilter={candidateSearchFilter}
+              renderOption={renderCandidateOption}
+              isLoading={searchingCandidates}
+              minSearchLength={1}
+              placeholder="Search by name or email"
+              triggerClassName="project-members__account-picker"
+              contentClassName="project-members__account-options"
+            />
+          </div>
+          <div className="project-members__field project-members__field--role">
+            <label htmlFor="project-member-role">Role</label>
+            <Select
+              id="project-member-role"
+              aria-label="Role for new members"
+              value={newMemberRole}
+              options={roleOptions}
+              onChange={(role) => setNewMemberRole(role as ProjectRole)}
+            />
+          </div>
+          <Button
+            type="submit"
+            leading={<IconPlus />}
+            waiting={saving}
+            disabled={saving || selectedUserIds.length === 0}
+            className="project-members__add-button"
+          >
+            Add {selectedUserIds.length || ""} Member{selectedUserIds.length === 1 ? "" : "s"}
+          </Button>
         </div>
-        <Button
-          type="submit"
-          leading={<IconPlus />}
-          disabled={saving || selectedUserIds.length === 0}
-          className="project-members__add-button"
-        >
-          Add {selectedUserIds.length || ""} Member{selectedUserIds.length === 1 ? "" : "s"}
-        </Button>
       </form>
 
       <div className="project-members__toolbar">
-        <div>
-          <h2>Current members</h2>
-          <span>{members.length} total</span>
-        </div>
+        <h2>
+          Current members <span>({members.length})</span>
+        </h2>
         <Input
           aria-label="Search current members"
           placeholder="Search members"
@@ -320,7 +333,7 @@ export const ProjectMembersSettings = () => {
               <tr>
                 <th>Account</th>
                 <th>Role</th>
-                <th aria-label="Actions" />
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -333,8 +346,8 @@ export const ProjectMembersSettings = () => {
               ) : (
                 filteredMembers.map((member) => (
                   <tr key={member.id}>
-                    <td>
-                      <strong>{getUserName(member.user)}</strong>
+                    <td className="project-members__account">
+                      {getUserDisplayName(member.user) && <strong>{getUserDisplayName(member.user)}</strong>}
                       <span>{member.user.email}</span>
                     </td>
                     <td>
