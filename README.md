@@ -1,5 +1,7 @@
 <img src="https://user-images.githubusercontent.com/12534576/192582340-4c9e4401-1fe6-4dbb-95bb-fdbba5493f61.png"/>
 
+English | [简体中文](docs/README.zh-CN.md)
+
 ![GitHub](https://img.shields.io/github/license/heartexlabs/label-studio?logo=heartex) ![label-studio:build](https://github.com/HumanSignal/label-studio/workflows/label-studio:build/badge.svg) ![GitHub release](https://img.shields.io/github/v/release/heartexlabs/label-studio?include_prereleases)
 
 [Website](https://labelstud.io/) • [Docs](https://labelstud.io/guide/) • [Join Slack Community <img src="https://app.heartex.ai/docs/images/slack-mini.png" width="18px"/>](https://slack.labelstud.io/?source=github-1)
@@ -11,6 +13,7 @@
 
 Label Studio is an open source data labeling tool. It lets you label data types like audio, text, images, videos, and time series with a simple and straightforward UI and export to various model formats. It can be used to prepare raw data or improve existing training data to get more accurate ML models.
 
+- [Fork-specific project access control](#fork-specific-project-access-control)
 - [Try out Label Studio](#try-out-label-studio)
 - [What you get from Label Studio](#what-you-get-from-label-studio)
 - [Included templates for labeling data in Label Studio](#included-templates-for-labeling-data-in-label-studio)
@@ -19,7 +22,18 @@ Label Studio is an open source data labeling tool. It lets you label data types 
 
 ![Gif of Label Studio annotating different types of data](/images/annotation_examples.gif)
 
-Have a custom dataset? You can customize Label Studio to fit your needs. Read an [introductory blog post](https://towardsdatascience.com/introducing-label-studio-a-swiss-army-knife-of-data-labeling-140c1be92881) to learn more. 
+Have a custom dataset? You can customize Label Studio to fit your needs. Read an [introductory blog post](https://towardsdatascience.com/introducing-label-studio-a-swiss-army-knife-of-data-labeling-140c1be92881) to learn more.
+
+## Fork-specific project access control
+
+This fork adds explicit project membership with two project-scoped roles:
+
+- **Admin** can manage the project and its members, access all project annotations and Data Manager tabs, and use project-wide operations such as imports, exports, storage, webhooks, and ML integrations.
+- **Annotator** can work only in assigned projects and can access only their own annotations, drafts, and Data Manager tabs. Project management and project-wide operations are hidden in the UI and rejected by the server.
+
+The project creator becomes an enabled admin automatically. Admins manage members from **Project Settings > Members**, where they can search for existing active organization accounts, add multiple members, change roles, or remove members. Users without an enabled project membership cannot access the project; this fork does not automatically grant project access to every organization user.
+
+For implementation status, policy decisions, and verification details, see [Project Access Control Progress](docs/project-access-control-progress.md).
 
 ## Try out Label Studio
 
@@ -51,10 +65,18 @@ docker run -it -p 8080:8080 -v $(pwd)/mydata:/label-studio/data heartexlabs/labe
 ```
 
 #### Build a local image with Docker
-If you want to build a local image, run:
+If you want to build this fork locally, use the fork image name and pass the available CPU count to native build tools. The mirror arguments keep dependency installation reliable in mainland China:
+
 ```bash
-docker build -t heartexlabs/label-studio:latest .
+docker build \
+  --build-arg BUILD_JOBS="$(nproc)" \
+  --build-arg ALPINE_REPOSITORY=https://mirrors.aliyun.com/alpine \
+  --build-arg YARN_REGISTRY=https://registry.npmmirror.com \
+  --build-arg PIP_INDEX_URL=https://mirrors.aliyun.com/pypi/simple/ \
+  -t docker.io/mars160/label-studio:latest .
 ```
+
+`BUILD_JOBS` defaults to `1` when omitted. On systems without `nproc`, replace `$(nproc)` with the number of CPU cores available to the build.
 
 ### Run with Docker Compose
 Docker Compose script provides production-ready stack consisting of the following components:
@@ -63,10 +85,12 @@ Docker Compose script provides production-ready stack consisting of the followin
 - [Nginx](https://www.nginx.com/) - proxy web server used to load various static data, including uploaded audio, images, etc.
 - [PostgreSQL](https://www.postgresql.org/) - production-ready database that replaces less performant SQLite3.
 
-To start using the app from `http://localhost` run this command:
+To start the fork with Nginx and PostgreSQL, run:
 ```bash
-docker-compose up
+docker compose up
 ```
+
+The default Compose configuration uses `docker.io/mars160/label-studio:latest` and serves Label Studio at `http://localhost:28000`. Run the [local image build](#build-a-local-image-with-docker) first when you need an image containing your current checkout.
 
 ### Run with Docker Compose + MinIO
 You can also run it with an additional MinIO server for local S3 storage. This is particularly useful when you want to 
