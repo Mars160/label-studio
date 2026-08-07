@@ -70,7 +70,7 @@ docker build \
   --build-arg BUILD_JOBS="$(nproc)" \
   --build-arg ALPINE_REPOSITORY=https://mirrors.aliyun.com/alpine \
   --build-arg YARN_REGISTRY=https://registry.npmmirror.com \
-  --build-arg PIP_INDEX_URL=https://mirrors.aliyun.com/pypi/simple/ \
+  --build-arg PIP_INDEX_URL=https://mirrors.ustc.edu.cn/pypi/simple \
   -t docker.io/mars160/label-studio:latest .
 ```
 

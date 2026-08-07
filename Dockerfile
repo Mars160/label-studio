@@ -4,7 +4,7 @@ ARG PYTHON_VERSION=3.13
 ARG UV_VERSION=0.10.2
 ARG ALPINE_REPOSITORY=https://mirrors.aliyun.com/alpine
 ARG YARN_REGISTRY=https://registry.npmmirror.com
-ARG PIP_INDEX_URL=https://mirrors.aliyun.com/pypi/simple/
+ARG PIP_INDEX_URL=https://mirrors.ustc.edu.cn/pypi/simple
 ARG BUILD_JOBS=1
 
 ################################ Overview
