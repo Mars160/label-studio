@@ -576,6 +576,12 @@
         "decorators": ""
     },
     {
+        "url": "/api/tasks/<int:pk>/summary/",
+        "module": "tasks.api.TaskSummaryAPI",
+        "name": "tasks:api:task-summary",
+        "decorators": ""
+    },
+    {
         "url": "/api/annotations/<int:pk>/",
         "module": "tasks.api.AnnotationAPI",
         "name": "tasks:api-annotations:annotation-detail",
@@ -1005,6 +1011,18 @@
         "url": "/projects/<int:project_id>/presign/",
         "module": "io_storages.proxy_api.ProjectResolveStorageUri",
         "name": "storages:project-storage-data-presign",
+        "decorators": ""
+    },
+    {
+        "url": "/api/react-code/token/",
+        "module": "io_storages.react_code_proxy.ReactCodeTokenView",
+        "name": "storages:react-code-token",
+        "decorators": ""
+    },
+    {
+        "url": "/api/react-code/resolve/<str:token>/",
+        "module": "io_storages.react_code_proxy.ReactCodeResolveView",
+        "name": "storages:react-code-resolve",
         "decorators": ""
     },
     {

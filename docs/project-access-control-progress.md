@@ -1,6 +1,6 @@
 # Project Access Control Progress
 
-Last reviewed: 2026-08-01
+Last reviewed: 2026-08-07
 
 Status: **Implemented on `develop`; PostgreSQL migration verification remains an environment follow-up**
 
@@ -25,6 +25,7 @@ The authorization boundary is `ProjectMember(project, user, role, enabled)`. Fro
 - Added role/membership helpers and enabled-membership project discovery.
 - Added a project `post_save` receiver that provisions the creator as an enabled admin for every creation path.
 - Added migration `projects.0035_projectmember_role` to consolidate duplicates, preserve disabled creators, promote creators, and ensure an existing enabled member becomes admin when necessary.
+- Added `projects.0036_merge_projectmember_role_projectsummary_counts` after the upstream merge to join the two independent `0035` migration branches without schema operations.
 - Added final-admin demotion/removal protection with project-row locking.
 
 ### Member management
@@ -75,6 +76,9 @@ The following commands/checks have passed in the local test environment:
 | Label Studio TypeScript check and development build | Passed |
 | Data Manager assignee and feature-flag regression tests | 7 passed |
 | Biome 2.4.6 on the 4 assignee/feature-flag files | Passed |
+| Post-upstream-merge project membership/role suite | 36 passed |
+| Post-upstream-merge Data Manager manager/filter suite | 62 passed |
+| Post-upstream-merge assignee and feature-flag tests | 9 passed |
 
 Tests cover creator-admin provisioning, nonmember hiding, admin-only membership visibility and management, atomic multi-account role assignment and rollback, eligible-account full-name/username search, account-enumeration resistance, empty and invalid batch rejection, role management, active-user-aware final-admin protection, deactivation/soft/hard-offboarding replacement-admin promotion, disabled membership, admin/annotator annotation and draft visibility, role-safe Data Manager filtering, own-tab isolation, tab-owner immutability and persistence, annotator denial for ground-truth/prediction/model-version/live-ML/import/storage/webhook operations, prediction/draft/label relationship integrity, credential redaction, organization-level webhooks, migration promotion behavior, Data Manager task-path assignee references, the opensource user-fetch feature-flag override, missing assignee degradation, and affected existing API behavior.
 

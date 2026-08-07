@@ -1,6 +1,6 @@
 import { types } from "mobx-state-tree";
-import { Assignee } from "./Assignee";
 import { FF_DISABLE_GLOBAL_USER_FETCHING } from "../utils/feature-flags";
+import { Assignee } from "./Assignee";
 import { User } from "./Users";
 
 const Root = types.model("AssigneeTestRoot", {
@@ -19,6 +19,7 @@ const TaskRoot = types.model("AssigneeTaskTestRoot", {
     ),
   }),
 });
+
 const user = {
   id: 1,
   first_name: "Test",
@@ -86,5 +87,59 @@ describe("Assignee", () => {
     } finally {
       window.APP_SETTINGS = originalAppSettings;
     }
+  });
+});
+
+describe("Assignee preProcessSnapshot (FIT-1658)", () => {
+  let ff;
+
+  beforeEach(() => {
+    ff = mockFF();
+    ff.setup();
+  });
+
+  afterEach(() => {
+    ff.reset();
+  });
+
+  it("embeds flat profile fields from API payload", () => {
+    const row = Assignee.create({
+      user_id: 42,
+      id: 42,
+      first_name: "Sam",
+      last_name: "",
+      email: "sam@example.com",
+      username: "sam",
+      last_activity: "",
+      avatar: null,
+      initials: "S",
+      annotated: true,
+      review: null,
+      reviewed: false,
+    });
+
+    expect(row.email).toBe("sam@example.com");
+    expect(row.firstName).toBe("Sam");
+  });
+
+  it("embeds nested user object when API provides user", () => {
+    const row = Assignee.create({
+      id: 9,
+      user: {
+        id: 9,
+        first_name: "Rae",
+        email: "rae@example.com",
+        last_name: "Lee",
+        username: "rae",
+        lastActivity: "",
+        avatar: null,
+        initials: "RL",
+      },
+      annotated: true,
+      review: null,
+      reviewed: false,
+    });
+
+    expect(row.email).toBe("rae@example.com");
   });
 });

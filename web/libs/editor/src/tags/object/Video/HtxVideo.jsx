@@ -25,6 +25,8 @@ import { clamp, isDefined } from "../../../utils/utilities";
 import "./Video.prefix.css";
 import { VideoRegions } from "./VideoRegions";
 import { ff } from "@humansignal/core";
+import { InteractiveOverlayHost } from "../../../ml-interactive/InteractiveOverlayHost";
+import { InteractiveActionsBar } from "../../../ml-interactive/InteractiveActionsBar";
 
 const isSyncedBuffering = ff.isActive(ff.FF_SYNCED_BUFFERING);
 
@@ -130,6 +132,18 @@ const VideoConfig = observer(({ item }) => {
   );
 });
 
+export const VIDEO_VECTOR_FRAME_BLOCKED_TOOLTIP = "Close the open VideoVector or delete it to change frames";
+
+const hasFrameBlockingClosableVideoVector = (item) => {
+  return item.regs?.some((reg) => {
+    // Closed contours must not block scrubbing even when `incomplete` stays true
+    // (e.g. closable + unmet minPoints).
+    if (reg.type !== "videovectorregion" || !reg.closable || reg.closed) return false;
+    if (reg.isDrawing) return true;
+    return reg.incomplete;
+  });
+};
+
 const HtxVideoView = ({ item, store }) => {
   if (!item._value) return null;
 
@@ -194,6 +208,12 @@ const HtxVideoView = ({ item, store }) => {
     },
     [videoLength],
   );
+
+  useEffect(() => {
+    if (isDefined(item.frame) && item.frame !== position && videoLength) {
+      setPosition(item.frame);
+    }
+  }, [item.frame, position, setPosition, videoLength]);
 
   const supportsRegions = useMemo(() => {
     return isDefined(item?.videoControl) || isDefined(item?.videoVectorControl);
@@ -288,9 +308,15 @@ const HtxVideoView = ({ item, store }) => {
         const nextZoom = zoom + delta;
         const scale = nextZoom / zoom;
 
+        const rawPointer = stageRef.current.getPointerPosition?.();
+        const resolvedPointer = rawPointer ?? {
+          x: item.ref.current.width / 2,
+          y: item.ref.current.height / 2,
+        };
+
         const pointerPos = {
-          x: stageRef.current.pointerPos.x - item.ref.current.width / 2,
-          y: stageRef.current.pointerPos.y - item.ref.current.height / 2,
+          x: resolvedPointer.x - item.ref.current.width / 2,
+          y: resolvedPointer.y - item.ref.current.height / 2,
         };
 
         return {
@@ -355,6 +381,15 @@ const HtxVideoView = ({ item, store }) => {
   // VIDEO EVENT HANDLERS
   const handleFrameChange = useCallback(
     (position, length) => {
+      if (hasFrameBlockingClosableVideoVector(item)) {
+        if (item.ref.current?.playing) {
+          item.ref.current.pause();
+          item.triggerSyncPause();
+        }
+        setVideoLength(length);
+        return;
+      }
+
       setPosition(position);
       setVideoLength(length);
       item.setOnlyFrame(position);
@@ -386,6 +421,8 @@ const HtxVideoView = ({ item, store }) => {
 
   // TIMELINE EVENT HANDLERS
   const handlePlay = useCallback(() => {
+    if (hasFrameBlockingClosableVideoVector(item)) return;
+
     setPlaying((_playing) => {
       if (!item.ref.current.playing) {
         // @todo item.ref.current.playing? could be buffering and other states
@@ -426,10 +463,15 @@ const HtxVideoView = ({ item, store }) => {
     (_, id, select) => {
       const region = item.findRegion(id);
       const selected = region?.selected || region?.inSelection;
+      const wasNotSelected = !selected;
 
       if (!region || (isDefined(select) && selected === select)) return;
 
       region.onClickRegion();
+
+      if (wasNotSelected && region.incomplete) {
+        region.onSelectInOutliner?.(wasNotSelected);
+      }
     },
     [item],
   );
@@ -460,6 +502,8 @@ const HtxVideoView = ({ item, store }) => {
 
   const handleTimelinePositionChange = useCallback(
     (newPosition) => {
+      if (hasFrameBlockingClosableVideoVector(item)) return false;
+
       if (position !== newPosition) {
         const now = Date.now();
         const state = scrubStateRef.current;
@@ -591,6 +635,7 @@ const HtxVideoView = ({ item, store }) => {
                     currentFrame={position}
                   />
                 )}
+                {loaded && ff.isSegmentAnythingEditorEnabled() && <InteractiveOverlayHost objectTag={item} />}
                 <VideoCanvas
                   ref={item.ref}
                   src={item._value}
@@ -621,6 +666,8 @@ const HtxVideoView = ({ item, store }) => {
           </div>
         </div>
 
+        {loaded && ff.isSegmentAnythingEditorEnabled() && <InteractiveActionsBar objectTag={item} />}
+
         {loaded && (
           <Timeline
             className={cn("video-segmentation").elem("timeline").toClassName()}
@@ -638,6 +685,8 @@ const HtxVideoView = ({ item, store }) => {
             framerate={item.framerate}
             controls={{ FramesControl: true }}
             readonly={item.annotation?.isReadOnly()}
+            navigationBlocked={hasFrameBlockingClosableVideoVector(item)}
+            navigationBlockedTooltip={VIDEO_VECTOR_FRAME_BLOCKED_TOOLTIP}
             customControls={[
               {
                 position: "left",

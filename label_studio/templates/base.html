@@ -16,16 +16,11 @@
   <meta name="msapplication-navbutton-color" content="#272727">  <!-- Windows Phone -->
   <meta name="apple-mobile-web-app-status-bar-style" content="#272727">  <!-- iOS Safari -->
 
-  <!-- Preload fonts -->
-  <link rel="preload" href="{{ settings.HOSTNAME }}/static/fonts/Figtree-Regular.ttf" as="font" type="font/ttf"
-    crossorigin="anonymous">
-  <link rel="preload" href="{{ settings.HOSTNAME }}/static/fonts/Figtree-SemiBold.ttf" as="font" type="font/ttf"
-    crossorigin="anonymous">
-
-
   <!-- CSS -->
   {% block app-css %}
-    <link href="{{settings.FRONTEND_HOSTNAME}}/react-app/main.css?v={{ versions.backend.commit }}" rel="stylesheet">
+    {% if not settings.FRONTEND_HMR %}
+      <link href="{% manifest_asset 'main.css' %}" rel="stylesheet">
+    {% endif %}
   {% endblock %}
 
   {% block theme_colors %}
@@ -73,7 +68,7 @@
 
 </head>
 
-<body>
+<body{% block body_attrs %}{% endblock %}>
 
 <div class="app-wrapper"></div>
 
@@ -159,7 +154,7 @@
   window.APP_SETTINGS = Object.assign({
 
     user: {
-      id: {{ user.pk }},
+      id: {{ user.pk|json_dumps_ensure_ascii|safe }},
       username: "{{user.username}}",
       firstName: "{{user.first_name}}",
       lastName: "{{user.last_name}}",
@@ -189,9 +184,11 @@
     collect_analytics: {{ settings.COLLECT_ANALYTICS|yesno:"true,false" }},
     local_files_document_root: {{ settings.LOCAL_FILES_DOCUMENT_ROOT|json_dumps_ensure_ascii|safe }},
     local_files_serving_enabled: {{ settings.LOCAL_FILES_SERVING_ENABLED|yesno:"true,false" }},
+    allowed_iframe_domains: {{ settings.ALLOWED_IFRAME_DOMAINS|json_dumps_ensure_ascii|safe }},
 
     data_manager: {
       max_users_to_display: {{ settings.DM_MAX_USERS_TO_DISPLAY }},
+      list_filter_max_values: {{ settings.DATA_MANAGER_LIST_FILTER_MAX_VALUES }},
     },
 
     {% block app_more_settings %}
@@ -206,13 +203,17 @@
 </script>
 
 {% block app-js %}
-<script src="{{settings.FRONTEND_HOSTNAME}}/react-app/runtime.js?v={{ versions.backend.commit }}"></script>
-{% comment %}
-  NOTE: purposely setting this to not cache using backend commit as we do not intend this to change frequently.
-  If for any reason we need to invalidate the cache, we can do so by changing the version number.
-{% endcomment %}
-<script src="{{settings.FRONTEND_HOSTNAME}}/react-app/vendor.js?v=1"></script>
-<script src="{{settings.FRONTEND_HOSTNAME}}/react-app/main.js?v={{ versions.backend.commit }}"></script>
+  {% if settings.FRONTEND_HMR %}
+  <script type="module" nonce="{{ request.csp_nonce }}">
+    import RefreshRuntime from '{{ settings.FRONTEND_HOSTNAME }}/react-app/@react-refresh'
+    RefreshRuntime.injectIntoGlobalHook(window)
+    window.$RefreshReg$ = () => {}
+    window.$RefreshSig$ = () => (type) => type
+    window.__vite_plugin_react_preamble_installed__ = true
+  </script>
+  <script type="module" src="{{ settings.FRONTEND_HOSTNAME }}/react-app/@vite/client"></script>
+  {% endif %}
+  <script type="module" src="{% manifest_asset 'main.js' %}"></script>
 {% endblock %}
 
 {% block bottomjs %}

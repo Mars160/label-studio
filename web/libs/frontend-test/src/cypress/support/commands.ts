@@ -2,11 +2,13 @@ import Loggable = Cypress.Loggable;
 import Timeoutable = Cypress.Timeoutable;
 import Thresholdable = Cypress.Thresholdable;
 import CompareScreenshotOptions = Cypress.CompareScreenshotOptions;
-import { addMatchImageSnapshotCommand } from "cypress-image-snapshot/command";
+
+import { addMatchImageSnapshotCommand } from "../../cypress-image-snapshot/command";
 
 addMatchImageSnapshotCommand({
   failureThreshold: 0.1,
   failureThresholdType: "percent",
+  e2eSpecDir: "tests/integration/",
 });
 
 const Screenshots = new Map<string, string>();
@@ -154,10 +156,11 @@ Cypress.Commands.add("throttleCPU", (rate: number) => {
         command: "Emulation.setCPUThrottlingRate",
         params: { rate },
       }),
+      { log: false },
     )
     .then(() => {
       cy.log(`CPU throttling set to ${rate}x slower`);
-    });
+    }) as Cypress.Chainable<void>;
 });
 
 Cypress.Commands.add("waitForFrames", (frameCount = 1) => {
@@ -198,12 +201,13 @@ Cypress.Commands.add("throttleNetwork", (downloadThroughput: number, uploadThrou
           latency, // milliseconds
         },
       }),
+      { log: false },
     )
     .then(() => {
       cy.log(
         `Network throttling set: ${Math.round(downloadThroughput / 1024)}KB/s down, ${Math.round(uploadThroughput / 1024)}KB/s up, ${latency}ms latency`,
       );
-    });
+    }) as Cypress.Chainable<void>;
 });
 
 Cypress.Commands.add("resetNetwork", () => {
@@ -218,10 +222,11 @@ Cypress.Commands.add("resetNetwork", () => {
           latency: 0,
         },
       }),
+      { log: false },
     )
     .then(() => {
       cy.log("Network throttling reset to normal");
-    });
+    }) as Cypress.Chainable<void>;
 });
 
 // Preset network conditions

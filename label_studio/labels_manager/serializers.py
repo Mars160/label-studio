@@ -158,3 +158,7 @@ class LabelBulkUpdateSerializer(serializers.Serializer):
 
     old_label = serializers.JSONField()
     new_label = serializers.JSONField()
+
+
+class LabelBulkUpdateResponseSerializer(serializers.Serializer):
+    annotations_updated = serializers.IntegerField()

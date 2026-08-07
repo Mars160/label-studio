@@ -3,6 +3,7 @@
 import logging
 
 from asgiref.sync import async_to_sync, sync_to_async
+from core.current_request import CurrentContext
 from core.feature_flags import flag_set
 from core.permissions import ViewClassPermission, all_permissions
 from core.utils.common import int_from_request, load_func
@@ -19,21 +20,26 @@ from data_manager.serializers import (
     ViewSerializer,
 )
 from django.conf import settings
-from django.db.models import Prefetch, Q, Sum
+from django.db.models import Max, Prefetch, Q, Sum
 from django.db.models.functions import Coalesce
 from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiExample, OpenApiParameter, OpenApiResponse, extend_schema
+from io_storages.functions import get_import_storage_link_prefetches
 from projects.models import Project
 from projects.serializers import ProjectSerializer
 from rest_framework import generics, viewsets
 from rest_framework.decorators import action
-from rest_framework.exceptions import PermissionDenied
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from tasks.models import Annotation, Prediction, Task, annotation_visibility_q
+from tasks.ordering import (
+    apply_annotation_ordering,
+    get_task_children_prefetch,
+    parse_annotations_ordering_request,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -149,6 +155,7 @@ _view_request_body = {
     ),
 )
 class ViewAPI(viewsets.ModelViewSet):
+    queryset = View.objects.none()
     serializer_class = ViewSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['project']
@@ -161,7 +168,10 @@ class ViewAPI(viewsets.ModelViewSet):
     )
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        project = serializer.validated_data.get('project')
+        max_order = View.objects.filter(project=project).aggregate(Max('order'))['order__max']
+        order = (max_order if max_order is not None else -1) + 1
+        serializer.save(user=self.request.user, order=order)
 
     @extend_schema(
         tags=['Data Manager'],
@@ -232,7 +242,7 @@ class ViewAPI(viewsets.ModelViewSet):
         # Bulk update views
         View.objects.bulk_update(views, ['order'])
 
-        return Response(status=200)
+        return Response(status=204)
 
     def get_queryset(self):
         member_project_ids = Project.objects.for_user(self.request.user).values('id')
@@ -289,9 +299,7 @@ class TaskPagination(PageNumberPagination):
         return super().paginate_queryset(id_only_queryset, request, view)
 
     def paginate_queryset(self, queryset, request, view=None):
-        if flag_set('fflag_fix_back_optic_1407_optimize_tasks_api_pagination_counts'):
-            return self.paginate_totals_queryset(queryset, request, view)
-        return self.sync_paginate_queryset(queryset, request, view)
+        return self.paginate_totals_queryset(queryset, request, view)
 
     def get_paginated_response_schema(self, schema):
         return {
@@ -339,6 +347,17 @@ class TaskListAPI(generics.ListCreateAPIView):
     )
     pagination_class = TaskPagination
 
+    def _ensure_state_field_for_evaluation(self, fields_for_evaluation, request):
+        if not (
+            CurrentContext.is_fsm_enabled() and flag_set('fflag_feat_fit_710_fsm_state_fields', user=request.user)
+        ):
+            return fields_for_evaluation
+
+        fields_for_evaluation = list(fields_for_evaluation)
+        if 'state' not in fields_for_evaluation:
+            fields_for_evaluation.append('state')
+        return fields_for_evaluation
+
     def get_task_serializer_context(self, request, project, queryset):
         all_fields = request.GET.get('fields', None) == 'all'  # false by default
 
@@ -349,28 +368,31 @@ class TaskListAPI(generics.ListCreateAPIView):
             'drafts': all_fields,
             'predictions': all_fields,
             'annotations': all_fields,
+            'annotations_ordering': parse_annotations_ordering_request(request),
         }
 
     def get_task_queryset(self, request, prepare_params):
         return Task.prepared.only_filtered(prepare_params=prepare_params)
 
     @staticmethod
-    def prefetch(queryset, user):
-        return queryset.prefetch_related(
-            Prefetch(
-                'annotations',
-                queryset=Annotation.objects.for_user(user).select_related('completed_by'),
-                to_attr='visible_annotations',
-            ),
-            'predictions',
+    def prefetch(queryset, request=None):
+        common = (
             'project',
-            'io_storages_azureblobimportstoragelink',
-            'io_storages_gcsimportstoragelink',
-            'io_storages_localfilesimportstoragelink',
-            'io_storages_redisimportstoragelink',
-            'io_storages_s3importstoragelink',
+            *get_import_storage_link_prefetches(),
             'file_upload',
         )
+        if request:
+            ordering = parse_annotations_ordering_request(request)
+            visible_annotations = apply_annotation_ordering(
+                Annotation.objects.for_user(request.user).select_related('completed_by'), ordering
+            )
+            _, prediction_children = get_task_children_prefetch(ordering)
+            return queryset.prefetch_related(
+                Prefetch('annotations', queryset=visible_annotations, to_attr='visible_annotations'),
+                prediction_children,
+                *common,
+            )
+        return queryset.prefetch_related('annotations', 'predictions', *common)
 
     def get(self, request):
         # get project
@@ -400,6 +422,9 @@ class TaskListAPI(generics.ListCreateAPIView):
         if review:
             fields_for_evaluation = ['annotators', 'reviewed']
             all_fields = None
+        # If the response will expose task state, annotate it in bulk so FSMStateField does not
+        # fall back to one current-state lookup per task during serialization.
+        fields_for_evaluation = self._ensure_state_field_for_evaluation(fields_for_evaluation, request)
         if page is not None:
             ids = [task.id for task in page]  # page is a list already
             tasks = self.prefetch(
@@ -409,7 +434,7 @@ class TaskListAPI(generics.ListCreateAPIView):
                     all_fields=all_fields,
                     request=request,
                 ),
-                request.user,
+                request,
             )
 
             tasks_by_ids = {task.id: task for task in tasks}
@@ -447,7 +472,7 @@ class TaskListAPI(generics.ListCreateAPIView):
         summary='Get data manager columns',
         description=(
             'Retrieve the data manager columns available for the tasks in a specific project. '
-            'For more details, see [GET api/actions](#/Data%20Manager/get_api_actions).'
+            'For more details, see [GET api/actions](api:GET/api/dm/actions/).'
         ),
         parameters=[
             OpenApiParameter(
@@ -527,19 +552,19 @@ class ProjectStateAPI(APIView):
 
     def get(self, request):
         pk = int_from_request(request.GET, 'project', 1)  # replace 1 to None, it's for debug only
-        project = generics.get_object_or_404(Project.objects.for_user(request.user), pk=pk)
-        data = ProjectSerializer(project, context={'request': request}).data
-        is_admin = project.is_admin(request.user)
+        project = generics.get_object_or_404(Project, pk=pk)
+        self.check_object_permissions(request, project)
+        data = ProjectSerializer(project).data
 
         data.update(
             {
-                'can_delete_tasks': is_admin,
-                'can_manage_annotations': is_admin,
-                'can_manage_tasks': is_admin,
+                'can_delete_tasks': True,
+                'can_manage_annotations': True,
+                'can_manage_tasks': True,
                 'source_syncing': False,
                 'target_syncing': False,
                 'task_count': project.tasks.count(),
-                'annotation_count': Annotation.objects.for_user(request.user).filter(project=project).count(),
+                'annotation_count': Annotation.objects.filter(project=project).count(),
                 'config_has_control_tags': len(project.get_parsed_config()) > 0,
             }
         )
@@ -699,16 +724,14 @@ class ProjectActionsAPI(APIView):
 
     def get(self, request):
         pk = int_from_request(request.GET, 'project', 0)
-        project = generics.get_object_or_404(Project.objects.for_user(request.user), pk=pk)
-        if not project.is_admin(request.user):
-            return Response([])
+        project = generics.get_object_or_404(Project, pk=pk)
+        self.check_object_permissions(request, project)
         return Response(get_all_actions(request.user, project))
 
     def post(self, request):
         pk = int_from_request(request.GET, 'project', 0)
-        project = generics.get_object_or_404(Project.objects.for_user(request.user), pk=pk)
-        if not project.is_admin(request.user):
-            raise PermissionDenied('Only project administrators can perform Data Manager actions.')
+        project = generics.get_object_or_404(Project, pk=pk)
+        self.check_object_permissions(request, project)
 
         # keep ordering only when needed, otherwise drop to avoid expensive sorts/annotations
         action_id = request.GET.get('id', None)
@@ -728,7 +751,7 @@ class ProjectActionsAPI(APIView):
             return Response(response, status=422)
 
         # perform action and return the result dict
-        kwargs = {'request': request}  # pass advanced params to actions
+        kwargs = {'request': request, 'prepare_params': prepare_params}
         result = perform_action(action_id, project, queryset, request.user, **kwargs)
         code = result.pop('response_code', 200)
 
@@ -771,9 +794,8 @@ class ProjectActionsFormAPI(APIView):
 
     def get(self, request, action_id):
         pk = int_from_request(request.GET, 'project', 0)
-        project = generics.get_object_or_404(Project.objects.for_user(request.user), pk=pk)
-        if not project.is_admin(request.user):
-            raise PermissionDenied('Only project administrators can use Data Manager action forms.')
+        project = generics.get_object_or_404(Project, pk=pk)
+        self.check_object_permissions(request, project)
 
         form = get_action_form(action_id, project, request.user)
         return Response(form)

@@ -6,13 +6,14 @@ from core.feature_flags import flag_set
 from core.mixins import GetParentObjectMixin
 from core.permissions import ViewClassPermission, all_permissions
 from core.utils.common import is_community
+from core.utils.db import delete_annotation_with_retry
 from core.utils.params import bool_from_request
 from data_manager.api import TaskListAPI as DMTaskListAPI
 from data_manager.functions import evaluate_predictions
 from data_manager.models import PrepareParams
 from data_manager.serializers import DataManagerTaskSerializer
 from django.db import transaction
-from django.db.models import Prefetch
+from django.db.models import Prefetch, prefetch_related_objects
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
@@ -33,6 +34,11 @@ from tasks.openapi_schema import (
     prediction_response_example,
     task_request_schema,
     task_response_example,
+)
+from tasks.ordering import (
+    apply_annotation_ordering,
+    get_task_children_prefetch,
+    parse_annotations_ordering_request,
 )
 from tasks.serializers import (
     AnnotationDraftSerializer,
@@ -120,7 +126,7 @@ logger = logging.getLogger(__name__)
                 location='query',
                 description='Additional query to filter tasks. It must be JSON encoded string of dict containing '
                 'one of the following parameters: `{"filters": ..., "selectedItems": ..., "ordering": ...}`. Check '
-                '[Data Manager > Create View > see `data` field](#tag/Data-Manager/operation/api_dm_views_create) '
+                '[Data Manager > Create View > see `data` field](api:POST/api/dm/views/) '
                 'for more details about filters, selectedItems and ordering.\n\n'
                 '* **filters**: dict with `"conjunction"` string (`"or"` or `"and"`) and list of filters in `"items"` array. '
                 'Each filter is a dictionary with keys: `"filter"`, `"operator"`, `"type"`, `"value"`. '
@@ -179,28 +185,25 @@ class TaskListAPI(DMTaskListAPI):
     serializer_class = TaskSerializer
     permission_required = ViewClassPermission(
         GET=all_permissions.tasks_view,
-        POST=all_permissions.tasks_view,
+        POST=all_permissions.tasks_create,
     )
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['project']
 
     def filter_queryset(self, queryset):
         queryset = super().filter_queryset(queryset)
-        project_ids = Project.objects.for_user(self.request.user).values('id')
-        return queryset.filter(project_id__in=project_ids)
+        return queryset.filter(project__organization=self.request.user.active_organization)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
         project_id = self.request.data.get('project')
         if project_id:
-            context['project'] = generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=project_id)
+            context['project'] = generics.get_object_or_404(Project, pk=project_id)
         return context
 
     def perform_create(self, serializer):
         project_id = self.request.data.get('project')
-        project = generics.get_object_or_404(Project.objects.for_user(self.request.user), pk=project_id)
-        if not project.is_admin(self.request.user):
-            raise PermissionDenied('Only project administrators can create tasks.')
+        project = generics.get_object_or_404(Project, pk=project_id)
         instance = serializer.save(project=project)
         emit_webhooks_for_instance(
             self.request.user.active_organization, project, WebhookAction.TASKS_CREATED, [instance]
@@ -217,6 +220,16 @@ class TaskListAPI(DMTaskListAPI):
         """,
         parameters=[
             OpenApiParameter(name='id', type=OpenApiTypes.STR, location='path', description='Task ID'),
+            OpenApiParameter(
+                name='annotations_ordering',
+                type=OpenApiTypes.STR,
+                location='query',
+                required=False,
+                description=(
+                    'Django-style ordering for nested annotations and predictions: `-id` or `-pk` for descending '
+                    'primary key (labeling UI), `id` or `pk` for ascending. Omit for default database ordering.'
+                ),
+            ),
         ],
         request=None,
         responses={
@@ -282,23 +295,59 @@ class TaskAPI(generics.RetrieveUpdateDestroyAPIView):
     parser_classes = (JSONParser, FormParser, MultiPartParser)
     permission_required = ViewClassPermission(
         GET=all_permissions.tasks_view,
-        PUT=all_permissions.tasks_view,
-        PATCH=all_permissions.tasks_view,
-        DELETE=all_permissions.tasks_view,
+        PUT=all_permissions.tasks_change,
+        PATCH=all_permissions.tasks_change,
+        DELETE=all_permissions.tasks_delete,
     )
 
     def initial(self, request, *args, **kwargs):
         super().initial(request, *args, **kwargs)
         self.task = self.get_object()
 
-    def prefetch(self, queryset):
+    def prefetch(self, queryset, request=None):
+        ordering = parse_annotations_ordering_request(request)
+        annotations_stub = False
+        if request and flag_set('fflag_fix_all_fit_720_lazy_load_annotations', user=request.user):
+            annotations_stub = bool_from_request(request.GET, 'annotations_stub', False)
+
+        if annotations_stub:
+            from tasks.ordering import (
+                ANNOTATION_ORDERING_ID_ASC,
+                ANNOTATION_ORDERING_ID_DESC,
+                order_annotations,
+                order_annotations_asc,
+            )
+
+            annotations_qs = Annotation.objects.for_user(self.request.user).only(
+                'id',
+                'completed_by',
+                'ground_truth',
+                'was_cancelled',
+                'created_at',
+                'updated_at',
+                'task_id',
+            )
+            if ordering == ANNOTATION_ORDERING_ID_DESC:
+                annotations_qs = order_annotations(annotations_qs)
+            elif ordering == ANNOTATION_ORDERING_ID_ASC:
+                annotations_qs = order_annotations_asc(annotations_qs)
+
+            annotation_children = Prefetch('annotations', queryset=annotations_qs)
+            prediction_children = 'predictions'
+        else:
+            _, prediction_children = get_task_children_prefetch(ordering)
+            annotations_qs = apply_annotation_ordering(
+                Annotation.objects.for_user(self.request.user).select_related('completed_by'), ordering
+            )
+            annotation_children = Prefetch('annotations', queryset=annotations_qs)
+
         return queryset.prefetch_related(
+            annotation_children,
+            prediction_children,
             Prefetch(
-                'annotations',
-                queryset=Annotation.objects.for_user(self.request.user).select_related('completed_by'),
-                to_attr='visible_annotations',
+                'drafts',
+                queryset=AnnotationDraft.objects.for_user(self.request.user).select_related('user'),
             ),
-            'predictions',
             'project',
             'io_storages_azureblobimportstoragelink',
             'io_storages_gcsimportstoragelink',
@@ -308,16 +357,6 @@ class TaskAPI(generics.RetrieveUpdateDestroyAPIView):
             'file_upload',
             'project__ml_backends',
         )
-
-    def perform_update(self, serializer):
-        if not serializer.instance.project.is_admin(self.request.user):
-            raise PermissionDenied('Only project administrators can update tasks.')
-        serializer.save()
-
-    def perform_destroy(self, instance):
-        if not instance.project.is_admin(self.request.user):
-            raise PermissionDenied('Only project administrators can delete tasks.')
-        instance.delete()
 
     def get_retrieve_serializer_context(self, request):
         """Build serializer context for task retrieval.
@@ -341,24 +380,59 @@ class TaskAPI(generics.RetrieveUpdateDestroyAPIView):
             'annotations': 'annotations' in fields,
             'drafts': 'drafts' in fields,
             'annotations_stub': annotations_stub,
+            'annotations_ordering': parse_annotations_ordering_request(request),
             'request': request,
         }
+
+    def maybe_evaluate_predictions(self, project, request):
+        """Ask the ML backend for predictions when the task has none yet.
+
+        get_object() runs the whole PreparedTaskManager query, which takes tens of
+        seconds on tasks with thousands of annotations, so it must run exactly once
+        per GET. Instead of re-running it, refresh only the prediction-derived values.
+        """
+        if not (project.evaluate_predictions_automatically or project.show_collab_predictions):
+            return
+
+        # prefetched by prefetch(); .exists() would issue an extra query on every GET
+        if self.task.predictions.all():
+            return
+
+        # project.ml_backend slices the queryset, which bypasses the prefetch cache
+        if not project.ml_backends.all():
+            return
+
+        evaluate_predictions([self.task])
+        self.refresh_predictions(request)
+
+    def refresh_predictions(self, request):
+        """Reload predictions and the prediction-derived DM annotations in place.
+
+        Keeps every other prefetch and DM annotation from the single get_object() call.
+        """
+        _, prediction_children = get_task_children_prefetch(parse_annotations_ordering_request(request))
+        getattr(self.task, '_prefetched_objects_cache', {}).pop('predictions', None)
+        prefetch_related_objects([self.task], prediction_children)
+
+        predictions = self.task.predictions.all()
+        self.task.total_predictions = len(predictions)
+        self.task.predictions_model_versions = [p.model_version for p in predictions]
+        # This path only runs when the task had no predictions, so every prediction here
+        # was just created by the project's own backend. That is exactly the set
+        # annotate_predictions_score() would average over its model_version filter.
+        scores = [p.score for p in predictions if p.score is not None]
+        self.task.predictions_score = sum(scores) / len(scores) if scores else None
 
     def get(self, request, pk):
         context = self.get_retrieve_serializer_context(request)
         context['project'] = project = self.task.project
 
-        # get prediction
-        if (
-            project.evaluate_predictions_automatically or project.show_collab_predictions
-        ) and not self.task.predictions.exists():
-            evaluate_predictions([self.task])
-            # refresh task from db with prefetches
-            self.task = self.get_object()
+        self.maybe_evaluate_predictions(project, request)
 
-        # Flex expansion reads the unfiltered reverse relation, so annotators must use get_annotations().
-        use_annotation_method = context.get('annotations_stub') or request.user.is_project_annotator(project)
-        expand = [] if use_annotation_method else ['annotations.completed_by']
+        # Don't use expand for annotations when using stub mode (FIT-720)
+        # The expand mechanism would override get_annotations and use AnnotationSerializer
+        # instead of AnnotationStubSerializer
+        expand = [] if context.get('annotations_stub') else ['annotations.completed_by']
         serializer = self.get_serializer_class()(self.task, many=False, context=context, expand=expand)
         data = serializer.data
         return Response(data)
@@ -371,12 +445,20 @@ class TaskAPI(generics.RetrieveUpdateDestroyAPIView):
         task = generics.get_object_or_404(Task, pk=task_id)
         review = bool_from_request(self.request.GET, 'review', False)
         selected = {'all': False, 'included': [self.kwargs.get('pk')]}
+
+        annotations_stub = False
+        if flag_set('fflag_fix_all_fit_720_lazy_load_annotations', user=self.request.user):
+            annotations_stub = bool_from_request(self.request.GET, 'annotations_stub', False)
+
         if review:
             kwargs = {'fields_for_evaluation': ['annotators', 'reviewed']}
         else:
+            excluded = self.get_excluded_fields_for_evaluation()
+            if annotations_stub:
+                excluded = excluded + ['annotators', 'annotations_ids', 'avg_lead_time']
             kwargs = {
                 'all_fields': True,
-                'excluded_fields_for_evaluation': self.get_excluded_fields_for_evaluation(),
+                'excluded_fields_for_evaluation': excluded,
             }
         project = self.request.query_params.get('project') or self.request.data.get('project')
         if not project:
@@ -384,7 +466,8 @@ class TaskAPI(generics.RetrieveUpdateDestroyAPIView):
         return self.prefetch(
             Task.prepared.get_queryset(
                 prepare_params=PrepareParams(project=project, selectedItems=selected, request=self.request), **kwargs
-            )
+            ),
+            self.request,
         )
 
     def get_object(self):
@@ -445,6 +528,7 @@ class TaskAPI(generics.RetrieveUpdateDestroyAPIView):
                         name='response',
                         value={
                             'total_annotations': 100,
+                            'agreement': 85.5,
                             'distributions': {
                                 'label': {
                                     'type': 'rectanglelabels',
@@ -484,17 +568,14 @@ class TaskAgreementAPI(generics.RetrieveAPIView):
             return Response({'error': 'Task not found'}, status=404)
 
         # Check project access using LSO's native permission check
-        if not Project.has_permission(task.project, request.user):
+        if not task.project.has_permission(request.user):
             raise PermissionDenied('You do not have permission to view this task')
 
-        annotations = (
-            Annotation.objects.for_user(request.user)
-            .filter(
-                task=task,
-                was_cancelled=False,
-            )
-            .values_list('result', flat=True)
-        )
+        # Get all annotations for this task with their results in a single query
+        annotations = Annotation.objects.filter(
+            task=task,
+            was_cancelled=False,
+        ).values_list('result', flat=True)
 
         total_annotations = len(annotations)
         distributions = {}
@@ -580,12 +661,265 @@ class TaskAgreementAPI(generics.RetrieveAPIView):
             # Remove raw values from response to keep it lightweight
             del dist['values']
 
+        agreement_score = None
+        raw_agreement = getattr(task, 'precomputed_agreement', None)
+        if raw_agreement is not None:
+            val = float(raw_agreement)
+            # DM / LSE task payloads expose agreement as 0–100; DB may store 0–1 or percent
+            agreement_score = val * 100.0 if val <= 1.0 else val
+
         return Response(
             {
                 'total_annotations': total_annotations,
                 'distributions': distributions,
+                'agreement': agreement_score,
             }
         )
+
+
+@method_decorator(
+    name='get',
+    decorator=extend_schema(
+        tags=['Tasks'],
+        summary='Get task summary',
+        description='Get the task summary payload including aggregated label distribution '
+        'across all annotations and (in LSE) per-dimension agreement scores. '
+        'Returns counts of each label value grouped by control tag. '
+        'This is an efficient endpoint that avoids N+1 queries.',
+        responses={
+            '200': OpenApiResponse(
+                description='Task summary payload',
+                examples=[
+                    OpenApiExample(
+                        name='response',
+                        value={
+                            'task': {'id': 42, 'agreement': 85.5},
+                            'total_annotations': 2,
+                            'total_predictions': 1,
+                            'annotations': [
+                                {
+                                    'id': 123,
+                                    'type': 'annotation',
+                                    'user': {
+                                        'id': 10,
+                                        'email': 'user@example.com',
+                                        'first_name': 'Alice',
+                                        'last_name': 'Smith',
+                                    },
+                                    'result': [],
+                                },
+                            ],
+                            'agreement': 85.5,
+                            'distributions': {
+                                'label': {
+                                    'type': 'rectanglelabels',
+                                    'labels': {'Car': 45, 'Person': 30, 'Dog': 25},
+                                },
+                            },
+                        },
+                        media_type='application/json',
+                    )
+                ],
+            )
+        },
+        extensions={
+            'x-fern-audiences': ['internal'],
+        },
+    ),
+)
+class TaskSummaryAPI(generics.RetrieveAPIView):
+    """
+    Efficient endpoint that produces the full payload for the task summary panel.
+
+    Aggregates annotation results at the database level to avoid N+1 queries.
+    Returns pre-computed label counts for the Distribution row and (in LSE)
+    per-dimension agreement scores.
+    """
+
+    permission_required = ViewClassPermission(GET=all_permissions.tasks_view)
+    queryset = Task.objects.all()
+
+    def get(self, request, pk):
+        # This endpoint is gated by feature flag
+        if not flag_set('fflag_fix_all_fit_720_lazy_load_annotations', user=request.user):
+            raise PermissionDenied('Feature not enabled')
+
+        include_predictions = bool_from_request(request.GET, 'include_predictions', False)
+
+        try:
+            task = Task.objects.get(pk=pk)
+        except Task.DoesNotExist:
+            return Response({'error': 'Task not found'}, status=404)
+
+        # Check project access using LSO's native permission check
+        if not task.project.has_permission(request.user):
+            raise PermissionDenied('You do not have permission to view this task')
+
+        # Fetch annotations with user info for the summary panel
+        annotation_objs = list(
+            Annotation.objects.filter(task=task, was_cancelled=False)
+            .select_related('completed_by')
+            .only(
+                'id',
+                'result',
+                'ground_truth',
+                'lead_time',
+                'completed_by__id',
+                'completed_by__email',
+                'completed_by__first_name',
+                'completed_by__last_name',
+            )
+        )
+
+        total_annotations = len(annotation_objs)
+        total_predictions = Prediction.objects.filter(task=task).count()
+        distributions = {}
+
+        def merge_result_into_distributions(result):
+            """Merge a single result (list of labeling items) into distributions in place."""
+            if not result or not isinstance(result, list):
+                return
+            for item in result:
+                if not isinstance(item, dict):
+                    continue
+                from_name = item.get('from_name', '')
+                result_type = item.get('type', '')
+                value = item.get('value', {})
+
+                if from_name not in distributions:
+                    distributions[from_name] = {
+                        'type': result_type,
+                        'labels': {},
+                        'values': [],
+                    }
+
+                if result_type.endswith('labels'):
+                    labels = value.get(result_type, [])
+                    if isinstance(labels, list):
+                        for label in labels:
+                            if label not in distributions[from_name]['labels']:
+                                distributions[from_name]['labels'][label] = 0
+                            distributions[from_name]['labels'][label] += 1
+
+                elif result_type == 'choices':
+                    choices = value.get('choices', [])
+                    if isinstance(choices, list):
+                        for choice in choices:
+                            if choice not in distributions[from_name]['labels']:
+                                distributions[from_name]['labels'][choice] = 0
+                            distributions[from_name]['labels'][choice] += 1
+
+                elif result_type == 'rating':
+                    rating = value.get('rating')
+                    if rating is not None:
+                        distributions[from_name]['values'].append(rating)
+
+                elif result_type == 'number':
+                    number = value.get('number')
+                    if number is not None:
+                        distributions[from_name]['values'].append(number)
+
+                elif result_type == 'taxonomy':
+                    taxonomy = value.get('taxonomy', [])
+                    if isinstance(taxonomy, list):
+                        for path in taxonomy:
+                            if isinstance(path, list) and path:
+                                leaf = path[-1]
+                                if leaf not in distributions[from_name]['labels']:
+                                    distributions[from_name]['labels'][leaf] = 0
+                                distributions[from_name]['labels'][leaf] += 1
+
+                elif result_type == 'pairwise':
+                    selected = value.get('selected')
+                    if selected:
+                        if selected not in distributions[from_name]['labels']:
+                            distributions[from_name]['labels'][selected] = 0
+                        distributions[from_name]['labels'][selected] += 1
+
+        for ann in annotation_objs:
+            if ann.ground_truth or not ann.result:
+                continue
+            merge_result_into_distributions(ann.result)
+
+        if include_predictions:
+            prediction_results = Prediction.objects.filter(task=task, result__isnull=False).values_list(
+                'result', flat=True
+            )
+            for result in prediction_results:
+                if isinstance(result, list):
+                    merge_result_into_distributions(result)
+
+        # Post-process: calculate averages for numeric types
+        for from_name, dist in distributions.items():
+            if dist['values']:
+                dist['average'] = sum(dist['values']) / len(dist['values'])
+                dist['count'] = len(dist['values'])
+            del dist['values']
+
+        from users.serializers import AnnotatorReviewerFirewall
+
+        def _serialize_user(user):
+            if user is None:
+                return None
+            data = {
+                'id': user.id,
+                'email': user.email,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+            }
+            if AnnotatorReviewerFirewall.should_anonymize(user=user, requester=request.user):
+                return AnnotatorReviewerFirewall.anonymize_user_data(data, user=user, requester=request.user)
+            return data
+
+        annotations_list = [
+            {
+                'id': ann.id,
+                'type': 'annotation',
+                'user': _serialize_user(ann.completed_by),
+                'result': ann.result or [],
+                'ground_truth': ann.ground_truth,
+                'lead_time': ann.lead_time,
+                'reviews': [],
+                'comments': [],
+            }
+            for ann in annotation_objs
+        ]
+
+        predictions_list = None
+        if include_predictions:
+            predictions_list = [
+                {
+                    'id': pred.id,
+                    'model_version': pred.model_version,
+                    'result': pred.result or [],
+                }
+                for pred in Prediction.objects.filter(task=task, result__isnull=False).only(
+                    'id', 'result', 'model_version'
+                )
+            ]
+
+        agreement_score = None
+        raw_agreement = getattr(task, 'precomputed_agreement', None)
+        if raw_agreement is not None:
+            val = float(raw_agreement)
+            # DM / LSE task payloads expose agreement as 0–100; DB may store 0–1 or percent
+            agreement_score = val * 100.0 if val <= 1.0 else val
+
+        response_data = {
+            'task': {
+                'id': task.id,
+                'agreement': getattr(task, 'agreement', None),
+            },
+            'total_annotations': total_annotations,
+            'total_predictions': total_predictions,
+            'annotations': annotations_list,
+            'distributions': distributions,
+            'agreement': agreement_score,
+        }
+        if predictions_list is not None:
+            response_data['predictions'] = predictions_list
+
+        return Response(response_data)
 
 
 @method_decorator(
@@ -676,11 +1010,7 @@ class AnnotationAPI(generics.RetrieveUpdateDestroyAPIView):
                 for field in protected_fields
                 if field in serializer.validated_data
                 and getattr(annotation, f'{field}_id', getattr(annotation, field, None))
-                != getattr(
-                    serializer.validated_data[field],
-                    'id',
-                    serializer.validated_data[field],
-                )
+                != getattr(serializer.validated_data[field], 'id', serializer.validated_data[field])
             }
             if changed_fields:
                 raise PermissionDenied(f'Only project administrators can change {", ".join(sorted(changed_fields))}.')
@@ -695,7 +1025,7 @@ class AnnotationAPI(generics.RetrieveUpdateDestroyAPIView):
                 annotation.task.ensure_unique_groundtruth(annotation_id=annotation.id)
 
     def perform_destroy(self, annotation):
-        annotation.delete()
+        delete_annotation_with_retry(annotation)
 
     def update(self, request, *args, **kwargs):
         annotation = self.get_object()
@@ -738,7 +1068,7 @@ class AnnotationAPI(generics.RetrieveUpdateDestroyAPIView):
                 description='Annotation',
                 response=AnnotationSerializer(many=True),
                 examples=[
-                    OpenApiExample(name='response', value=[annotation_response_example], media_type='application/json')
+                    OpenApiExample(name='response', value=annotation_response_example, media_type='application/json')
                 ],
             )
         },
@@ -813,6 +1143,14 @@ class AnnotationsListAPI(GetParentObjectMixin, generics.ListCreateAPIView):
         task = generics.get_object_or_404(Task.objects.for_user(self.request.user), pk=self.kwargs.get('pk', 0))
         return Annotation.objects.for_user(self.request.user).filter(task=task, was_cancelled=False).order_by('pk')
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        # Only needed for annotation create/update validation; avoid parent_object
+        # permission checks on GET list (url_smoke expects annotator list = 200).
+        if self.request.method != 'GET':
+            context['task'] = self.parent_object
+        return context
+
     def delete_draft(self, draft_id, annotation_id):
         try:
             draft = AnnotationDraft.objects.get(id=draft_id)
@@ -857,7 +1195,8 @@ class AnnotationsListAPI(GetParentObjectMixin, generics.ListCreateAPIView):
         if 'was_cancelled' in self.request.GET:
             extra_args['was_cancelled'] = bool_from_request(self.request.GET, 'was_cancelled', False)
 
-        extra_args['completed_by'] = self.request.user
+        if 'completed_by' not in ser.validated_data:
+            extra_args['completed_by'] = self.request.user
 
         draft_id = self.request.data.get('draft_id')
         draft = AnnotationDraft.objects.filter(id=draft_id).first()
@@ -889,6 +1228,9 @@ class AnnotationsListAPI(GetParentObjectMixin, generics.ListCreateAPIView):
         if draft_id is not None:
             logger.debug(f'Remove draft {draft_id} after creating annotation {annotation.id}')
             self.delete_draft(draft_id, annotation.id)
+
+        if self.request.data.get('ground_truth'):
+            annotation.task.ensure_unique_groundtruth(annotation_id=annotation.id)
 
         fill_history_annotation(user, task, annotation)
 
@@ -969,7 +1311,7 @@ class AnnotationDraftAPI(generics.RetrieveUpdateDestroyAPIView):
                 description='Predictions list',
                 response=PredictionSerializer(many=True),
                 examples=[
-                    OpenApiExample(name='response', value=[prediction_response_example], media_type='application/json')
+                    OpenApiExample(name='response', value=prediction_response_example, media_type='application/json')
                 ],
             )
         },
@@ -1103,6 +1445,7 @@ class AnnotationDraftAPI(generics.RetrieveUpdateDestroyAPIView):
     ),
 )
 class PredictionAPI(viewsets.ModelViewSet):
+    queryset = Prediction.objects.none()
     serializer_class = PredictionSerializer
     permission_required = all_permissions.predictions_any
     filter_backends = [DjangoFilterBackend]
@@ -1167,7 +1510,7 @@ class AnnotationConvertAPI(generics.RetrieveAPIView):
 
             self.process_intermediate_state(annotation, draft)
 
-            annotation.delete()
+            delete_annotation_with_retry(annotation)
 
         emit_webhooks_for_instance(organization, project, WebhookAction.ANNOTATIONS_DELETED, [pk])
         data = AnnotationDraftSerializer(instance=draft).data

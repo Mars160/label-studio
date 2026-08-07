@@ -5,7 +5,7 @@ import os
 import pathlib
 
 from core.feature_flags import flag_set
-from core.filters import ListFilter
+from core.filters import NumberInFilter
 from core.label_config import config_essential_data_has_changed
 from core.mixins import GetParentObjectMixin
 from core.permissions import ViewClassPermission, all_permissions
@@ -117,7 +117,7 @@ class ProjectListPagination(PageNumberPagination):
 
 
 class ProjectFilterSet(FilterSet):
-    ids = ListFilter(field_name='id', lookup_expr='in')
+    ids = NumberInFilter(field_name='id', lookup_expr='in')
     title = CharFilter(field_name='title', lookup_expr='icontains')
 
 
@@ -709,9 +709,13 @@ class ProjectLabelConfigValidateAPI(generics.RetrieveAPIView):
         if not label_config:
             raise RestValidationError('Label config is not set or is empty')
 
-        # check new config includes meaningful changes
-        has_changed = config_essential_data_has_changed(label_config, project.label_config)
-        project.validate_config(label_config, strict=True)
+        try:
+            # check new config includes meaningful changes
+            has_changed = config_essential_data_has_changed(label_config, project.label_config)
+            project.validate_config(label_config, strict=True)
+        except ValueError as exc:
+            # lxml raises ValueError on a str carrying an XML encoding declaration; surface as 400.
+            raise RestValidationError(str(exc))
         return Response({'config_essential_data_has_changed': has_changed}, status=status.HTTP_200_OK)
 
     @extend_schema(exclude=True)
@@ -1022,14 +1026,16 @@ class ProjectSampleTask(generics.RetrieveAPIView):
                     annotation['completed_by'] = user_id
                 return Response({'sample_task': complete_task}, status=200)
             except Exception as e:
-                logger.error(
-                    f'Error generating enhanced sample task, falling back to original method: {str(e)}. Label config: {label_config}'
+                logger.warning(
+                    f'Error generating enhanced sample task, falling back to original method: {str(e)}. Label config: {label_config}',
+                    exc_info=True,
                 )
-                # Fallback to project.get_sample_task if LabelInterface.generate_complete_sample_task failed
-                return Response({'sample_task': project.get_sample_task(label_config)}, status=200)
-        else:
-            # Use the simple sample task generation method
+        try:
+            # Fallback to project.get_sample_task if enhanced generation failed, or the simple path otherwise.
             return Response({'sample_task': project.get_sample_task(label_config)}, status=200)
+        except Exception as e:
+            logger.warning(f'Failed to generate sample task for project={project.id}: {e}', exc_info=True)
+            return Response({'detail': 'Unable to generate sample task from the provided label config.'}, status=400)
 
 
 @extend_schema(exclude=True)

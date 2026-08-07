@@ -2,6 +2,7 @@
 
 import logging
 import re
+from dataclasses import dataclass
 from datetime import datetime
 from functools import reduce
 from typing import ClassVar
@@ -12,6 +13,7 @@ from core.utils.db import fast_first
 from data_manager.prepare_params import ConjunctionEnum
 from django.conf import settings
 from django.contrib.postgres.aggregates import ArrayAgg
+from django.core.exceptions import FieldDoesNotExist, FieldError
 from django.db import models
 from django.db.models import (
     Aggregate,
@@ -61,6 +63,91 @@ class _Operator(BaseModel):
 
 
 Operator = _Operator()
+USER_FILTER_FIELDS = frozenset({'annotators', 'updated_by', 'reviewers', 'comment_authors', 'skipped_by_annotator'})
+USER_FILTER_VALUE_OPERATORS = frozenset({Operator.CONTAINS, Operator.NOT_CONTAINS})
+LEGACY_USER_FILTER_OPERATORS = {
+    Operator.EQUAL: Operator.CONTAINS,
+    Operator.IN_LIST: Operator.CONTAINS,
+    Operator.NOT_EQUAL: Operator.NOT_CONTAINS,
+    Operator.NOT_IN_LIST: Operator.NOT_CONTAINS,
+}
+
+
+def validate_user_filter_operator(field_name, operator, value):
+    if field_name in USER_FILTER_FIELDS and isinstance(value, list) and operator not in USER_FILTER_VALUE_OPERATORS:
+        allowed = ', '.join(sorted(USER_FILTER_VALUE_OPERATORS))
+        raise ValidationError(f'List-valued user filters support only these operators: {allowed}.')
+
+
+def normalize_persisted_user_filter(field_name, operator, value):
+    """Recover historical user-filter shapes without relaxing validation for new writes."""
+    if field_name not in USER_FILTER_FIELDS:
+        return operator, value
+    if operator == Operator.EMPTY:
+        try:
+            empty_value = cast_bool_from_str(value)
+        except ValueError:
+            return Operator.CONTAINS, []
+        if isinstance(empty_value, bool):
+            return operator, empty_value
+        if isinstance(empty_value, int) and empty_value in (0, 1):
+            return operator, bool(empty_value)
+        return Operator.CONTAINS, []
+
+    normalized_operator = LEGACY_USER_FILTER_OPERATORS.get(operator, operator)
+    if normalized_operator not in USER_FILTER_VALUE_OPERATORS:
+        return Operator.CONTAINS, []
+
+    ids = []
+    seen = set()
+    max_values = settings.DATA_MANAGER_LIST_FILTER_MAX_VALUES
+    collection_value = isinstance(value, (list, tuple)) or (
+        isinstance(value, dict) and isinstance(value.get('items'), list)
+    )
+
+    def collect(candidate):
+        if len(ids) >= max_values or candidate is None or isinstance(candidate, bool):
+            return
+        if isinstance(candidate, dict):
+            if isinstance(candidate.get('items'), list):
+                collect(candidate['items'])
+            elif 'id' in candidate:
+                collect(candidate['id'])
+            elif 'value' in candidate:
+                collect(candidate['value'])
+            return
+        if isinstance(candidate, (list, tuple)):
+            for item in candidate:
+                collect(item)
+            return
+        if isinstance(candidate, float) and not candidate.is_integer():
+            return
+        try:
+            user_id = int(candidate)
+        except (TypeError, ValueError):
+            return
+        if user_id not in seen:
+            seen.add(user_id)
+            ids.append(user_id)
+
+    collect(value)
+    if collection_value or not ids:
+        return normalized_operator, ids
+    return normalized_operator, ids[0]
+
+
+@dataclass(frozen=True)
+class CustomFilterResult:
+    """Result from an enterprise filter hook that handled the current filter.
+
+    ``expression=None`` deliberately drops an unavailable filter line. Hooks
+    that compile a parent and its children into one expression set
+    ``consume_child_filter`` so the generic loop does not apply any child again.
+    """
+
+    expression: Q | None
+    consume_child_filter: bool = False
+
 
 operators = {
     Operator.EQUAL: '',
@@ -79,6 +166,14 @@ operators = {
     Operator.REGEX: '__regex',
 }
 
+KNOWN_FILTER_VALUE_TYPES = {
+    'reviewed': 'bool',
+}
+
+# Fields supported by the public `in_list` / `not_in_list` operators (BROS-1203).
+# `data__*` keys are accepted via _is_supported_in_list_field.
+SUPPORTED_IN_LIST_FIELDS = {'id', 'inner_id'}
+
 
 def get_fields_for_filter_ordering(prepare_params):
     result = []
@@ -96,6 +191,105 @@ def get_fields_for_filter_ordering(prepare_params):
             filter_field_name = _filter.filter.replace('filter:tasks:', '')
             result.append(filter_field_name)
     return result
+
+
+def is_agreement_related_field(field_name):
+    return field_name in {
+        'agreement',
+        'agreement_selected',
+        '_agreement',
+        '_agreement_selected',
+    } or field_name.startswith('dimension_agreement_')
+
+
+def _is_stale_agreement_field(queryset, field_name):
+    """Return true when an agreement field is no longer available for this queryset."""
+    if not is_agreement_related_field(field_name):
+        return False
+
+    if field_name in getattr(queryset.query, 'annotations', {}):
+        return False
+
+    try:
+        queryset.model._meta.get_field(field_name)
+        return False
+    except (AttributeError, FieldDoesNotExist):
+        return True
+
+
+def _set_prefilter_task_ids_for_agreement(request, queryset, prepare_params, project):
+    """Pre-narrow agreement candidate tasks using ANDed non-agreement filters.
+
+    Safe optimization: for conjunction=AND, applying only non-agreement filters yields
+    a superset of rows that could match the final query after agreement filters/order.
+    """
+    if request is None:
+        return
+
+    if hasattr(request, '_dm_prefilter_task_ids'):
+        delattr(request, '_dm_prefilter_task_ids')
+
+    filters = getattr(prepare_params, 'filters', None)
+    if not filters or filters.conjunction != ConjunctionEnum.AND:
+        return
+
+    fields_for_filter_ordering = get_fields_for_filter_ordering(prepare_params)
+    if not any(is_agreement_related_field(field) for field in fields_for_filter_ordering):
+        return
+
+    non_agreement_filters = [
+        _filter
+        for _filter in filters.items
+        if _filter.filter.startswith('filter:tasks:')
+        and not is_agreement_related_field(_filter.filter.removeprefix('filter:tasks:'))
+    ]
+    if not non_agreement_filters:
+        return
+
+    preprocess_field_name = load_func(settings.PREPROCESS_FIELD_NAME)
+    annotation_fields = set(get_annotations_map().keys())
+    prefilter_annotation_fields = []
+    for _filter in non_agreement_filters:
+        filter_field_name = _filter.filter.removeprefix('filter:tasks:')
+        if filter_field_name in annotation_fields and filter_field_name not in prefilter_annotation_fields:
+            prefilter_annotation_fields.append(filter_field_name)
+        processed_field_name, _ = preprocess_field_name(_filter.filter, project=project)
+        if processed_field_name in annotation_fields and processed_field_name not in prefilter_annotation_fields:
+            prefilter_annotation_fields.append(processed_field_name)
+
+    from data_manager.prepare_params import Filters
+
+    # Run prefilter with deep-copied filter models to avoid mutating the original request filters.
+    # apply_filters() casts values in-place (e.g. Datetime strings -> datetime), and reusing those
+    # mutated objects in the main filtering pass can trigger type errors.
+    #
+    # Child filters are dropped for prefiltering.
+    narrowed_items = []
+    for _filter in non_agreement_filters:
+        copied_filter = _filter.copy(deep=True)
+        copied_filter.child_filters = []
+        narrowed_items.append(copied_filter)
+
+    if prefilter_annotation_fields:
+        queryset = PreparedTaskManager.annotate_queryset(
+            queryset,
+            fields_for_evaluation=prefilter_annotation_fields,
+            request=request,
+        )
+
+    narrowed_filters = Filters(conjunction=filters.conjunction, items=narrowed_items)
+    try:
+        narrowed_queryset = apply_filters(queryset, narrowed_filters, project, request)
+    except FieldError:
+        # Fail open: prefilter is an optimization only, the main filtered query still runs later.
+        logger.warning('DM agreement prefilter skipped due to unresolved filter field', exc_info=True)
+        return
+    except (TypeError, ValueError):
+        # Fail open: filter value cannot be cast (e.g. bool passed for a Datetime filter).
+        # The main filtered query will surface the error from its own apply_filters pass.
+        logger.warning('DM agreement prefilter skipped due to filter value cast error', exc_info=True)
+        return
+    request._dm_prefilter_task_ids = tuple(narrowed_queryset.values_list('id', flat=True))
 
 
 def get_fields_for_evaluation(prepare_params, user, skip_regular=True):
@@ -182,7 +376,13 @@ def apply_ordering(queryset, ordering, project, request, view_data=None):
         else:
             f = F(field_name).asc(nulls_last=True) if ascending else F(field_name).desc(nulls_last=True)
 
-        queryset = queryset.order_by(f)
+        try:
+            queryset = queryset.order_by(f)
+        except FieldError:
+            if is_agreement_related_field(field_name):
+                logger.warning('Skipping stale agreement ordering field: %s', field_name, exc_info=True)
+                return queryset.order_by('id')
+            raise
     else:
         queryset = queryset.order_by('id')
 
@@ -196,16 +396,93 @@ def cast_value(_filter):
             _filter.value.min = float(_filter.value.min)
             _filter.value.max = float(_filter.value.max)
         elif _filter.type == 'Datetime':
-            _filter.value.min = datetime.strptime(_filter.value.min, DATETIME_FORMAT)
-            _filter.value.max = datetime.strptime(_filter.value.max, DATETIME_FORMAT)
+            try:
+                _filter.value.min = datetime.strptime(_filter.value.min, DATETIME_FORMAT)
+                _filter.value.max = datetime.strptime(_filter.value.max, DATETIME_FORMAT)
+            except (TypeError, ValueError):
+                logger.warning(
+                    'Skipping Datetime range cast for filter %s: invalid value %r',
+                    _filter.filter,
+                    _filter.value,
+                )
     # one value
     else:
         if _filter.type == 'Number':
             _filter.value = float(_filter.value)
         elif _filter.type == 'Datetime':
-            _filter.value = datetime.strptime(_filter.value, DATETIME_FORMAT)
+            try:
+                _filter.value = datetime.strptime(_filter.value, DATETIME_FORMAT)
+            except (TypeError, ValueError):
+                logger.warning(
+                    'Skipping Datetime cast for filter %s: invalid value %r',
+                    _filter.filter,
+                    _filter.value,
+                )
         elif _filter.type == 'Boolean':
             _filter.value = cast_bool_from_str(_filter.value)
+
+
+def _is_supported_in_list_field(field_name: str) -> bool:
+    """Return True if `field_name` (post-preprocess) is in the MVP allowlist for in_list / not_in_list."""
+    return field_name in SUPPORTED_IN_LIST_FIELDS or field_name.startswith('data__')
+
+
+def _normalize_in_list_value(_filter) -> None:
+    """Trim, dedupe, and coerce list values for in_list / not_in_list filters.
+
+    Mutates `_filter.value` in place. Lenient policy for Number type: non-numeric
+    tokens are dropped silently (the FE surfaces the invalid count to the user).
+    """
+    raw = _filter.value if isinstance(_filter.value, list) else []
+    cleaned = []
+    seen = set()
+    for el in raw:
+        if isinstance(el, str):
+            stripped = el.strip()
+            if len(stripped) >= 2 and (
+                (stripped[0] == '"' and stripped[-1] == '"') or (stripped[0] == "'" and stripped[-1] == "'")
+            ):
+                stripped = stripped[1:-1].strip()
+            if not stripped:
+                continue
+            el = stripped
+        if _filter.type == 'Number':
+            try:
+                el = float(el)
+            except (TypeError, ValueError):
+                continue
+        if el in seen:
+            continue
+        seen.add(el)
+        cleaned.append(el)
+    _filter.value = cleaned
+
+
+def validate_in_list_filter(_filter, field_name: str) -> str:
+    """Semantic validation for `in_list` / `not_in_list` operators (BROS-1203).
+
+    Returns one of:
+      - 'ok'   — proceed with the existing Q(__in=value) branch.
+      - 'none' — empty `in_list` after normalization: append a contradiction so the
+                 row contributes no matches (works correctly for both AND and OR).
+      - 'skip' — empty `not_in_list` after normalization: drop the filter entirely.
+
+    Raises ValidationError for unsupported fields. Only triggers when the *original*
+    operator is in_list / not_in_list, so the legacy `annotations_ids contains→in_list`
+    rewrite (below) remains unaffected.
+    """
+    if _filter.operator not in (Operator.IN_LIST, Operator.NOT_IN_LIST):
+        return 'ok'
+    if not _is_supported_in_list_field(field_name):
+        raise ValidationError(
+            '`is any of` / `is none of` support only Task ID, Inner ID, and task.data.* fields in this release.'
+        )
+    if not isinstance(_filter.value, list):
+        raise ValidationError('Filter value must be a list for `is any of` / `is none of`.')
+    _normalize_in_list_value(_filter)
+    if not _filter.value:
+        return 'none' if _filter.operator == Operator.IN_LIST else 'skip'
+    return 'ok'
 
 
 def add_result_filter(field_name, _filter, filter_expressions, project, request):
@@ -213,9 +490,18 @@ def add_result_filter(field_name, _filter, filter_expressions, project, request)
     from tasks.models import Annotation, Prediction
 
     if field_name == 'annotations_results':
-        records = Annotation.objects.for_user(request.user).filter(project=project)
+        user = getattr(request, 'user', None)
+        records = (
+            Annotation.objects.for_user(user)
+            if getattr(user, 'is_authenticated', False) is True
+            else Annotation.objects.all()
+        )
+        if isinstance(project, models.Model):
+            records = records.filter(project=project)
     else:
-        records = Prediction.objects.filter(task__project=project)
+        records = Prediction.objects.all()
+        if isinstance(project, models.Model):
+            records = records.filter(task__project=project)
 
     records = records.filter(task=OuterRef('pk'))
     if _filter.operator in [Operator.EQUAL, Operator.NOT_EQUAL]:
@@ -243,30 +529,67 @@ def add_result_filter(field_name, _filter, filter_expressions, project, request)
         return 'continue'
 
 
+def parse_user_filter_ids(value):
+    """Parse a scalar or list user-filter value into deduped integer user ids (FIT-2253)."""
+    if value is None:
+        return []
+    if isinstance(value, list) and len(value) > settings.DATA_MANAGER_LIST_FILTER_MAX_VALUES:
+        raise ValidationError(
+            f'User filter list exceeds maximum size of {settings.DATA_MANAGER_LIST_FILTER_MAX_VALUES}.'
+        )
+    raw = value if isinstance(value, list) else [value]
+    ids = []
+    seen = set()
+    for item in raw:
+        try:
+            if isinstance(item, bool) or (isinstance(item, float) and not item.is_integer()):
+                raise ValueError
+            user_id = int(item)
+        except (TypeError, ValueError):
+            raise ValidationError('User filter values must be integer ids.') from None
+        if user_id not in seen:
+            seen.add(user_id)
+            ids.append(user_id)
+    return ids
+
+
 def add_user_filter(enabled, key, _filter, filter_expressions):
-    if enabled and _filter.operator == Operator.CONTAINS:
-        filter_expressions.append(Q(**{key: int(_filter.value)}))
-        return 'continue'
-    if enabled and _filter.operator == Operator.NOT_CONTAINS:
-        filter_expressions.append(~Q(**{key: int(_filter.value)}))
-        return 'continue'
-    if enabled and _filter.operator == Operator.EMPTY:
+    if not enabled:
+        return
+
+    if _filter.operator == Operator.EMPTY:
         value = cast_bool_from_str(_filter.value)
         filter_expressions.append(Q(**{key + '__isnull': value}))
+        return 'continue'
+
+    user_ids = parse_user_filter_ids(_filter.value)
+    if not user_ids:
+        return 'skip_line'
+
+    lookup = f'{key}__in'
+    if _filter.operator == Operator.CONTAINS:
+        filter_expressions.append(Q(**{lookup: user_ids}))
+        return 'continue'
+    elif _filter.operator == Operator.NOT_CONTAINS:
+        filter_expressions.append(~Q(**{lookup: user_ids}))
         return 'continue'
 
 
 def add_annotation_user_filter(enabled, _filter, filter_expressions, annotations):
     if not enabled:
         return None
-    if _filter.operator == Operator.CONTAINS:
-        q = Exists(annotations.filter(completed_by=int(_filter.value)))
-    elif _filter.operator == Operator.NOT_CONTAINS:
-        q = ~Exists(annotations.filter(completed_by=int(_filter.value)))
-    elif _filter.operator == Operator.EMPTY:
+    if _filter.operator == Operator.EMPTY:
         q = Exists(annotations.filter(completed_by__isnull=cast_bool_from_str(_filter.value)))
     else:
-        return None
+        user_ids = parse_user_filter_ids(_filter.value)
+        if not user_ids:
+            return 'skip_line'
+        if _filter.operator == Operator.CONTAINS:
+            q = Exists(annotations.filter(completed_by__in=user_ids))
+        elif _filter.operator == Operator.NOT_CONTAINS:
+            q = ~Exists(annotations.filter(completed_by__in=user_ids))
+        else:
+            return None
     filter_expressions.append(q)
     return 'continue'
 
@@ -297,28 +620,60 @@ def apply_filters(queryset, filters, project, request):
 
     from tasks.models import Annotation
 
-    visible_annotations = Annotation.objects.for_user(request.user).filter(project=project, task=OuterRef('pk'))
+    user = getattr(request, 'user', None)
+    annotations = (
+        Annotation.objects.for_user(user)
+        if getattr(user, 'is_authenticated', False) is True
+        else Annotation.objects.all()
+    )
+    visible_annotations = annotations.filter(task=OuterRef('pk'))
+    if isinstance(project, models.Model):
+        visible_annotations = visible_annotations.filter(project=project)
 
-    # combine child filters with their parent in the same filter expression
+    # Combine child filters with their parent in the same filter expression.
+    # Result-parent hooks consume this complete line and compile one correlated
+    # expression; the generic path remains for legacy/non-result filter trees.
     filter_line_expressions: list[list[Q]] = []
     for parent_filter in filters.items:
-        filter_line = [parent_filter, parent_filter.child_filter] if parent_filter.child_filter else [parent_filter]
+        child_filters = list(parent_filter.child_filters)
+        filter_line = [parent_filter, *child_filters]
         filter_expressions: list[Q] = []
 
         for _filter in filter_line:
-            is_child_filter = parent_filter.child_filter is not None and _filter is parent_filter.child_filter
+            is_child_filter = _filter is not parent_filter
 
             # we can also have annotations filters
             if not _filter.filter.startswith('filter:tasks:') or _filter.value is None:
+                # Children never become standalone task filters when their parent
+                # is empty or malformed.
+                if not is_child_filter:
+                    break
                 continue
 
             # django orm loop expression attached to column name
             preprocess_field_name = load_func(settings.PREPROCESS_FIELD_NAME)
             field_name, _ = preprocess_field_name(_filter.filter, project)
+            if _is_stale_agreement_field(queryset, field_name):
+                logger.warning('Skipping stale agreement filter field: %s', field_name)
+                continue
+            validate_user_filter_operator(field_name, _filter.operator, _filter.value)
 
             # filter pre-processing, value type conversion, etc..
             preprocess_filter = load_func(settings.DATA_MANAGER_PREPROCESS_FILTER)
             _filter = preprocess_filter(_filter, field_name)
+
+            # Semantic validation for in_list / not_in_list (BROS-1203). Runs *before*
+            # the LSE custom hook and *before* the legacy `annotations_ids contains→in_list`
+            # rewrite so the rewrite path remains untouched.
+            in_list_status = validate_in_list_filter(_filter, field_name)
+            if in_list_status == 'none':
+                # Empty `in_list`: this filter line matches no rows. Append a contradiction
+                # so AND/OR conjunction semantics stay correct (Q(pk__in=[]) is always false).
+                filter_expressions.append(Q(pk__in=[]))
+                continue
+            if in_list_status == 'skip':
+                # Empty `not_in_list`: no constraint.
+                continue
 
             # custom expressions for enterprise
             filter_expression = custom_filter_expressions(
@@ -327,7 +682,15 @@ def apply_filters(queryset, filters, project, request):
                 project,
                 request=request,
                 is_child_filter=is_child_filter,
+                child_filter=parent_filter.child_filter if not is_child_filter else None,
+                child_filters=child_filters if not is_child_filter else None,
             )
+            if isinstance(filter_expression, CustomFilterResult):
+                if filter_expression.expression is not None:
+                    filter_expressions.append(filter_expression.expression)
+                if filter_expression.consume_child_filter:
+                    break
+                continue
             if filter_expression:
                 filter_expressions.append(filter_expression)
                 continue
@@ -336,11 +699,19 @@ def apply_filters(queryset, filters, project, request):
             result = add_annotation_user_filter(
                 field_name == 'annotators', _filter, filter_expressions, visible_annotations
             )
+            if result == 'skip_line':
+                if not is_child_filter:
+                    break
+                continue
             if result == 'continue':
                 continue
 
             # updated_by
             result = add_user_filter(field_name == 'updated_by', 'updated_by', _filter, filter_expressions)
+            if result == 'skip_line':
+                if not is_child_filter:
+                    break
+                continue
             if result == 'continue':
                 continue
 
@@ -357,7 +728,6 @@ def apply_filters(queryset, filters, project, request):
                 result = add_annotation_id_filter(_filter, filter_expressions, visible_annotations)
                 if result == 'continue':
                     continue
-
             # predictions model versions
             if field_name == 'predictions_model_versions' and _filter.operator == Operator.CONTAINS:
                 q = Q()
@@ -403,8 +773,8 @@ def apply_filters(queryset, filters, project, request):
                 _filter.value = 0
 
             # get type of annotated field
-            value_type = 'str'
-            if queryset.exists():
+            value_type = KNOWN_FILTER_VALUE_TYPES.get(field_name, 'str')
+            if field_name not in KNOWN_FILTER_VALUE_TYPES and queryset.exists():
                 value_type = type(queryset.values_list(field_name, flat=True)[0]).__name__
 
             if (value_type == 'list' or value_type == 'tuple') and 'equal' in _filter.operator:
@@ -494,7 +864,8 @@ def apply_filters(queryset, filters, project, request):
                 cast_value(_filter)
                 filter_expressions.append(Q(**{field_name: _filter.value}))
 
-        filter_line_expressions.append(filter_expressions)
+        if filter_expressions:
+            filter_line_expressions.append(filter_expressions)
 
     resolved_filter_lines = [reduce(lambda x, y: x & y, fle) for fle in filter_line_expressions]
 
@@ -542,22 +913,23 @@ class TaskQuerySet(FSMStateQuerySetMixin, models.QuerySet):
         else:
             # Backwards compatible: prepare_params.project is an int
             project = Project.objects.get(pk=prepare_params.project)
+            queryset.project = project
 
         request = prepare_params.request
         queryset = apply_filters(queryset, prepare_params.filters, project, request)
         queryset = apply_ordering(queryset, prepare_params.ordering, project, request, view_data=prepare_params.data)
 
-        if not prepare_params.selectedItems:
-            return queryset
+        if prepare_params.selectedItems:
+            # included selected items
+            if prepare_params.selectedItems.all is False and prepare_params.selectedItems.included:
+                queryset = queryset.filter(id__in=prepare_params.selectedItems.included)
 
-        # included selected items
-        if prepare_params.selectedItems.all is False and prepare_params.selectedItems.included:
-            queryset = queryset.filter(id__in=prepare_params.selectedItems.included)
+            # excluded selected items
+            elif prepare_params.selectedItems.all is True and prepare_params.selectedItems.excluded:
+                queryset = queryset.exclude(id__in=prepare_params.selectedItems.excluded)
 
-        # excluded selected items
-        elif prepare_params.selectedItems.all is True and prepare_params.selectedItems.excluded:
-            queryset = queryset.exclude(id__in=prepare_params.selectedItems.excluded)
-
+        if not prepare_params.is_multi_project:
+            queryset.project = project
         return queryset
 
 
@@ -570,33 +942,15 @@ class GroupConcat(Aggregate):
         super().__init__(expression, distinct='DISTINCT ' if distinct else '', output_field=output_field, **extra)
 
 
-def visible_annotations_filter(queryset):
-    request = getattr(queryset, 'request', None)
-    user = getattr(request, 'user', None)
-    if not getattr(user, 'is_authenticated', False):
-        return Q()
-
-    from projects.models import Project
-
-    admin_project_ids = Project.objects.admin_for_user(user).values('id')
-    member_project_ids = Project.objects.for_user(user).values('id')
-    return Q(project_id__in=admin_project_ids) | Q(project_id__in=member_project_ids, annotations__completed_by=user)
-
-
-def newest_annotation_subquery(queryset) -> Subquery:
+def newest_annotation_subquery() -> Subquery:
     from tasks.models import Annotation
 
-    request = getattr(queryset, 'request', None)
-    user = getattr(request, 'user', None)
-    newest_annotations = (
-        Annotation.objects.for_user(user) if getattr(user, 'is_authenticated', False) else Annotation.objects.none()
-    )
-    newest_annotations = newest_annotations.filter(task=OuterRef('pk')).order_by('-id')[:1]
+    newest_annotations = Annotation.objects.filter(task=OuterRef('pk')).order_by('-id')[:1]
     return Subquery(newest_annotations.values('created_at'))
 
 
 def base_annotate_completed_at(queryset: TaskQuerySet) -> TaskQuerySet:
-    return queryset.annotate(completed_at=Case(When(is_labeled=True, then=newest_annotation_subquery(queryset))))
+    return queryset.annotate(completed_at=Case(When(is_labeled=True, then=newest_annotation_subquery())))
 
 
 def annotate_completed_at(queryset: TaskQuerySet) -> TaskQuerySet:
@@ -648,7 +1002,7 @@ def annotated_completed_at_considering_agreement_threshold(queryset):
                 Q(_agreement__gte=agreement_threshold)
                 | Q(annotator_count__gte=(F('overlap') + max_additional_annotators_assignable))
             ),
-            then=newest_annotation_subquery(queryset),
+            then=newest_annotation_subquery(),
         ),
         default=Value(None),
         output_field=DateTimeField(),
@@ -667,21 +1021,14 @@ def annotate_storage_filename(queryset: TaskQuerySet) -> TaskQuerySet:
 
 
 def annotate_annotations_results(queryset):
-    annotation_filter = visible_annotations_filter(queryset)
     if settings.DJANGO_DB == settings.DJANGO_DB_SQLITE:
         return queryset.annotate(
             annotations_results=Coalesce(
-                GroupConcat('annotations__result', filter=annotation_filter),
-                Value(''),
-                output_field=models.CharField(),
+                GroupConcat('annotations__result'), Value(''), output_field=models.CharField()
             )
         )
     else:
-        return queryset.annotate(
-            annotations_results=ArrayAgg(
-                'annotations__result', distinct=True, default=Value([]), filter=annotation_filter
-            )
-        )
+        return queryset.annotate(annotations_results=ArrayAgg('annotations__result', distinct=True, default=Value([])))
 
 
 def annotate_predictions_results(queryset):
@@ -696,21 +1043,12 @@ def annotate_predictions_results(queryset):
 
 
 def annotate_annotators(queryset):
-    annotation_filter = visible_annotations_filter(queryset)
     if settings.DJANGO_DB == settings.DJANGO_DB_SQLITE:
         return queryset.annotate(
-            annotators=Coalesce(
-                GroupConcat('annotations__completed_by', filter=annotation_filter),
-                Value(''),
-                output_field=models.CharField(),
-            )
+            annotators=Coalesce(GroupConcat('annotations__completed_by'), Value(''), output_field=models.CharField())
         )
     else:
-        return queryset.annotate(
-            annotators=ArrayAgg(
-                'annotations__completed_by', distinct=True, default=Value([]), filter=annotation_filter
-            )
-        )
+        return queryset.annotate(annotators=ArrayAgg('annotations__completed_by', distinct=True, default=Value([])))
 
 
 def annotate_predictions_score(queryset):
@@ -731,7 +1069,25 @@ def annotate_predictions_score(queryset):
                 predictions_score=Avg('predictions__score', filter=Q(predictions__model_version__in=model_versions))
             )
     else:
-        model_version = first_task.project.model_version
+        project = first_task.project
+        model_version = project.model_version
+        if model_version is not None:
+            backend_exists_for_model_version = project.ml_backends.filter(model_version=model_version).exists()
+            predictions_exists_for_model_version = False
+            if not backend_exists_for_model_version:
+                predictions_exists_for_model_version = project.predictions.filter(model_version=model_version).exists()
+            if not backend_exists_for_model_version and not predictions_exists_for_model_version:
+                # project.model_version can secretly store a title instead of a model_version
+                backup_model_version = (
+                    project.ml_backends.filter(title=model_version)
+                    .order_by('-updated_at')
+                    .values_list('model_version', flat=True)
+                    .first()
+                )
+                if backup_model_version is not None:
+                    # '' is used for 'no selected model version', don't overwrite it
+                    model_version = backup_model_version
+
         if model_version is None:
             return queryset.annotate(predictions_score=Avg('predictions__score'))
         else:
@@ -741,15 +1097,10 @@ def annotate_predictions_score(queryset):
 
 
 def annotate_annotations_ids(queryset):
-    annotation_filter = visible_annotations_filter(queryset)
     if settings.DJANGO_DB == settings.DJANGO_DB_SQLITE:
-        return queryset.annotate(
-            annotations_ids=GroupConcat('annotations__id', output_field=models.CharField(), filter=annotation_filter)
-        )
+        return queryset.annotate(annotations_ids=GroupConcat('annotations__id', output_field=models.CharField()))
     else:
-        return queryset.annotate(
-            annotations_ids=ArrayAgg('annotations__id', default=Value([]), filter=annotation_filter)
-        )
+        return queryset.annotate(annotations_ids=ArrayAgg('annotations__id', default=Value([])))
 
 
 def annotate_predictions_model_versions(queryset):
@@ -762,20 +1113,13 @@ def annotate_predictions_model_versions(queryset):
 
 
 def annotate_avg_lead_time(queryset):
-    return queryset.annotate(avg_lead_time=Avg('annotations__lead_time', filter=visible_annotations_filter(queryset)))
+    return queryset.annotate(avg_lead_time=Avg('annotations__lead_time'))
 
 
 def annotate_draft_exists(queryset):
     from tasks.models import AnnotationDraft
 
-    request = getattr(queryset, 'request', None)
-    user = getattr(request, 'user', None)
-    drafts = (
-        AnnotationDraft.objects.for_user(user)
-        if getattr(user, 'is_authenticated', False)
-        else AnnotationDraft.objects.none()
-    )
-    return queryset.annotate(draft_exists=Exists(drafts.filter(task=OuterRef('pk'))))
+    return queryset.annotate(draft_exists=Exists(AnnotationDraft.objects.filter(task=OuterRef('pk'))))
 
 
 def file_upload(queryset):
@@ -852,27 +1196,32 @@ class PreparedTaskManager(models.Manager):
         queryset, fields_for_evaluation=None, all_fields=False, excluded_fields_for_evaluation=None, request=None
     ):
         annotations_map = get_annotations_map()
-        # If we have dynamic control-tag level agreement columns, inject into annotation map
-        # without mutating the global map
-        if flag_set('fflag_utc_428_consensus_control_tag_agreement', user='auto'):
-            inject_path = getattr(settings, 'GET_DYNAMIC_DM_ANNOTATIONS', None)
-            if inject_path:
-                overlay_func = load_func(inject_path)
-                # Expect a dict of {field_name: function that annotates the queryset}
-                overlay_map = overlay_func(request=request, project=getattr(queryset.first(), 'project', None)) or {}
-                if isinstance(overlay_map, dict) and overlay_map:
-                    # Only add overlay_map keys if they're explicitly requested in fields_for_evaluation
-                    # or if all_fields=True. Don't automatically add all overlay_map keys to avoid
-                    # processing all tasks when only a page is needed (e.g., in only_filtered).
-                    # Merge overlay with base map for this call only (all keys available, but only used if requested)
-                    annotations_map = {**annotations_map, **overlay_map}
-                    # Only add overlay_map keys to fields_for_evaluation if they're explicitly requested
-                    if fields_for_evaluation is not None:
-                        # Only include overlay_map keys that are already in fields_for_evaluation
-                        overlay_keys_in_request = [k for k in overlay_map.keys() if k in fields_for_evaluation]
-                        if overlay_keys_in_request:
-                            # Ensure they're in the list (they already are, but this makes it explicit)
-                            fields_for_evaluation = list(set(fields_for_evaluation) | set(overlay_keys_in_request))
+        project = getattr(queryset, 'project', None)
+        # If configured, inject dynamic annotation fields without mutating the global map.
+        # Do not pre-gate this with the Agreement V2 feature flag here: LSE uses this hook
+        # for project-level Agreement V2 targeting, so the hook itself must decide whether
+        # to return dynamic agreement fields for the current project.
+        inject_path = getattr(settings, 'GET_DYNAMIC_DM_ANNOTATIONS', None)
+        if inject_path:
+            overlay_func = load_func(inject_path)
+            # Expect a dict of {field_name: function that annotates the queryset}
+            if project is None:
+                first_task = queryset.first()
+                project = None if first_task is None else first_task.project
+            overlay_map = overlay_func(request=request, project=project) or {}
+            if isinstance(overlay_map, dict) and overlay_map:
+                # Only add overlay_map keys if they're explicitly requested in fields_for_evaluation
+                # or if all_fields=True. Don't automatically add all overlay_map keys to avoid
+                # processing all tasks when only a page is needed (e.g., in only_filtered).
+                # Merge overlay with base map for this call only (all keys available, but only used if requested)
+                annotations_map = {**annotations_map, **overlay_map}
+                # Only add overlay_map keys to fields_for_evaluation if they're explicitly requested
+                if fields_for_evaluation is not None:
+                    # Only include overlay_map keys that are already in fields_for_evaluation
+                    overlay_keys_in_request = [k for k in overlay_map.keys() if k in fields_for_evaluation]
+                    if overlay_keys_in_request:
+                        # Ensure they're in the list (they already are, but this makes it explicit)
+                        fields_for_evaluation = list(set(fields_for_evaluation) | set(overlay_keys_in_request))
 
         if fields_for_evaluation is None:
             fields_for_evaluation = []
@@ -880,8 +1229,14 @@ class PreparedTaskManager(models.Manager):
         if excluded_fields_for_evaluation is None:
             excluded_fields_for_evaluation = []
 
-        first_task = queryset.first()
-        project = None if first_task is None else first_task.project
+        if request is not None:
+            # Expose the exact annotation fields requested in this pass so downstream
+            # annotators can choose cheaper implementations when safe.
+            request._dm_annotation_fields = tuple(fields_for_evaluation)
+
+        if project is None:
+            first_task = queryset.first()
+            project = None if first_task is None else first_task.project
 
         # db annotations applied only if we need them in ordering or filters
         for field in annotations_map.keys():
@@ -927,14 +1282,24 @@ class PreparedTaskManager(models.Manager):
         )
 
     def only_filtered(self, prepare_params=None):
+        from projects.models import Project
+
         request = prepare_params.request
+        if request is not None and hasattr(request, '_dm_prefilter_task_ids'):
+            delattr(request, '_dm_prefilter_task_ids')
         # Support both single and multiple projects
         if prepare_params.is_multi_project:
             queryset = TaskQuerySet(self.model).filter(project__in=prepare_params.projects)
         else:
             queryset = TaskQuerySet(self.model).filter(project=prepare_params.project)
+            project = Project.objects.get(pk=prepare_params.project)
+            _set_prefilter_task_ids_for_agreement(request, queryset, prepare_params, project)
         fields_for_filter_ordering = get_fields_for_filter_ordering(prepare_params)
         queryset = self.annotate_queryset(queryset, fields_for_evaluation=fields_for_filter_ordering, request=request)
+        # TaskListAPI runs a second annotate_queryset on the same request for the paginated id__in slice.
+        # Drop the prefilter so agreement does not reuse this large ID list for that pass (must use page tasks only).
+        if request is not None and hasattr(request, '_dm_prefilter_task_ids'):
+            delattr(request, '_dm_prefilter_task_ids')
         return queryset.prepared(prepare_params=prepare_params)
 
 

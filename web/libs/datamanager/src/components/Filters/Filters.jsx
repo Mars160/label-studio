@@ -17,6 +17,8 @@ const injector = inject(({ store }) => ({
 
 export const Filters = injector(({ store, views, currentView, filters, projectId }) => {
   const { sidebarEnabled } = views;
+  const isLocked = currentView?.isLockedByManager;
+  const lockedTooltip = currentView?.lockedUpdateMessage;
   const { fields, recentEntries, saveOnSwitch, saveInPlace } = useRecentFilters(
     projectId,
     currentView.availableFilters,
@@ -95,13 +97,15 @@ export const Filters = injector(({ store, views, currentView, filters, projectId
               view={currentView}
               sidebar={sidebarEnabled}
               value={filter.currentValue}
-              key={`${filter.filter.id}-${i}`}
+              key={filter.id}
               availableFilters={fields}
               pickerFilters={currentView.availableFilters}
               recentEntries={recentEntries}
               dropdownClassName={cn("filters").elem("selector").toClassName()}
               onSaveOnSwitch={saveOnSwitch}
               onSaveInPlace={saveInPlace}
+              disabled={isLocked}
+              disabledTooltip={isLocked ? lockedTooltip : undefined}
             />
           ))
         ) : (
@@ -112,6 +116,8 @@ export const Filters = injector(({ store, views, currentView, filters, projectId
         <Button
           size="small"
           look="string"
+          disabled={isLocked}
+          tooltip={isLocked ? lockedTooltip : undefined}
           onClick={() => currentView.createFilter()}
           leading={<IconPlus className="!h-3 !w-3" />}
         >
@@ -134,7 +140,8 @@ export const Filters = injector(({ store, views, currentView, filters, projectId
           <Button
             size="small"
             look="string"
-            tooltip={pasteFeedback ? "Pasted!" : "Paste filters from clipboard"}
+            disabled={isLocked}
+            tooltip={isLocked ? lockedTooltip : pasteFeedback ? "Pasted!" : "Paste filters from clipboard"}
             onClick={handlePasteFilters}
             aria-label="Paste filters"
           >
@@ -145,7 +152,8 @@ export const Filters = injector(({ store, views, currentView, filters, projectId
             <Button
               size="small"
               look="string"
-              tooltip="Undo paste — restore previous filters"
+              disabled={isLocked}
+              tooltip={isLocked ? lockedTooltip : "Undo paste — restore previous filters"}
               onClick={handleUndoPaste}
               aria-label="Undo paste"
             >

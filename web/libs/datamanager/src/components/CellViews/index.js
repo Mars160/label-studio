@@ -19,6 +19,7 @@ export { VideoCell as Video } from "./VideoCell";
 export { ProjectCell as Project } from "./ProjectCell";
 export { AgreementSelected } from "./AgreementSelected";
 export { TaskState } from "./TaskState";
+export { PaymentStatus } from "./PaymentStatus/PaymentStatus";
 
 export function normalizeCellAlias(alias) {
   // remove trailing separators to make `pascalCase` safe
@@ -28,6 +29,10 @@ export function normalizeCellAlias(alias) {
   // so they use the same percentage formatting and coloring.
   if (safeAlias === "agreement" || safeAlias.startsWith("dimension_agreement_")) {
     return "Agreement";
+  }
+
+  if (safeAlias === "skipped_by_annotator") {
+    return "Annotators";
   }
 
   return pascalCase(safeAlias);

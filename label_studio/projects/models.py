@@ -553,6 +553,9 @@ class Project(ProjectMixin, FsmHistoryStateModel):
         :param overlap_cohort_percentage_changed: If cohort_percentage param changed
         :param tasks_number_changed: If tasks number changed in project
         """
+        # Async RQ jobs pickle the Project instance; refresh so concurrent settings
+        # changes (e.g. during duplication) are not overwritten with stale values.
+        self.refresh_from_db(fields=['maximum_annotations', 'overlap_cohort_percentage'])
         logger.info(
             f'Starting _update_tasks_states with params: Project {str(self)} maximum_annotations '
             f'{self.maximum_annotations} and percentage {self.overlap_cohort_percentage}'
@@ -607,6 +610,9 @@ class Project(ProjectMixin, FsmHistoryStateModel):
         """
         Rearrange overlap depending on annotation count in tasks
         """
+        # Async RQ jobs pickle the Project instance; refresh so concurrent settings
+        # changes (e.g. during duplication) are not overwritten with stale values.
+        self.refresh_from_db(fields=['maximum_annotations', 'overlap_cohort_percentage'])
         all_project_tasks = Task.objects.filter(project=self)
         max_annotations = self.maximum_annotations
         must_tasks = int(self.tasks.count() * self.overlap_cohort_percentage / 100 + 0.5)
@@ -773,6 +779,32 @@ class Project(ProjectMixin, FsmHistoryStateModel):
                 return None
             return f'{count} {type}{"s" if count > 1 else ""}'
 
+        parsed_config = parse_config(config_string)
+        tag_types = {tag_info['type'] for _, tag_info in parsed_config.items()}
+
+        def add_separated_video_object_labels(control_tag_from_config, labels_from_config_by_tag):
+            # DEV-1990 Workaround for Video labels as there are no labels in separated VideoRectangle/VideoVector tags.
+            # Their annotation results store selected labels under the VideoRectangle/VideoVector control name, while
+            # the label values are declared by a sibling Labels tag targeting the same Video object.
+            control_tag_info = parsed_config.get(control_tag_from_config)
+            if (
+                labels_from_config_by_tag
+                or not control_tag_info
+                or control_tag_info.get('type') not in {'VideoRectangle', 'VideoVector'}
+            ):
+                return labels_from_config_by_tag
+
+            control_to_names = set(control_tag_info.get('to_name') or [])
+            if not control_to_names:
+                return labels_from_config_by_tag
+
+            for sibling_tag, sibling_tag_info in parsed_config.items():
+                if sibling_tag_info.get('type') != 'Labels':
+                    continue
+                if control_to_names.intersection(sibling_tag_info.get('to_name') or []):
+                    labels_from_config_by_tag |= set(labels_from_config.get(sibling_tag, []))
+            return labels_from_config_by_tag
+
         for control_tag_from_data, labels_from_data in created_labels.items():
             # Check if labels created in annotations, and their control tag has been removed
             if (
@@ -787,15 +819,11 @@ class Project(ProjectMixin, FsmHistoryStateModel):
                     f'There are {sum(labels_from_data.values(), 0)} annotation(s) created with tag '
                     f'"{control_tag_from_data}", you can\'t remove it'
                 )
-            labels_from_config_by_tag = set(
-                labels_from_config[get_original_fromname_by_regex(config_string, control_tag_from_data)]
+            control_tag_from_config = get_original_fromname_by_regex(config_string, control_tag_from_data)
+            labels_from_config_by_tag = set(labels_from_config[control_tag_from_config])
+            labels_from_config_by_tag = add_separated_video_object_labels(
+                control_tag_from_config, labels_from_config_by_tag
             )
-            parsed_config = parse_config(config_string)
-            tag_types = [tag_info['type'] for _, tag_info in parsed_config.items()]
-            # DEV-1990 Workaround for Video labels as there are no labels in VideoRectangle/VideoVectorLabels tag
-            if 'VideoRectangle' in tag_types or 'VideoVectorLabels' in tag_types:
-                for key in labels_from_config:
-                    labels_from_config_by_tag |= set(labels_from_config[key])
             if 'Taxonomy' in tag_types:
                 custom_tags = Label.objects.filter(links__project=self).values_list('value', flat=True)
                 flat_custom_tags = set([item for sublist in custom_tags for item in sublist])
@@ -1450,6 +1478,64 @@ class ProjectMember(models.Model):
         return self.project.has_permission(user)
 
 
+def _build_flat_increment_sql(column, keys):
+    """Build chained jsonb_set expression for flat {key: count} columns.
+
+    Pre-aggregates duplicate keys to prevent lost increments when jsonb_set
+    reads the original column value multiple times in a single expression.
+
+    Returns (sql_expr, params) or (None, []) if keys is empty.
+    """
+    if not keys:
+        return None, []
+
+    counts = {}
+    for key in keys:
+        counts[key] = counts.get(key, 0) + 1
+
+    expr = f"COALESCE({column}, '{{}}'::jsonb)"
+    params = []
+    for key, count in counts.items():
+        expr = f"jsonb_set({expr}, %s, (COALESCE(({column})->>%s, '0')::int + %s)::text::jsonb)"
+        params.extend([[key], key, count])
+
+    return expr, params
+
+
+def _build_nested_increment_sql(column, label_items):
+    """Build chained jsonb_set expression for nested {from_name: {label: count}} columns.
+
+    Pre-aggregates duplicate (from_name, label) pairs.
+    Phase 1: ensure parent keys exist.
+    Phase 2: increment leaf values.
+
+    Returns (sql_expr, params) or (None, []) if label_items is empty.
+    """
+    if not label_items:
+        return None, []
+
+    counts = {}
+    for from_name, label in label_items:
+        key = (from_name, label)
+        counts[key] = counts.get(key, 0) + 1
+
+    parent_keys = list(dict.fromkeys(from_name for from_name, _ in counts))
+
+    # Phase 1: ensure parent keys exist
+    expr = f"COALESCE({column}, '{{}}'::jsonb)"
+    params = []
+    for parent in parent_keys:
+        expr = f"jsonb_set({expr}, %s, COALESCE(({column})->%s, '{{}}'::jsonb))"
+        params.extend([[parent], parent])
+
+    # Phase 2: increment leaves
+    for (from_name, label), count in counts.items():
+        expr = f"jsonb_set({expr}, %s, (COALESCE(({column})->%s->>%s, '0')::int + %s)::text::jsonb)"
+        params.extend([[from_name, label], from_name, label, count])
+
+    return expr, params
+
+
 class ProjectSummary(models.Model):
     project = AutoOneToOneField(Project, primary_key=True, on_delete=models.CASCADE, related_name='summary')
     created_at = models.DateTimeField(_('created at'), auto_now_add=True, help_text='Creation time')
@@ -1474,6 +1560,12 @@ class ProjectSummary(models.Model):
     created_labels_drafts = JSONField(
         _('created labels in drafts'), null=True, default=dict, help_text='Unique drafts labels'
     )
+    dimension_value_counts = JSONField(
+        _('dimension value counts'),
+        null=True,
+        blank=True,
+        help_text='Dimension-backed label distribution counts cache',
+    )
 
     def has_permission(self, user):
         user.project = self.project  # link for activity log
@@ -1486,6 +1578,7 @@ class ProjectSummary(models.Model):
         self.created_annotations = {}
         self.created_labels = {}
         self.created_labels_drafts = {}
+        self.dimension_value_counts = {}
         self.save()
 
     def update_data_columns(self, tasks):
@@ -1553,11 +1646,22 @@ class ProjectSummary(models.Model):
         return key
 
     def _get_labels(self, result):
+        if not isinstance(result, dict):
+            return []
         result_type = result.get('type')
-        # DEV-1990 Workaround for Video labels as there are no labels in VideoRectangle tag
+        # DEV-1990 Workaround for Video labels as there are no labels in VideoRectangle/VideoVector tags
         if result_type in ['videorectangle', 'videovector']:
             result_type = 'labels'
-        result_value = result['value'].get(result_type)
+        value = result.get('value')
+        if isinstance(value, list):
+            # Custom interface array-of-string pass-through (type labels, bare array on value).
+            if result_type != 'labels':
+                return []
+            result_value = value
+        elif isinstance(value, dict):
+            result_value = value.get(result_type)
+        else:
+            return []
         if not result_value or not isinstance(result_value, list) or result_type == 'text':
             # Non-list values are not labels. TextArea list values (texts) are not labels too.
             return []
@@ -1572,6 +1676,16 @@ class ProjectSummary(models.Model):
         return labels
 
     def update_created_annotations_and_labels(self, annotations):
+        if flag_set('fflag_fix_plt_1048_concurrent_project_summary_update_19032026_short', user='auto'):
+            try:
+                self._atomic_update_created_annotations_and_labels(annotations)
+                return
+            except Exception:
+                logger.warning(
+                    'Atomic annotation counter increment failed, falling back to original',
+                    exc_info=True,
+                )
+
         created_annotations = dict(self.created_annotations)
         labels = dict(self.created_labels)
         for annotation in annotations:
@@ -1599,6 +1713,49 @@ class ProjectSummary(models.Model):
         self.created_annotations = created_annotations
         self.created_labels = labels
         self.save(update_fields=['created_annotations', 'created_labels'])
+
+    def _atomic_update_created_annotations_and_labels(self, annotations):
+        """Atomically increment created_annotations and created_labels via SQL.
+
+        Uses jsonb_set() to avoid SELECT FOR UPDATE → Python dict → UPDATE cycle,
+        eliminating row-lock contention under concurrent annotators.
+        """
+        annotation_keys = []
+        label_items = []
+
+        for annotation in annotations:
+            results = get_attr_or_item(annotation, 'result') or []
+            if not isinstance(results, list):
+                continue
+            for result in results:
+                key = self._get_annotation_key(result)
+                if not key:
+                    continue
+                annotation_keys.append(key)
+                from_name = result['from_name']
+                for label in self._get_labels(result):
+                    label_items.append((from_name, label))
+
+        ann_sql, ann_params = _build_flat_increment_sql('created_annotations', annotation_keys)
+        lbl_sql, lbl_params = _build_nested_increment_sql('created_labels', label_items)
+
+        if not ann_sql and not lbl_sql:
+            return
+
+        set_clauses = []
+        params = []
+        if ann_sql:
+            set_clauses.append(f'created_annotations = {ann_sql}')
+            params.extend(ann_params)
+        if lbl_sql:
+            set_clauses.append(f'created_labels = {lbl_sql}')
+            params.extend(lbl_params)
+
+        params.append(self.project_id)
+        sql = f'UPDATE projects_projectsummary SET {", ".join(set_clauses)} WHERE project_id = %s'
+
+        with connection.cursor() as cursor:
+            cursor.execute(sql, params)
 
     def remove_created_annotations_and_labels(self, annotations):
         # we are going to remove all annotations, so we'll reset the corresponding fields on the summary
@@ -1641,6 +1798,16 @@ class ProjectSummary(models.Model):
         self.save(update_fields=['created_annotations', 'created_labels'])
 
     def update_created_labels_drafts(self, drafts):
+        if flag_set('fflag_fix_plt_1048_concurrent_project_summary_update_19032026_short', user='auto'):
+            try:
+                self._atomic_update_created_labels_drafts(drafts)
+                return
+            except Exception:
+                logger.warning(
+                    'Atomic draft counter increment failed, falling back to original',
+                    exc_info=True,
+                )
+
         labels = dict(self.created_labels_drafts)
         for draft in drafts:
             results = get_attr_or_item(draft, 'result') or []
@@ -1662,6 +1829,30 @@ class ProjectSummary(models.Model):
         logger.debug(f'update summary.created_labels_drafts = {labels}')
         self.created_labels_drafts = labels
         self.save(update_fields=['created_labels_drafts'])
+
+    def _atomic_update_created_labels_drafts(self, drafts):
+        """Atomically increment created_labels_drafts via SQL."""
+        label_items = []
+        for draft in drafts:
+            results = get_attr_or_item(draft, 'result') or []
+            if not isinstance(results, list):
+                continue
+            for result in results:
+                if 'from_name' not in result:
+                    continue
+                from_name = result['from_name']
+                for label in self._get_labels(result):
+                    label_items.append((from_name, label))
+
+        lbl_sql, lbl_params = _build_nested_increment_sql('created_labels_drafts', label_items)
+        if not lbl_sql:
+            return
+
+        params = lbl_params + [self.project_id]
+        sql = f'UPDATE projects_projectsummary SET created_labels_drafts = {lbl_sql} WHERE project_id = %s'
+
+        with connection.cursor() as cursor:
+            cursor.execute(sql, params)
 
     def remove_created_drafts_and_labels(self, drafts):
         # we are going to remove all drafts, so we'll reset the corresponding field on the summary

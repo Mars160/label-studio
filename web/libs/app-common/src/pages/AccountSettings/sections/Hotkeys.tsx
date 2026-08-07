@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { IconWarning, ToastType, useToast } from "@humansignal/ui";
+import { cnm, ToastType, useToast } from "@humansignal/ui";
+import { IconWarning } from "@humansignal/icons";
 
 // Shadcn UI components
 import { Button } from "@humansignal/ui";
@@ -32,7 +33,7 @@ export const HotkeysHeaderButtons = () => {
 
   return (
     <>
-      <div className={`${styles.flexRow} justify-end gap-tight`}>
+      <div className={cnm(styles.flexRow, "justify-end !gap-tight")}>
         <Button variant="neutral" look="outlined" onClick={() => setImportDialogOpen(true)}>
           Import
         </Button>
@@ -225,7 +226,7 @@ export const HotkeysManager = () => {
   };
 
   // Enhanced import handler that manages dirty state
-  const handleImportHotkeys = async (importedData: ImportData | Hotkey[]) => {
+  const _handleImportHotkeys = async (importedData: ImportData | Hotkey[]) => {
     try {
       setIsLoading(true);
 

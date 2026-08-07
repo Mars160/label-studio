@@ -3,6 +3,7 @@
 import logging
 
 from core.permissions import ViewClassPermission, all_permissions
+from django import forms
 from django.utils.decorators import method_decorator
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, OpenApiResponse, extend_schema
@@ -58,6 +59,17 @@ _user_schema = {
         'allow_newsletters': {
             'type': 'boolean',
             'description': 'Whether the user allows newsletters',
+        },
+    },
+}
+
+_user_update_schema = {
+    **_user_schema,
+    'properties': {
+        **_user_schema['properties'],
+        'id': {
+            **_user_schema['properties']['id'],
+            'x-fern-property-name': 'request_user_id',
         },
     },
 }
@@ -140,7 +152,7 @@ _user_schema = {
             OpenApiParameter(name='id', type=OpenApiTypes.INT, location='path', description='User ID'),
         ],
         request={
-            'application/json': _user_schema,
+            'application/json': _user_update_schema,
         },
         responses={200: UserSerializer},
         extensions={
@@ -185,7 +197,10 @@ class UserAPI(viewsets.ModelViewSet):
     @action(detail=True, methods=['delete', 'post'], permission_required=all_permissions.avatar_any)
     def avatar(self, request, pk):
         if request.method == 'POST':
-            avatar = check_avatar(request.FILES)
+            try:
+                avatar = check_avatar(request.FILES)
+            except forms.ValidationError as e:
+                return Response({'detail': '; '.join(e.messages)}, status=400)
             request.user.avatar = avatar
             request.user.save()
             return Response({'detail': 'avatar saved'}, status=200)

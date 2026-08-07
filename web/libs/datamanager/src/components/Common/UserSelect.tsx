@@ -2,16 +2,26 @@ import { observer } from "mobx-react";
 import { useState, useCallback, useMemo } from "react";
 import { debounce } from "@humansignal/core/lib/utils/debounce";
 import { useDataManagerUsers } from "../../hooks/useUsers";
-import { Select, Tooltip, Userpic } from "@humansignal/ui";
+import { Select, Tooltip, Typography, Userpic } from "@humansignal/ui";
 import { cn } from "../../utils/bem";
 import { SelectSize } from "@humansignal/ui/lib/select/types";
 import { userDisplayName } from "@humansignal/core/lib/utils/helpers";
 
 const DEBOUNCE_DELAY = 300;
 
+const normalizeSelectedValue = (value, multiple) => {
+  if (!multiple) {
+    return Array.isArray(value) ? value[0] : value;
+  }
+  return Array.isArray(value) ? value : value != null ? [value] : [];
+};
+
+export const getUserOptionLabel = (user: { email?: string | null }, displayName: string) =>
+  user.email && user.email !== displayName ? `${displayName} (${user.email})` : displayName;
+
 export const UserSelect = observer(({ filter, onChange, multiple, value, placeholder, disabled }) => {
   const [search, setSearch] = useState(null);
-  const [selectedValue, setSelectedValue] = useState(value);
+  const selectedValue = useMemo(() => normalizeSelectedValue(value, multiple), [multiple, value]);
 
   // Get project ID from the filter context or use a default
   const projectId = filter?.view?.project?.id || 1;
@@ -22,7 +32,7 @@ export const UserSelect = observer(({ filter, onChange, multiple, value, placeho
     [],
   );
 
-  const { users, hasMore, total, loadMore } = useDataManagerUsers(
+  const { users, hasMore, total, loadMore, isLoading } = useDataManagerUsers(
     projectId,
     optionsPerRequest,
     false,
@@ -31,17 +41,21 @@ export const UserSelect = observer(({ filter, onChange, multiple, value, placeho
     selectedValue,
   );
   const options = useMemo(() => {
-    return users.map((user) => {
+    return users.filter(Boolean).map((user) => {
       const displayName = userDisplayName(user);
-      user.displayName = displayName;
+      const optionLabel = getUserOptionLabel(user, displayName);
+      const displayUser = { ...user, displayName };
+
       return {
         value: user.id,
         raw: { id: user.id, email: user.email, displayName, username: user.username },
         label: (
-          <Tooltip title={user.displayName} alignment="top-left">
+          <Tooltip title={optionLabel} alignment="top-left">
             <div className="flex gap-2 w-full items-center">
-              <Userpic user={user} size={16} key={`user-${user.id}`} showName={true} />
-              <span className="text-ellipsis text-nowrap overflow-hidden w-full">{user.displayName}</span>
+              <Userpic user={displayUser} size={16} key={`user-${user.id}`} showName={true} />
+              <Typography as="span" size="smallest" className="text-ellipsis text-nowrap overflow-hidden w-full">
+                {optionLabel}
+              </Typography>
             </div>
           </Tooltip>
         ),
@@ -51,11 +65,11 @@ export const UserSelect = observer(({ filter, onChange, multiple, value, placeho
 
   const _onChange = useCallback(
     (val) => {
-      setSelectedValue(val);
-      onChange?.(val);
-      setSearch(null);
+      const nextValue = multiple ? (val ? [].concat(val) : []) : val;
+      onChange?.(nextValue);
+      if (!multiple) setSearch(null);
     },
-    [onChange],
+    [multiple, onChange],
   );
 
   const searchFilter = useCallback((option: any, queryString: string) => {
@@ -82,6 +96,7 @@ export const UserSelect = observer(({ filter, onChange, multiple, value, placeho
       multiple={multiple}
       isVirtualList={true}
       searchable={true}
+      isLoading={isLoading}
       onSearch={debouncedSearch}
       searchFilter={searchFilter}
       itemCount={total}
