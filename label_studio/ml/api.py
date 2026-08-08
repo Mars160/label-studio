@@ -10,7 +10,12 @@ from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, OpenApiResponse, extend_schema
 from ml.models import MLBackend
-from ml.serializers import MLBackendSerializer, MLInteractiveAnnotatingRequest
+from ml.serializers import (
+    MLBackendRequestSerializer,
+    MLBackendSerializer,
+    MLBackendTrainRequestSerializer,
+    MLInteractiveAnnotatingRequest,
+)
 from projects.models import Project, Task
 from rest_framework import generics, status
 from rest_framework.exceptions import PermissionDenied
@@ -25,55 +30,6 @@ def admin_ml_backends(user):
     return MLBackend.objects.filter(project_id__in=Project.objects.admin_for_user(user).values('id'))
 
 
-_ml_backend_schema = {
-    'type': 'object',
-    'properties': {
-        'url': {
-            'type': 'string',
-            'description': 'ML backend URL',
-        },
-        'project': {
-            'type': 'integer',
-            'description': 'Project ID',
-        },
-        'is_interactive': {
-            'type': 'boolean',
-            'description': 'Is interactive',
-        },
-        'title': {
-            'type': 'string',
-            'description': 'Title',
-        },
-        'description': {
-            'type': 'string',
-            'description': 'Description',
-        },
-        'auth_method': {
-            'type': 'string',
-            'description': 'Auth method',
-            'enum': ['NONE', 'BASIC_AUTH'],
-        },
-        'basic_auth_user': {
-            'type': 'string',
-            'description': 'Basic auth user',
-        },
-        'basic_auth_pass': {
-            'type': 'string',
-            'description': 'Basic auth password',
-        },
-        'extra_params': {
-            'type': 'object',
-            'description': 'Extra parameters',
-        },
-        'timeout': {
-            'type': 'integer',
-            'description': 'Response model timeout',
-        },
-    },
-    'required': [],
-}
-
-
 @method_decorator(
     name='post',
     decorator=extend_schema(
@@ -86,9 +42,7 @@ _ml_backend_schema = {
     curl -X POST -H 'Content-type: application/json' {host}/api/ml -H 'Authorization: Token abc123'\\
     --data '{{"url": "http://localhost:9090", "project": {{project_id}}}}' 
     """.format(host=(settings.HOSTNAME or 'https://localhost:8080')),
-        request={
-            'application/json': _ml_backend_schema,
-        },
+        request=MLBackendRequestSerializer,
         extensions={
             'x-fern-sdk-group-name': 'ml',
             'x-fern-sdk-method-name': 'create',
@@ -172,9 +126,7 @@ class MLBackendListAPI(generics.ListCreateAPIView):
     curl -X PATCH -H 'Content-type: application/json' {host}/api/ml/{{ml_backend_ID}} -H 'Authorization: Token abc123'\\
     --data '{{"url": "http://localhost:9091"}}' 
     """.format(host=(settings.HOSTNAME or 'https://localhost:8080')),
-        request={
-            'application/json': _ml_backend_schema,
-        },
+        request=MLBackendRequestSerializer,
         extensions={
             'x-fern-sdk-group-name': 'ml',
             'x-fern-sdk-method-name': 'update',
@@ -258,17 +210,7 @@ class MLBackendDetailAPI(generics.RetrieveUpdateDestroyAPIView):
                 description='A unique integer value identifying this ML backend.',
             ),
         ],
-        request={
-            'application/json': {
-                'type': 'object',
-                'properties': {
-                    'use_ground_truth': {
-                        'type': 'boolean',
-                        'description': 'Whether to include ground truth annotations in training',
-                    },
-                },
-            },
-        },
+        request=MLBackendTrainRequestSerializer,
         responses={
             200: OpenApiResponse(description='Training has successfully started.'),
             500: OpenApiResponse(
