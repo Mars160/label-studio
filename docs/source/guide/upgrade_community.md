@@ -20,13 +20,6 @@ When upgrading Label Studio, keep the following in mind:
 
 
 
-## Upgrade using pip
-  
-```bash
- pip install --upgrade label-studio
-```
-
-
 ## Upgrade using Docker
 
 1. Stop the existing Label Studio container:
@@ -62,70 +55,14 @@ When upgrading Label Studio, keep the following in mind:
 
 If you installed Label Studio [using the source in Github](https://github.com/HumanSignal/label-studio), you can upgrade using the following steps. 
 
-<div class="code-tabs">
-  <div data-name="Using Poetry (recommended)">
-
-  If you're using Poetry ([see these instructions](install#Install-from-source)), upgrade with the following steps:
-  
-  1. Navigate to your Label Studio directory (where you cloned the repository). 
-  2. Fetch the latest changes from the repository:
-  ```bash
-    git pull
-  ```
-  3. If you want to upgrade to a specific version, list available tags and checkout the desired one. For example, to upgrade to version 1.14.0:
-  ```bash
-    git fetch --tags
-    git checkout v1.14.0
-  ```
-  4. Install updated dependencies using Poetry:
-  ```bash
-    poetry install
-  ```
-  5. Run database migrations to apply any updates to the database schema:
-  ```bash
-    poetry run python label_studio/manage.py migrate
-  ```
-  6. Collect static files:
-  ```bash
-    poetry run python label_studio/manage.py collectstatic
-  ```
-  7. Restart Label Studio:
-  ```bash
-    poetry run python label_studio/manage.py runserver
-  ```
-
-  </div>
-  <div data-name="Using pip">
-  
-  1. Navigate to your Label Studio directory (where you cloned the repository). 
-  2. Fetch the latest changes from the repository:
-  ```bash
-    git pull
-  ```
-  1. If you want to upgrade to a specific version, list available tags and checkout the desired one. For example, to upgrade to version 1.14.0:
-  ```bash
-    git fetch --tags
-    git checkout v1.14.0
-  ```
-  1. Install updated dependencies:
-  ```bash
-    pip install -r requirements.txt
-  ```
-  1. Run database migrations to apply any updates to the database schema:
-  ```bash
-    python label_studio/manage.py migrate
-  ```
-  1. Collect static files:
-  ```bash
-    python label_studio/manage.py collectstatic
-  ```
-  1. Restart Label Studio:
-  ```bash
-    python label_studio/manage.py runserver
-  ```
-
-  </div>
-</div>
+1. Navigate to your Label Studio directory.
+2. Fetch the latest changes and refresh the supported environment:
+```bash
+git pull
+uv sync
+make migrate-dev
+make run-dev
+```
 
 ## Upgrade a Kubernetes installation
 

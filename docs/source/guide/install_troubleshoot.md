@@ -22,15 +22,6 @@ Many bugs might be fixed in patch releases or maintenance releases. Make sure yo
 
 If you see errors about missing packages, install those packages and try to install Label Studio again. Make sure that you run Label Studio in a clean Python environment, such as a virtual environment.
 
-For Windows users the default installation might fail to build the `lxml` package. Consider manually installing it from [the unofficial Windows binaries](https://www.lfd.uci.edu/~gohlke/pythonlibs/#lxml). If you are running Windows 64-bit with Python 3.8 or later, run `pip install lxml‑4.5.0‑cp38‑cp38‑win_amd64.whl` to install it.
-
-## Errors from Label Studio
-
-If you see any other errors during installation, try to rerun the installation.
-
-```bash
-pip install --ignore-installed label-studio
-```
 
 ## OpenBLAS blas_thread_init: pthread_create failed for thread X of Y: Operation not permitted
 

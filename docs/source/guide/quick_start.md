@@ -11,14 +11,9 @@ section: "Install & Setup"
 date: 2023-11-27 13:34:32
 ---
 
-1. Install Label Studio:
+1. Start Label Studio with Docker:
 ```bash
-pip install label-studio
-```
-
-2. Start Label Studio
-```bash
-label-studio start
+docker run -it -p 8080:8080 -v $(pwd)/mydata:/label-studio/data heartexlabs/label-studio:latest
 ```
 
 1. Open Label Studio at `http://localhost:8080`.

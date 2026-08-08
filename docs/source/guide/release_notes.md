@@ -2896,8 +2896,6 @@ This release includes an upgrade to Django 5. As part of this change, Label Stud
 
 - Fixed an issue where users were unable to edit meta information that they previously added to bounding box regions.
 
-- Fixed multiple issues resulting from Poetry/Poetry core 2 release.
-
 - Fixed an issue where the django-rq admin page was unavailable.
 
 - Fixed a possible race condition when dynamically loading the Data Manager or editor that would prevent either from loading.
@@ -5165,7 +5163,6 @@ Label Studio 2.3.1 includes the following bug fixes:
 - Fixed an issue when locking UI disappeared when "trial days" is negative.
 - Fixed an issue when the image shrinks in certain cases.
 - Logout menu displayed in smaller screens.
-- Turned off lambda prefix and tags for cloud instance.
 - Fixed a bug where the loader would appear when user list is empty
 - Tasks were not updated after filter field changed in DM
 - Fixed an issue when Sentry cannot properly capture Frontend exceptions.

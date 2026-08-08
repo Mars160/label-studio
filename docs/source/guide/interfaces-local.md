@@ -23,17 +23,11 @@ Developing locally is useful when you want to:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/-xOjbN4PAhk?si=CUtfpYCxYQc0lRmx" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-## 1. Install the label-studio-sdk package and check your setup
+## 1. Check your setup
 
 Before you begin, make sure you have:
 
-- **The [`label-studio-sdk` Python package](https://github.com/HumanSignal/label-studio-sdk).** If you already have it installed, ensure you version 2.0.22 or later. 
-   ```bash
-   pip install --upgrade label-studio-sdk
-   # or
-   poetry add label-studio-sdk
-   ```
-- Node.js and npm available on your `PATH`.
+- **The [`label-studio-sdk` Python package](https://github.com/HumanSignal/label-studio-sdk), version 2.0.22 or later, available in your environment.**
 - Your Label Studio Enterprise URL and an [API token](access_tokens).
 - A coding agent installed (Claude, Codex, or Cursor) if you want agent assistance.
 

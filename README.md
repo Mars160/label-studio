@@ -2,6 +2,8 @@
 
 English | [简体中文](docs/README.zh-CN.md)
 
+Upstream: [HumanSignal/label-studio](https://github.com/HumanSignal/label-studio)
+
 ![GitHub](https://img.shields.io/github/license/heartexlabs/label-studio?logo=heartex) ![label-studio:build](https://github.com/HumanSignal/label-studio/workflows/label-studio:build/badge.svg) ![GitHub release](https://img.shields.io/github/v/release/heartexlabs/label-studio?include_prereleases)
 
 [Website](https://labelstud.io/) • [Docs](https://labelstud.io/guide/) • [Join Slack Community <img src="https://app.heartex.ai/docs/images/slack-mini.png" width="18px"/>](https://slack.labelstud.io/?source=github-1)
@@ -37,15 +39,11 @@ For implementation status, policy decisions, and verification details, see [Proj
 
 ## Try out Label Studio
 
-Install Label Studio locally or deploy it in a cloud instance. [Or sign up for a free trial of our Starter Cloud edition!](https://humansignal.com/platform/starter-cloud/) You can learn more about what each edition offers [here](https://labelstud.io/guide/label_studio_compare). 
+Run Label Studio locally with Docker or set up a local development environment.
 
 - [Install locally with Docker](#install-locally-with-docker)
 - [Run with Docker Compose (Label Studio + Nginx + PostgreSQL)](#run-with-docker-compose)
-- [Install locally with pip](#install-locally-with-pip)
-- [Install locally with poetry](#install-locally-with-poetry)
-- [Install locally with Anaconda](#install-locally-with-anaconda)
 - [Install for local development](#install-for-local-development)
-- [Deploy in a cloud instance](#deploy-in-a-cloud-instance)
 
 ### Install locally with Docker
 Pull this fork's image and access Label Studio at `http://localhost:28000`:
@@ -101,113 +99,33 @@ If you do not have a static IP address, you must create an entry in your hosts f
 browser can access the MinIO server. For more detailed instructions, please refer to [our guide on storing data](docs/source/guide/storedata.md).
 
 
-### Install locally with pip
-
-```bash
-# Requires Python >=3.10
-pip install label-studio
-
-# Start the server at http://localhost:8080
-label-studio
-```
-
-### Install locally with poetry
-
-```bash
-### install poetry
-pip install poetry
-
-### set poetry environment
-poetry new my-label-studio
-cd my-label-studio
-poetry add label-studio
-
-### activate poetry environment
-poetry shell
-
-### Start the server at http://localhost:8080
-label-studio
-```
-
-### Install locally with Anaconda
-
-```bash
-conda create --name label-studio
-conda activate label-studio
-conda install psycopg2
-pip install label-studio
-```
-
 ### Install for local development
 
-You can run the latest Label Studio version locally without installing the package from pypi. 
+Use the repository's supported development commands:
 
 ```bash
-# Install all package dependencies
-pip install poetry
-poetry install
-# Run database migrations
-python label_studio/manage.py migrate
-python label_studio/manage.py collectstatic
-# Start the server in development mode at http://localhost:8080
-python label_studio/manage.py runserver
+uv sync
+make migrate-dev
+make run-dev
 ```
-
-### Deploy in a cloud instance
-
-You can deploy Label Studio with one click in Heroku, Microsoft Azure, or Google Cloud Platform: 
-
-<a href="https://www.heroku.com/deploy?template=https://github.com/HumanSignal/label-studio/tree/heroku-persistent-pg"><img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy" height="30px"></a>
-[<img src="https://aka.ms/deploytoazurebutton" height="30px">](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fhumansignal%2Flabel-studio%2Fdevelop%2Fazuredeploy.json)
-[<img src="https://deploy.cloud.run/button.svg" height="30px">](https://deploy.cloud.run)
-
 
 #### Apply frontend changes
 
 For information about updating the frontend, see [label-studio/web/README.md](https://github.com/HumanSignal/label-studio/blob/develop/web/README.md#installation-instructions).
 
-
-#### Install dependencies on Windows 
-To run Label Studio on Windows, download and install the following wheel packages from [Gohlke builds](https://www.lfd.uci.edu/~gohlke/pythonlibs) to ensure you're using the correct version of Python:
-- [lxml](https://www.lfd.uci.edu/~gohlke/pythonlibs/#lxml)
-
-```bash
-# Upgrade pip 
-pip install -U pip
-
-# If you're running Win64 with Python 3.8, install the packages downloaded from Gohlke:
-pip install lxml‑4.5.0‑cp38‑cp38‑win_amd64.whl
-
-# Install label studio
-pip install label-studio
-```
-
 ### Run test suite
-To add the tests' dependencies to your local install:
+Run the test suite through the repository environment:
 
 ```bash
-poetry install --with test
+cd label_studio
+DJANGO_DB=sqlite uv run pytest -vv
 ```
 
-Alternatively, it is possible to run the unit tests from a Docker container in which the test dependencies are installed:
-
+For containerized test execution, run:
 
 ```bash
 make build-testing-image
 make docker-testing-shell
-```
-
-In either case, to run the unit tests:
-
-```bash
-cd label_studio
-
-# sqlite3
-DJANGO_DB=sqlite DJANGO_SETTINGS_MODULE=core.settings.label_studio pytest -vv
-
-# postgres (assumes default postgres user,db,pass. Will not work in Docker
-# testing container without additional configuration)
-DJANGO_DB=default DJANGO_SETTINGS_MODULE=core.settings.label_studio pytest -vv
 ```
  
 ## What you get from Label Studio
@@ -250,29 +168,11 @@ You can use Label Studio as an independent part of your machine learning workflo
 
 | Project | Description |
 |-|-|
-| label-studio | Server, distributed as a pip package |
+| label-studio | Label Studio server |
 | [Frontend library](web/libs/editor/) | The Label Studio frontend library. This uses React to build the UI and mobx-state-tree for state management. |  
 | [Data Manager library](web/libs/datamanager/) | A library for the Data Manager, our data exploration tool. | 
 | [label-studio-converter](https://github.com/HumanSignal/label-studio-sdk/tree/master/src/label_studio_sdk/converter) | Encode labels in the format of your favorite machine learning library |
 | [label-studio-transformers](https://github.com/HumanSignal/label-studio-transformers) | Transformers library connected and configured for use with Label Studio |
-
-## Citation
-
-Include a citation for Label Studio in the **References** section of your articles:
-
-```tex
-@misc{Label Studio,
-  title={{Label Studio}: Data labeling software},
-  url={https://github.com/HumanSignal/label-studio},
-  note={Open source software available from https://github.com/HumanSignal/label-studio},
-  author={
-    Maxim Tkachenko and
-    Mikhail Malyuk and
-    Andrey Holmanyuk and
-    Nikolai Liubimov},
-  year={2020-2025},
-}
-```
 
 ## License
 

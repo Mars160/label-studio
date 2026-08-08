@@ -34,11 +34,10 @@ Restart your agent after installing.
 - A running Label Studio instance (community OSS or Enterprise) reachable from this machine. The skill defaults to `http://localhost:8080`.
 - A Label Studio personal API key. Grab one from **Account & Settings → Access Token** in your instance.
 
-If you don't have Label Studio installed yet:
+If you don't have Label Studio running yet, start it with Docker:
 
 ```bash
-pip install label-studio
-label-studio start
+docker run -it -p 8080:8080 -v $(pwd)/mydata:/label-studio/data heartexlabs/label-studio:latest
 ```
 
 Open `http://localhost:8080`, create an account, then copy your token from the Account page.

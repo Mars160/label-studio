@@ -56,7 +56,6 @@ The following command line arguments are optional and must be specified with `la
 | `--password` | `LABEL_STUDIO_PASSWORD` | `None` | Password to use for the default user. See [Set up user accounts](signup.html). |
 | `--username` | `LABEL_STUDIO_USERNAME` | `default_user@localhost` | Username to use for the default user. See [Set up user accounts](signup.html). |
 | `--user-token` |  `LABEL_STUDIO_USER_TOKEN` | Automatically generated. | Authentication token for a user to use for the API. Must be set with a username, otherwise automatically generated. See [Set up user accounts](signup.html). |
-| `--agree-fix-sqlite` | N/A | `False` | Automatically agree to let Label Studio fix SQLite issues when using Python 3.6–3.8 on Windows operating systems. | 
 | `--enable-legacy-api-token` | `LABEL_STUDIO_ENABLE_LEGACY_API_TOKEN` | `False` | Enable legacy API token authentication. Useful for running with a pre-existing token via `--user-token`. |
 | N/A | `LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED` | `False` | Allow Label Studio to access local file directories to import storage. See [Run Label Studio on Docker and use local storage](start.html#Run_Label_Studio_on_Docker_and_use_local_storage). |
 | N/A | `LABEL_STUDIO_LOCAL_FILES_DOCUMENT_ROOT` | `/` | Specify the root directory for Label Studio to use when accessing local file directories. See [Run Label Studio on Docker and use local storage](start.html#Run_Label_Studio_on_Docker_and_use_local_storage). |
@@ -73,21 +72,12 @@ export LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED=true
     If you are using Docker, you can write all your [environment variables into the `.env`](https://docs.docker.com/compose/env-file/) file.
     
     
-    
-On Windows, you can use the following syntax:
-```bash
-set LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED=true
-```
 
 To check if you set an environment variable successfully, run the following on *nix operating systems:
 ```bash
 echo $LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED
 ```
 
-Or the following on Windows operating systems:
-```bash
-echo %LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED%
-```
 
 ## Run Label Studio on localhost with a different port
 
@@ -172,17 +162,6 @@ LABEL_STUDIO_HOST=https://your-subdomain.ngrok-free.app label-studio start
 ```
 </div>
 
-<div data-name="Native - Windows">
-
-```bash
-# Avoid CSRF errors 
-# Must exactly match the ngrok HTTPS URL, with no trailing slash
-set CSRF_TRUSTED_ORIGINS=https://your-subdomain.ngrok-free.app
-# Start Label Studio
-LABEL_STUDIO_HOST=https://your-subdomain.ngrok-free.app label-studio start
-```
-</div>
-
 <div data-name="Docker Container">
 
 ```bash
@@ -244,33 +223,6 @@ If you're using Docker Compose, specify the volumes in the Docker Compose YAML f
 To run Label Studio with HTTPS and access the web server using HTTPS in the browser, use NGINX or another web server to run HTTPS for Label Studio.  
 
 
-## Run Label Studio on the cloud using Heroku
-To run Label Studio on the cloud using Heroku, specify an environment variable so that Label Studio loads. 
-
-```
-LABEL_STUDIO_HOST
-```
-
-If you want, you can specify a different hostname for Label Studio, but you don't need to.
-
-To run Label Studio with Heroku and use PostgreSQL as the [database storage](storedata.html), specify the PostgreSQL environment variables required as part of the Heroku environment variable `DATABASE_URL`. For example, to specify a PostgreSQL database hosted on Amazon:
-```
-DATABASE_URL = postgres://username:password@hostname.compute.amazonaws.com:5432/dbname
-```
-Then you can specify the required environment variables for a PostgreSQL connection as config variables. See [Database storage](storedata.html).
-
-Our Heroku manifest uses [postgresql addon](https://elements.heroku.com/addons/heroku-postgresql) out of the box.
-Please notice that the storage capacity is limited.
-
-[<img src="https://www.herokucdn.com/deploy/button.svg" height="30px">](https://heroku.com/deploy?template=https://github.com/HumanSignal/label-studio/tree/master)
-
-Please notice that all uploaded data via import will be lost after a dyno replace since [filesystem is ephemeral](https://devcenter.heroku.com/articles/dynos#ephemeral-filesystem).
-Using S3 storage is recommended.
-
-<!--
-## Run Label Studio on the cloud using a different cloud provider
-To run Label Studio on the cloud using a cloud provider such as Google Cloud Services (GCS), Amazon Web Services (AWS), or Microsoft Azure, 
--->
 
 
 ## Run Label Studio with an external domain name

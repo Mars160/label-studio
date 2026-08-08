@@ -2,6 +2,8 @@
 
 [English README](../README.md)
 
+上游仓库：[HumanSignal/label-studio](https://github.com/HumanSignal/label-studio)
+
 Label Studio 是一款开源数据标注工具，支持音频、文本、图像、视频和时间序列等多种数据类型。它提供直观的标注界面，并支持导出为多种机器学习模型所需的格式，可用于准备原始数据或持续改进训练数据。
 
 - [本分支的项目级访问控制](#本分支的项目级访问控制)
@@ -96,36 +98,14 @@ docker compose -f docker-compose.yml -f docker-compose.minio.yml up -d
 
 详细存储配置请参阅[数据存储指南](source/guide/storedata.md)。
 
-### 使用 pip 安装
-
-需要 Python 3.10 或更高版本：
-
-```bash
-pip install label-studio
-label-studio
-```
-
-启动后访问 `http://localhost:8080`。
-
-### 使用 Poetry 安装
-
-```bash
-pip install poetry
-poetry new my-label-studio
-cd my-label-studio
-poetry add label-studio
-poetry shell
-label-studio
-```
-
 ### 本地开发
 
-当前仓库使用 Poetry 管理后端依赖，使用 Yarn 管理前端依赖。
+当前仓库使用 uv 管理后端依赖，使用 pnpm 管理前端依赖。
 
 后端开发环境：
 
 ```bash
-poetry install --with test
+uv sync
 make migrate-dev
 make run-dev
 ```

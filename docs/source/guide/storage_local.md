@@ -32,11 +32,6 @@ Add these environment variables:
 - `LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED=true`
 - `LABEL_STUDIO_LOCAL_FILES_DOCUMENT_ROOT` and set it to a directory on your machine. This must be a parent directory of the folder or folders where your local files are located. See [Directory examples](#Directory-examples) below.
 
-!!! note
-    When setting your file root on Windows, use double backslashes e.g. 
-    
-    `LABEL_STUDIO_LOCAL_FILES_DOCUMENT_ROOT=C:\\data\\media`
-
 See [Set environment variables](https://labelstud.io/guide/start#Set-environment-variables) for more about using environment variables.
 
 If you are using Docker, see [Run Label Studio on Docker and use local storage](https://labelstud.io/guide/start#Run-Label-Studio-on-Docker-and-use-Local-Storage). 

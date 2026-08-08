@@ -89,7 +89,6 @@ The following entry redirects all requests to MinIO to your local system:
 127.0.0.1 minio
 ```
 
-On Windows, you can find your hosts file at `C:\Windows\System32\drivers\etc\hosts`.
 On Linux, you can find your hosts file at `/etc/hosts`.
 On macOS, you can find your hosts file at `/private/etc/hosts`.
 
@@ -105,7 +104,7 @@ docker-compose -f docker-compose.minio.yml down --volumes
 
 ## Data persistence
 
-If you're using a Docker container, Heroku, or another cloud provider, you might want your data to persist after shutting down Label Studio. You can [export your data](export.html) to persist your labeling task data and annotations, but to preserve the state of Label Studio and assets such as files that you uploaded for labeling, set up data persistence. 
+Use persistent storage to preserve the state of Label Studio and assets such as uploaded files after a container stops. You can also [export your data](export.html) to preserve labeling tasks and annotations.
 
 ### Persist data with Docker
 
@@ -139,8 +138,5 @@ volumes:
     As this is a non-root container, the mounted files and directories must have the proper permissions for the `UID 1001`.
 
 For more about specifying volumes in Docker Compose, see the volumes section of the [Docker Compose file documentation](https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes).
-
-### Persist data with a cloud provider
-Host a PostgreSQL server that you manage and set up the PostgreSQL environment variables with Label Studio to persist data from a cloud provider such as Heroku, Amazon Web Services, Google Cloud Services, or Microsoft Azure. 
 
 

@@ -31,8 +31,7 @@ MinIO.
 
 Before you begin:
 * Ensure git is installed
-* Ensure Docker Compose is installed. For MacOS and Windows users,
-   we suggest using Docker Desktop. 
+* Ensure Docker Compose is installed. Docker Desktop is one supported option.
 
 You must also install the [Label Studio ML backend](https://github.com/HumanSignal/label-studio-ml-backend?tab=readme-ov-file#quickstart). 
 
