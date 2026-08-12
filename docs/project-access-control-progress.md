@@ -1,6 +1,6 @@
 # Project Access Control Progress
 
-Last reviewed: 2026-08-08
+Last reviewed: 2026-08-12
 
 Status: **Implemented on `develop`; PostgreSQL migration verification remains an environment follow-up**
 
@@ -85,6 +85,8 @@ The following commands/checks have passed in the local test environment:
 | 2026-08-08 Biome check on 5 merged Data Manager frontend files | Passed |
 | 2026-08-08 Django check and migration drift check | Passed |
 | 2026-08-08 conflict-marker and diff checks | Passed |
+| 2026-08-12 upstream merge project/Data Manager serializer suites | 160 passed |
+| 2026-08-12 Ruff, `compileall`, conflict-marker, and diff checks | Passed |
 
 Tests cover creator-admin provisioning, nonmember hiding, admin-only membership visibility and management, atomic multi-account role assignment and rollback, eligible-account full-name/username search, account-enumeration resistance, empty and invalid batch rejection, role management, active-user-aware final-admin protection, deactivation/soft/hard-offboarding replacement-admin promotion, disabled membership, admin/annotator annotation and draft visibility, role-safe Data Manager filtering, own-tab isolation, tab-owner immutability and persistence, annotator denial for ground-truth/prediction/model-version/live-ML/import/storage/webhook operations, prediction/draft/label relationship integrity, credential redaction, organization-level webhooks, migration promotion behavior, Data Manager task-path assignee references, project-scoped user filter options, project hotkey access, the opensource user-fetch feature-flag override, missing assignee degradation, and affected existing API behavior.
 

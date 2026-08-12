@@ -37,7 +37,7 @@ export const summarizeSelectedUsers = (
   return { primaryLabel, overflowCount: Math.max(0, selectedOptions.length - 1) };
 };
 
-export const UserSelect = observer(({ filter, onChange, multiple, value, placeholder, disabled }) => {
+export const UserSelect = observer(({ filter, onChange, multiple, value, placeholder, disabled, readOnly }) => {
   const [search, setSearch] = useState(null);
   const selectedValue = useMemo(() => normalizeSelectedValue(value, multiple), [multiple, value]);
 
@@ -84,11 +84,12 @@ export const UserSelect = observer(({ filter, onChange, multiple, value, placeho
 
   const _onChange = useCallback(
     (val) => {
+      if (disabled || readOnly) return;
       const nextValue = multiple ? (val ? [].concat(val) : []) : val;
       onChange?.(nextValue);
       if (!multiple) setSearch(null);
     },
-    [multiple, onChange],
+    [multiple, onChange, disabled, readOnly],
   );
 
   const searchFilter = useCallback((option: any, queryString: string) => {
@@ -149,9 +150,10 @@ export const UserSelect = observer(({ filter, onChange, multiple, value, placeho
       onChange={_onChange}
       triggerClassName={`${cn("form-select").elem("list").toString()} w-full max-w-[200px] min-w-0`}
       loadMore={loadMore}
-      size={SelectSize.SMALL}
+      size={SelectSize.SMALLER}
       placeholder={placeholder}
       disabled={disabled}
+      readOnly={readOnly}
       multiple={multiple}
       isVirtualList={true}
       searchable={true}
