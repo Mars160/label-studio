@@ -96,6 +96,7 @@ class MLBackendListAPI(generics.ListCreateAPIView):
         return ml_backends
 
     def create(self, request, *args, **kwargs):
+        # Authorize before serializer validation contacts the backend with the project creator's token.
         project = generics.get_object_or_404(Project.objects.for_user(request.user), pk=request.data.get('project'))
         if not project.is_admin(request.user):
             raise PermissionDenied('Only project administrators can configure machine learning backends.')

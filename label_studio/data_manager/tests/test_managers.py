@@ -1030,13 +1030,13 @@ class TestValidateInListFilter(TestCase):
         with self.assertRaises(ValidationError):
             validate_in_list_filter(f, 'annotators')
 
-    def test_rejects_unsupported_total_annotations(self):
+    def test_allowlisted_counter_columns_return_ok(self):
+        """FIT-2416: denormalized annotation/prediction counters accept in_list."""
         from data_manager.managers import validate_in_list_filter
-        from rest_framework.exceptions import ValidationError
 
-        f = Filter(filter='filter:tasks:total_annotations', operator='in_list', type='Number', value=[1])
-        with self.assertRaises(ValidationError):
-            validate_in_list_filter(f, 'total_annotations')
+        for field in ('total_annotations', 'total_predictions', 'cancelled_annotations'):
+            f = Filter(filter=f'filter:tasks:{field}', operator='in_list', type='Number', value=[1, 2])
+            assert validate_in_list_filter(f, field) == 'ok', field
 
     def test_rejects_unsupported_created_at(self):
         from data_manager.managers import validate_in_list_filter
@@ -1072,6 +1072,33 @@ class TestValidateInListFilter(TestCase):
 
         f = Filter(filter='filter:tasks:id', operator='in_list', type='Number', value=['foo', 'bar'])
         self.assertEqual(validate_in_list_filter(f, 'id'), 'none')
+
+
+class TestAnnotationIdFilterQ(TestCase):
+    """Unit tests for `annotation_id_filter_q` (FIT-2432)."""
+
+    def test_not_contains_skips_blank_tokens_from_trailing_separators(self):
+        """Empty fragments are not malformed; ``"12,"`` still excludes only 12."""
+        from data_manager.managers import Operator, annotation_id_filter_q
+
+        expression = annotation_id_filter_q('pk', Operator.NOT_CONTAINS, '12,')
+
+        assert expression == ~Q(pk__in=[12])
+
+    def test_contains_skips_blank_tokens_from_trailing_separators(self):
+        from data_manager.managers import Operator, annotation_id_filter_q
+
+        expression = annotation_id_filter_q('pk', Operator.CONTAINS, '12,')
+
+        assert expression == Q(pk__in=[12])
+
+    def test_not_contains_malformed_token_still_fail_closes(self):
+        """Dropping a malformed token would broaden not_contains, so reject the line."""
+        from data_manager.managers import Operator, annotation_id_filter_q
+
+        expression = annotation_id_filter_q('pk', Operator.NOT_CONTAINS, '12, malformed')
+
+        assert expression == Q(pk__in=[])
 
 
 class TestApplyFiltersInList(TestCase):
@@ -1140,10 +1167,10 @@ class TestApplyFiltersInList(TestCase):
         """Legacy `annotations_ids` smart-contains hack must remain intact.
 
         The validator only fires when the *original* operator is in_list / not_in_list, so
-        `{annotations_ids, contains, "1 2,3"}` still hits the existing rewrite path at
-        `data_manager.managers.apply_filters` line ~458.
+        `{annotations_ids, contains, "1 2,3"}` still hits the annotation-ID compiler
+        in `data_manager.managers.apply_filters`.
         """
-        # `contains` (not in_list) — validator returns 'ok', rewrite proceeds.
+        # `contains` (not in_list) — validator returns 'ok', compiler proceeds.
         _filter = Filter(
             filter='filter:tasks:annotations_ids',
             operator='contains',
@@ -1152,7 +1179,6 @@ class TestApplyFiltersInList(TestCase):
         )
         result, queryset = self._run(_filter)
         self.assertIs(result, queryset)
-        # The rewrite turns `contains` into `in_list` and emits a Q expression.
         queryset.filter.assert_called_once()
 
 
@@ -1236,3 +1262,172 @@ class TestApplyFiltersInListDB(TestCase):
         result = self._apply(_filter)
 
         assert result.count() == 3
+
+    def test_total_annotations_in_list_returns_matching_tasks(self):
+        """FIT-2416: counter columns use a single __in filter instead of N OR equals."""
+        from tasks.models import Task
+
+        Task.objects.filter(id=self.tasks[0].id).update(total_annotations=2)
+        Task.objects.filter(id=self.tasks[1].id).update(total_annotations=5)
+        Task.objects.filter(id=self.tasks[2].id).update(total_annotations=2)
+
+        _filter = Filter(
+            filter='filter:tasks:total_annotations',
+            operator='in_list',
+            type='Number',
+            value=[2, 9],
+        )
+        result = self._apply(_filter)
+        assert set(result.values_list('id', flat=True)) == {self.tasks[0].id, self.tasks[2].id}
+
+
+class TestVisibleDataColumnKeys(TestCase):
+    """FIT-2416: visible task.data keys from hiddenColumns for payload trimming."""
+
+    @classmethod
+    def setUpTestData(cls):
+        from projects.tests.factories import ProjectFactory
+        from tasks.tests.factories import TaskFactory
+
+        cls.project = ProjectFactory(
+            label_config="""
+            <View>
+              <Text name="text" value="$text"/>
+              <Image name="image" value="$image"/>
+              <Choices name="label" toName="text">
+                <Choice value="a"/>
+              </Choices>
+            </View>
+            """
+        )
+        TaskFactory(project=cls.project, data={'text': 'hello', 'image': 's3://bucket/a.jpg', 'extra': 'x'})
+        summary = cls.project.summary
+        summary.all_data_columns = {'text': 1, 'image': 1, 'extra': 1}
+        summary.save(update_fields=['all_data_columns'])
+
+    def test_returns_none_without_hidden_columns(self):
+        from data_manager.managers import get_visible_data_column_keys
+        from data_manager.prepare_params import PrepareParams
+        from users.tests.factories import UserFactory
+
+        user = UserFactory()
+        prepare_params = PrepareParams(project=self.project.id, data={})
+        assert get_visible_data_column_keys(prepare_params, user) is None
+
+    def test_excludes_data_keys_hidden_in_both_modes(self):
+        from data_manager.managers import get_visible_data_column_keys
+        from data_manager.prepare_params import PrepareParams
+        from users.tests.factories import UserFactory
+
+        user = UserFactory()
+        prepare_params = PrepareParams(
+            project=self.project.id,
+            data={
+                'hiddenColumns': {
+                    'explore': ['tasks:data.extra', 'tasks:data.image'],
+                    'labeling': ['tasks:data.extra', 'tasks:id'],
+                }
+            },
+        )
+        visible = get_visible_data_column_keys(prepare_params, user)
+        assert visible is not None
+        assert 'extra' not in visible
+        assert 'text' in visible
+        # image is only hidden in explore, not both — still visible
+        assert 'image' in visible
+
+
+class TestApplyFiltersUnqueryableDataColumns(TestCase):
+    """UTC-1221: imported task.data keys can hold characters Django refuses in query aliases.
+
+    Those filters used to crash with `ValueError: Column aliases cannot contain whitespace
+    characters, ...` (a 500), so they must surface as a client validation error instead.
+    """
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.project = ProjectFactory()
+        cls.task = TaskFactory(project=cls.project, data={'my column': 'keep me', 'my number': 1})
+
+    def _apply(self, column, operator, filter_type, value):
+        from data_manager.managers import apply_filters
+
+        filters = Filters(
+            conjunction=ConjunctionEnum.AND,
+            items=[
+                Filter(
+                    filter=f'filter:tasks:data.{column}',
+                    operator=operator,
+                    type=filter_type,
+                    value=value,
+                )
+            ],
+        )
+        queryset = apply_filters(Task.objects.filter(project=self.project), filters, self.project, request=None)
+        return list(queryset.values_list('id', flat=True))
+
+    def test_string_filter_on_unqueryable_column_reports_validation_error(self):
+        from rest_framework.exceptions import ValidationError
+
+        with self.assertRaises(ValidationError):
+            self._apply('my column', 'contains', 'String', 'keep')
+
+    def test_empty_operator_on_unqueryable_column_reports_validation_error(self):
+        from rest_framework.exceptions import ValidationError
+
+        with self.assertRaises(ValidationError):
+            self._apply('my column', 'empty', 'String', 'true')
+
+    def test_number_filter_on_unqueryable_column_reports_validation_error(self):
+        from rest_framework.exceptions import ValidationError
+
+        with self.assertRaises(ValidationError):
+            self._apply('my number', 'equal', 'Number', '1')
+
+    def test_queryable_data_column_filters_are_unaffected(self):
+        task = TaskFactory(project=self.project, data={'safe_column': 'keep me'})
+
+        assert self._apply('safe_column', 'contains', 'String', 'keep') == [task.id]
+
+
+class TestApplyFiltersInvalidRegex(TestCase):
+    """FIT-2460: invalid regex fails closed before custom emitters run."""
+
+    def test_invalid_child_regex_empties_queryset_before_custom_hook(self):
+        """Invalid child regex under OR returns none before custom emitters load."""
+        from data_manager.managers import apply_filters
+
+        queryset = Mock()
+        queryset.none.return_value = 'EMPTY'
+        filters = Filters(
+            conjunction=ConjunctionEnum.OR,
+            items=[
+                Filter(
+                    filter='filter:tasks:annotations_results',
+                    operator='contains',
+                    type='String',
+                    value='Airplane',
+                    child_filters=[
+                        Filter(
+                            filter='filter:tasks:comments',
+                            operator='regex',
+                            type='String',
+                            value='[',
+                        )
+                    ],
+                ),
+                Filter(
+                    filter='filter:tasks:id',
+                    operator='equal',
+                    type='Number',
+                    value=1,
+                ),
+            ],
+        )
+
+        with patch('data_manager.managers.load_func') as load_func:
+            result = apply_filters(queryset=queryset, filters=filters, project=Mock(), request=Mock())
+
+        assert result == 'EMPTY'
+        load_func.assert_not_called()
+        queryset.none.assert_called_once_with()

@@ -311,7 +311,7 @@ class TaskAPI(generics.RetrieveUpdateDestroyAPIView):
                 order_annotations_asc,
             )
 
-            annotations_qs = Annotation.objects.for_user(self.request.user).only(
+            annotations_qs = Annotation.objects.for_user(self.request.user).select_related('completed_by').only(
                 'id',
                 'completed_by',
                 'ground_truth',
@@ -319,6 +319,7 @@ class TaskAPI(generics.RetrieveUpdateDestroyAPIView):
                 'created_at',
                 'updated_at',
                 'task_id',
+                'last_action',
             )
             if ordering == ANNOTATION_ORDERING_ID_DESC:
                 annotations_qs = order_annotations(annotations_qs)
@@ -551,10 +552,6 @@ class TaskAgreementAPI(generics.RetrieveAPIView):
     queryset = Task.objects.all()
 
     def get(self, request, pk):
-        # This endpoint is gated by feature flag
-        if not flag_set('fflag_fix_all_fit_720_lazy_load_annotations', user=request.user):
-            raise PermissionDenied('Feature not enabled')
-
         try:
             task = Task.objects.get(pk=pk)
         except Task.DoesNotExist:
@@ -733,10 +730,6 @@ class TaskSummaryAPI(generics.RetrieveAPIView):
     queryset = Task.objects.all()
 
     def get(self, request, pk):
-        # This endpoint is gated by feature flag
-        if not flag_set('fflag_fix_all_fit_720_lazy_load_annotations', user=request.user):
-            raise PermissionDenied('Feature not enabled')
-
         include_predictions = bool_from_request(request.GET, 'include_predictions', False)
 
         try:

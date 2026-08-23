@@ -102,7 +102,7 @@ PRIMITIVE_LIST_ELEMENT_TYPES = (str, int, float, bool)
 
 
 def _column_supports_list_membership(column: str) -> bool:
-    """Return True if `column` is in the MVP allowlist for `in_list` / `not_in_list`.
+    """Return True if `column` is in the allowlist for `in_list` / `not_in_list`.
 
     Mirrors `data_manager.managers._is_supported_in_list_field` but operates on the
     raw `filter:tasks:*` column string so the serializer can reject bad views before
@@ -114,7 +114,16 @@ def _column_supports_list_membership(column: str) -> bool:
     field = column[len('filter:tasks:') :]
     if field.startswith('-'):
         field = field[1:]
-    return field in ('id', 'inner_id') or field.startswith('data.')
+    if field.startswith('data.'):
+        return True
+    # Keep in sync with managers.SUPPORTED_IN_LIST_FIELDS
+    return field in {
+        'id',
+        'inner_id',
+        'total_annotations',
+        'total_predictions',
+        'cancelled_annotations',
+    }
 
 
 def _column_filter_field_name(column: str) -> str | None:
@@ -171,8 +180,8 @@ class FilterSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     {
                         'column': (
-                            '`is any of` / `is none of` support only Task ID, Inner ID, '
-                            'and task.data.* fields in this release.'
+                            '`is any of` / `is none of` support Task ID, Inner ID, '
+                            'annotation/prediction counters, and task.data.* fields.'
                         )
                     }
                 )
@@ -185,6 +194,11 @@ class FilterSerializer(serializers.ModelSerializer):
             )
 
             field_name = _column_filter_field_name(attrs.get('column', ''))
+            # FIT-2525: Ground Truth is never null (task Exists / annotation BooleanField).
+            if field_name == 'ground_truth' and operator == 'empty':
+                raise serializers.ValidationError(
+                    {'operator': 'Ground Truth does not support operator "empty". Allowed: equal.'}
+                )
             if field_name in USER_FILTER_FIELDS:
                 try:
                     validate_user_filter_operator(field_name, operator, attrs.get('value'))
@@ -711,6 +725,11 @@ class DataManagerTaskSerializer(TaskSerializer):
 
     def to_representation(self, obj):
         """Dynamically manage including of some fields in the API result"""
+        # Restrict task.data to visible DM columns before URI resolve (FIT-2416).
+        visible_data_keys = self.context.get('dm_visible_data_keys')
+        if visible_data_keys is not None and isinstance(getattr(obj, 'data', None), dict):
+            obj.data = {key: value for key, value in obj.data.items() if key in visible_data_keys}
+
         ret = super(DataManagerTaskSerializer, self).to_representation(obj)
         if not self.context.get('annotations'):
             ret.pop('annotations', None)

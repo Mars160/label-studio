@@ -3,6 +3,7 @@ import { mock, describe, it, expect, afterEach } from "bun:test";
 import { types } from "mobx-state-tree";
 import { TabStore } from "./store";
 import { History } from "../../utils/history";
+import { DataStore, DataStoreItem } from "../../mixins/DataStore";
 
 const RootStore = types
   .model({
@@ -454,8 +455,7 @@ describe("multiselect filter validation (FIT-2253)", () => {
     }
   });
 
-  it("persists clearing a root multiselect by omitting the invalid filter", async () => {
-    const apiCall = mock(async () => ({ id: 1, title: "Saved" }));
+  const setupAnnotatorsFilter = (apiCall, value = [1]) => {
     root = RootStore.create({
       viewsStore: {
         columnsRaw: [
@@ -478,16 +478,15 @@ describe("multiselect filter validation (FIT-2253)", () => {
       title: "Saved",
       saved: true,
       key: "saved",
-      filters: [
-        {
-          filter: "filter:tasks:annotators",
-          operator: "contains",
-          value: [1],
-        },
-      ],
+      filters: [{ filter: "filter:tasks:annotators", operator: "contains", value }],
     });
     root.viewsStore.selected = 1;
-    const filter = root.viewsStore.views[0].filters[0];
+    return root.viewsStore.views[0].filters[0];
+  };
+
+  it("persists clearing a root multiselect by omitting the invalid filter", async () => {
+    const apiCall = mock(async () => ({ id: 1, title: "Saved" }));
+    const filter = setupAnnotatorsFilter(apiCall);
 
     expect(filter.schema?.multiple).toBe(true);
     apiCall.mockClear();
@@ -568,6 +567,39 @@ describe("multiselect filter validation (FIT-2253)", () => {
 
     expect(child.isValidFilter).toBe(false);
     expect(apiCall).toHaveBeenCalled();
+  });
+
+  it("re-saves the latest value when save() races an in-flight PATCH", async () => {
+    let release;
+    const gate = new Promise((resolve) => {
+      release = resolve;
+    });
+    const values = [];
+    const apiCall = mock(async (method, _params, body) => {
+      if (method === "updateTab") {
+        values.push(body?.body?.data?.filters?.items?.[0]?.value);
+        if (values.length === 1) await gate;
+      }
+      return { id: 1, title: "Saved" };
+    });
+    const filter = setupAnnotatorsFilter(apiCall);
+
+    filter.setValue([2]);
+    const first = filter.save(true);
+    filter.setValue([2, 3]);
+    filter.save(true);
+    expect(filter.pendingSave).toBe(true);
+
+    release();
+    await first;
+    // Follow-up save is scheduled with setTimeout(0) after the first flow exits.
+    await new Promise((resolve) => {
+      const poll = () => (values.length >= 2 ? resolve() : setTimeout(poll, 0));
+      setTimeout(poll, 0);
+    });
+
+    expect(filter.pendingSave).toBe(false);
+    expect(values).toEqual([[2], [2, 3]]);
   });
 });
 
@@ -766,7 +798,7 @@ describe("multiple child filters (FIT-2273)", () => {
     const { view, parent } = createView();
     const annotators = filterTypeFor(view, "annotators");
     const validChild = view.createChildFilterForType(annotators, parent);
-    const invalidChild = view.createChildFilterForType(annotators, parent);
+    const invalidChild = view.createChildFilterForType(filterTypeFor(view, "annotators"), parent);
 
     validChild.setValue([1]);
     invalidChild.setValue([]);
@@ -778,5 +810,87 @@ describe("multiple child filters (FIT-2273)", () => {
       filter: "filter:tasks:annotators",
       value: [1],
     });
+  });
+});
+
+describe("tab switch loading (FIT-2376)", () => {
+  let root;
+
+  afterEach(() => {
+    if (root) {
+      destroy(root);
+      root = null;
+    }
+  });
+
+  it("marks dataStore loading on tab switch so EmptyState does not flash while tasks reload", async () => {
+    History.navigate = mock(() => {});
+
+    const Item = types.compose(
+      "Fit2376Item",
+      DataStoreItem,
+      types.model({
+        id: types.identifierNumber,
+      }),
+    );
+    const TasksStore = DataStore("Fit2376TasksStore", {
+      listItemType: Item,
+      apiMethod: "tasks",
+    });
+
+    const LoadingAwareRoot = types
+      .model({
+        viewsStore: types.optional(TabStore, {}),
+        apiVersion: 2,
+        project: types.optional(types.model({ id: types.number, task_count: types.optional(types.number, 0) }), {
+          id: 1,
+          task_count: 5,
+        }),
+        SDK: types.optional(types.frozen(), { hasInterface: () => false, invoke: () => {} }),
+        API: types.optional(types.frozen(), { getSettingsByMethodName: () => ({}) }),
+        dataStore: types.optional(TasksStore, {}),
+      })
+      .actions((self) => ({
+        apiCall(method) {
+          if (method === "tab") {
+            return Promise.resolve({ id: 2, title: "Tab B", data: {} });
+          }
+          if (method === "tasks") {
+            return Promise.resolve({ total: 5, tasks: [{ id: 10 }, { id: 11 }], isCanceled: false });
+          }
+          return Promise.resolve({ id: 100, title: "New Tab" });
+        },
+        unsetSelection() {},
+      }));
+
+    root = LoadingAwareRoot.create({
+      viewsStore: {
+        views: [
+          { id: 1, title: "Tab A", saved: true, key: "tab-a" },
+          { id: 2, title: "Tab B", saved: true, key: "tab-b" },
+        ],
+        selected: 1,
+      },
+      dataStore: {
+        list: [{ id: 10 }, { id: 11 }],
+        total: 5,
+        loading: false,
+      },
+      project: { id: 1, task_count: 5 },
+    });
+
+    // Project has tasks; clear must set loading so Table shows Spinner not EmptyState
+    expect(root.project.task_count).toBe(5);
+    expect(root.dataStore.loading).toBe(false);
+    expect(root.dataStore.total).toBe(5);
+
+    const switchPromise = root.viewsStore.setSelected(2);
+
+    // Sync portion of setSelected runs clear before the first yield (tab fetch / reload)
+    expect(root.dataStore.total).toBe(0);
+    expect(root.dataStore.list).toHaveLength(0);
+    expect(root.dataStore.loading).toBe(true);
+
+    await switchPromise;
   });
 });

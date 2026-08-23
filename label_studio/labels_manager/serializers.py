@@ -88,7 +88,7 @@ class LabelListSerializer(serializers.ListSerializer):
 class LabelCreateSerializer(serializers.ModelSerializer):
     created_by = serializers.PrimaryKeyRelatedField(required=False, read_only=True)
     organization = serializers.PrimaryKeyRelatedField(required=False, read_only=True)
-    project = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all())
+    project = serializers.PrimaryKeyRelatedField(queryset=Project.objects)
     from_name = serializers.CharField()
 
     def validate_project(self, project):
@@ -143,7 +143,7 @@ class LabelSerializer(FlexFieldsModelSerializer):
 
 
 class LabelBulkUpdateSerializer(serializers.Serializer):
-    project = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all(), required=False, default=None)
+    project = serializers.PrimaryKeyRelatedField(queryset=Project.objects, required=False, default=None)
 
     def validate_project(self, project):
         request = self.context.get('request')

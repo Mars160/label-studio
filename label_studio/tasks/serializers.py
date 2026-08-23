@@ -235,7 +235,10 @@ class AnnotationSerializer(FlexFieldsModelSerializer):
         project = self._resolve_project_for_validation(data)
         custom_interface_validator = load_func(getattr(settings, 'CUSTOM_INTERFACE_ANNOTATION_VALIDATOR', None))
         if custom_interface_validator and project:
-            validation_errors = custom_interface_validator(project, data.get('result', []))
+            task = data.get('task') or self.context.get('task') or getattr(self.instance, 'task', None)
+            request = self.context.get('request')
+            user = getattr(request, 'user', None) if request is not None else None
+            validation_errors = custom_interface_validator(project, data.get('result', []), task=task, user=user)
             if validation_errors:
                 raise ValidationError(f'Error validating annotation: {validation_errors}')
 
@@ -396,6 +399,16 @@ class BaseTaskSerializer(FlexFieldsModelSerializer):
             instance=instance if 'data' not in task else None,
         )
         return validator.validate(task)
+
+    def create(self, validated_data):
+        # Full-overlap projects skip rearrangement on task add (`_update_tasks_states`
+        # only rearranges when cohort < 100%). Seed overlap like bulk import / storage
+        # sync so is_labeled uses maximum_annotations instead of the model default of 1.
+        # Own this here so both POST /api/tasks/ and POST /api/projects/{id}/tasks/ agree.
+        project = validated_data.get('project') or self.project()
+        if 'overlap' not in validated_data and project is not None and project.overlap_cohort_percentage >= 100:
+            validated_data['overlap'] = project.maximum_annotations
+        return super().create(validated_data)
 
     def to_representation(self, instance):
         project = self.project(instance)
@@ -842,7 +855,11 @@ class BaseTaskSerializerBulk(serializers.ListSerializer):
                 draft.update(
                     {
                         'task_id': db_tasks[i].id,
-                        'annotation_id': annotation_mapping[draft.get('annotation')],
+                        # Use .get() so a draft that references an annotation not present in this
+                        # import batch (e.g. its parent annotation was dropped/never imported)
+                        # degrades to an unlinked draft (annotation_id=None) instead of raising
+                        # KeyError. See ENTERPRISE-V2-BACKEND-6G5.
+                        'annotation_id': annotation_mapping.get(draft.get('annotation')),
                         'project': self.project,
                         'import_id': draft.get('id'),
                     }

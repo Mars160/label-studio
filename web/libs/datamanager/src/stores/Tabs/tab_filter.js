@@ -12,6 +12,8 @@ import {
   sanitizeIntegerUserListValue,
   fieldAliasFromFilterId,
   normalizeIntegerUserFilter,
+  recoverReviewIndicatorSnapshot,
+  REVIEW_INDICATOR_CHILD_ALIASES,
 } from "./filter_snapshot_utils";
 import { guidGenerator } from "../../utils/random";
 
@@ -32,6 +34,8 @@ export const LIST_MEMBERSHIP_OPERATORS = new Set(["in_list", "not_in_list"]);
 export function isListMembershipOperator(operator) {
   return LIST_MEMBERSHIP_OPERATORS.has(operator);
 }
+
+export { REVIEW_INDICATOR_CHILD_ALIASES };
 
 /**
  * BROS-1203 — defensive snapshot recovery on TabFilter rehydration.
@@ -54,7 +58,7 @@ export function recoverFilterSnapshot(sn) {
   const normalized = normalizeIntegerUserFilter({ fieldAlias, operator: sn.operator, value });
   const { operator } = normalized;
   value = normalized.value;
-  return { ...sn, operator, value };
+  return recoverReviewIndicatorSnapshot({ ...sn, operator, value });
 }
 
 function normalizeChildFilterSnapshot(sn) {
@@ -193,14 +197,30 @@ export const TabFilter = types
 
     get cellView() {
       const col = self.filter.field;
+      const byAlias = CellViews[normalizeCellAlias(col.alias)];
+      const byType = CellViews[col.type];
+      // Prefer alias views that customize operators (e.g. GroundTruth without "is empty").
+      if (byAlias?.customOperators) return byAlias;
+      return byType ?? byAlias;
+    },
 
-      return CellViews[col.type] ?? CellViews[normalizeCellAlias(col.alias)];
+    get isNestedChildFilter() {
+      try {
+        const parentCollection = getParent(self);
+        const owner = getParent(self, 2);
+        return owner?.child_filters === parentCollection;
+      } catch {
+        return false;
+      }
     },
   }))
   .volatile(() => ({
     wasValid: false,
     saved: false,
     saving: false,
+    // When save() races an in-flight PATCH, schedule one follow-up write after
+    // this flow exits (setTimeout) — no loop, no recursive yield.
+    pendingSave: false,
   }))
   .actions((self) => ({
     afterAttach() {
@@ -374,19 +394,45 @@ export const TabFilter = types
         return;
       }
 
-      if (self.saving) return;
+      // Coalesce races onto the in-flight PATCH. A follow-up is scheduled with
+      // setTimeout (same idea as setValueDelayed) so we neither recurse into
+      // this flow nor yield another save from finally.
+      if (self.saving) {
+        self.pendingSave = true;
+        return;
+      }
 
       self.saving = true;
       self.wasValid = isValid;
       self.markSaved();
       getRoot(self)?.unsetSelection();
       self.view?.clearSelection();
-      yield self.view?.save({ interaction: "filter" });
-      if (!isAlive(self)) return;
-      self.saving = false;
+      try {
+        yield self.view?.save({ interaction: "filter" });
+      } finally {
+        if (isAlive(self)) {
+          self.saving = false;
+          if (self.pendingSave) {
+            self.pendingSave = false;
+            self.markUnsaved();
+            setTimeout(() => {
+              if (!isAlive(self)) return;
+              self.save(true);
+            }, 0);
+          }
+        }
+      }
     }),
 
     setDefaultValue() {
+      // Child review indicators use Boolean widgets on Number columns, so they
+      // do not get Boolean defaultValue=false. Default to no so the child is
+      // valid and serialized (otherwise the UI shows "no" while the child is dropped).
+      const alias = self.filter?.field?.alias;
+      if (self.isNestedChildFilter && REVIEW_INDICATOR_CHILD_ALIASES.has(alias)) {
+        self.setValue(false);
+        return;
+      }
       self.setValue(getOperatorDefaultValue(self.operator) ?? self.filter.defaultValue);
     },
 

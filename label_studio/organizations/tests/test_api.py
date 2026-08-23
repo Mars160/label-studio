@@ -1,6 +1,7 @@
 from urllib.parse import urlencode
 
 from organizations.tests.factories import OrganizationFactory
+from projects.models import ProjectMember, ProjectMemberRole
 from projects.tests.factories import ProjectFactory
 from rest_framework.test import APITestCase
 from tasks.tests.factories import AnnotationFactory
@@ -47,6 +48,8 @@ class TestOrganizationMemberListAPI(APITestCase):
     def test_list_with_contributed_to_projects(self):
         project_1 = ProjectFactory(created_by=self.user_1, organization=self.organization)
         project_2 = ProjectFactory(created_by=self.user_2, organization=self.organization)
+        ProjectMember.objects.create(project=project_1, user=self.owner, role=ProjectMemberRole.ADMIN)
+        ProjectMember.objects.create(project=project_2, user=self.owner, role=ProjectMemberRole.ADMIN)
 
         AnnotationFactory(task__project=project_1, completed_by=self.user_1)
         AnnotationFactory(task__project=project_2, completed_by=self.user_2)
