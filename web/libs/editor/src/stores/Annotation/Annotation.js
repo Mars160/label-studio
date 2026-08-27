@@ -482,6 +482,11 @@ const _Annotation = types
       self.editable = val;
     },
 
+    /** LSE review badge / History — must run inside an MST action (FIT-2498). */
+    setAcceptedState(val) {
+      self.acceptedState = val ?? null;
+    },
+
     setReadonly(val) {
       self.readonly = val;
     },
@@ -1094,6 +1099,12 @@ const _Annotation = types
         }
 
         if (node && node.onHotKey && !node.hotkey) {
+          // Taxonomy Choice nodes live in SharedStore (TagParentMixin.parent is
+          // not Choices). Auto-assigning would write across MST trees and throw,
+          // and large taxonomies must not receive sequential [1]/[2]/… hotkeys.
+          // Explicit `hotkey` attrs are bound in pass 1 above.
+          if (node.type === "choice" && node.parent?.type !== "choices") return;
+
           const comb = hotkeys.makeComb();
 
           if (!comb) return;
