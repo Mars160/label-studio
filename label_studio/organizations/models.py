@@ -1,6 +1,7 @@
 """This file and its contents are licensed under the Apache License 2.0. Please see the included NOTICE for copyright information and LICENSE for a copy of the license."""
 
 import logging
+from datetime import timedelta
 
 from core.utils.common import create_hash, load_func
 from django.conf import settings
@@ -109,7 +110,8 @@ class OrganizationMember(OrganizationMemberMixin, models.Model):
 
     @cached_property
     def is_owner(self):
-        return self.user.id == self.organization.created_by.id
+        # created_by is SET_NULL, so an orphaned organization has no owner
+        return self.organization.created_by_id is not None and self.user_id == self.organization.created_by_id
 
     class Meta:
         ordering = ['pk']
@@ -135,12 +137,27 @@ class OrganizationMember(OrganizationMemberMixin, models.Model):
 OrganizationMixin = load_func(settings.ORGANIZATION_MIXIN)
 
 
+def default_invite_token_expires_at():
+    """Expiry for an invite link issued now; None when ORG_INVITE_EXPIRATION_DAYS disables expiration"""
+    if settings.ORG_INVITE_EXPIRATION_DAYS <= 0:
+        return None
+    return timezone.now() + timedelta(days=settings.ORG_INVITE_EXPIRATION_DAYS)
+
+
 class Organization(OrganizationMixin, models.Model):
     """ """
 
     title = models.CharField(_('organization title'), max_length=1000, null=False)
 
     token = models.CharField(_('token'), max_length=256, default=create_hash, unique=True, null=True, blank=True)
+    # Fixed when the link is issued, so changing ORG_INVITE_EXPIRATION_DAYS later never revives or kills old links
+    token_expires_at = models.DateTimeField(
+        _('token expires at'),
+        default=default_invite_token_expires_at,
+        null=True,
+        blank=True,
+        help_text='When the current invite link stops working; null works only while expiration is disabled',
+    )
 
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='organizations', through=OrganizationMember)
 
@@ -156,6 +173,16 @@ class Organization(OrganizationMixin, models.Model):
     updated_at = models.DateTimeField(_('updated at'), auto_now=True)
 
     contact_info = models.EmailField(_('contact info'), blank=True, null=True)
+
+    allow_unsafe_instruction_tags = models.BooleanField(
+        _('allow unsafe tags in instructions'),
+        default=False,
+        # Rows inserted by the previous build during a rollout must still get a value
+        db_default=False,
+        # Nullable per the migration rules; NULL reads as off
+        null=True,
+        help_text='Keep script, iframe, style and other active tags in project instructions',
+    )
 
     def __str__(self):
         return self.title + ', id=' + str(self.pk)
@@ -227,7 +254,16 @@ class Organization(OrganizationMixin, models.Model):
 
     def reset_token(self):
         self.token = create_hash()
-        self.save(update_fields=['token'])
+        self.token_expires_at = default_invite_token_expires_at()
+        self.save(update_fields=['token', 'token_expires_at'])
+
+    @property
+    def is_invite_token_expired(self):
+        if self.token_expires_at is None:
+            # No expiry recorded: issued while expiration was disabled, or written by a build without expiry (e.g. a
+            # blue-green cutover). Fail closed once expiration is enabled; a reset issues a link with a real expiry.
+            return settings.ORG_INVITE_EXPIRATION_DAYS > 0
+        return timezone.now() >= self.token_expires_at
 
     def check_max_projects(self):
         """This check raise an exception if the projects limit is hit"""

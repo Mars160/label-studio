@@ -144,7 +144,7 @@ INTERNAL_PORT = '8080'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = get_bool_env('DEBUG', True)
-DEBUG_MODAL_EXCEPTIONS = get_bool_env('DEBUG_MODAL_EXCEPTIONS', True)
+DEBUG_MODAL_EXCEPTIONS = get_bool_env('DEBUG_MODAL_EXCEPTIONS', False)
 
 # Whether to verify SSL certs when making external requests, eg in the uploader
 # ⚠️ Turning this off means assuming risk. ⚠️
@@ -161,7 +161,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DATA_DIR = get_env('BASE_DATA_DIR')
 if BASE_DATA_DIR is None:
     BASE_DATA_DIR = get_data_dir()
-os.makedirs(BASE_DATA_DIR, exist_ok=True)
+os.makedirs(BASE_DATA_DIR, mode=0o700, exist_ok=True)
 logger.info('=> Database and media directory: %s', BASE_DATA_DIR)
 
 # This indicates whether the code is running in a Continuous Integration environment.
@@ -341,6 +341,11 @@ AUTHENTICATION_BACKENDS = [
 USE_USERNAME_FOR_LOGIN = False
 
 DISABLE_SIGNUP_WITHOUT_LINK = get_bool_env('DISABLE_SIGNUP_WITHOUT_LINK', False)
+# Organization invite links stop working this many days after they are issued or reset; 0 disables expiration
+ORG_INVITE_EXPIRATION_DAYS = int(get_env('ORG_INVITE_EXPIRATION_DAYS', 30))
+
+# Creating extra organizations via POST /api/organizations/ is opt-in: most deployments are single-org
+ALLOW_ORGANIZATION_CREATION = get_bool_env('ALLOW_ORGANIZATION_CREATION', False)
 
 # Password validation settings
 AUTH_PASSWORD_MIN_LENGTH = 8
@@ -410,6 +415,15 @@ RQ_QUEUES = {
     },
 }
 
+# django-rq >= 4 defaults this to True, which mounts an unwrapped stats.json under /admin/
+RQ_SHOW_ADMIN_LINK = False
+
+RQ = {
+    # django-rq >= 4 defaults to 'on_db_commit', which defers the enqueue and returns None
+    # from enqueue() inside an atomic block; callers here rely on the returned job
+    'COMMIT_MODE': 'auto',
+}
+
 # How long to keep failed RQ jobs (in seconds); default is 30 days
 RQ_FAILED_JOB_TTL = int(get_env('RQ_FAILED_JOB_TTL', 30 * 24 * 60 * 60))
 
@@ -464,6 +478,11 @@ SPECTACULAR_SETTINGS = {
             ('COMPLETED', 'Completed'),
             ('FAILED', 'Failed'),
         ),
+        'RejectActionEnum': (
+            ('remove', 'Remove'),
+            ('requeue', 'Requeue'),
+            ('redistribute', 'Redistribute'),
+        ),
         # Stored organization roles: includes the hidden VIEW_ONLY backing role ('VO',
         # FIT-2196), which can appear in responses but is never assignable via role APIs.
         'OrganizationRoleEnum': (
@@ -504,9 +523,11 @@ SPECTACULAR_SETTINGS = {
             ('flex', 'Flex'),
             ('viewonly', 'View Only'),
         ),
-        # Membership updates support only the paid upgrade direction. View-Only
-        # creation is exposed separately through the invite contract.
-        'StandardUserTypeEnum': (('standard', 'Standard'),),
+        # Membership updates accept Standard or Flex (View-Only creation stays on invite).
+        'StandardUserTypeEnum': (
+            ('standard', 'Standard'),
+            ('flex', 'Flex'),
+        ),
         'OrganizationPermissionRoleEnum': (
             'OW',
             'AD',
@@ -615,7 +636,7 @@ MAX_SESSION_AGE = int(get_env('MAX_SESSION_AGE', timedelta(days=14).total_second
 # The most time that can elapse between activity with the server before the user is logged out
 MAX_TIME_BETWEEN_ACTIVITY = int(get_env('MAX_TIME_BETWEEN_ACTIVITY', timedelta(days=5).total_seconds()))
 
-SSRF_PROTECTION_ENABLED = get_bool_env('SSRF_PROTECTION_ENABLED', False)
+SSRF_PROTECTION_ENABLED = get_bool_env('SSRF_PROTECTION_ENABLED', True)
 USE_DEFAULT_BANNED_SUBNETS = get_bool_env('USE_DEFAULT_BANNED_SUBNETS', True)
 USER_ADDITIONAL_BANNED_SUBNETS = get_env_list('USER_ADDITIONAL_BANNED_SUBNETS', default=[])
 
@@ -670,7 +691,6 @@ os.makedirs(os.path.join(BASE_DATA_DIR, MEDIA_ROOT, DELAYED_EXPORT_DIR), exist_o
 # file / task size limits
 DATA_UPLOAD_MAX_MEMORY_SIZE = int(get_env('DATA_UPLOAD_MAX_MEMORY_SIZE', 250 * 1024 * 1024))
 DATA_UPLOAD_MAX_NUMBER_FILES = int(get_env('DATA_UPLOAD_MAX_NUMBER_FILES', 100))
-TASKS_MAX_NUMBER = 1000000
 TASKS_MAX_FILE_SIZE = DATA_UPLOAD_MAX_MEMORY_SIZE
 
 TASK_LOCK_TTL = int(get_env('TASK_LOCK_TTL', default=86400))
@@ -772,6 +792,8 @@ ANNOTATOR_REVIEWER_FIREWALL = 'users.firewall.AnnotatorReviewerFirewall'
 TASK_SERIALIZER = 'tasks.serializers.BaseTaskSerializer'
 EXPORT_DATA_SERIALIZER = 'data_export.serializers.BaseExportDataSerializer'
 DATA_MANAGER_GET_ALL_COLUMNS = 'data_manager.functions.get_all_columns'
+DATA_MANAGER_VALIDATE_COLUMN_ACCESS = 'data_manager.functions.noop_validate_column_access'
+DATA_MANAGER_SANITIZE_COLUMN_ORDERING = 'data_manager.functions.noop_sanitize_column_ordering'
 DATA_MANAGER_GET_PROJECT_USER_IDS = 'users.project_access.get_user_ids_in_projects'
 DATA_MANAGER_ANNOTATIONS_MAP = {}
 DATA_MANAGER_ACTIONS = {}
@@ -788,6 +810,7 @@ LSE_PROJECT = None
 GET_TASKS_AGREEMENT_QUERYSET = None
 SHOULD_ATTEMPT_GROUND_TRUTH_FIRST = None
 IS_USER_IN_GT_EVALUATION_WINDOW = None
+ANNOTATE_CURRENT_OVERLAP = None
 ANNOTATION_MIXIN = 'tasks.mixins.AnnotationMixin'
 ORGANIZATION_MIXIN = 'organizations.mixins.OrganizationMixin'
 USER_MIXIN = 'users.mixins.UserMixin'
@@ -806,6 +829,8 @@ DELETE_PREDICTIONS_POSTPROCESS = None
 PROJECT_SAVE_DIMENSIONS_POSTPROCESS = None
 FEATURE_FLAGS_GET_USER_REPR = 'core.feature_flags.utils.get_user_repr'
 FEATURE_FLAGS_GET_USER_REPR_FROM_ORGANIZATION = 'core.feature_flags.utils.get_user_repr_from_organization'
+FEATURE_FLAGS_GET_USER_REPR_FROM_ORGANIZATION_ID = 'core.feature_flags.utils.get_user_repr_from_organization_id'
+JOB_TENANCY_ENQUEUED_HOOK = None
 
 # Test factories
 ORGANIZATION_FACTORY = 'organizations.tests.factories.OrganizationFactory'
@@ -871,7 +896,7 @@ COLLECT_ANALYTICS = get_bool_env('COLLECT_ANALYTICS', get_bool_env('collect_anal
 # Strip harmful content from SVG files by default
 SVG_SECURITY_CLEANUP = get_bool_env('SVG_SECURITY_CLEANUP', False)
 
-ML_BLOCK_LOCAL_IP = get_bool_env('ML_BLOCK_LOCAL_IP', False)
+ML_BLOCK_LOCAL_IP = get_bool_env('ML_BLOCK_LOCAL_IP', True)
 
 RQ_LONG_JOB_TIMEOUT = int(get_env('RQ_LONG_JOB_TIMEOUT', 36000))
 
@@ -881,7 +906,24 @@ BATCH_JOB_RETRY_TIMEOUT = int(get_env('BATCH_JOB_RETRY_TIMEOUT', 60))
 
 FUTURE_SAVE_TASK_TO_STORAGE = get_bool_env('FUTURE_SAVE_TASK_TO_STORAGE', default=False)
 FUTURE_SAVE_TASK_TO_STORAGE_JSON_EXT = get_bool_env('FUTURE_SAVE_TASK_TO_STORAGE_JSON_EXT', default=True)
+# TTL for presigned reads of export-target objects. Export connections have no
+# per-connection presign settings (nothing to configure on a write target), so
+# previews of project-produced assets sign with this instead. Long enough to
+# scrub a video without re-resolving; short enough to bound a leaked link.
+EXPORT_STORAGE_PRESIGN_TTL_MINUTES = int(get_env('EXPORT_STORAGE_PRESIGN_TTL_MINUTES', 15))
+# Whether reads of export-target objects are presigned. Turning this off keeps
+# an org that requires proxy-only access proxying these objects through Label
+# Studio's own auth, exactly as the presign flag does on import connections.
+EXPORT_STORAGE_PRESIGN = get_bool_env('EXPORT_STORAGE_PRESIGN', default=True)
+
 STORAGE_IN_PROGRESS_TIMER = float(get_env('STORAGE_IN_PROGRESS_TIMER', 5.0))
+# Absolute wall-clock stale timeout (seconds) for import/reimport when Redis is down
+# or RQ status is finishing/unknown. Keyed off ProjectImport/ProjectReimport.updated_at.
+# Live RQ jobs (queued/started/…) are never failed by this timer — see projects.import_health.
+IMPORT_STALE_TIMEOUT = float(get_env('IMPORT_STALE_TIMEOUT', 300.0))
+# Grace (seconds) before a CREATED row with RQ ``not found`` is marked failed — avoids
+# false fails when status is polled before Redis has registered the just-enqueued job.
+IMPORT_CREATED_NOT_FOUND_GRACE = float(get_env('IMPORT_CREATED_NOT_FOUND_GRACE', 60.0))
 STORAGE_EXPORT_CHUNK_SIZE = int(get_env('STORAGE_EXPORT_CHUNK_SIZE', 100))
 DEFAULT_STORAGE_LIST_LIMIT = int(get_env('DEFAULT_STORAGE_LIST_LIMIT', 100))
 STORAGE_EXISTED_COUNT_BATCH_SIZE = int(get_env('STORAGE_EXISTED_COUNT_BATCH_SIZE', 1000))
@@ -1002,7 +1044,6 @@ if ENABLE_CSP := get_bool_env('ENABLE_CSP', True):
         "'report-sample'",
         "'unsafe-inline'",
         'blob:',
-        'browser.sentry-cdn.com',
         'https://*.googletagmanager.com',
     )
     CSP_IMG_SRC = (
@@ -1104,3 +1145,9 @@ MIGRATION_JOB_START_DELAY_SECONDS = int(get_env('MIGRATION_JOB_START_DELAY_SECON
 # Delay (seconds) before a migration runner retries when the target import fails (stale worker
 # not yet upgraded during a rolling deploy). Short, since this is a fast retry loop.
 MIGRATION_JOB_RESCHEDULE_DELAY_SECONDS = int(get_env('MIGRATION_JOB_RESCHEDULE_DELAY_SECONDS', 30))
+
+# When an async migration waits on another AsyncMigrationStatus row, retry this often.
+MIGRATION_DEPENDENCY_RETRY_DELAY_SECONDS = int(get_env('MIGRATION_DEPENDENCY_RETRY_DELAY_SECONDS', 15 * 60))
+
+# Cap how long a dependent job waits (delay * max retries ~= 24 hours at the defaults).
+MIGRATION_DEPENDENCY_MAX_RETRIES = int(get_env('MIGRATION_DEPENDENCY_MAX_RETRIES', 96))

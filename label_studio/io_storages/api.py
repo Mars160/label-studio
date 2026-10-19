@@ -6,6 +6,7 @@ import os
 import time
 
 from core.permissions import ViewClassPermission, all_permissions
+from core.utils.common import load_func
 from core.utils.io import read_yaml
 from django.conf import settings
 from drf_spectacular.utils import extend_schema
@@ -23,7 +24,19 @@ def admin_storages(model, user):
     return model.objects.filter(project_id__in=Project.objects.admin_for_user(user).values('id'))
 
 
-class ImportStorageListAPI(generics.ListCreateAPIView):
+class StorageCreateMixin:
+    def create(self, request, *args, **kwargs):
+        # serializer validation copies credentials from the storage passed in `id`
+        storage_id = request.data.get('id')
+        if storage_id:
+            storage = generics.get_object_or_404(self.serializer_class.Meta.model.objects.all(), pk=storage_id)
+            # storages are project-admin only, so credential inheritance requires project admin access too
+            if not storage.has_permission(request.user) or not storage.project.is_admin(request.user):
+                raise PermissionDenied()
+        return super().create(request, *args, **kwargs)
+
+
+class ImportStorageListAPI(StorageCreateMixin, generics.ListCreateAPIView):
     permission_required = ViewClassPermission(
         GET=all_permissions.storages_view,
         POST=all_permissions.storages_view,
@@ -48,8 +61,6 @@ class ImportStorageListAPI(generics.ListCreateAPIView):
         return storages
 
     def perform_create(self, serializer):
-        from rest_framework.exceptions import PermissionDenied
-
         project = serializer.validated_data.get('project')
         if project is not None and not project.has_permission(self.request.user):
             raise PermissionDenied('You do not have permission to create storages for this project.')
@@ -76,7 +87,7 @@ class ImportStorageDetailAPI(generics.RetrieveUpdateDestroyAPIView):
         return super(ImportStorageDetailAPI, self).put(request, *args, **kwargs)
 
 
-class ExportStorageListAPI(generics.ListCreateAPIView):
+class ExportStorageListAPI(StorageCreateMixin, generics.ListCreateAPIView):
     permission_required = ViewClassPermission(
         GET=all_permissions.storages_view,
         POST=all_permissions.storages_view,
@@ -100,8 +111,6 @@ class ExportStorageListAPI(generics.ListCreateAPIView):
         return storages
 
     def perform_create(self, serializer):
-        from rest_framework.exceptions import PermissionDenied
-
         project = serializer.validated_data.get('project')
         if project is not None and not project.has_permission(self.request.user):
             raise PermissionDenied('You do not have permission to create storages for this project.')
@@ -155,6 +164,11 @@ class ImportStorageSyncAPI(generics.GenericAPIView):
         if not storage.synchronizable:
             response_data = {'message': f'Storage {str(storage.id)} is not synchronizable'}
             return Response(status=status.HTTP_400_BAD_REQUEST, data=response_data)
+        sync_guard = load_func(getattr(settings, 'IMPORT_STORAGE_SYNC_GUARD', None))
+        if sync_guard:
+            error = sync_guard(storage)
+            if error:
+                return Response(status=status.HTTP_409_CONFLICT, data={'message': error})
         storage.validate_connection()
         storage.sync()
         storage.refresh_from_db()

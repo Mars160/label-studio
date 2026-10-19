@@ -1431,3 +1431,112 @@ class TestApplyFiltersInvalidRegex(TestCase):
         assert result == 'EMPTY'
         load_func.assert_not_called()
         queryset.none.assert_called_once_with()
+
+
+class TestAnnotateStateProjectScoped(TestCase):
+    """The DM state column reads the latest TaskState through the project-scoped index."""
+
+    @classmethod
+    def setUpTestData(cls):
+        from fsm.state_models import TaskState
+
+        cls.project = ProjectFactory()
+        cls.other_project = ProjectFactory()
+        cls.moved_on = TaskFactory(project=cls.project)
+        cls.single = TaskFactory(project=cls.project)
+        cls.stateless = TaskFactory(project=cls.project)
+        cls.other = TaskFactory(project=cls.other_project)
+        TaskState.objects.filter(task__in=[cls.moved_on, cls.single, cls.stateless, cls.other]).delete()
+
+        def add_state(task, state):
+            TaskState.objects.create(
+                task=task,
+                project_id=task.project_id,
+                organization_id=task.project.organization_id,
+                state=state,
+                transition_name='test',
+            )
+
+        add_state(cls.moved_on, 'CREATED')
+        add_state(cls.moved_on, 'IN_PROGRESS')
+        add_state(cls.moved_on, 'COMPLETED')
+        add_state(cls.single, 'IN_PROGRESS')
+        add_state(cls.other, 'COMPLETED')
+
+    def _states(self, queryset):
+        from data_manager.managers import annotate_state
+
+        with patch('fsm.queryset_mixins.flag_set', return_value=True):
+            annotated = annotate_state(queryset)
+            return annotated, dict(annotated.values_list('id', 'state'))
+
+    def test_latest_state_per_task(self):
+        annotated, states = self._states(Task.objects.filter(project=self.project))
+
+        assert states == {self.moved_on.id: 'COMPLETED', self.single.id: 'IN_PROGRESS', self.stateless.id: None}
+        assert '."project_id" = ("task"."project_id")' in str(annotated.query).split('AS "current_state"')[0]
+
+    def test_filter_and_order_by_state(self):
+        from data_manager.managers import annotate_state
+
+        with patch('fsm.queryset_mixins.flag_set', return_value=True):
+            annotated = annotate_state(Task.objects.filter(project=self.project))
+            completed = list(annotated.filter(state__icontains='complet').values_list('id', flat=True))
+            ordered = list(annotated.exclude(state=None).order_by('state').values_list('id', flat=True))
+
+        assert completed == [self.moved_on.id]
+        assert ordered == [self.moved_on.id, self.single.id]
+
+
+class TestHiddenColumnsListForm(TestCase):
+    """Virtual-tab queries send hiddenColumns as one list to keep the GET URL short (FIT-3167).
+
+    The backend only ever uses columns hidden in both explore and labeling modes, so a flat
+    list of those columns must yield the same fields and visible data keys as the dict form.
+    """
+
+    COLUMNS = {
+        'columns': [
+            {'id': 'agreement'},
+            {'id': 'annotators'},
+            {'id': 'total_annotations'},
+            {'id': 'image', 'parent': 'data'},
+            {'id': 'text', 'parent': 'data'},
+            {'id': 'data'},
+        ]
+    }
+    DICT_FORM = {
+        'explore': ['tasks:agreement', 'tasks:data.image', 'tasks:total_annotations'],
+        'labeling': ['tasks:agreement', 'tasks:data.image', 'tasks:annotators'],
+    }
+    LIST_FORM = ['tasks:agreement', 'tasks:data.image']
+
+    def _evaluate(self, hidden_columns):
+        from data_manager.managers import get_fields_for_evaluation, get_visible_data_column_keys
+
+        params = PrepareParams(project=1, data={'hiddenColumns': hidden_columns})
+        with patch('data_manager.managers._get_all_project_columns', return_value=self.COLUMNS):
+            fields = get_fields_for_evaluation(params, user=None)
+            visible_data_keys = get_visible_data_column_keys(params, user=None)
+        return set(fields), visible_data_keys
+
+    def test_list_form_matches_dict_form(self):
+        """A flat list of columns hidden in both modes is evaluated like the equivalent dict."""
+        dict_fields, dict_keys = self._evaluate(self.DICT_FORM)
+        list_fields, list_keys = self._evaluate(self.LIST_FORM)
+
+        # total_annotations is a regular Task field, so it is never annotated
+        self.assertEqual(dict_fields, {'annotators'})
+        self.assertEqual(list_fields, dict_fields)
+        self.assertEqual(dict_keys, frozenset({'text'}))
+        self.assertEqual(list_keys, dict_keys)
+
+    def test_empty_list_shows_every_column(self):
+        """Nothing hidden in both modes ([]) still evaluates every column, like the empty dict."""
+        dict_fields, dict_keys = self._evaluate({'explore': [], 'labeling': []})
+        list_fields, list_keys = self._evaluate([])
+
+        self.assertEqual(dict_fields, {'agreement', 'annotators'})
+        self.assertEqual(list_fields, dict_fields)
+        self.assertEqual(dict_keys, frozenset({'image', 'text'}))
+        self.assertEqual(list_keys, dict_keys)

@@ -86,6 +86,14 @@ export const FF_UTC_428_CONSENSUS_CONTROL_TAG_AGREEMENT = "fflag_utc_428_consens
 export const FF_UTC_1012_ADD_OR_MODIFY_COLUMNS = "fflag_utc_1012_add_or_modify_columns";
 
 /**
+ * Reusable organization members filtering engine.
+ */
+export const FF_UTC_1206_REUSEABLE_MEMBERS_FILTERING = "fflag_utc_1206_reuseable_members_filtering";
+
+/** Replace the existing table filter bar with FilterShell (UTC-1166). */
+export const FF_UTC_1166_FILTER_SHELL = "fflag_utc_1166_filter_shell";
+
+/**
  * FSM State Fields
  */
 export const FF_FSM_STATE_FIELDS = "fflag_feat_fit_710_fsm_state_fields";
@@ -139,6 +147,11 @@ export const FF_LSE_PROJECT_DASHBOARDS_V3_MEMBERS = "fflag_feat_lse_project_dash
 export const FF_LSE_PROJECT_DASHBOARDS_V3_DATA_QUALITY = "fflag_feat_lse_project_dashboards_v3_data_quality_short";
 
 /**
+ * Enables filtered Label Distribution reads and their Data Quality filter-state shell.
+ */
+export const FF_FILTERED_LABEL_DISTRIBUTION = "fflag_feat_all_fit_2318_filtered_label_distribution";
+
+/**
  * Show per-item classifications (like Choices or Taxonomy) alongside regions in the Outliner panel
  */
 export const FF_CLASSIFICATIONS_IN_OUTLINER = "fflag_feat_front_bros_766_per_item_in_outliner";
@@ -186,6 +199,17 @@ export const FF_INTERFACES = "fflag_feat_all_optic_interfaces_short";
 export const FF_INTERFACES_AGENT_WORKFLOW = "fflag_feat_interfaces_agent_workflow";
 
 /**
+ * In-browser interface interaction tests (scenarios.js, Tests tab, agent scenario tools).
+ * Requires FF_INTERFACES; when off, the Create Interface agent does not author or run tests.
+ */
+export const FF_INTERFACES_SCENARIOS = "fflag_feat_interfaces_scenarios";
+
+/**
+ * Dynamic Interface Components (e.g. AudioCanvas) and component-level skills/hotkeys for Custom Interfaces.
+ */
+export const FF_INTERFACES_COMPONENTS = "fflag_interfaces_components";
+
+/**
  * WASM FFmpeg Streaming Decoder (progressive seek/decode) for long compressed audio files
  */
 export const FF_FIT_2003_WASM_STREAMING_DECODER = "fflag_feat_front_fit_2003_wasm_streaming_decoder";
@@ -208,6 +232,18 @@ export const FF_UTC_950_FIREWALL = "fflag_feat_utc_950_annotator_reviewer_firewa
  * page (cards/table) under the public description.
  */
 export const FF_LSE_PROJECT_INTERNAL_DESCRIPTION = "fflag_feat_lse_project_internal_description_short";
+
+/**
+ * Project Settings: Managers+ default Data Manager column visibility and order
+ * for the main grid (FIT-2808 / FIT-2845).
+ */
+export const FF_PROJECT_DM_COLUMN_DEFAULTS = "fflag_feat_all_fit_2808_project_dm_column_defaults";
+
+/**
+ * Project Settings: Annotator/Reviewer Data Manager column hard access
+ * (Available / Unavailable). FIT-2808 / FIT-2850.
+ */
+export const FF_PROJECT_DM_COLUMN_ACCESS = "fflag_feat_all_fit_2808_dm_column_access";
 
 /**
  * Vertical annotations sidebar with filtering and resizable column in labeling UI.
@@ -253,3 +289,71 @@ export const FF_ANNOTATOR_EVALUATION_METRIC = "fflag_feat_utc_1085_annotator_eva
  * time for a configured coverage percent before rotating to another annotator.
  */
 export const FF_UTC_1079_REVIEW_ORDER_BY_ANNOTATOR = "fflag_feat_utc_1079_review_order_by_annotator";
+
+/**
+ * Ask AI "Annotator mode" (UTC-1233): a switch in the assistant panel that lets somebody running a
+ * project be answered exactly as one of their own annotators would be, so they can see for
+ * themselves what their workforce is told. Experiment gate, off by default, and layered on top of
+ * the workforce rollout flag — with that one off the server refuses every question asked in this
+ * mode, so the switch is not offered either.
+ */
+export const FF_ASK_AI_ANNOTATOR_MODE = "fflag_utc_1233_admin_sees_worker_toggle_ask_ai";
+
+/**
+ * Ask AI "Agent" (UTC-1233): the assistant answers by looking things up for itself — the project,
+ * the task, the annotation, the courses — instead of being handed one fixed bundle of context. The
+ * only thing this flag decides in the browser is whether the "Think longer" control is offered in
+ * the composer; whether a question is actually answered by the agent is decided per organization
+ * on the assistant's own side, so with the flag on but the agent not enabled the control is simply
+ * a slower ordinary answer rather than a broken one.
+ */
+export const FF_ASK_AI_AGENT = "fflag_utc_1233_ask_ai_agent";
+
+/**
+ * Configurable reject actions, including requeueing work to another annotator.
+ */
+export const FF_REJECT_REDISTRIBUTE = "fflag_feat_utc_1178_reject_requeue_other_short";
+
+/**
+ * Manual payment batches (UTC-1260): an org admin creates, on a Program's Pay runs tab, a batch of
+ * fixed-amount corrections (worker email + amount + note) as a draft, and approves it in a separate,
+ * explicit step. Off everywhere until switched on per organization — an absent flag means OFF, so the
+ * frontend checks it with an explicit ``false`` default rather than the app-wide flag default.
+ */
+export const FF_MANUAL_BATCHES = "fflag_feat_utc_1260_manual_batches_short";
+
+/**
+ * Azure SPI secretless authentication: auth_mode=workload_identity uses constrained
+ * DefaultAzureCredential (workload identity + managed identity only). Default off.
+ */
+export const FF_AZURE_SPI_WORKLOAD_IDENTITY = "fflag_feat_back_fit_2608_azure_spi_workload_identity_short";
+
+/**
+ * Persist Data Manager column drag-order on the shared tab (like visibility) and
+ * disable the personal browser key `dm:columnorder`. Independent of FIT-2808
+ * project defaults (`FF_PROJECT_DM_COLUMN_DEFAULTS`). FIT-2882.
+ */
+export const FF_DM_SHARED_COLUMN_ORDER = "fflag_feat_fit_2882_dm_shared_column_order";
+
+/** Owner/Administrator "Close account" button in the Organization → Members drawer. UTC-1373. */
+export const FF_UTC_1373_USER_REMOVAL_ORG_PAGE = "fflag_feat_utc1373_user_removal_org_page";
+
+/**
+ * Interface workspaces (UTC-1367): Personal Sandbox interfaces private to their owner, the
+ * interface Workspace control and move confirmation modal, `can_edit` gating, and the workspace
+ * delete guard for workspaces that still hold interfaces. Ships with the backend flag of the same name.
+ */
+export const FF_UTC_1367_INTERFACE_WORKSPACES = "fflag_feat_utc_1367_interface_workspaces";
+
+/**
+ * Analytics → Member Performance "Submitted by Project" / "Reviewed by Project" columns, their export
+ * fields, and the backend user × project KPI segmentation they read. UTC-1389.
+ */
+export const FF_UTC_1389_ANALYTICS_PERFORMANCE_PROJECT_BREAKDOWN =
+  "fflag_feat_utc_1389_analytics_performance_project_breakdown";
+
+/**
+ * Verified Skills and Onboarding (workforce organizations only): skill assessments that test
+ * contributors, onboarding projects and verified skill statuses.
+ */
+export const FF_VERIFIED_SKILLS_AND_ONBOARDING = "fflag_feat_utc_1407_verified_skills_and_onboarding";

@@ -13,9 +13,14 @@ from core.utils.exceptions import extract_message
 from django.conf import settings
 from django.db import IntegrityError, transaction
 from drf_spectacular.utils import extend_schema_field
-from fsm.serializer_fields import FSMStateField
+from fsm.serializer_fields import FSMStateField, fsm_state_fields_enabled
 from fsm.state_inference import get_or_infer_state
-from fsm.utils import get_or_initialize_state, is_fsm_enabled
+from fsm.utils import (
+    FF_IMPORT_BULK_TASK_STATES,
+    bulk_initialize_created_task_states,
+    get_or_initialize_state,
+    is_fsm_enabled,
+)
 from label_studio_sdk.label_interface import LabelInterface
 from projects.models import Project
 from rest_flex_fields import FlexFieldsModelSerializer
@@ -85,7 +90,23 @@ class AnnotationResultField(serializers.JSONField):
     pass
 
 
-class PredictionSerializer(ModelSerializer):
+class ImmutableOnUpdateMixin:
+    # not a docstring: serializers without their own would inherit it as their OpenAPI description
+    # fields listed in `immutable_on_update` are ignored in the request body once the object exists
+    immutable_on_update = ()
+
+    def get_fields(self):
+        fields = super().get_fields()
+        if self.instance is not None:
+            for name in self.immutable_on_update:
+                if name in fields:
+                    fields[name].read_only = True
+        return fields
+
+
+class PredictionSerializer(ImmutableOnUpdateMixin, ModelSerializer):
+    immutable_on_update = ('task', 'project')
+
     result = PredictionResultField()
     model_version = serializers.CharField(
         allow_blank=True,
@@ -159,13 +180,15 @@ class CompletedByDMSerializer(UserSerializer):
         fields = ['id', 'first_name', 'last_name', 'username', 'last_activity', 'avatar', 'email', 'initials']
 
 
-class AnnotationSerializer(FlexFieldsModelSerializer):
+class AnnotationSerializer(ImmutableOnUpdateMixin, FlexFieldsModelSerializer):
     """
     Annotation Serializer with FSM state support.
 
     Note: The 'state' field will be populated from the queryset annotation
     if present, preventing N+1 queries. Use .with_state() on your queryset.
     """
+
+    immutable_on_update = ('task', 'project', 'parent_annotation', 'parent_prediction')
 
     state = FSMStateField(read_only=True)  # FSM state - automatically uses annotation if present
     """"""
@@ -243,6 +266,11 @@ class AnnotationSerializer(FlexFieldsModelSerializer):
             task = data.get('task') or self.context.get('task') or getattr(self.instance, 'task', None)
             request = self.context.get('request')
             user = getattr(request, 'user', None) if request is not None else None
+            # Integrity binds to the annotation author, not the acting user:
+            # a reviewer editing a contributor's annotation must validate
+            # against the contributor's uploads.
+            if self.instance is not None:
+                user = getattr(self.instance, 'completed_by', None) or user
             validation_errors = custom_interface_validator(project, data.get('result', []), task=task, user=user)
             if validation_errors:
                 raise ValidationError(f'Error validating annotation: {validation_errors}')
@@ -354,7 +382,9 @@ class AnnotationStubSerializer(FlexFieldsModelSerializer):
         ]
 
 
-class TaskSimpleSerializer(FlexFieldsModelSerializer):
+class TaskSimpleSerializer(ImmutableOnUpdateMixin, FlexFieldsModelSerializer):
+    immutable_on_update = ('project',)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['annotations'] = AnnotationSerializer(many=True, default=[], context=self.context, read_only=True)
@@ -374,8 +404,10 @@ class TaskSimpleSerializer(FlexFieldsModelSerializer):
         exclude = ('precomputed_agreement', 'allow_skip')
 
 
-class BaseTaskSerializer(FlexFieldsModelSerializer):
+class BaseTaskSerializer(ImmutableOnUpdateMixin, FlexFieldsModelSerializer):
     """Task Serializer with project scheme configs validation"""
+
+    immutable_on_update = ('project',)
 
     def project(self, task=None):
         """Take the project from context"""
@@ -742,7 +774,8 @@ class BaseTaskSerializerBulk(serializers.ListSerializer):
 
         self.post_process_annotations(user, db_annotations, 'imported')
         self.post_process_tasks(self.project.id, [t.id for t in self.db_tasks])
-        self.post_process_custom_callback(self.project.id, user)
+        if not self.context.get('defer_post_process_custom_callback'):
+            self.post_process_custom_callback(self.project.id, user)
 
         if flag_set('fflag_feat_back_lsdv_5307_import_reviews_drafts_29062023_short', user=ff_user):
             with transaction.atomic():
@@ -759,7 +792,7 @@ class BaseTaskSerializerBulk(serializers.ListSerializer):
         # Backfill FSM states for bulk-created tasks
         # bulk_create() bypasses save() so FSM transitions don't fire automatically
         # Do this after all child entities states(annotations, drafts, reviews) have been backfilled
-        self._backfill_fsm_states(self.db_tasks)
+        self._backfill_task_fsm_states_skipping_inference(self.db_tasks, task_annotations)
 
         return db_tasks
 
@@ -1006,6 +1039,24 @@ class BaseTaskSerializerBulk(serializers.ListSerializer):
 
         return db_tasks
 
+    def _backfill_task_fsm_states_skipping_inference(self, db_tasks: list, task_annotations: list):
+        """
+        Backfill FSM states for bulk-created tasks.
+
+        A just-created task without imported annotations is always CREATED, so its state is
+        inserted in bulk instead of being inferred and initialized one task at a time.
+        """
+        if not flag_set(FF_IMPORT_BULK_TASK_STATES, organization=self.project.organization):
+            self._backfill_fsm_states(db_tasks)
+            return
+
+        unannotated, annotated = [], []
+        for task, annotations in zip(db_tasks, task_annotations):
+            (annotated if annotations else unannotated).append(task)
+
+        bulk_initialize_created_task_states(unannotated, user=CurrentContext.get_user())
+        self._backfill_fsm_states(annotated)
+
     def _backfill_fsm_states(self, entities: list, overwrite_state=False):
         """
         Backfill FSM states for entities created via bulk_create().
@@ -1059,13 +1110,15 @@ class TaskWithAnnotationsSerializer(TaskSerializer):
         exclude = ()
 
 
-class AnnotationDraftSerializer(ModelSerializer):
+class AnnotationDraftSerializer(ImmutableOnUpdateMixin, ModelSerializer):
     """
     AnnotationDraft Serializer with FSM state support.
 
     Note: The 'state' field will be populated from the queryset annotation
     if present, preventing N+1 queries. Use .with_state() on your queryset.
     """
+
+    immutable_on_update = ('task', 'annotation')
 
     state = FSMStateField(read_only=True)  # FSM state - automatically uses annotation if present
     user = serializers.CharField(default=serializers.CurrentUserDefault())
@@ -1099,11 +1152,7 @@ class AnnotationDraftSerializer(ModelSerializer):
     def to_representation(self, obj):
         """Remove state field if feature flags are disabled"""
         ret = super().to_representation(obj)
-        user = CurrentContext.get_user()
-        if not (
-            flag_set('fflag_feat_fit_568_finite_state_management', user=user)
-            and flag_set('fflag_feat_fit_710_fsm_state_fields', user=user)
-        ):
+        if not fsm_state_fields_enabled(self.context):
             ret.pop('state', None)
         # Firewall: the `user` field serializes to str(user) (username/email); hide it for others.
         draft_user = getattr(obj, 'user', None)

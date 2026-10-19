@@ -978,17 +978,26 @@ class Project(ProjectMixin, FsmHistoryStateModel):
 
         # argument for recalculate project task stats
         if recalc:
-            self.update_tasks_states(
-                maximum_annotations_changed=self.__maximum_annotations != self.maximum_annotations,
-                overlap_cohort_percentage_changed=self.__overlap_cohort_percentage != self.overlap_cohort_percentage,
-                tasks_number_changed=False,
+            # Capture flags now: on_commit runs after we refresh __maximum_annotations below.
+            maximum_annotations_changed = self.__maximum_annotations != self.maximum_annotations
+            overlap_cohort_percentage_changed = self.__overlap_cohort_percentage != self.overlap_cohort_percentage
+            transaction.on_commit(
+                lambda *, maximum_annotations_changed=maximum_annotations_changed, overlap_cohort_percentage_changed=overlap_cohort_percentage_changed: (
+                    self.update_tasks_states(
+                        maximum_annotations_changed=maximum_annotations_changed,
+                        overlap_cohort_percentage_changed=overlap_cohort_percentage_changed,
+                        tasks_number_changed=False,
+                    )
+                )
             )
             self.__maximum_annotations = self.maximum_annotations
             self.__overlap_cohort_percentage = self.overlap_cohort_percentage
 
         if self.__skip_queue != self.skip_queue:
-            bulk_update_stats_project_tasks(
-                self.tasks.filter(Q(annotations__isnull=False) & Q(annotations__ground_truth=False))
+            transaction.on_commit(
+                lambda: bulk_update_stats_project_tasks(
+                    self.tasks.filter(Q(annotations__isnull=False) & Q(annotations__ground_truth=False))
+                )
             )
 
         if hasattr(self, 'summary'):
@@ -1004,10 +1013,14 @@ class Project(ProjectMixin, FsmHistoryStateModel):
         # Call dimensions postprocess if configured (LSE feature)
         dimensions_postprocess = load_func(settings.PROJECT_SAVE_DIMENSIONS_POSTPROCESS)
         if dimensions_postprocess is not None:
-            dimensions_postprocess(
-                project=self,
-                created=not exists,
-                label_config_has_changed=label_config_has_changed,
+            transaction.on_commit(
+                lambda *, postprocess=dimensions_postprocess, created=not exists, changed=label_config_has_changed: (
+                    postprocess(
+                        project=self,
+                        created=created,
+                        label_config_has_changed=changed,
+                    )
+                )
             )
 
     # ============================================================================
@@ -1239,10 +1252,14 @@ class Project(ProjectMixin, FsmHistoryStateModel):
         return values
 
     def resolve_storage_uri(self, url: str) -> Optional[Mapping[str, Any]]:
-        from io_storages.functions import get_storage_by_url
+        from io_storages.functions import get_storage_by_url, resolve_own_collection_export_storage
 
         storage_objects = self.get_all_import_storage_objects
         storage = get_storage_by_url(url, storage_objects)
+        if not storage:
+            # Project-produced assets (e.g. Data Collection submissions) live in
+            # an export target; import first keeps existing resolution unchanged.
+            storage = resolve_own_collection_export_storage(url, self)
 
         if storage:
             return {
@@ -1280,17 +1297,21 @@ class Project(ProjectMixin, FsmHistoryStateModel):
         tasks_number_changed,
         from_scratch=True,
         recalculate_stats_counts: Optional[Mapping[str, int]] = None,
+        update_counters=True,
     ):
         """
         Update tasks counters and update tasks states (rearrange and/or is_labeled)
         :param queryset: Tasks to update queryset
         :param from_scratch: Skip calculated tasks
+        :param update_counters: Recalculate task counters; pass False when they are known to be correct
         :return: Count of updated tasks
         """
         from tasks.functions import update_tasks_counters
 
-        queryset = make_queryset_from_iterable(queryset)
-        objs = update_tasks_counters(queryset, from_scratch)
+        objs = 0
+        if update_counters:
+            queryset = make_queryset_from_iterable(queryset)
+            objs = update_tasks_counters(queryset, from_scratch)
         self._update_tasks_states(maximum_annotations_changed, overlap_cohort_percentage_changed, tasks_number_changed)
 
         if recalculate_all_stats and recalculate_stats_counts:
@@ -1707,9 +1728,7 @@ class ProjectSummary(models.Model):
     def update_created_annotations_and_labels(self, annotations):
         # the atomic increment SQL is PostgreSQL-only (jsonb_set, :: casts),
         # other backends would raise OperationalError on every call
-        if connection.vendor == 'postgresql' and flag_set(
-            'fflag_fix_plt_1048_concurrent_project_summary_update_19032026_short', user='auto'
-        ):
+        if connection.vendor == 'postgresql':
             try:
                 self._atomic_update_created_annotations_and_labels(annotations)
                 return
@@ -1833,9 +1852,7 @@ class ProjectSummary(models.Model):
     def update_created_labels_drafts(self, drafts):
         # the atomic increment SQL is PostgreSQL-only (jsonb_set, :: casts),
         # other backends would raise OperationalError on every call
-        if connection.vendor == 'postgresql' and flag_set(
-            'fflag_fix_plt_1048_concurrent_project_summary_update_19032026_short', user='auto'
-        ):
+        if connection.vendor == 'postgresql':
             try:
                 self._atomic_update_created_labels_drafts(drafts)
                 return
@@ -1936,8 +1953,27 @@ class ProjectImport(models.Model):
     traceback = models.TextField(null=True, blank=True)
     error = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(_('created at'), null=True, auto_now_add=True, help_text='Creation time')
-    updated_at = models.DateTimeField(_('updated at'), null=True, auto_now_add=True, help_text='Updated time')
+    # Progress / status clock (not Django auto_now): bumped on batch progress and terminal writes.
+    updated_at = models.DateTimeField(
+        _('updated at'),
+        null=True,
+        blank=True,
+        help_text='Last time import progress or terminal status was updated',
+    )
     finished_at = models.DateTimeField(_('finished at'), help_text='Complete or fail time', null=True, default=None)
+    job_id = models.CharField(
+        _('job id'),
+        max_length=256,
+        null=True,
+        blank=True,
+        help_text='RQ job id for async import background work',
+    )
+    # Internal: inferred FAILED from health check may be overwritten by a real COMPLETED.
+    failed_by_health_check = models.BooleanField(
+        default=False,
+        null=True,
+        help_text='True when status was marked failed by stale/dead RQ health check (not a worker failure)',
+    )
     task_count = models.IntegerField(default=0)
     annotation_count = models.IntegerField(default=0)
     prediction_count = models.IntegerField(default=0)
@@ -1948,6 +1984,11 @@ class ProjectImport(models.Model):
     data_columns = models.JSONField(default=list)
     tasks = models.JSONField(blank=True, null=True)
     task_ids = models.JSONField(default=list)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['project', '-created_at'], name='projects_pi_proj_created_idx'),
+        ]
 
     def has_permission(self, user):
         return self.project.has_permission(user)
@@ -1963,6 +2004,28 @@ class ProjectReimport(models.Model):
     project = models.ForeignKey('projects.Project', null=True, related_name='reimports', on_delete=models.CASCADE)
     status = models.CharField(max_length=64, choices=Status.choices, default=Status.CREATED)
     error = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(_('created at'), null=True, auto_now_add=True, help_text='Creation time')
+    # Progress / status clock (not Django auto_now): bumped on batch progress and terminal writes.
+    updated_at = models.DateTimeField(
+        _('updated at'),
+        null=True,
+        blank=True,
+        help_text='Last time reimport progress or terminal status was updated',
+    )
+    finished_at = models.DateTimeField(_('finished at'), help_text='Complete or fail time', null=True, default=None)
+    job_id = models.CharField(
+        _('job id'),
+        max_length=256,
+        null=True,
+        blank=True,
+        help_text='RQ job id for async reimport background work',
+    )
+    # Internal: inferred FAILED from health check may be overwritten by a real COMPLETED.
+    failed_by_health_check = models.BooleanField(
+        default=False,
+        null=True,
+        help_text='True when status was marked failed by stale/dead RQ health check (not a worker failure)',
+    )
     task_count = models.IntegerField(default=0)
     annotation_count = models.IntegerField(default=0)
     prediction_count = models.IntegerField(default=0)
@@ -1972,6 +2035,11 @@ class ProjectReimport(models.Model):
     found_formats = models.JSONField(default=list)
     data_columns = models.JSONField(default=list)
     traceback = models.TextField(null=True, blank=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['project', '-created_at'], name='projects_pr_proj_created_idx'),
+        ]
 
     def has_permission(self, user):
         return self.project.has_permission(user)

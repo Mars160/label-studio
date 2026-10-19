@@ -1,5 +1,5 @@
 import deepEqual from "deep-equal";
-import { clone, destroy, flow, getParent, getRoot, getSnapshot, types } from "mobx-state-tree";
+import { clone, destroy, flow, getParent, getRoot, getSnapshot, isAlive, types } from "mobx-state-tree";
 import { guidGenerator } from "../../utils/random";
 import { normalizeFilterValue } from "./filter_utils";
 import { TabFilter } from "./tab_filter";
@@ -14,8 +14,14 @@ const LOCKED_TAB_UPDATE_MESSAGE = "This tab is locked. Unlock it to update.";
 const LOCKED_TAB_READONLY_MESSAGE = "This tab is locked. Changes are not allowed.";
 const LOCKED_TAB_FILTERS_UPDATE_MESSAGE = "This tab is locked. Unlock it to change filters.";
 const LOCKED_TAB_FILTERS_READONLY_MESSAGE = "This tab is locked. Filters cannot be changed.";
+// Encoded virtual-tab query length above which hiddenColumns is sent as a compact list.
+// Matches common proxy request-line buffers (e.g. nginx's 8k default).
+export const VIRTUAL_QUERY_COMPACT_THRESHOLD = 8 * 1024;
 
+import { preferSiblingFilterType } from "./child_filter_types";
 import { validateFilterSnapshot } from "./filter_snapshot_utils";
+import { clearPersonalColumnOrder } from "../../components/Common/Table/columnOrderStorage";
+import { clearUnavailableVirtualFilters } from "./unavailable_filters";
 
 export const Tab = types
   .model("View", {
@@ -38,6 +44,8 @@ export const Tab = types
     opener: types.optional(types.maybeNull(types.late(() => Tab)), null),
     columnsWidth: types.map(types.maybeNull(types.number)),
     columnsDisplayType: types.map(types.maybeNull(types.string)),
+    /** Drag order map `{ [columnId]: index }` — shared on the tab when FF_DM_SHARED_COLUMN_ORDER is on (FIT-2882). */
+    columnOrder: types.map(types.number),
     gridWidth: 4,
     gridFitImagesToWidth: false,
 
@@ -104,7 +112,9 @@ export const Tab = types
     },
 
     get availableFilters() {
-      return self.parent.availableFilters.filter((filter) => filter.field.available_for_new_filters);
+      return self.parent.availableFilters.filter(
+        (filter) => isAlive(filter) && filter.field.available_for_new_filters && !filter.field.child_only,
+      );
     },
 
     get dataStore() {
@@ -126,8 +136,13 @@ export const Tab = types
     },
 
     get currentOrder() {
-      return self.ordering.length
-        ? self.ordering.reduce((res, field) => {
+      const columns = self.columns ?? [];
+      const ordering = columns.length
+        ? self.ordering.filter((field) => columns.some((column) => column.id === field.replace(/^-/, "")))
+        : self.ordering;
+
+      return ordering.length
+        ? ordering.reduce((res, field) => {
             const fieldName = field.replace(/^-/, "");
             const desc = field[0] === "-";
 
@@ -136,7 +151,7 @@ export const Tab = types
               [fieldName]: desc,
               desc,
               field: fieldName,
-              column: self.columns.find((c) => c.id === fieldName),
+              column: columns.find((c) => c.id === fieldName),
             };
           }, {})
         : null;
@@ -241,13 +256,32 @@ export const Tab = types
       return getSnapshot(self.hiddenColumns);
     },
 
+    get columnOrderSnapshot() {
+      return self.columnOrder.toPOJO();
+    },
+
+    // Columns hidden in both modes, the only ones the tasks API uses.
+    get hiddenColumnsInAllModes() {
+      const { explore, labeling } = self.hiddenColumnsSnapshot;
+      const hiddenInLabeling = new Set(labeling);
+
+      return [...new Set(explore)].filter((id) => hiddenInLabeling.has(id));
+    },
+
     get query() {
-      return JSON.stringify({
-        filters: self.filterSnapshot,
-        ordering: self.ordering.toJSON(),
-        hiddenColumns: self.hiddenColumnsSnapshot,
-        agreement_selected: self.agreement_selected,
-      });
+      const build = (hiddenColumns) =>
+        JSON.stringify({
+          filters: self.filterSnapshot,
+          ordering: self.ordering.toJSON(),
+          hiddenColumns,
+          agreement_selected: self.agreement_selected,
+        });
+      const query = build(self.hiddenColumnsSnapshot);
+
+      // Large configs push the virtual-tab GET URL past load balancer limits (FIT-3167). Only then
+      // send the compact flat list, so smaller queries stay readable by backends without list support.
+      if (encodeURIComponent(query).length <= VIRTUAL_QUERY_COMPACT_THRESHOLD) return query;
+      return build(self.hiddenColumnsInAllModes);
     },
 
     serialize() {
@@ -259,6 +293,7 @@ export const Tab = types
           hiddenColumns: self.hiddenColumnsSnapshot,
           columnsWidth: self.columnsWidth.toPOJO(),
           columnsDisplayType: self.columnsDisplayType.toPOJO(),
+          columnOrder: self.columnOrderSnapshot,
           gridWidth: self.gridWidth,
           gridFitImagesToWidth: self.gridFitImagesToWidth,
           agreement_selected: self.agreement_selected,
@@ -277,6 +312,7 @@ export const Tab = types
         hiddenColumns: getSnapshot(self.hiddenColumns),
         columnsWidth: self.columnsWidth.toPOJO(),
         columnsDisplayType: self.columnsDisplayType.toPOJO(),
+        columnOrder: self.columnOrderSnapshot,
         gridWidth: self.gridWidth,
         gridFitImagesToWidth: self.gridFitImagesToWidth,
         semantic_search: self.semantic_search?.toJSON() ?? [],
@@ -530,12 +566,15 @@ export const Tab = types
       const filterType =
         typeof filterTypeOrAlias === "object"
           ? filterTypeOrAlias
-          : self.availableFilters.find(
-              (candidate) =>
-                candidate.id === filterTypeOrAlias ||
-                candidate.field.alias === filterTypeOrAlias ||
-                (!filterTypeOrAlias && allowedAliases.includes(candidate.field.alias)),
-            );
+          : (self.parent.availableFilters.find((candidate) => candidate.id === filterTypeOrAlias) ??
+            preferSiblingFilterType(
+              self.parent.availableFilters.filter((candidate) =>
+                filterTypeOrAlias
+                  ? candidate.field.alias === filterTypeOrAlias
+                  : allowedAliases.includes(candidate.field.alias),
+              ),
+              rootFilter.field,
+            ));
 
       if (
         !filterType ||
@@ -577,6 +616,55 @@ export const Tab = types
       self.save();
     },
 
+    /**
+     * Replace the tab's shared column drag-order map and persist (FIT-2882).
+     * Same lock guard as visibility toggles — locked tabs cannot reorder.
+     * @param {Record<string, number>} orderMap
+     */
+    setColumnOrder(orderMap) {
+      if (self.isLockedByManager) return self.notifyLocked();
+      self.columnOrder.clear();
+      for (const [columnId, index] of Object.entries(orderMap ?? {})) {
+        if (typeof index === "number" && !Number.isNaN(index)) {
+          self.columnOrder.set(columnId, index);
+        }
+      }
+      self.save();
+    },
+
+    /**
+     * Restore this tab's column visibility + order from project soft defaults (FIT-2846).
+     * Explicit user action — does not affect other tabs. Locked tabs are a no-op.
+     * Also removes this view's column ids from personal localStorage order so Reset is
+     * visible when shared column-order is off (Table otherwise prefers browser prefs
+     * over tab columnOrder). Unrelated personal prefs for other column sets are kept.
+     */
+    resetColumnsToProjectDefaults() {
+      if (self.isLockedByManager) return self.notifyLocked();
+
+      const defaults = self.parent.projectDefaultsSnapshot(false);
+      const hidden =
+        defaults.hiddenColumns ??
+        (self.parent.defaultHidden ? getSnapshot(self.parent.defaultHidden) : { explore: [], labeling: [] });
+
+      self.hiddenColumns = TabHiddenColumns.create(hidden);
+
+      self.columnOrder.clear();
+      if (defaults.columnOrder) {
+        for (const [columnId, index] of Object.entries(defaults.columnOrder)) {
+          if (typeof index === "number" && !Number.isNaN(index)) {
+            self.columnOrder.set(columnId, index);
+          }
+        }
+      }
+
+      const columnIds = self.columns.map((c) => c.id).filter(Boolean);
+      clearPersonalColumnOrder(columnIds);
+
+      self.save();
+      return true;
+    },
+
     setAgreementFilters({
       ground_truth = false,
       annotators = { all: true, ids: [] },
@@ -597,6 +685,13 @@ export const Tab = types
     },
 
     reload: flow(function* ({ interaction } = {}) {
+      // Annotator virtual tabs: strip denied-column filters before the tasks
+      // request so Refresh / tab apply match the initial-load graceful path
+      // and do not 403 on GET /api/tasks (FIT-2850).
+      if (self.virtual && clearUnavailableVirtualFilters(self)) {
+        self.persistVirtual();
+      }
+
       if (self.saved) {
         yield self.dataStore.reload({ id: self.id, interaction });
       }
@@ -630,7 +725,12 @@ export const Tab = types
      */
     importFilters(snapshot) {
       if (self.isLockedByManager) return self.notifyLocked();
-      const validItems = validateFilterSnapshot(snapshot, self.availableFilters);
+      // Check against every column type, not the picker list: a saved read-only line must survive paste and undo.
+      // Child-only columns stay valid as children but not as top-level lines.
+      const validItems = validateFilterSnapshot(
+        snapshot,
+        self.parent.availableFilters.filter((filterType) => !filterType.field.child_only),
+      );
       if (!validItems) return false;
 
       const { conjunction } = snapshot;
@@ -688,24 +788,33 @@ export const Tab = types
       self.snapshot = self.serialize();
     },
 
+    /**
+     * Write the virtual tab to localStorage and the URL tab key.
+     * Same persistence a normal virtual-tab edit uses, without reloading tasks.
+     */
+    persistVirtual() {
+      if (self.virtual !== true) return;
+      const snapshot = self.serialize();
+
+      self.snapshot = snapshot;
+      self.key = self.parent.snapshotToUrl(snapshot);
+
+      const projectId = self.root.SDK?.projectId;
+
+      if (projectId) {
+        localStorage.setItem(`virtual-tab-${projectId}`, JSON.stringify(snapshot));
+      }
+
+      History.navigate({ tab: self.key }, true);
+    },
+
     save: flow(function* ({ reload, interaction } = {}) {
       const serialized = self.serialize();
 
       if (!self.saved || !deepEqual(self.snapshot, serialized)) {
         self.snapshot = serialized;
         if (self.virtual === true) {
-          const snapshot = self.serialize();
-
-          self.key = self.parent.snapshotToUrl(snapshot);
-
-          const projectId = self.root.SDK.projectId;
-
-          // Save the virtual tab of the project to local storage to persist between page navigations
-          if (projectId) {
-            localStorage.setItem(`virtual-tab-${projectId}`, JSON.stringify(snapshot));
-          }
-
-          History.navigate({ tab: self.key }, true);
+          self.persistVirtual();
           self.reload({ interaction });
         } else {
           yield self.parent.saveView(self, { reload, interaction });

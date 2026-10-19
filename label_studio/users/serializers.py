@@ -71,7 +71,7 @@ class BaseUserSerializer(FlexFieldsModelSerializer):
     initials = serializers.SerializerMethodField(default='?', read_only=True)
     avatar = serializers.SerializerMethodField(read_only=True)
     active_organization_meta = serializers.SerializerMethodField(read_only=True)
-    last_activity = serializers.DateTimeField(read_only=True, source='last_activity_cached')
+    last_activity = serializers.DateTimeField(read_only=True, allow_null=True, source='last_activity_cached')
 
     def get_avatar(self, instance) -> str | None:
         return instance.avatar_url
@@ -106,14 +106,13 @@ class BaseUserSerializer(FlexFieldsModelSerializer):
         """Returns user with cache, this helps to avoid multiple s3/gcs links resolving for avatars"""
 
         uid = instance.id
-        key = 'user_cache'
+        # user serializers with different fields share this context, so cache per shape
+        shape = (type(self), tuple(self.fields))
+        cache = self.context.setdefault('user_cache', {}).setdefault(uid, {})
+        if shape not in cache:
+            cache[shape] = super().to_representation(instance)
 
-        if key not in self.context:
-            self.context[key] = {}
-        if uid not in self.context[key]:
-            self.context[key][uid] = super().to_representation(instance)
-
-        representation = self.context[key][uid]
+        representation = cache[shape]
         is_modified = False
 
         if self._is_deleted(instance):
@@ -128,6 +127,10 @@ class BaseUserSerializer(FlexFieldsModelSerializer):
                     representation[field] = f'deleted-{uid}-user@example.com'
                 else:
                     representation[field] = 'Deleted'
+            # The avatar file may still exist (the user can be active in another organization),
+            # so never expose it next to the masked identity.
+            if 'avatar' in representation:
+                representation['avatar'] = None
 
         # Annotator/reviewer firewall: hide other users' identity entirely (id-less role stub)
         requester = self._get_requester()
@@ -138,7 +141,7 @@ class BaseUserSerializer(FlexFieldsModelSerializer):
             is_modified = True
 
         if is_modified:
-            self.context[key][uid] = representation
+            cache[shape] = representation
 
         return representation
 

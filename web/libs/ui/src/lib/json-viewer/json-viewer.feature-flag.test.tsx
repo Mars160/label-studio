@@ -14,7 +14,10 @@ declare global {
 }
 
 describe("JsonViewer feature flag", () => {
+  let originalClipboard: PropertyDescriptor | undefined;
+
   beforeEach(() => {
+    originalClipboard = Object.getOwnPropertyDescriptor(navigator, "clipboard");
     global.__virtualizedJsonViewerProps = undefined;
 
     spyOn(jsonEditReactModule, "JsonEditor").mockImplementation(() => <div data-testid="json-editor" />);
@@ -36,6 +39,14 @@ describe("JsonViewer feature flag", () => {
     ));
 
     spyOn(tooltipModule, "Tooltip").mockImplementation(({ children }: any) => <>{children}</>);
+  });
+
+  afterEach(() => {
+    if (originalClipboard) {
+      Object.defineProperty(navigator, "clipboard", originalClipboard);
+    } else {
+      delete (navigator as { clipboard?: Clipboard }).clipboard;
+    }
   });
 
   it("renders legacy json-edit-react path when flag is off", () => {
@@ -140,13 +151,26 @@ describe("JsonViewer feature flag", () => {
   it("copy button still copies JSON.stringify(data, null, 2) when flag is on", async () => {
     spyOn(ff, "isActive").mockReturnValue(true);
     const writeText = mock(() => Promise.resolve());
-    Object.assign(navigator, { clipboard: { writeText } });
+    // navigator.clipboard is often a readonly accessor in happy-dom/Bun; Object.assign throws.
+    Object.defineProperty(navigator, "clipboard", {
+      value: { writeText },
+      configurable: true,
+      writable: true,
+    });
 
-    const data = { id: 1, label: "task" };
-    render(<JsonViewer data={data} showSearch={false} showFilters={false} />);
+    try {
+      const data = { id: 1, label: "task" };
+      render(<JsonViewer data={data} showSearch={false} showFilters={false} />);
 
-    fireEvent.click(screen.getByRole("button"));
+      fireEvent.click(screen.getByRole("button"));
 
-    expect(writeText).toHaveBeenCalledWith(JSON.stringify(data, null, 2));
+      expect(writeText).toHaveBeenCalledWith(JSON.stringify(data, null, 2));
+    } finally {
+      if (originalClipboard) {
+        Object.defineProperty(navigator, "clipboard", originalClipboard);
+      } else {
+        delete (navigator as { clipboard?: Clipboard }).clipboard;
+      }
+    }
   });
 });

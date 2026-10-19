@@ -1,6 +1,6 @@
 # Project Access Control Progress
 
-Last reviewed: 2026-08-23
+Last reviewed: 2026-10-19
 
 Status: **Implemented on `develop`; PostgreSQL migration verification remains an environment follow-up**
 
@@ -27,6 +27,7 @@ The authorization boundary is `ProjectMember(project, user, role, enabled)`. Fro
 - Added migration `projects.0035_projectmember_role` to consolidate duplicates, preserve disabled creators, promote creators, and ensure an existing enabled member becomes admin when necessary.
 - Added `projects.0036_merge_projectmember_role_projectsummary_counts` after an earlier upstream merge to join the two independent `0035` migration branches without schema operations.
 - Added `projects.0037_merge_projecthotkeypreference_projectmember_role` after the 2026-08-08 upstream merge to join the local membership branch with upstream project hotkey preferences.
+- Added `projects.0039_merge_20261019_0655` to join the local role migration branch with upstream import-progress/index migrations; no schema operations.
 - Added final-admin demotion/removal protection with project-row locking.
 
 ### Member management
@@ -91,6 +92,21 @@ The following commands/checks have passed in the local test environment:
 | 2026-08-23 Ruff, `compileall`, Django check, migration drift, conflict-marker, and diff checks | Passed |
 
 Tests cover creator-admin provisioning, nonmember hiding, admin-only membership visibility and management, atomic multi-account role assignment and rollback, eligible-account full-name/username search, account-enumeration resistance, empty and invalid batch rejection, role management, active-user-aware final-admin protection, deactivation/soft/hard-offboarding replacement-admin promotion, disabled membership, admin/annotator annotation and draft visibility, role-safe Data Manager filtering, own-tab isolation, tab-owner immutability and persistence, annotator denial for ground-truth/prediction/model-version/live-ML/import/storage/webhook operations, prediction/draft/label relationship integrity, credential redaction, organization-level webhooks, migration promotion behavior, Data Manager task-path assignee references, project-scoped user filter options, project hotkey access, the opensource user-fetch feature-flag override, missing assignee degradation, and affected existing API behavior.
+
+## 2026-10-19 upstream synchronization verification
+
+Upstream target: `HumanSignal/label-studio` develop at `5b17e744a` (205 incoming commits). The following results verify the integrated code with the fork's project-scoped access controls preserved.
+
+- Preserved project membership, admin-only management, annotation/draft/tab owner isolation, and frontend capability checks.
+- Scoped new import/reimport job lists to project admins and annotation-to-draft conversion to role-visible annotations.
+- Combined upstream instruction sanitization with local annotator credential redaction (two `to_representation` methods initially caused a regression; now consolidated).
+- Retained upstream annotation deletion retry and storage credential-copy checks alongside local restrictions.
+- Added import-job list authorization coverage and adapted upstream conversion tests to explicit project membership and owner isolation.
+- Installed dependencies with `uv sync --frozen --group test`; `uv lock --check --offline` passed.
+- Backend: focused checks passed 386 tests and 193 subtests; broader `projects/tests tasks/tests data_manager/tests io_storages/tests data_export/tests` run passed 746 tests and 183 subtests (overlapping coverage, not additive). Two incoming model tests assumed organization-wide access; adapted them to explicit project membership and fail-closed access for projects without an organization, preserving the local policy.
+- Frontend: 22 tests passed across AppStore, Assignee, and feature flags. AppStore Biome check passed with one existing warning. Production `cd web && bun run build` passed (Vite application and service worker; Vite build took 12.30 seconds). Non-blocking warnings: outdated Browserslist data, runtime URL resolution, browser-externalized `module` from audio-file-decoder, and large chunks. Build-generated backend static-file changes were cleaned up.
+- Ruff lint/format passed on six resolved backend files, three updated test files, and the merge migration. Django system check and migration drift check passed.
+- Complete backend suite and PostgreSQL migration verification were not run. Incoming upstream documentation contains trailing whitespace reported by the full merge diff check; retained unchanged outside the resolved conflict.
 
 ## Resolved Security Review Findings
 

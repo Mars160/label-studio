@@ -5,7 +5,7 @@ import { xml } from "@codemirror/lang-xml";
 import { indentUnit } from "@codemirror/language";
 import { searchKeymap } from "@codemirror/search";
 import { history, historyKeymap } from "@codemirror/commands";
-import { Compartment, EditorState, type Extension, StateEffect, StateField } from "@codemirror/state";
+import { Compartment, EditorState, type Extension, Prec, StateEffect, StateField } from "@codemirror/state";
 import { Decoration, type DecorationSet, EditorView, keymap, lineNumbers, placeholder } from "@codemirror/view";
 import type { Editor } from "codemirror";
 import { labelStudioSyntaxHighlighting } from "./cm6-code-editor-highlight";
@@ -87,6 +87,28 @@ const markField = StateField.define<DecorationSet>({
 
 const placeholderCompartment = new Compartment();
 const readOnlyCompartment = new Compartment();
+
+/**
+ * CM6 renders placeholders as an inline-block span, so a multi-line placeholder stretches the
+ * empty document's line box — and the caret drawn against it — to the full placeholder height.
+ * Returning an out-of-flow element keeps the hint visible at normal line height.
+ */
+export function createPlaceholderContent(content: string): string | HTMLElement {
+  if (!content.includes("\n")) return content;
+
+  const element = document.createElement("div");
+  element.className = "cm-multiline-placeholder";
+  element.textContent = content;
+  element.style.position = "absolute";
+  element.style.maxWidth = "100%";
+  element.style.whiteSpace = "pre-wrap";
+  element.style.pointerEvents = "none";
+  return element;
+}
+
+function placeholderExtension(content: string | undefined): Extension {
+  return content ? placeholder(createPlaceholderContent(content)) : [];
+}
 
 export type Cm5EditorShim = Pick<
   Editor,
@@ -214,9 +236,7 @@ export function createCm5EditorShim(getView: () => EditorView | undefined | null
       if (key === "placeholder") {
         dynamicOptions.placeholder = typeof value === "string" ? value : undefined;
         view.dispatch({
-          effects: placeholderCompartment.reconfigure(
-            dynamicOptions.placeholder ? placeholder(dynamicOptions.placeholder) : [],
-          ),
+          effects: placeholderCompartment.reconfigure(placeholderExtension(dynamicOptions.placeholder)),
         });
         return;
       }
@@ -328,21 +348,25 @@ export function buildCm6Extensions(
   }
 
   extensions.push(
-    placeholderCompartment.of(options.placeholder ? placeholder(options.placeholder) : []),
+    placeholderCompartment.of(placeholderExtension(options.placeholder)),
     readOnlyCompartment.of(resolveReadOnlyExtension(options.readOnly)),
   );
 
   if (handlers?.onKeyDown) {
+    // Must run before keymaps (CM5 fires `keydown` first): a keymap that handles the key, e.g. Escape
+    // closing autocomplete, stops later handlers, so callers could never stopPropagation it.
     extensions.push(
-      EditorView.domEventHandlers({
-        keydown(event, view) {
-          handlers.onKeyDown?.(
-            createCm5EditorShim(() => view),
-            event,
-          );
-          return false;
-        },
-      }),
+      Prec.highest(
+        EditorView.domEventHandlers({
+          keydown(event, view) {
+            handlers.onKeyDown?.(
+              createCm5EditorShim(() => view),
+              event,
+            );
+            return false;
+          },
+        }),
+      ),
     );
   }
 

@@ -288,7 +288,13 @@ class Task(TaskMixin, FsmHistoryStateModel):
             if rejected_q:
                 q &= rejected_q
 
-        return q | Q(ground_truth=True)
+        exclude_q = q | Q(ground_truth=True)
+
+        extra_q = self.get_lock_extra_exclude_query()
+        if extra_q:
+            exclude_q |= extra_q
+
+        return exclude_q
 
     def has_lock(self, user=None):
         """
@@ -541,13 +547,14 @@ class Task(TaskMixin, FsmHistoryStateModel):
             return self.annotations.filter(Q_finished_annotations)
 
     def increase_project_summary_counters(self):
-        if hasattr(self.project, 'summary'):
-            summary = self.project.summary
+        # AutoOneToOneField opens a savepoint on every access, even when cached
+        summary = getattr(self.project, 'summary', None)
+        if summary is not None:
             summary.update_data_columns([self])
 
     def decrease_project_summary_counters(self):
-        if hasattr(self.project, 'summary'):
-            summary = self.project.summary
+        summary = getattr(self.project, 'summary', None)
+        if summary is not None:
             summary.remove_data_columns([self])
 
     def ensure_unique_groundtruth(self, annotation_id):
@@ -1053,25 +1060,10 @@ class AnnotationDraft(FsmHistoryStateModel):
         # embedded OCR/text layer can leak \x00 into value.ocrtext, which otherwise 500s the
         # draft write with a DataError. See FIT-2353.
         self.result = sanitize_null_bytes(self.result)
-        if flag_set('fflag_fix_plt_1048_concurrent_project_summary_update_19032026_short', user='auto'):
-            # Atomic path: skip SELECT FOR UPDATE since update_created_labels_drafts
-            # will use atomic SQL (jsonb_set) instead of read-modify-write
-            super().save(*args, **kwargs)
-            project = self.task.project
-            if hasattr(project, 'summary'):
-                project.summary.update_created_labels_drafts([self])
-        else:
-            with transaction.atomic():
-                project = self.task.project
-                # Lock projectsummary first to avoid deadlocks with annotation-reviews
-                # which accesses projectsummary before annotationdraft
-                if hasattr(project, 'summary'):
-                    from projects.models import ProjectSummary
-
-                    ProjectSummary.objects.select_for_update().filter(pk=project.summary.pk).first()
-                super().save(*args, **kwargs)
-                if hasattr(project, 'summary'):
-                    project.summary.update_created_labels_drafts([self])
+        super().save(*args, **kwargs)
+        project = self.task.project
+        if hasattr(project, 'summary'):
+            project.summary.update_created_labels_drafts([self])
 
     def delete(self, *args, **kwargs):
         with transaction.atomic():
@@ -1441,15 +1433,21 @@ def remove_data_columns(sender, instance, **kwargs):
 
 
 def _task_data_is_not_updated(update_fields):
-    if update_fields and list(update_fields) == ['is_labeled']:
-        return True
+    """True when this save cannot affect project.summary data columns.
+
+    The summary's data columns are derived from task.data alone, so only a full
+    save or a save that writes task.data needs to recompute them.
+    """
+    if not update_fields:
+        return False
+    return 'data' not in update_fields
 
 
 @receiver(pre_save, sender=Task)
 def delete_project_summary_data_columns_before_updating_task(sender, instance, update_fields, **kwargs):
     """Before updating task fields - ensure previous info removed from project.summary"""
-    if _task_data_is_not_updated(update_fields):
-        # we don't need to update counters when other than task.data fields are updated
+    if _task_data_is_not_updated(update_fields) or instance.pk is None:
+        # we don't need to update counters when other than task.data fields are updated, or for a new task
         return
     try:
         old_task = sender.objects.get(id=instance.id)
@@ -1554,14 +1552,17 @@ def update_task_counters_after_annotation_delete(sender, instance, **kwargs):
 @receiver(pre_delete, sender=Prediction)
 def remove_predictions_from_project(sender, instance, **kwargs):
     """Remove predictions counters"""
-    instance.task.total_predictions = instance.task.predictions.all().count() - 1
+    instance.task.total_predictions = max(instance.task.predictions.all().count() - 1, 0)
     instance.task.save(update_fields=['total_predictions'])
     logger.debug(f'Updated total_predictions for {instance.task.id}.')
 
 
 @receiver(post_save, sender=Prediction)
-def save_predictions_to_project(sender, instance, **kwargs):
+def save_predictions_to_project(sender, instance, created, **kwargs):
     """Add predictions counters"""
+    if not created:
+        # post_save also fires on updates, which don't change the count
+        return
     instance.task.total_predictions = instance.task.predictions.all().count()
     instance.task.save(update_fields=['total_predictions'])
     logger.debug(f'Updated total_predictions for {instance.task.id}.')

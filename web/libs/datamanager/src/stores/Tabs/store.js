@@ -8,7 +8,16 @@ import { TabColumn } from "./tab_column";
 import { TabFilterType } from "./tab_filter_type";
 import { TabHiddenColumns } from "./tab_hidden_columns";
 import { serializeJsonForUrl, deserializeJsonFromUrl } from "@humansignal/core";
+import { FF_PROJECT_DM_COLUMN_DEFAULTS, isActive } from "@humansignal/core/lib/utils/feature-flags";
 import { isEmpty } from "../../utils/helpers";
+import { projectDefaultsForNewTab } from "./project_column_defaults";
+import { resolvePreloaded } from "../../sdk/resolve-preloaded";
+import {
+  clearUnavailableVirtualFilters,
+  noticeKeyForView,
+  notifyVirtualFiltersRemoved,
+  stripUnavailableFiltersFromVirtualSnapshot,
+} from "./unavailable_filters";
 
 const storeValue = (name, value) => {
   window.localStorage.setItem(name, value);
@@ -21,7 +30,7 @@ const restoreValue = (name) => {
   return value ? value === "true" : false;
 };
 
-const dataCleanup = (tab, columns) => {
+export const dataCleanup = (tab, columns) => {
   const { data } = tab;
 
   if (!data) return { ...tab };
@@ -36,10 +45,19 @@ const dataCleanup = (tab, columns) => {
     data[key] = Object.fromEntries(
       Object.entries(data[key] ?? {}).filter(([col]) => {
         const match = columns.find((c) => c.id === col);
-        return !!match && !match.isAnnotationResultsFilterColumn;
+        return !!match && !match.isFilterOnlyColumn;
       }),
     );
   });
+
+  // Keep synthetic table columns (select / show-source) in drag order; validate catalog ids.
+  data.columnOrder = Object.fromEntries(
+    Object.entries(data.columnOrder ?? {}).filter(([col]) => {
+      if (col === "select" || col === "show-source") return true;
+      const match = columns.find((c) => c.id === col);
+      return !!match && !match.isFilterOnlyColumn;
+    }),
+  );
 
   // Only compatibility filter columns are pruned from the hidden lists. IDs of columns this
   // session cannot see stay untouched: agreement columns are role-gated and dimension columns
@@ -52,7 +70,7 @@ const dataCleanup = (tab, columns) => {
         (list ?? []).filter((columnID) => {
           const match = columns.find((c) => c.id === columnID);
 
-          return !match?.isAnnotationResultsFilterColumn;
+          return !match?.isFilterOnlyColumn;
         }),
       ]),
     );
@@ -129,6 +147,23 @@ const createNameCopy = (name) => {
   return newName;
 };
 
+const ORDERING_NOTICE = "This tab is sorted by a column you can't see, so that sort isn't applied.";
+
+function notifyUnavailableOrdering(view) {
+  if (!view?.ordering?.length) return;
+  const columns = view.columns ?? [];
+  if (!columns.length) return;
+  const hiddenSort = view.ordering.some(
+    (field) => !columns.some((column) => column.id === String(field).replace(/^-/, "")),
+  );
+  if (!hiddenSort) return;
+  const notices = view.root?.viewsStore?.orderingNoticesShown;
+  const noticeKey = noticeKeyForView(view);
+  if (notices?.has(noticeKey)) return;
+  notices?.add(noticeKey);
+  view.root?.SDK?.invoke("toast", { message: ORDERING_NOTICE, type: "info" });
+}
+
 export const TabStore = types
   .model("TabStore", {
     selected: types.maybeNull(types.late(() => types.reference(Tab))),
@@ -141,6 +176,10 @@ export const TabStore = types
   })
   .volatile(() => ({
     defaultHidden: null,
+    // Per TabStore instance, keyed by `${projectId}_${viewId}` so SPA nav across
+    // projects/orgs does not permanently suppress the ordering / filter notices.
+    orderingNoticesShown: new Set(),
+    filterNoticesShown: new Set(),
   }))
   .views((self) => ({
     get all() {
@@ -175,6 +214,25 @@ export const TabStore = types
     serialize() {
       return self.views.map((v) => v.serialize());
     },
+
+    /**
+     * Soft project defaults for a newly created tab (FIT-2846).
+     * Never call for existing saved/URL/browser tabs — only when constructing a new snapshot.
+     */
+    projectDefaultsSnapshot(hasCustomization = false) {
+      const root = getRoot(self);
+      const catalogDefaultHidden = self.defaultHidden ? getSnapshot(self.defaultHidden) : { explore: [], labeling: [] };
+
+      return projectDefaultsForNewTab({
+        enabled: isActive(FF_PROJECT_DM_COLUMN_DEFAULTS),
+        defaults: root.project?.dm_column_defaults ?? null,
+        surface: "explore",
+        role: root.SDK?.role ?? null,
+        columns: self.columns ?? [],
+        catalogDefaultHidden,
+        hasCustomization,
+      });
+    },
   }))
   .actions((self) => ({
     setSelected: flow(function* (view, options = {}) {
@@ -206,17 +264,28 @@ export const TabStore = types
 
         const root = getRoot(self);
 
-        // Fetch fresh tab config from server so changes made by other users
-        // (e.g., another user locking this tab) are reflected immediately.
+        // Paint tasks from the view-list payload immediately. Refresh the
+        // selected view beside that request so a lock changed by someone else
+        // is still picked up, without sitting in front of the task list.
+        // Virtual-tab reload strips denied filters before the tasks request
+        // (same policy as RefreshButton / initial apply).
+        const queryBefore = selected.query;
+        let tasksPromise = selected.reload();
+
         if (selected.saved && selected.id) {
           const latest = yield root.apiCall("tab", { tabId: selected.id });
-          if (!latest?.error && (latest.id == null || latest.id === selected.id)) {
+          if (self.selected === selected && !latest?.error && (latest.id == null || latest.id === selected.id)) {
             applySnapshot(selected, serverViewSnapshot(selected, self.columns, latest));
+            // View-list payload can be stale on later tab switches. If the
+            // single-view refresh changed filters/ordering, fetch tasks again.
+            if (self.selected === selected && selected.query !== queryBefore) {
+              tasksPromise = selected.reload();
+            }
           }
         }
 
-        yield selected.reload();
-
+        yield tasksPromise;
+        notifyUnavailableOrdering(selected);
         root.SDK.invoke("tabChanged", selected);
         selected.selected._invokeChangeEvent();
       }
@@ -254,14 +323,25 @@ export const TabStore = types
       const urlTabNotEmpty = !isEmpty(existingTabUrlParsed);
       const existingTab = urlTabNotEmpty ? existingTabUrlParsed : existingTabStorageParsed;
       const existingTabKey = urlTabNotEmpty ? viewSnapshot.tab : existingTabStorageParsed?.tab;
-      const snapshot = {
+      let snapshot = {
         ...viewSnapshot,
         key: existingTabKey,
         tab: existingTabKey,
         ...(existingTab ?? viewSnapshot ?? {}),
+        virtual: isVirtual || !!viewSnapshot?.virtual,
       };
+      const stripped = stripUnavailableFiltersFromVirtualSnapshot(snapshot, self.availableFilters);
+      snapshot = stripped.snapshot;
       const newTitle = snapshot.title ?? `New Tab ${self.views.length + 1}`;
       const newID = nextTempTabId(self.views);
+
+      const hasCustomization = !!(
+        existingTab ||
+        snapshot.hiddenColumns ||
+        (snapshot.columnOrder && Object.keys(snapshot.columnOrder).length > 0)
+      );
+
+      const projectDefaults = self.projectDefaultsSnapshot(hasCustomization);
 
       const defaultHiddenColumns = self.defaultHidden
         ? clone(self.defaultHidden)
@@ -271,25 +351,37 @@ export const TabStore = types
           };
 
       return {
-        ...snapshot,
-        id: newID,
-        title: newTitle,
-        key: snapshot.key ?? guidGenerator(),
-        hiddenColumns: snapshot.hiddenColumns ?? defaultHiddenColumns,
+        snapshot: {
+          ...snapshot,
+          id: newID,
+          title: newTitle,
+          key: snapshot.key ?? guidGenerator(),
+          hiddenColumns: snapshot.hiddenColumns ?? projectDefaults.hiddenColumns ?? defaultHiddenColumns,
+          ...(projectDefaults.columnOrder && !snapshot.columnOrder ? { columnOrder: projectDefaults.columnOrder } : {}),
+        },
+        deniedFiltersRemoved: stripped.removed,
       };
     },
 
     addView: flow(function* (viewSnapshot = {}, options) {
       const { autoselect = true, autosave = true, reload = true } = options ?? {};
 
-      const newSnapshot = self.createSnapshot(viewSnapshot);
+      const { snapshot: newSnapshot, deniedFiltersRemoved } = self.createSnapshot(viewSnapshot);
 
       self.views.push(newSnapshot);
       const newView = self.views[self.views.length - 1];
 
+      if (deniedFiltersRemoved) {
+        notifyVirtualFiltersRemoved(newView);
+      }
+
       if (autosave) {
         // with autosave it will be reloaded anyway
         yield newView.save({ reload: !autosave && reload });
+      } else if (deniedFiltersRemoved && newView.virtual) {
+        // Annotator virtual tabs load with autosave off, so nothing else rewrites
+        // localStorage or the URL tab key. Persist the stripped snapshot now.
+        newView.persistVirtual();
       }
 
       if (autoselect) {
@@ -321,10 +413,14 @@ export const TabStore = types
     }),
 
     createDefaultView: flow(function* () {
+      const projectDefaults = self.projectDefaultsSnapshot(false);
+      const hiddenColumns = projectDefaults.hiddenColumns ?? self.defaultHidden;
+
       self.views.push({
         id: 0,
         title: "Default",
-        hiddenColumns: self.defaultHidden,
+        hiddenColumns,
+        ...(projectDefaults.columnOrder ? { columnOrder: projectDefaults.columnOrder } : {}),
       });
 
       let defaultView = self.views[self.views.length - 1];
@@ -389,6 +485,14 @@ export const TabStore = types
 
       if (result.error) {
         view.unlock();
+        const detail = result?.response?.detail;
+        root.SDK.invoke("toast", {
+          message:
+            typeof detail === "string"
+              ? detail
+              : "This tab could not be saved. Your filters or other changes were not stored.",
+          type: "error",
+        });
         return view;
       }
 
@@ -538,7 +642,7 @@ export const TabStore = types
       self.sidebarVisible = storeValue("sidebarVisible", !self.sidebarVisible);
     },
 
-    fetchColumns() {
+    fetchColumns({ deferSelectedReload = false } = {}) {
       const columns = self.columnsRaw;
       const targets = unique(columns.map((c) => c.target));
       const hiddenColumns = {};
@@ -622,11 +726,28 @@ export const TabStore = types
       });
 
       self.defaultHidden = TabHiddenColumns.create(hiddenColumns);
+
+      for (const view of self.views) {
+        if (view.virtual && clearUnavailableVirtualFilters(view)) {
+          // RefreshButton refetches columns then reloads once; persist without a
+          // nested tasks fetch so denied filters are gone before that reload.
+          if (deferSelectedReload) {
+            view.persistVirtual();
+          } else {
+            view.save({ reload: view === self.selected });
+          }
+        }
+      }
+
+      notifyUnavailableOrdering(self.selected);
     },
 
     fetchTabs: flow(function* (tab, taskID, labeling) {
       const tabId = Number.parseInt(tab);
-      const response = yield getRoot(self).apiCall("tabs");
+      const root = getRoot(self);
+      const preloadedViews = root.SDK?.explorerPreload?.views ?? null;
+      if (root.SDK?.explorerPreload) root.SDK.explorerPreload.views = null;
+      const response = yield resolvePreloaded(preloadedViews, () => root.apiCall("tabs"));
       const tabs = response.tabs ?? response ?? [];
 
       const snapshots = tabs.map((t) => {

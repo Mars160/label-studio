@@ -1,5 +1,6 @@
 """This file and its contents are licensed under the Apache License 2.0. Please see the included NOTICE for copyright information and LICENSE for a copy of the license."""
 
+import copy
 import os
 from typing import Any
 
@@ -12,6 +13,7 @@ from django.conf import settings
 from django.db import transaction
 from django.db.models import Max
 from django.utils import timezone
+from drf_spectacular.extensions import OpenApiSerializerFieldExtension
 from drf_spectacular.utils import extend_schema_field
 from fsm.serializer_fields import FSMStateField
 from projects.models import Project
@@ -444,6 +446,15 @@ class ViewSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         with transaction.atomic():
+            from data_manager.functions import run_column_access_validation
+
+            request = self.context.get('request')
+            run_column_access_validation(
+                view_lock_project(validated_data),
+                getattr(request, 'user', None),
+                payload=validated_data.get('filter_group'),
+                message='This tab could not be saved because it filters by a column that is not available for your role.',
+            )
             filter_group_data = validated_data.pop('filter_group', None)
             if filter_group_data:
                 filters_data = filter_group_data.pop('filters', [])
@@ -477,6 +488,14 @@ class ViewSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             request = self.context.get('request')
             user = getattr(request, 'user', None)
+            from data_manager.functions import run_column_access_validation
+
+            run_column_access_validation(
+                view_lock_project(instance),
+                user,
+                payload=validated_data.get('filter_group'),
+                message='This tab could not be saved because it filters by a column that is not available for your role.',
+            )
             is_locked = validated_data.pop('is_locked', serializers.empty)
             filter_group_data = validated_data.pop('filter_group', None)
 
@@ -942,10 +961,26 @@ class PrepareParamsFilterItemSerializer(PrepareParamsChildFilterItemSerializer):
     )
 
 
-@extend_schema_field(filters_schema, component_name='PrepareParamsFiltersRequest')
 class PrepareParamsFiltersSerializer(serializers.Serializer):
     conjunction = serializers.ChoiceField(choices=['or', 'and'])
     items = PrepareParamsFilterItemSerializer(many=True)
+
+
+class PrepareParamsFiltersSchemaExtension(OpenApiSerializerFieldExtension):
+    """Publish the canonical filters schema as the PrepareParamsFiltersRequest component.
+
+    Unlike extend_schema_field(filters_schema, ...), this hands drf-spectacular a fresh copy on every schema
+    generation: its enum postprocessing hook rewrites component schemas in place, so sharing the module-level dict
+    left a dangling ConjunctionEnum $ref in every schema generated after the first one in a process (FIT-2939).
+    """
+
+    target_class = PrepareParamsFiltersSerializer
+
+    def get_name(self):
+        return 'PrepareParamsFiltersRequest'
+
+    def map_serializer_field(self, auto_schema, direction):
+        return copy.deepcopy(filters_schema)
 
 
 @extend_schema_field(ordering_schema, component_name='PrepareParamsOrderingRequest')
@@ -957,6 +992,22 @@ class PrepareParamsRequestSerializer(serializers.Serializer):
     filters = PrepareParamsFiltersSerializer(required=False, allow_null=True)
     selectedItems = SelectedItemsSerializer(required=False, allow_null=True)
     ordering = PrepareParamsOrderingField(child=serializers.CharField(), required=False, allow_null=True)
+
+    def validate(self, attrs):
+        request = self.context.get('request')
+        project = self.context.get('project')
+        if project is None and request is not None:
+            project_id = request.query_params.get('project') or request.data.get('project')
+            if project_id:
+                project = Project.objects.filter(pk=project_id).first()
+        from data_manager.functions import run_column_ordering_sanitize
+
+        # Reads/actions may carry denied-column filters from shared tabs; apply them.
+        # View create/update still validates via run_column_access_validation above.
+        user = getattr(request, 'user', None) if request else None
+        if attrs.get('ordering'):
+            attrs['ordering'] = run_column_ordering_sanitize(project, user, attrs.get('ordering')) or []
+        return attrs
 
 
 class ViewDataRequestSerializer(serializers.Serializer):

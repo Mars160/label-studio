@@ -1,6 +1,6 @@
 import { describe, it, expect, mock, afterEach } from "bun:test";
-import { destroy, types } from "mobx-state-tree";
-import { Tab } from "./tab";
+import { destroy, types, unprotect } from "mobx-state-tree";
+import { Tab, VIRTUAL_QUERY_COMPACT_THRESHOLD } from "./tab";
 import { validateFilterSnapshot } from "./filter_snapshot_utils";
 import { raceConditionLockToastMessage } from "./store";
 
@@ -123,6 +123,111 @@ describe("Tab virtual serialize (FIT-1835)", () => {
     expect(result).toHaveProperty("hiddenColumns.explore");
     expect(result).toHaveProperty("hiddenColumns.labeling");
   });
+
+  it("includes columnOrder in virtual tab serialization (FIT-2882)", () => {
+    tab = Tab.create({
+      id: _tabIdCounter++,
+      virtual: true,
+      columnOrder: { "tasks:id": 0, "tasks:data.text": 1 },
+    });
+    const result = tab.serialize();
+    expect(result.columnOrder).toEqual({ "tasks:id": 0, "tasks:data.text": 1 });
+  });
+
+  it("defaults columnOrder to an empty map on new virtual tabs", () => {
+    tab = Tab.create({ id: _tabIdCounter++, virtual: true });
+    expect(tab.columnOrderSnapshot).toEqual({});
+    expect(tab.serialize().columnOrder).toEqual({});
+  });
+});
+
+describe("Tab setColumnOrder (FIT-2882)", () => {
+  let root;
+
+  afterEach(() => {
+    if (root) {
+      destroy(root);
+      root = null;
+    }
+  });
+
+  const createRootWithTab = (tabProps = {}) => {
+    root = LockedTabTestRoot.create({
+      views: [{ id: _tabIdCounter++, virtual: true, ...tabProps }],
+    });
+    unprotect(root);
+    const toasts = [];
+    root.setSDK({
+      projectId: 1,
+      apiVersion: 2,
+      invoke: (_event, payload) => {
+        if (payload?.message) toasts.push(payload);
+      },
+    });
+    const view = root.views[0];
+    // Avoid TabStore.saveView / snapshotToUrl — only assert columnOrder mutation.
+    view.save = mock(() => {});
+    return { view, toasts };
+  };
+
+  it("updates columnOrder and includes it in virtual tab serialization", () => {
+    const { view } = createRootWithTab();
+    const order = { select: 0, "tasks:id": 1, "show-source": 2 };
+    view.setColumnOrder(order);
+    expect(view.columnOrderSnapshot).toEqual(order);
+    expect(view.serialize().columnOrder).toEqual(order);
+    expect(view.save).toHaveBeenCalled();
+  });
+
+  it("replaces previous order entirely on each setColumnOrder", () => {
+    const { view } = createRootWithTab({ columnOrder: { "tasks:id": 0, "tasks:old": 1 } });
+    view.setColumnOrder({ "tasks:id": 1, "tasks:new": 0 });
+    expect(view.columnOrderSnapshot).toEqual({ "tasks:id": 1, "tasks:new": 0 });
+  });
+
+  it("includes columnOrder in apiVersion-2 saved-tab serialize data", () => {
+    const SavedRoot = types
+      .model("SavedRoot", {
+        views: types.array(Tab),
+      })
+      .volatile(() => ({ _sdk: null }))
+      .views((self) => ({
+        get SDK() {
+          return self._sdk;
+        },
+        get apiVersion() {
+          return 2;
+        },
+      }))
+      .actions((self) => ({
+        setSDK(sdk) {
+          self._sdk = sdk;
+        },
+      }));
+
+    const savedRoot = SavedRoot.create({
+      views: [{ id: _tabIdCounter++, saved: true, virtual: false, columnOrder: { "tasks:id": 0 } }],
+    });
+    savedRoot.setSDK({ projectId: 42, invoke: () => {} });
+    try {
+      expect(savedRoot.views[0].serialize().data.columnOrder).toEqual({ "tasks:id": 0 });
+    } finally {
+      destroy(savedRoot);
+    }
+  });
+
+  it("does not change columnOrder when the tab is locked by a manager", () => {
+    const { view, toasts } = createRootWithTab({
+      is_locked: true,
+      locked_by: { name: "Manager" },
+      columnOrder: { "tasks:id": 0 },
+    });
+    const result = view.setColumnOrder({ "tasks:id": 1, "tasks:data.text": 0 });
+    expect(result).toBe(false);
+    expect(view.columnOrderSnapshot).toEqual({ "tasks:id": 0 });
+    expect(view.save).not.toHaveBeenCalled();
+    expect(toasts.length).toBeGreaterThan(0);
+  });
 });
 
 const LockedTabTestRoot = types
@@ -237,5 +342,48 @@ describe("raceConditionLockToastMessage", () => {
     expect(raceConditionLockToastMessage({ is_locked: true, locked_by: null }, true)).toBe(
       "This tab was locked. Your changes could not be saved.",
     );
+  });
+});
+
+describe("Tab virtual query hiddenColumns (FIT-3167)", () => {
+  let tab;
+
+  afterEach(() => {
+    if (tab) {
+      destroy(tab);
+      tab = null;
+    }
+  });
+
+  const hiddenColumns = {
+    explore: ["tasks:data.image", "tasks:agreement", "tasks:annotators"],
+    labeling: ["tasks:annotators", "tasks:data.image", "tasks:total_annotations"],
+  };
+
+  // Enough default-hidden prediction columns (listed in both modes) to push the dict past the threshold
+  const largeHiddenColumns = () => {
+    const ids = Array.from({ length: 200 }, (_, i) => `tasks:predictions_results:field_with_a_realistic_name_${i}`);
+    return { explore: [...ids, "tasks:agreement"], labeling: [...ids, "tasks:annotators"] };
+  };
+
+  it("keeps the explore/labeling dict for small queries so every backend version can read them", () => {
+    tab = Tab.create({ id: _tabIdCounter++, virtual: true, hiddenColumns });
+    expect(encodeURIComponent(tab.query).length).toBeLessThanOrEqual(VIRTUAL_QUERY_COMPACT_THRESHOLD);
+    expect(JSON.parse(tab.query).hiddenColumns).toEqual(hiddenColumns);
+  });
+
+  it("sends only columns hidden in both modes, once, when the dict would make the GET URL too long", () => {
+    const large = largeHiddenColumns();
+    tab = Tab.create({ id: _tabIdCounter++, virtual: true, hiddenColumns: large });
+    const query = JSON.parse(tab.query);
+
+    expect(query.hiddenColumns).toEqual(large.explore.slice(0, -1));
+    // Roughly half the size of sending both lists
+    expect(encodeURIComponent(tab.query).length).toBeLessThan(encodeURIComponent(JSON.stringify(large)).length * 0.6);
+  });
+
+  it("keeps the full explore/labeling lists in serialize() for annotator column persistence", () => {
+    tab = Tab.create({ id: _tabIdCounter++, virtual: true, hiddenColumns });
+    expect(tab.serialize().hiddenColumns).toEqual(hiddenColumns);
   });
 });

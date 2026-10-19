@@ -512,7 +512,9 @@ Tasks are shown in randomized task order while preserving the stable order of an
 
 <dd>
 
-Configure what rejection options are available to reviewers. 
+Select which reject options are available to reviewers, and which one is the default. 
+
+Use the **Available** column to choose the options. At least one option must be available. Use the **Default** column to choose the option that is applied when a reviewer clicks **Reject** without opening the menu. 
 
 <table>
 <thead>
@@ -524,44 +526,59 @@ Configure what rejection options are available to reviewers.
 <tr>
 <td>
 
-**Requeue rejected annotations back to annotators**
+**Reject and do not require rework**
 </td>
 <td>
 
-When a reviewer clicks **Reject**, the annotation is reassigned back to the annotator. 
+The annotation is rejected and is not sent back to the annotator for rework. 
 
-</td>
-</tr>
-<td>
-
-**Remove rejected annotations from labeling queue**
-</td>
-<td>
-
-When a reviewer clicks **Reject**, the annotation is not reassigned back to the annotator. 
+This is the default for new projects.
 
 </td>
 </tr>
 <tr>
 <td>
 
-**Allow reviewer to choose: Requeue or Remove**
+**Reject and return to annotator**
 </td>
 <td>
 
-Reviewers see the following options:
+The annotation is rejected and sent back to the original annotator for rework. The annotator sees the rejected annotation in their labeling stream and can update it. The updated annotation is then shown to reviewers again in the review stream. 
 
-* **Accept**
-* **Remove** -- When selected, the annotation is rejected and removed from the labeling queue. 
-* **Requeue** -- When selected, the annotation is rejected and then reassigned back to the annotator.  
+</td>
+</tr>
+<tr>
+<td>
 
-For example, a reviewer might decide to requeue an annotation that is nearly correct but just needs a slight change. However, an annotation with numerous errors may be easier to simply reject entirely and remove from the queue. 
+**Reject and pass to another annotator**
+</td>
+<td>
 
-Note that when you click **Remove**, the annotation is also marked as cancelled/skipped. This is reflected in various metrics (for example, Data Manager columns and dashboards), and differentiates between the two rejection actions in the API with `was_cancelled: true`. 
+The annotation is rejected and the task is sent to a different annotator for a new annotation. 
+
+The rejected annotation no longer counts toward the project's [overlap](#overlap), which opens one slot on the task for another annotator. The original annotator can no longer update the rejected annotation. The annotation, its rejection, and the time spent on it remain in the Data Manager and in dashboards.
+
+This option is only available when [**Task Assignment**](#distribute-tasks) is set to **Automatic**.
 
 </td>
 </tr>
 </table>
+
+When only one option is available, reviewers see a single **Reject** button that applies it. When more than one option is available, reviewers can click **Reject** to apply the default option, or open the reject menu to choose another option:
+
+* **No Rework** -- Reject without sending for rework.
+* **Return to Annotator** -- Reject and send back to the original annotator for rework.
+* **Pass to Another Annotator** -- Reject and send to a different annotator.
+
+![Screenshot of the reject menu](/images/review/reject-menu.png)
+
+For example, a reviewer might return an annotation that is nearly correct and only needs a small change. For an annotation with numerous errors, they might pass the task to another annotator instead. 
+
+The same options are available when reviewers reject annotations in bulk from the Data Manager. 
+
+Changing the available options only affects future rejections. Annotations that were already rejected keep the outcome that the reviewer chose. For example, annotations that were returned to an annotator can still be updated by that annotator after you make **Reject and return to annotator** unavailable. 
+
+Separately, you can enable **Reviewers must leave a comment on reject** to require reviewers to add a comment before they can reject an annotation from the review stream. This does not apply to bulk rejections from the Data Manager.
 
 </dd>
 
@@ -722,7 +739,7 @@ Note that enforcement only applies when the user submitting the annotation is in
 
 Set limits on how many tasks each individual user can annotate. This can be useful if you are concerned with preventing any potential bias that might arise from a small set of power users completing a majority of project tasks. 
 
-When an annotator reaches their limit, they will see a notification telling them that they have been paused. When paused, an annotator can no longer access the project. 
+When an annotator reaches their limit, they will see a notification telling them that they have been paused. This is a flexible pause: the annotator cannot begin any new annotation work, but they keep access to the project so that they can update annotations that reviewers have rejected. For more information, see [Full and flexible pauses](quality#Full-and-flexible-pauses). 
 
 When **Limit tasks per annotator** is enabled, you will see the following options:
 
@@ -743,7 +760,7 @@ For more information about pausing annotators, including how to manually pause s
 !!! note
     Pauses are enforced for users in Annotator and Reviewer roles. 
     
-    So, for example, if a Reviewer is also annotating tasks and they hit the annotation limit, they will be unable to regain access to the project to review annotations unless they are unpaused. 
+    Because this is a flexible pause, it only stops new annotation work. So, for example, if a Reviewer is also annotating tasks and they hit the annotation limit, they can continue reviewing other people's annotations. 
 
     Users in the Manager, Administrator, or Owner role are unaffected by the task limit.
 
@@ -876,14 +893,14 @@ You can see each annotator's evaluation status and who is paused from the **Memb
 
 When users are paused as part of the annotator evaluation workflow, you cannot manually unpause them from the Members pause toggle. They are unpaused automatically if their score recovers. You can also relax the evaluation settings for the project, for example by increasing the minimum sample or changing the score threshold.
 
-If your project requeues rejected annotations, paused annotators can still receive and update their rejected work from the labeling stream and the Data Manager. When you evaluate against acceptance score, updating a rejected annotation does not lift the pause by itself; a reviewer has to record a new verdict that improves the score.
+If your project requeues rejected annotations, paused annotators can still receive and update their rejected work from the labeling stream and the Data Manager. When you evaluate against acceptance score, updating a rejected annotation does not lift the pause by itself; a reviewer has to record a new verdict that improves the score. For more information, see [Recover from a flexible pause](quality#Recover-from-a-flexible-pause).
 
 For more information about pausing annotators, including how to manually pause specific annotators, see [Pause an annotator](quality#Pause-an-annotator).
 
 !!! note
     Pauses are enforced for users in Annotator and Reviewer roles.  
     
-    So, for example, if a Reviewer is also annotating tasks and they fail evaluation, they will be unable to regain access to the project to review annotations unless they are unpaused.
+    Because this is a flexible pause, it only stops new annotation work. So, for example, if a Reviewer is also annotating tasks and they fail evaluation, they can continue reviewing other people's annotations.
 
     Users in the Manager, Administrator, or Owner role are unaffected by evaluation requirements. 
 

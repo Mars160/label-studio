@@ -1,16 +1,6 @@
 import { getRoot, getSnapshot, types } from "mobx-state-tree";
-import {
-  IconCommentCheck,
-  IconCommentRed,
-  IconAnnotation,
-  IconBanSquare,
-  IconSparkSquare,
-  IconStarSquare,
-  IconThumbsDown,
-  IconThumbsUp,
-} from "@humansignal/icons";
-import * as CellViews from "../../components/CellViews";
-import { normalizeCellAlias } from "../../components/CellViews";
+import { cellViewFor } from "./cell_view";
+import { getColumnIconByAlias } from "../../utils/columnIcons";
 import { all } from "../../utils/utils";
 import { StringOrNumberID } from "../types";
 
@@ -32,6 +22,7 @@ export const ViewColumnType = types.enumeration([
   "AgreementSelected",
   "TaskState",
   "PaymentStatus",
+  "Submission",
 ]);
 
 const typeShortMap = {
@@ -47,6 +38,7 @@ const typeShortMap = {
   HyperText: "html",
   TimeSeries: "ts",
   Time: "time",
+  Submission: "file",
 };
 
 export const ViewColumnTypeShort = (type) => typeShortMap[type] || "str";
@@ -64,6 +56,7 @@ const typeNameMap = {
   HyperText: "Hyper Text",
   TimeSeries: "Time Series",
   Time: "Time",
+  Submission: "Submission",
 };
 
 export const ViewColumnTypeName = (type) => typeNameMap[type] || "String";
@@ -90,6 +83,10 @@ export const TabColumn = types
     disabled: types.optional(types.boolean, false),
     // Whether this field can be selected when creating or changing a filter.
     available_for_new_filters: types.optional(types.boolean, true),
+    // Whether the field can only be a child of another filter, never a filter of its own
+    child_only: types.optional(types.boolean, false),
+    // Value a new filter on this column starts with, instead of the type's default
+    filter_default_value: types.frozen(),
     // Whether a persisted filter can currently be evaluated and edited.
     filter_available: types.optional(types.boolean, true),
     unavailable_reason: types.maybeNull(types.string),
@@ -103,7 +100,7 @@ export const TabColumn = types
       if (self.children) {
         return all(self.children, (c) => c.is_hidden);
       }
-      return self.hidden || (self.parentView?.hiddenColumns.hasColumn(self) ?? (self.parent.is_hidden || false));
+      return self.hidden || (self.parentView?.hiddenColumns?.hasColumn(self) ?? (self.parent?.is_hidden || false));
     },
 
     get parentView() {
@@ -166,7 +163,7 @@ export const TabColumn = types
         const childColumns = [].concat(...self.children.map((subColumn) => subColumn.asField));
 
         result.push(...childColumns);
-      } else if (!self.isAnnotationResultsFilterColumn) {
+      } else if (!self.isFilterOnlyColumn) {
         result.push({
           ...self,
           id: self.key,
@@ -182,26 +179,7 @@ export const TabColumn = types
     },
 
     get icon() {
-      switch (self.alias) {
-        case "total_annotations":
-          return <IconAnnotation width="20" height="20" className="text-primary-icon" />;
-        case "cancelled_annotations":
-          return <IconBanSquare width="20" height="20" className="text-negative-icon" />;
-        case "total_predictions":
-          return <IconSparkSquare width="20" height="20" className="text-accent-plum-bold" />;
-        case "reviews_accepted":
-          return <IconThumbsUp width="20" height="20" className="text-positive-icon" />;
-        case "reviews_rejected":
-          return <IconThumbsDown width="20" height="20" className="text-negative-icon" />;
-        case "ground_truth":
-          return <IconStarSquare width="20" height="20" className="text-warning-icon" />;
-        case "comment_count":
-          return <IconCommentCheck width="20" height="20" className="text-warning-icon" />;
-        case "unresolved_comment_count":
-          return <IconCommentRed width="20" height="20" className="text-warning-icon" />;
-        default:
-          return null;
-      }
+      return getColumnIconByAlias(self.alias, { width: 20, height: 20 });
     },
 
     get readableType() {
@@ -219,11 +197,7 @@ export const TabColumn = types
     },
 
     get filterable() {
-      const byAlias = CellViews[normalizeCellAlias(self.alias)];
-      const byType = CellViews[self.type];
-      const cellView = byAlias?.customOperators ? byAlias : (byType ?? byAlias);
-
-      return cellView?.filterable !== false;
+      return cellViewFor(self)?.filterable !== false;
     },
 
     get isAnnotationResultsFilterColumn() {
@@ -235,6 +209,15 @@ export const TabColumn = types
         "predictions_dimension_results",
       ];
       return hidden_column_ids.some((id) => self.id.includes(`${id}.`) || self.id.endsWith(`:${id}`));
+    },
+
+    get isReviewsFilterColumn() {
+      return self.id === `${self.target}:reviews` || self.id.startsWith(`${self.target}:reviews.`);
+    },
+
+    // Filter-only columns: not shown in the column selector or the table, but available as filters.
+    get isFilterOnlyColumn() {
+      return self.isAnnotationResultsFilterColumn || self.isReviewsFilterColumn;
     },
   }))
   .actions((self) => ({

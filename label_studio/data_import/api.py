@@ -4,6 +4,7 @@ import json
 import logging
 import mimetypes
 import time
+import traceback
 from urllib.parse import unquote, urlparse
 
 from core.decorators import override_report_only_csp
@@ -18,10 +19,12 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.db import transaction
 from django.http import HttpResponse
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, OpenApiResponse, extend_schema
 from label_studio_sdk.label_interface import LabelInterface
+from projects.import_health import mark_import_job_finished
 from projects.models import Project, ProjectImport, ProjectReimport
 from ranged_fileresponse import RangedFileResponse
 from rest_framework import generics, status
@@ -61,7 +64,15 @@ def get_admin_project_or_404(request, pk):
     return project
 
 
+_ENQUEUE_FAIL_ERROR = 'Failed to enqueue background job. No tasks were committed from this job; safe to retry.'
+
 ProjectImportPermission = load_func(settings.PROJECT_IMPORT_PERMISSION)
+
+# Types a browser renders as a document (and would execute scripts from); mirrored
+# by the $uploaded_file_csp map in deploy/default.conf for the NGINX serving paths.
+SANDBOXED_UPLOAD_CONTENT_TYPES = frozenset(
+    ['text/html', 'application/xhtml+xml', 'image/svg+xml', 'text/xml', 'application/xml']
+)
 
 task_create_response_scheme = {
     201: OpenApiResponse(
@@ -384,6 +395,7 @@ class ImportAPI(generics.CreateAPIView):
             preannotated_from_fields=preannotated_from_fields,
             commit_to_project=commit_to_project,
             return_task_ids=return_task_ids,
+            updated_at=timezone.now(),
         )
 
         if len(request.FILES) > 0:
@@ -416,15 +428,33 @@ class ImportAPI(generics.CreateAPIView):
         else:
             raise ValidationError('load_tasks: No data found in DATA or in FILES')
 
-        start_job_async_or_sync(
-            async_import_background,
-            project_import.id,
-            request.user.id,
-            queue_name='high',
-            on_failure=set_import_background_failure,
-            project_id=project.id,
-            organization_id=request.user.active_organization.id,
-        )
+        try:
+            job = start_job_async_or_sync(
+                async_import_background,
+                project_import.id,
+                request.user.id,
+                queue_name='high',
+                job_timeout=settings.RQ_LONG_JOB_TIMEOUT,
+                on_failure=set_import_background_failure,
+                project_id=project.id,
+                organization_id=request.user.active_organization.id,
+            )
+        except Exception:
+            # Enqueue failed after the CREATED row was committed — mark failed so it
+            # is not left as an orphan with no job_id. Do not wrap job_id save: if
+            # enqueue succeeded, a worker may already be running.
+            mark_import_job_finished(
+                project_import,
+                ProjectImport.Status.FAILED,
+                error=_ENQUEUE_FAIL_ERROR,
+                traceback_text=traceback.format_exc(),
+            )
+            raise
+
+        job_id = getattr(job, 'id', None)
+        if job_id:
+            project_import.job_id = str(job_id)
+            project_import.save(update_fields=['job_id'])
 
         response = {'import': project_import.id}
         return Response(response, status=status.HTTP_201_CREATED)
@@ -736,18 +766,36 @@ class ReImportAPI(ImportAPI):
 
     def async_reimport(self, project, file_upload_ids, files_as_tasks_list, organization_id):
         project_reimport = ProjectReimport.objects.create(
-            project=project, file_upload_ids=file_upload_ids, files_as_tasks_list=files_as_tasks_list
+            project=project,
+            file_upload_ids=file_upload_ids,
+            files_as_tasks_list=files_as_tasks_list,
+            updated_at=timezone.now(),
         )
 
-        start_job_async_or_sync(
-            async_reimport_background,
-            project_reimport.id,
-            organization_id,
-            self.request.user,
-            queue_name='high',
-            on_failure=set_reimport_background_failure,
-            project_id=project.id,
-        )
+        try:
+            job = start_job_async_or_sync(
+                async_reimport_background,
+                project_reimport.id,
+                organization_id,
+                self.request.user,
+                queue_name='high',
+                job_timeout=settings.RQ_LONG_JOB_TIMEOUT,
+                on_failure=set_reimport_background_failure,
+                project_id=project.id,
+            )
+        except Exception:
+            mark_import_job_finished(
+                project_reimport,
+                ProjectReimport.Status.FAILED,
+                error=_ENQUEUE_FAIL_ERROR,
+                traceback_text=traceback.format_exc(),
+            )
+            raise
+
+        job_id = getattr(job, 'id', None)
+        if job_id:
+            project_reimport.job_id = str(job_id)
+            project_reimport.save(update_fields=['job_id'])
 
         response = {'reimport': project_reimport.id}
         return Response(response, status=status.HTTP_201_CREATED)
@@ -914,7 +962,12 @@ class FileUploadListAPI(generics.mixins.ListModelMixin, generics.mixins.DestroyM
 )
 class FileUploadAPI(generics.RetrieveUpdateDestroyAPIView):
     parser_classes = (JSONParser, MultiPartParser, FormParser)
-    permission_classes = (IsAuthenticated,)
+    permission_required = ViewClassPermission(
+        GET=all_permissions.projects_view,
+        PATCH=all_permissions.projects_change,
+        PUT=all_permissions.projects_change,
+        DELETE=all_permissions.projects_change,
+    )
     serializer_class = FileUploadSerializer
 
     def get_queryset(self):
@@ -1076,6 +1129,11 @@ class DownloadStorageData(APIView):
             response = RangedFileResponse(request, file_obj.open(mode='rb'), content_type=content_type)
             response['Content-Disposition'] = f'inline; filename="{filepath}"'
             response['filename'] = filepath
+            # Served inline from the app origin, so an uploaded document would run its
+            # scripts with the viewer's session; sandbox only the types a browser
+            # renders as a document, to keep the PDF viewer working.
+            if content_type in SANDBOXED_UPLOAD_CONTENT_TYPES:
+                response['Content-Security-Policy'] = 'sandbox'
             return response
 
     def build_streamer_delegation(self, file_obj, filepath):

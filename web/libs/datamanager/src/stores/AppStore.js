@@ -3,6 +3,7 @@ import { runInAction } from "mobx";
 import { emitDatamanagerEvent, labelingDisplayViewFromLsf } from "../utils/datamanagerTelemetry";
 import { Modal } from "../components/Common/Modal/Modal";
 import { FF_DISABLE_GLOBAL_USER_FETCHING, FF_LOPS_E_3, isFF } from "../utils/feature-flags";
+import { FF_PROJECT_DM_COLUMN_DEFAULTS, isActive } from "@humansignal/core/lib/utils/feature-flags";
 import { History } from "../utils/history";
 import { isDefined } from "../utils/utils";
 import { Action } from "./Action";
@@ -137,12 +138,14 @@ export const AppStore = types
       if (self._poll) return;
       if (self.SDK.polling === false) return;
 
-      const poll = async (self) => {
-        if (networkActivity.active) await self.fetchProject({ interaction: "timer" });
-        self._poll = setTimeout(() => poll(self), PROJECTS_FETCH_PERIOD);
+      const poll = async (store) => {
+        if (networkActivity.active) await store.fetchProject({ interaction: "timer" });
+        store._poll = setTimeout(() => poll(store), PROJECTS_FETCH_PERIOD);
       };
 
-      poll(self);
+      // The grid just loaded the project. Wait a full period before the timer
+      // poll so it does not refetch in the same turn.
+      self._poll = setTimeout(() => poll(self), PROJECTS_FETCH_PERIOD);
     },
 
     afterCreate() {
@@ -504,6 +507,31 @@ export const AppStore = types
       self.loading = value;
     },
 
+    /**
+     * Shallow-merge fields onto the in-memory project (e.g. after Save as Default).
+     * Prefer this over a full fetchProject when the caller already has the updated payload —
+     * Reset / new tabs read `project.dm_column_defaults` from this store (FIT-2847).
+     */
+    patchProject(fields) {
+      if (!fields || typeof fields !== "object") return;
+      self.project = Object.assign({}, self.project ?? {}, fields);
+    },
+
+    /**
+     * Re-fetch /api/dm/columns and rebuild the filter catalog.
+     * Used by the Refresh button so mid-session denials are reflected before
+     * the tasks request (FIT-2850). Does not reload tasks itself.
+     */
+    refreshColumns: flow(function* () {
+      const response = yield self.apiCall("columns");
+      if (!response || response.error) return false;
+
+      const columns = response.columns ?? (Array.isArray(response) ? response : []);
+      self.viewsStore.columnsRaw = columns;
+      self.viewsStore.fetchColumns({ deferSelectedReload: true });
+      return true;
+    }),
+
     fetchProject: flow(function* (options = {}) {
       self.projectFetch = options.force === true;
 
@@ -612,18 +640,30 @@ export const AppStore = types
 
       self.viewsStore.fetchColumns();
 
-      const projectRequest = self.fetchProject();
+      const applyProjectDefaultsFirst = isActive(FF_PROJECT_DM_COLUMN_DEFAULTS);
+
+      // FIT-2846: when project soft defaults are enabled, finish fetchProject before constructing
+      // the first Default / virtual tab so defaults are available. Flag-off keeps parallel fetch,
+      // so start the project request now and await it together with the tabs.
+      const projectRequest = applyProjectDefaultsFirst ? null : self.fetchProject();
 
       // Task assignees use MST user references, so users must be registered before tabs hydrate task lists.
       if (!isFF(FF_DISABLE_GLOBAL_USER_FETCHING)) {
         yield self.fetchUsers();
       }
 
-      const requests = [projectRequest];
+      let projectFetched = true;
+      if (applyProjectDefaultsFirst) {
+        projectFetched = yield self.fetchProject();
+      }
 
-      if (!isLabelStream || (self.project?.show_annotation_history && task)) {
+      const shouldLoadTabs = !isLabelStream || (self.project?.show_annotation_history && task);
+      const shouldLoadLabelStreamTab = isLabelStream && !!tab;
+      const tabRequests = [];
+
+      if (projectFetched && shouldLoadTabs) {
         if (self.SDK.settings?.onlyVirtualTabs && self.project?.show_annotation_history && !task) {
-          requests.push(
+          tabRequests.push(
             self.viewsStore.addView(
               {
                 virtual: true,
@@ -634,7 +674,7 @@ export const AppStore = types
             ),
           );
         } else if (self.SDK.type === "labelops") {
-          requests.push(
+          tabRequests.push(
             self.viewsStore.addView(
               {
                 virtual: false,
@@ -645,15 +685,22 @@ export const AppStore = types
             ),
           );
         } else {
-          requests.push(self.viewsStore.fetchTabs(tab, task, labeling));
+          tabRequests.push(self.viewsStore.fetchTabs(tab, task, labeling));
         }
-      } else if (isLabelStream && !!tab) {
+      } else if (projectFetched && shouldLoadLabelStreamTab) {
         const { selectedItems } = parseDmQueryParam(query);
 
-        requests.push(self.viewsStore.fetchSingleTab(tab, selectedItems ?? {}));
+        tabRequests.push(self.viewsStore.fetchSingleTab(tab, selectedItems ?? {}));
       }
 
-      const [projectFetched] = yield Promise.all(requests);
+      if (applyProjectDefaultsFirst) {
+        if (tabRequests.length) {
+          yield Promise.all(tabRequests);
+        }
+      } else {
+        const requests = [projectRequest, ...tabRequests];
+        [projectFetched] = yield Promise.all(requests);
+      }
 
       if (projectFetched) {
         self.resolveURLParams();

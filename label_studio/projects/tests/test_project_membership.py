@@ -33,6 +33,16 @@ class ProjectMembershipAPITest(APITestCase):
             role=ProjectMemberRole.ANNOTATOR,
         )
 
+    def test_import_job_lists_are_admin_only(self):
+        for user in (self.annotator, self.nonmember, self.admin):
+            self.client.force_authenticate(user)
+            for endpoint in ('imports', 'reimports'):
+                response = self.client.get(f'/api/projects/{self.project.id}/{endpoint}/')
+                if user == self.admin:
+                    assert response.status_code == 200, response.content
+                else:
+                    assert response.status_code in (403, 404), response.content
+
     def test_project_creator_is_admin_and_nonmember_cannot_see_project(self):
         creator_membership = ProjectMember.objects.get(project=self.project, user=self.admin)
         assert creator_membership.role == ProjectMemberRole.ADMIN
