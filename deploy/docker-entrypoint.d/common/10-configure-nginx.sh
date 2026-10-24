@@ -62,8 +62,22 @@ LABEL_STUDIO_HOST_NO_TRAILING_SLASH=${LABEL_STUDIO_HOST_NO_SCHEME%/}
 LABEL_STUDIO_HOST_SUBPATH=$(echo "$LABEL_STUDIO_HOST_NO_TRAILING_SLASH" | cut -d'/' -f2- -s)
 
 if [ -n "${LABEL_STUDIO_HOST_SUBPATH:-}" ] && [ -w $NGINX_CONFIG ]; then
+  # This value is interpolated into both sed expressions and nginx directives.
+  case "$LABEL_STUDIO_HOST_SUBPATH" in
+    *[!a-zA-Z0-9_./%~-]*)
+      echo >&3 "ERROR: LABEL_STUDIO_HOST contains an unsupported subpath."
+      exit 1
+      ;;
+  esac
   echo >&3 "=> Adding subpath to nginx config $NGINX_CONFIG ..."
-  sed -i "s|^\(\s*\)\(location \/\)|\1\2$LABEL_STUDIO_HOST_SUBPATH\/|g" $NGINX_CONFIG
+  sed -i "s|^\(\s*\)\(location \/\)|\1\2$LABEL_STUDIO_HOST_SUBPATH\/|g" "$NGINX_CONFIG"
+  # Once location / is prefixed, nginx otherwise falls back to its compiled-in
+  # document root for /. Keep redirects relative for TLS-terminating proxies,
+  # and never expose the default document root for paths outside the subpath.
+  sed -i "/# SUBPATH_FALLBACK:/c\\
+    location = / { absolute_redirect off; return 302 /$LABEL_STUDIO_HOST_SUBPATH/\$is_args\$args; }\\
+    location = /$LABEL_STUDIO_HOST_SUBPATH { absolute_redirect off; return 302 /$LABEL_STUDIO_HOST_SUBPATH/\$is_args\$args; }\\
+    location / { return 404; }" "$NGINX_CONFIG"
   echo >&3 "=> Successfully added subpath to nginx config."
 else
   echo >&3 "=> Skipping adding subpath to nginx config."
