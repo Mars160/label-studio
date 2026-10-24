@@ -4,6 +4,7 @@
 # Except:
 !deploy/docker-entrypoint.d/**
 !deploy/docker-entrypoint.sh
+!deploy/docker-data-init.sh
 !deploy/heroku_run.sh
 !deploy/uwsgi.ini
 !deploy/default.conf
