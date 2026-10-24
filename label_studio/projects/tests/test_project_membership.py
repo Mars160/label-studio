@@ -2,6 +2,7 @@ import importlib
 from types import SimpleNamespace
 from unittest.mock import patch
 
+from data_export.models import ConvertedFormat, Export
 from data_manager.managers import apply_filters
 from data_manager.models import View
 from data_manager.prepare_params import ConjunctionEnum, Filter, Filters
@@ -721,6 +722,106 @@ class ProjectRoleVisibilityAPITest(APITestCase):
         )
         assert response.status_code == 403
         healthcheck.assert_not_called()
+
+
+class ProjectExportAccessControlTest(APITestCase):
+    """Export snapshots, conversions, downloads, and the nginx auth check stay admin-only."""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.project = ProjectFactory()
+        cls.admin = cls.project.created_by
+        cls.annotator = UserFactory(active_organization=cls.project.organization)
+        cls.nonmember = UserFactory(active_organization=cls.project.organization)
+        ProjectMember.objects.create(
+            project=cls.project,
+            user=cls.annotator,
+            role=ProjectMemberRole.ANNOTATOR,
+        )
+        cls.export = Export.objects.create(project=cls.project, created_by=cls.admin)
+
+    def _urls(self):
+        base = f'/api/projects/{self.project.id}'
+        return {
+            'list': f'{base}/exports/',
+            'detail': f'{base}/exports/{self.export.id}',
+            'download': f'{base}/exports/{self.export.id}/download',
+            'convert': f'{base}/exports/{self.export.id}/convert',
+            'sync_export': f'{base}/export',
+            'formats': f'{base}/export/formats',
+            'files': f'{base}/export/files',
+        }
+
+    def test_admin_can_list_read_and_delete_export_snapshots(self):
+        self.client.force_authenticate(self.admin)
+        urls = self._urls()
+
+        response = self.client.get(urls['list'])
+        assert response.status_code == 200, response.content
+        assert [item['id'] for item in response.json()] == [self.export.id]
+
+        assert self.client.get(urls['detail']).status_code == 200
+        assert self.client.get(urls['formats']).status_code == 200
+
+        response = self.client.delete(urls['detail'])
+        assert response.status_code == 204, response.content
+        assert not Export.objects.filter(id=self.export.id).exists()
+
+    def test_annotator_is_denied_every_export_endpoint(self):
+        self.client.force_authenticate(self.annotator)
+        urls = self._urls()
+
+        assert self.client.get(urls['list']).status_code == 403
+        assert self.client.post(urls['list'], {}, format='json').status_code == 403
+        assert self.client.get(urls['detail']).status_code == 403
+        assert self.client.get(urls['download']).status_code == 403
+        assert self.client.post(urls['convert'], {'export_type': 'CSV'}, format='json').status_code in (403, 404)
+
+        # Endpoints scoped through ``admin_for_user`` hide the project entirely.
+        assert self.client.get(urls['sync_export']).status_code == 404
+        assert self.client.get(urls['formats']).status_code == 404
+        assert self.client.get(urls['files']).status_code == 404
+
+        # A rejected convert request must not queue conversion work.
+        assert ConvertedFormat.objects.count() == 0
+
+    def test_annotator_cannot_delete_or_create_export_snapshots(self):
+        self.client.force_authenticate(self.annotator)
+        urls = self._urls()
+        before = Export.objects.count()
+
+        assert self.client.delete(urls['detail']).status_code == 403
+        assert self.client.post(urls['list'], {}, format='json').status_code == 403
+
+        assert Export.objects.count() == before
+        assert Export.objects.filter(id=self.export.id).exists()
+
+    def test_nonmember_cannot_reach_export_endpoints(self):
+        self.client.force_authenticate(self.nonmember)
+        urls = self._urls()
+
+        assert self.client.get(urls['list']).status_code == 404
+        assert self.client.get(urls['detail']).status_code == 404
+        assert self.client.get(urls['download']).status_code == 404
+        assert self.client.get(urls['sync_export']).status_code == 404
+
+    def test_export_auth_check_rejects_annotator(self):
+        self.client.force_authenticate(self.annotator)
+        response = self.client.get(
+            '/api/auth/export/',
+            HTTP_X_ORIGINAL_URI=f'/export/{self.project.id}-snapshot.json',
+        )
+        assert response.status_code in (403, 404), response.content
+        assert response.content != b'{"detail": "auth ok"}'
+
+    def test_export_auth_check_allows_admin(self):
+        self.client.force_authenticate(self.admin)
+        response = self.client.get(
+            '/api/auth/export/',
+            HTTP_X_ORIGINAL_URI=f'/export/{self.project.id}-snapshot.json',
+        )
+        assert response.status_code == 200, response.content
+        assert response.json() == {'detail': 'auth ok'}
 
 
 class ProjectMembershipBackfillTest(TestCase):

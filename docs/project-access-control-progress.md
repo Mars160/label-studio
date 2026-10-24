@@ -1,6 +1,6 @@
 # Project Access Control Progress
 
-Last reviewed: 2026-10-19
+Last reviewed: 2026-10-24
 
 Status: **Implemented on `develop`; PostgreSQL migration verification remains an environment follow-up**
 
@@ -90,6 +90,12 @@ The following commands/checks have passed in the local test environment:
 | 2026-08-12 Ruff, `compileall`, conflict-marker, and diff checks | Passed |
 | 2026-08-23 upstream merge focused access-control/backend regression suite | 282 passed |
 | 2026-08-23 Ruff, `compileall`, Django check, migration drift, conflict-marker, and diff checks | Passed |
+| 2026-10-24 upstream merge export admin-gate regression class | 6 passed |
+| 2026-10-24 upstream merge `projects/tests tasks/tests data_manager/tests data_export/tests` | 506 passed, 183 subtests |
+| 2026-10-24 Tavern label-manager and export suites (from repository root) | 14 passed |
+| 2026-10-24 Ruff 0.17.1 check/format on resolved Python files, Django check, migration drift, resolved-file diff checks | Passed |
+| 2026-10-24 frontend Tabs/AppStore/AnnotationButton and interface/Controls/collection-uploader unit tests (merge owner) | 317 passed |
+| 2026-10-24 deployment tests, non-root and root (merge owner) | 26 passed and 4 passed |
 
 Tests cover creator-admin provisioning, nonmember hiding, admin-only membership visibility and management, atomic multi-account role assignment and rollback, eligible-account full-name/username search, account-enumeration resistance, empty and invalid batch rejection, role management, active-user-aware final-admin protection, deactivation/soft/hard-offboarding replacement-admin promotion, disabled membership, admin/annotator annotation and draft visibility, role-safe Data Manager filtering, own-tab isolation, tab-owner immutability and persistence, annotator denial for ground-truth/prediction/model-version/live-ML/import/storage/webhook operations, prediction/draft/label relationship integrity, credential redaction, organization-level webhooks, migration promotion behavior, Data Manager task-path assignee references, project-scoped user filter options, project hotkey access, the opensource user-fetch feature-flag override, missing assignee degradation, and affected existing API behavior.
 
@@ -107,6 +113,29 @@ Upstream target: `HumanSignal/label-studio` develop at `5b17e744a` (205 incoming
 - Frontend: 22 tests passed across AppStore, Assignee, and feature flags. AppStore Biome check passed with one existing warning. Production `cd web && bun run build` passed (Vite application and service worker; Vite build took 12.30 seconds). Non-blocking warnings: outdated Browserslist data, runtime URL resolution, browser-externalized `module` from audio-file-decoder, and large chunks. Build-generated backend static-file changes were cleaned up.
 - Ruff lint/format passed on six resolved backend files, three updated test files, and the merge migration. Django system check and migration drift check passed.
 - Complete backend suite and PostgreSQL migration verification were not run. Incoming upstream documentation contains trailing whitespace reported by the full merge diff check; retained unchanged outside the resolved conflict.
+
+## 2026-10-24 upstream synchronization verification
+
+Upstream target: `HumanSignal/label-studio` develop at `284a2e72f` (34 incoming commits, merge base `5b17e744a`). Conflicts in `Dockerfile`, `uv.lock`, and `label_studio/data_export/api.py` were resolved while preserving local deployment and access-control changes.
+
+- Resolved the import conflict as `APIException, NotFound, PermissionDenied, ValidationError`. The local `PermissionDenied` admin gates and upstream's `ExportFileDeleteError` (`APIException`) are both required.
+- All local export gates are retained on top of the upstream export-file cleanup: the nginx auth check, `ExportListAPI`, `ExportDetailAPI`, and `ExportDownloadAPI` still reject non-admin project members with `PermissionDenied`, and the deprecated sync export plus `export/formats`/`export/files` still scope through `Project.objects.admin_for_user`. Upstream's `ExportDetailAPI.perform_destroy` deletes rows and snapshot/converted files inside one transaction and is now covered by the incoming `data_export/tests/test_file_cleanup.py` suite.
+- Added `ProjectExportAccessControlTest` covering annotator denial for list/create/detail/download/convert/sync-export/formats/files and the `/api/auth/export/` auth check, nonmember `404` hiding, rejection without queuing conversion work, and admin list/detail/formats/delete success.
+- `data_manager/serializers.py`: upstream's row-lock timeout, `ViewSaveConflictError` (`409`), and bulk filter inserts merged cleanly. The local `read_only_fields = ('user',)`, membership `validate_project`, `visible_annotations`, `Annotation.objects.for_user`, and `AnnotationDraft.objects.for_user` scoping are unchanged, so annotator tab/annotation/draft isolation still holds.
+- `labels_manager/serializers.py`: upstream's `OrganizationProjectField`/`OrganizationLabelField` organization scoping and `read_only_fields` on `LabelSerializer` now run in addition to the three local admin-only `validate_project` checks and the cross-organization label/project validation. The combined behavior is strictly stricter; no local restriction was dropped.
+- `tasks/models.py`: upstream changed `Task.get_predictions_for_prelabeling` so an empty `project.model_version` returns all task predictions instead of filtering on the empty version. This matches the existing `DataManagerTaskSerializer.get_predictions` behavior (`get_task_predictions_queryset` returns all task predictions) and only applies when the project has `show_collab_predictions` enabled; prediction visibility is not role-scoped in this fork, so no new cross-role disclosure is introduced. Local annotation/draft role scoping in the same file is intact.
+- Data Manager frontend: only upstream changed `web/libs/datamanager/src/stores/Tabs/store.js` (409 conflict handling), while the local `AppStore.js`/`Assignee.js` role work was untouched by upstream, so no ownership-isolation logic was dropped. The 409 path keeps local edits and clears the client snapshot instead of reporting a successful save.
+- Docker defaults follow upstream Python 3.14 and uv 0.13.5 while retaining the fork's mainland mirrors, build parallelism options, and data initialization. Nginx follows upstream's four-worker default and retains the fork's routing fixes.
+- The resolved lock matches upstream package metadata, versions and hashes exactly apart from the fork's mirror URLs. `uv lock --check --offline` passed with uv 0.13.5.
+- Full merge diff checks report upstream vendored font-license CRLF/trailing whitespace in `web/.design-sync/fonts/ibm-plex-mono/OFL.txt`; the vendor license was retained unchanged. Resolved-file checks passed.
+
+### Environment limitations for this verification
+
+- The repository `.venv` was reused without `uv sync`: Python 3.12.13, Django 5.2.17, DRF 3.17.2, django-environ 0.10.0. The incoming `pyproject.toml` raises `requires-python` to `>=3.11,<4` (the local interpreter already satisfies it) but pins DRF 3.18.3 and django-environ 0.14.0, so these backend results were produced against the pre-merge dependency set.
+- `uv lock --check --offline` passes with uv 0.13.5 against the resolved lock (verified by the merge owner).
+- The repository `.venv` has no `ruff` installed, so the system `ruff` 0.17.1 was used for check and format verification of the resolved files.
+- Tavern suites must be run from the repository root because the global config path is `label_studio/tests/shared_stages.yml`; the `label_studio/pytest.ini` invocation cannot collect them.
+- The complete backend suite and PostgreSQL migration verification were still not run; the frontend and deployment results above were reported by the merge owner rather than rerun here.
 
 ## Resolved Security Review Findings
 
