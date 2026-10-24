@@ -70,7 +70,15 @@ if [ -n "${LABEL_STUDIO_HOST_SUBPATH:-}" ] && [ -w $NGINX_CONFIG ]; then
       ;;
   esac
   echo >&3 "=> Adding subpath to nginx config $NGINX_CONFIG ..."
+  # Prefix every externally reachable location with the subpath. The plain
+  # "location /" form covers /, /static/, /react-app/ and /nginx_health. The
+  # exact favicon match needs its own expression. Internal downloads retain
+  # the unprefixed URI emitted by Django, while accepting a prefixed alias too.
+  # Use a noncapturing group so protocol/host/path remain $1/$2/$3.
   sed -i "s|^\(\s*\)\(location \/\)|\1\2$LABEL_STUDIO_HOST_SUBPATH\/|g" "$NGINX_CONFIG"
+  sed -i "s|^\(\s*location = \)/favicon\.ico|\1/$LABEL_STUDIO_HOST_SUBPATH/favicon.ico|" "$NGINX_CONFIG"
+  regex_subpath=$(printf '%s' "$LABEL_STUDIO_HOST_SUBPATH" | sed 's/\./\\\\./g')
+  sed -i "s|^\(\s*location ~ \)\^/file_download/|\1^/(?:$regex_subpath/)?file_download/|" "$NGINX_CONFIG"
   # Once location / is prefixed, nginx otherwise falls back to its compiled-in
   # document root for /. Keep redirects relative for TLS-terminating proxies,
   # and never expose the default document root for paths outside the subpath.

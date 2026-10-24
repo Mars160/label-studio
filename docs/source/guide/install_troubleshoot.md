@@ -46,12 +46,57 @@ Our [Dockerfile](https://github.com/HumanSignal/label-studio/blob/develop/Docker
 
 ### File permissions for non-root user
 
-By default, Label Studio container images operate as non-root. As a result, any directory requiring write access must be assigned to the root group (`GID 0`). This ensures that the arbitrary user (default `UID 1001`) can write to the directory, as this user is always part of the root group. To achieve this, simply set the ownership of the local directory to the root group (GID 0), which will be enough regardless of the UID:
+By default, Label Studio container images run as a non-root user (`UID 1001`). Any directory the application writes to must therefore be owned by `UID 1001` and group `GID 0`, or otherwise be writable by that user. On a bind mount such as `./mydata:/label-studio/data`, ownership comes from the host directory, so the host directory must allow the container user to write.
+
+Before Django settings are imported, the container entrypoint runs a preflight check (`deploy/docker-entrypoint.d/common/05-check-data-permissions.sh`). It verifies that:
+
+- The base data directory can be traversed and written.
+- Existing `media`, `media/export`, `media/delayed_export`, `export` and `test_data` directories are readable and writable.
+- An existing `.env` file is readable and writable.
+
+The check never changes permissions, never rewrites existing files and never removes existing directories; it only creates and immediately removes its own probe file. If it fails, the container exits before migrations run and reports the exact paths that need attention.
+
+!!! warning
+    Existing data is never re-owned automatically. If an existing data directory has the wrong ownership, the preflight check fails and the container stops with an actionable error instead of silently changing or damaging your files.
+
+#### Preparing a fresh data directory with Docker Compose
+
+The bundled `docker-compose.yml` includes a one-shot `data-init` service. It runs as container root (`user: "0:0"`) and prepares a fresh bind mount only:
+
+- It creates the base data directory and the `media`, `media/export`, `media/delayed_export`, `export` and `test_data` subdirectories owned by `1001:0` with mode `750`.
+- It creates `.env` owned by `1001:0` with mode `600`.
+- If the data directory already contains anything, it leaves it completely untouched and exits successfully, so the application preflight check can validate it.
+
+Both the `app` and `nginx` services wait for `data-init` to complete successfully. To prepare an empty mount manually:
 
 ```bash
-mkdir mydata
-sudo chown :0 mydata
+docker compose run --rm data-init
 ```
+
+#### Migrating ownership of existing data (opt in)
+
+If you already have data and the preflight check reports a permission problem, fix the ownership on the Docker host. **Back up your data first.** Changing ownership is an opt-in migration and Label Studio does not do it for you.
+
+Rootful Docker normally maps host and container user IDs one to one (unless user namespace remapping is configured):
+
+```bash
+sudo chown -R 1001:0 mydata
+sudo chmod -R u+rwX mydata
+sudo sh -c 'if [ -f mydata/.env ]; then chmod 600 mydata/.env; fi'
+```
+
+Rootless Podman shifts user IDs inside the user namespace, so the same numeric IDs on the host map to different IDs inside the container. Use `podman unshare`:
+
+```bash
+podman unshare chown -R 1001:0 mydata
+podman unshare chmod -R u+rwX mydata
+podman unshare sh -c 'if [ -f mydata/.env ]; then chmod 600 mydata/.env; fi'
+```
+
+Do not make the data directory or `.env` world-readable or world-writable. `.env` stores the `SECRET_KEY` used to sign sessions and JSON Web Tokens, so it must stay mode `600` and be owned by the user that runs the container.
+
+!!! warning
+    Do not mix rootful and rootless engines for the same data. PostgreSQL data under `postgres-data` follows the same rule: it must stay owned by the user the database image runs as, and ownership written by a rootful engine is not valid for a rootless engine (or the other way around). Never apply the application `1001` user to the database directory. If you switch engines, back up the database first, then re-own `postgres-data` with the matching tool (`sudo chown -R` for rootful, `podman unshare chown -R` for rootless).
 
 !!! note
 

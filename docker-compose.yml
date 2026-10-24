@@ -1,4 +1,17 @@
 services:
+  # Container root prepares fresh bind mounts in either rootful or rootless mode.
+  # Existing data is never recursively chowned; app preflight reports migration needs.
+  data-init:
+    build: .
+    image: docker.io/mars160/label-studio:latest
+    user: "0:0"
+    read_only: true
+    network_mode: none
+    restart: "no"
+    entrypoint: ["/bin/sh", "/label-studio/deploy/docker-data-init.sh"]
+    volumes:
+      - ./mydata:/label-studio/data:rw
+
   nginx:
     build: .
     image: docker.io/mars160/label-studio:latest
@@ -7,7 +20,10 @@ services:
       - "28000:8085"
       - "8081:8086"
     depends_on:
-      - app
+      app:
+        condition: service_started
+      data-init:
+        condition: service_completed_successfully
     environment:
       - LABEL_STUDIO_HOST=${LABEL_STUDIO_HOST:-}
     #   Optional: Set nginx error log level (default: warn)
@@ -33,7 +49,10 @@ services:
     expose:
       - "8000"
     depends_on:
-      - db
+      db:
+        condition: service_started
+      data-init:
+        condition: service_completed_successfully
     environment:
       - DJANGO_DB=default
       - POSTGRE_NAME=postgres
