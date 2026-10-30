@@ -1,6 +1,6 @@
 # Project Access Control Progress
 
-Last reviewed: 2026-10-24
+Last reviewed: 2026-10-30
 
 Status: **Implemented on `develop`; PostgreSQL migration verification remains an environment follow-up**
 
@@ -136,6 +136,18 @@ Upstream target: `HumanSignal/label-studio` develop at `284a2e72f` (34 incoming 
 - The repository `.venv` has no `ruff` installed, so the system `ruff` 0.17.1 was used for check and format verification of the resolved files.
 - Tavern suites must be run from the repository root because the global config path is `label_studio/tests/shared_stages.yml`; the `label_studio/pytest.ini` invocation cannot collect them.
 - The complete backend suite and PostgreSQL migration verification were still not run; the frontend and deployment results above were reported by the merge owner rather than rerun here.
+
+## 2026-10-30 upstream synchronization verification
+
+Upstream target: `HumanSignal/label-studio` develop at `75bdd80a2` (27 incoming commits, previous upstream target `284a2e72f`).
+
+- The only merge conflict was `uv.lock`. Preserved upstream dependency metadata, versions, and hashes exactly while retaining the fork's USTC registry and package URLs. `uv lock --check --offline` passed.
+- Project admin gates, membership discovery, annotation/draft visibility, and Data Manager role capabilities were retained. Read-only review found no access-control regression in the incoming changes.
+- Adapted the incoming snapshot media conversion test to explicitly grant the converting user project-admin membership, retaining the distinction between the snapshot creator and converter without weakening the admin-only export policy.
+- Backend regression suite (`projects/tests tasks/tests data_manager/tests data_export/tests io_storages/tests/test_utils.py tests/test_export_media_downloads.py`): **558 passed, 183 subtests passed**. The initial run exposed the missing test membership above; the complete selected suite passed after adaptation.
+- Frontend selected Data Manager, topbar, BottomBar, collection-uploader, multi-tree-select, and select unit suites: **1525 passed, 0 failed** across 78 files.
+- Ruff lint and format checks on all 11 incoming Python files passed. Django system check and migration drift check passed. Removed two incoming documentation trailing spaces for a clean merge diff check.
+- Tests reused the existing Python 3.12.13 environment (Django 5.2.17, DRF 3.17.2, SDK 2.1.7, sentry-sdk 2.54.0); dependencies were not reinstalled, so these results do not validate the newly locked dependency set. Complete backend/frontend suites, production build, Docker build, and PostgreSQL migration verification were not run.
 
 ## Resolved Security Review Findings
 

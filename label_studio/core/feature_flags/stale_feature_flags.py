@@ -41,8 +41,6 @@ STALE_FEATURE_FLAGS = {
     'fflag_fix_back_plt_807_batch_size_26062025_short': True,
     'fflag_fix_back_plt_802_update_is_labeled_20062025_short': True,
     # Apr 8
-    'fflag_all_feat_utc_274_permissions_improvements': True,
-    'fflag_feat_all_fit_778_analytics_short': True,
     'fflag_feat_all_leap_883_custom_script_270524_short': True,
     'fflag_feat_all_lops_315_temp_datasets_limitations_short': True,
     'fflag_feat_fit_890_ask_ai_event_stream': True,
@@ -61,6 +59,4 @@ STALE_FEATURE_FLAGS = {
     'ff_front_dev_2669_paragraph_author_filter_210622_short': True,
     'fflag_fix_all_optic_18_dashboard_label_distribution_chart_async_22082023_short': False,
     'fflag_fix_all_optic_79_task_count_is_wrong_short': True,
-    # Oct 22
-    'fflag_feat_interfaces_new_drafts': True,
 }

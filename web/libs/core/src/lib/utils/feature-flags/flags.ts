@@ -221,12 +221,6 @@ export const FF_FIT_2003_WASM_STREAMING_DECODER = "fflag_feat_front_fit_2003_was
 export const FF_FIT_2007_VIRTUALIZED_JSON_EDITOR = "fflag_feat_fit_2007_virtualized_json_editor_short";
 
 /**
- * Annotator/reviewer firewall — backend anonymizes PII, so frontend no longer needs
- * to suppress userpics or hide annotation info when this flag is on.
- */
-export const FF_UTC_950_FIREWALL = "fflag_feat_utc_950_annotator_reviewer_firewall_short";
-
-/**
  * LSE-only "Description (Internal)" project field — a manager-only notes field stored on
  * LseProject, editable in Project Settings and Create Project, and displayed on the Projects
  * page (cards/table) under the public description.
@@ -276,13 +270,6 @@ export const FF_FLEX_SEATS = "fflag_feat_back_fit_2313_flex_seats_short";
  * eligible projects themselves (workforce/services organizations only).
  */
 export const FF_CONTRIBUTOR_OPT_IN = "fflag_feat_utc_1064_contributor_opt_in";
-
-/**
- * Configurable Annotator Evaluation metric (No-GT Evaluation): lets a project
- * choose the metric that drives Annotator Evaluation — ground truth agreement
- * (default, today's behavior), review acceptance score, or rejection rate.
- */
-export const FF_ANNOTATOR_EVALUATION_METRIC = "fflag_feat_utc_1085_annotator_evaluation_metric";
 
 /**
  * Review stream "By Annotator" task ordering: review one annotator's work at a
@@ -357,6 +344,13 @@ export const FF_UTC_1389_ANALYTICS_PERFORMANCE_PROJECT_BREAKDOWN =
  * contributors, onboarding projects and verified skill statuses.
  */
 export const FF_VERIFIED_SKILLS_AND_ONBOARDING = "fflag_feat_utc_1407_verified_skills_and_onboarding";
+
+/**
+ * UTC-1437 restricted locations (workforce organizations only): contributors who must verify their identity
+ * also need a reviewed tax form before they can be added to projects or join them. Ships with the backend
+ * flag of the same name.
+ */
+export const FF_RESTRICTED_LOCATIONS = "fflag_feat_utc_1437_restricted_locations_short";
 
 /**
  * UTC-1446 experiment: the "Ask AI" pill in the labeling editor's comment headers, which prefills Ask AI

@@ -178,6 +178,7 @@ export interface SubmissionRegion {
   id: string;
   type: string;
   locked?: boolean;
+  hidden?: boolean;
   _submission?: {
     upload_id: number;
     bucket?: string | null;
@@ -194,6 +195,10 @@ export interface SubmissionScreenProps {
   task?: { id?: number } | null;
   readOnly?: boolean;
   rpcCapabilities?: Set<string>;
+  /** False while the open annotation is a draft never submitted (e.g. a duplicate). */
+  annotationSubmitted?: boolean;
+  /** Every region, hidden ones included: hiding a file never removes it from the submission. */
+  regions?: SubmissionRegion[];
   visibleRegions?: SubmissionRegion[];
   initialResults?: Array<{ value?: { upload_id?: number | string } | null } | null>;
   outputSchema?: Record<string, unknown> | null;
@@ -481,9 +486,10 @@ export function useCollectionSubmission(options: UseCollectionSubmissionOptions)
   const accept = useMemo(() => submissionAccept(rules, fallbackRules), [rules, fallbackRules]);
   const bounds = useMemo(() => submissionFileBounds(rules), [rules]);
 
+  const allRegions = props.regions || props.visibleRegions;
   const regions = useMemo(
-    () => (props.visibleRegions || []).filter((r) => r.type === "submission" && r._submission),
-    [props.visibleRegions],
+    () => (allRegions || []).filter((r) => r.type === "submission" && r._submission),
+    [allRegions],
   );
   // Upload completions read the lock state at that moment, not at pick time.
   const regionsRef = useRef(regions);
@@ -648,7 +654,7 @@ export function useCollectionSubmission(options: UseCollectionSubmissionOptions)
   }, [taskId]);
 
   // ---- attach: the ONLY way an upload becomes a member ---------------------
-  const { visibleRegions, addRegion, updateRegion, deleteRegion } = props;
+  const { addRegion, updateRegion, deleteRegion } = props;
   const attachRow = useCallback(
     (row: SubmissionUploadRow, forTaskId: number | undefined | null) => {
       if (!row || row.status !== "uploaded" || row.uploadId == null) return;
@@ -686,7 +692,7 @@ export function useCollectionSubmission(options: UseCollectionSubmissionOptions)
         );
         return;
       }
-      const live = (visibleRegions || []).filter((r) => r.type === "submission" && r._submission);
+      const live = (allRegions || []).filter((r) => r.type === "submission" && r._submission);
       if (live.some((r) => String(r._submission!.upload_id) === String(row.uploadId))) return;
 
       const pending = replacePendingRef.current;
@@ -755,7 +761,7 @@ export function useCollectionSubmission(options: UseCollectionSubmissionOptions)
         previewCache(taskId)[row.key] = { url: picked.url, kind: submissionMediaKind(row.filename, row.contentType) };
       }
     },
-    [visibleRegions, addRegion, updateRegion, isRegionLocked, taskId, bounds.max, rules],
+    [allRegions, addRegion, updateRegion, isRegionLocked, taskId, bounds.max, rules],
   );
 
   // Bind the in-flight replace to its engine row once, by clientRef. Name+size
@@ -801,7 +807,7 @@ export function useCollectionSubmission(options: UseCollectionSubmissionOptions)
         uploads.forEach((u) => {
           byId[String(u.upload_id)] = u;
         });
-        const live = (props.visibleRegions || []).filter((r) => r.type === "submission" && r._submission);
+        const live = (allRegions || []).filter((r) => r.type === "submission" && r._submission);
         // The list holds the viewer's own uploads. A manager or reviewer opening
         // another contributor's task reads each shown file by id instead, so its
         // submitted state and server facts still arrive.
@@ -897,7 +903,7 @@ export function useCollectionSubmission(options: UseCollectionSubmissionOptions)
       const engine = getEngine();
       if (!engine) return;
       setError(null);
-      const live = (props.visibleRegions || []).filter((r) => r.type === "submission" && r._submission);
+      const live = (allRegions || []).filter((r) => r.type === "submission" && r._submission);
       const inFlightRows = engineRowsRef.current.filter((r) => r.status === "pending" || r.status === "uploading");
       // The same bytes already on their way (a drop handled twice, a double click) are not a new pick.
       const inFlightKeys = new Set(
@@ -957,7 +963,7 @@ export function useCollectionSubmission(options: UseCollectionSubmissionOptions)
         );
       });
     },
-    [readonly, getEngine, props.visibleRegions, bounds.max, validateAndHandle, startUpload, attachRow, taskId],
+    [readonly, getEngine, allRegions, bounds.max, validateAndHandle, startUpload, attachRow, taskId],
   );
 
   // ---- replace ---------------------------------------------------------------
@@ -1086,15 +1092,27 @@ export function useCollectionSubmission(options: UseCollectionSubmissionOptions)
     : null;
 
   const capacityOver = regions.length > bounds.max;
+  // The server only knows that some annotation references the file. A draft that
+  // reuses it (a duplicated annotation) is not submitted until it is submitted itself.
+  const isReferencedSubmission = (server: SubmissionCurrentUpload | undefined) =>
+    !!(server && server.referenced_by_annotation) && props.annotationSubmitted !== false;
 
-  const storedMembers: CollectionMember[] = regions.map((region) => {
+  // A hidden region keeps its file in the submission; only its card leaves the
+  // screen. A replace still uploading into that slot keeps its card and Cancel.
+  const shownRegions = regions.filter(
+    (region) => !region.hidden || (!!pendingReplace && !!replaceRow && pendingReplace.regionId === region.id),
+  );
+  const storedMembers: CollectionMember[] = shownRegions.map((region) => {
     const sub = region._submission!;
     const locked = region.locked === true;
     const server = serverByUploadId[String(sub.upload_id)];
     const submitted =
-      !!(server && server.referenced_by_annotation) ||
-      (!canUpload &&
-        (props.initialResults || []).some((r) => r && r.value && String(r.value.upload_id) === String(sub.upload_id)));
+      props.annotationSubmitted !== false &&
+      (isReferencedSubmission(server) ||
+        (!canUpload &&
+          (props.initialResults || []).some(
+            (r) => r && r.value && String(r.value.upload_id) === String(sub.upload_id),
+          )));
 
     if (pendingReplace && replaceRow && pendingReplace.regionId === region.id) {
       const failed = replaceRow.status === "failed";
@@ -1150,7 +1168,8 @@ export function useCollectionSubmission(options: UseCollectionSubmissionOptions)
     const storedKind = submissionMediaKind(sub.filename, sub.contentType);
     return {
       key: region.id,
-      state: readonly ? "readonly" : submitted ? "submitted" : "uploaded",
+      // A read-only card reads "Submitted"; one that is not part of a submitted annotation stays "Uploaded".
+      state: readonly ? (submitted ? "readonly" : "uploaded") : submitted ? "submitted" : "uploaded",
       file: { name: sub.filename || "", size: sub.size, contentType: sub.contentType },
       kind: storedKind,
       pdf: memberPdf(storedKind, previewUrl),
@@ -1252,7 +1271,7 @@ export function useCollectionSubmission(options: UseCollectionSubmissionOptions)
     ? uploadingRows.reduce((sum, r) => sum + (r.progress || 0), 0) / uploadingRows.length
     : null;
 
-  const count = members.length;
+  const count = regions.length + rowMembers.length;
   return {
     rules,
     accept,
@@ -1274,8 +1293,7 @@ export function useCollectionSubmission(options: UseCollectionSubmissionOptions)
       submitted:
         regions.length > 0 &&
         regions.every((r) => {
-          const server = serverByUploadId[String(r._submission!.upload_id)];
-          return !!(server && server.referenced_by_annotation);
+          return isReferencedSubmission(serverByUploadId[String(r._submission!.upload_id)]);
         }),
       readonly,
     },
